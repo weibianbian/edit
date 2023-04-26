@@ -1,6 +1,6 @@
 ﻿using Sirenix.OdinInspector;
 
-public enum EActionType
+public enum EEventAction
 {
     [LabelText("null")]
     None=-1,

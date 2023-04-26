@@ -8,22 +8,22 @@ public class CustomEvent
     public string eventName = "";
     [LabelText("事件集合")]
     [HideReferenceObjectPicker]
-    public List<CustomEventData> datas = new List<CustomEventData>();
+    public List<EventActionData> datas = new List<EventActionData>();
 
     private bool bRequestedFlowUpdate = false;
-    private CustomEventData nextEventData;
+    private EventActionData nextEventData;
     private int currentIndex = -1;
-    private ActionBase curAction = null;
-    public void Update()
+    private EventActionBase nextEventAction;
+    public void Update(float deltaTime)
     {
         if (bRequestedFlowUpdate)
         {
             bRequestedFlowUpdate = false;
             ProcessExecutionRequest();
         }
-        if (curAction!=null)
+        if (nextEventAction!=null)
         {
-            //curAction
+            nextEventAction.Update(this, deltaTime);
         }
     }
     public void ProcessExecutionRequest()
@@ -85,7 +85,7 @@ public class CustomEvent
     }
     public bool DoConditionAllowExecution(int childIndex)
     {
-        CustomEventData evtData = datas[childIndex];
+        EventActionData evtData = datas[childIndex];
         bool result = true;
         if (evtData.conditions.Count == 0)
         {
@@ -112,22 +112,15 @@ public class CustomEvent
     {
         currentIndex = -1;
     }
-    public void ExecuteEventData(CustomEventData data)
+    public void ExecuteEventData(EventActionData data)
     {
-        if (data.isBlock)
-        {
-            ActionBase action = ActionFactory.Create(data.actionType);
-            EActionResult result = action.Execute(data);
-            OnCustomEventDataFinished(data, result);
-        }
-        else
-        {
-
-        }
+        EventActionBase action = ActionFactory.Create(data.actionType);
+        ENodeResult result = action.Execute(data);
+        OnCustomEventDataFinished(data, result);
     }
-    public void OnCustomEventDataFinished(CustomEventData data, EActionResult result)
+    public void OnCustomEventDataFinished(EventActionData data, ENodeResult result)
     {
-        if (result != EActionResult.InProgress)
+        if (result != ENodeResult.InProgress)
         {
             //data.WrappedOnTaskFinished(result);
 

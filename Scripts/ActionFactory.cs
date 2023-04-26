@@ -1,8 +1,8 @@
 ﻿public class ActionFactory
 {
-    public static ActionBase Create(EActionType actionType)
+    public static EventActionBase Create(EEventAction actionType)
     {
-        if (actionType == EActionType.CreateAI)
+        if (actionType == EEventAction.CreateAI)
         {
             return new CreateAIAction();
         }

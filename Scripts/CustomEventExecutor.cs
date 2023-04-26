@@ -1,24 +1,24 @@
 ﻿public class CustomEventExecutor
 {
-    public CustomEventData data;
+    public EventActionData data;
 
-    public EActionResult eventResult= EActionResult.Successed;
+    public ENodeResult eventResult = ENodeResult.Succeeded;
 
     public float curTime = 0;
     public void OnNodeActivation()
     {
         curTime = 0;
     }
-    public EActionResult Execute()
+    public ENodeResult Execute()
     {
-        ActionBase action = ActionFactory.Create(data.actionType);
+        EventActionBase action = ActionFactory.Create(data.actionType);
         if (action!=null)
         {
-           return  action.Execute();
+           return  action.Execute(data);
         }
-        return EActionResult.Successed;
+        return ENodeResult.Succeeded;
     }
-    public void WrappedOnTaskFinished(EActionResult result)
+    public void WrappedOnTaskFinished(ENodeResult result)
     {
 
     }

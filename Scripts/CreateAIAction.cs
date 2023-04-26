@@ -1,7 +1,7 @@
-﻿public class CreateAIAction : ActionBase
+﻿public class CreateAIAction : EventActionBase
 {
-    protected override EActionResult OnExecute()
+    protected override ENodeResult OnExecute(EventActionData data)
     {
-        return EActionResult.Successed;
+        return ENodeResult.Succeeded;
     }
 }

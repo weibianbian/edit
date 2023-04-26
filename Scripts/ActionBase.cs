@@ -1,11 +1,24 @@
-﻿public abstract class ActionBase
+﻿public abstract class EventActionBase
 {
-    public  EActionResult Execute(CustomEventData data)
+    public ENodeResult Execute(EventActionData data)
     {
-        return OnExecute();
+        return OnExecute(data);
     }
-    protected virtual EActionResult OnExecute()
+    protected virtual ENodeResult OnExecute(EventActionData data)
     {
-        return EActionResult.Successed;
+        ENodeResult result = ENodeResult.InProgress;
+        if (!data.isBlock)
+        {
+            result= ENodeResult.Succeeded;
+        }
+        else
+        {
+
+        }
+        return result;
+    }
+    public virtual void Update(CustomEvent parent, float deltaTime)
+    {
+
     }
 }
