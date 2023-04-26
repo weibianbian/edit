@@ -35,6 +35,7 @@ public class CustomEvent
             int childIdx = FindEventToExecute();
             if (childIdx == (int)GameConst.ReturnToParent)
             {
+                //执行完毕，返回上一层 通知他的父级，
             }
             else if (IsValidIndex(childIdx))
             {
@@ -116,13 +117,13 @@ public class CustomEvent
     {
         EventActionBase action = ActionFactory.Create(data.actionType);
         ENodeResult result = action.Execute(data);
-        OnCustomEventDataFinished(data, result);
+        OnActionFinished(action, result);
     }
-    public void OnCustomEventDataFinished(EventActionData data, ENodeResult result)
+    public void OnActionFinished(EventActionBase action, ENodeResult result)
     {
         if (result != ENodeResult.InProgress)
         {
-            //data.WrappedOnTaskFinished(result);
+            action.WrappedOnActionFinished(result);
 
             RequestExecution();
         }

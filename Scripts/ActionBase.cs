@@ -19,6 +19,14 @@
     }
     public virtual void Update(CustomEvent parent, float deltaTime)
     {
+        
+    }
+    public void FinishLatentTask(CustomEvent parent,ENodeResult result)
+    {
+        parent.OnActionFinished(this, result);
+    }
+    public void WrappedOnActionFinished(ENodeResult result)
+    {
 
     }
 }

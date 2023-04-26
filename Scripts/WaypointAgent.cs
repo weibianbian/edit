@@ -17,7 +17,7 @@ public class WaypointAgent:SerializedMonoBehaviour
     public List<CustomEvent> customEvents = new List<CustomEvent>();
     public CustomEvent AddCustomEventAction => new CustomEvent();
 
-    public CustomEvent nextEvent = null;
+    public CustomEvent curEvent = null;
     public int currentIndex = -1;
     public bool bRequestedFlowUpdate = false;
     public const int ReturnToParent = -2;
@@ -52,6 +52,10 @@ public class WaypointAgent:SerializedMonoBehaviour
         if (bRequestedFlowUpdate)
         {
             bRequestedFlowUpdate = false;
+        }
+        if (curEvent!=null)
+        {
+            curEvent.Update(Time.deltaTime);
         }
     }
  
