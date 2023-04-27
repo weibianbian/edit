@@ -9,8 +9,6 @@ public enum EStatus
 }
 public enum ENodeResult
 {
-    NotInitialized = -1,	// special value for child indices: needs to be initialized
-	ReturnToParent = -2,	// special value for child indices: return to parent node
     Succeeded=0,
     Failed=1,
     InProgress=2,

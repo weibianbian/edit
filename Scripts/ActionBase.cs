@@ -17,13 +17,13 @@
         }
         return result;
     }
-    public virtual void Update(CustomEvent parent, float deltaTime)
+    public virtual void Update(EventActionData parent, float deltaTime)
     {
         
     }
-    public void FinishLatentTask(CustomEvent parent,ENodeResult result)
+    public void FinishLatentTask(EventActionData parent,ENodeResult result)
     {
-        parent.OnActionFinished(this, result);
+        //parent.OnActionFinished(this, result);
     }
     public void WrappedOnActionFinished(ENodeResult result)
     {

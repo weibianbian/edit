@@ -1,32 +1,70 @@
 ﻿using Sirenix.OdinInspector;
 using System.Collections.Generic;
-using Unity.IO.LowLevel.Unsafe;
 
+public class DelayEventWraper
+{
+    public float delayTime = 0;
+    public bool completed = false;
+    public EventActionData evt;
+    public void Update(float deltaTime)
+    {
+        if (completed) return;
+        if (delayTime <= 0)
+        {
+            completed = true;
+        }
+        else
+        {
+            delayTime -= deltaTime;
+        }
+    }
+    public bool IsCompleted()
+    {
+        return completed;
+    }
+}
 public class CustomEvent
 {
     [LabelText("事件名称")]
     public string eventName = "";
     [LabelText("事件集合")]
     [HideReferenceObjectPicker]
+    [ListDrawerSettings(CustomAddFunction = "AddEventActionData")]
     public List<EventActionData> datas = new List<EventActionData>();
-
+    public EventActionData AddEventActionData => new EventActionData();
     private bool bRequestedFlowUpdate = false;
     private EventActionData nextEventData;
-    private int currentIndex = -1;
-    private EventActionBase nextEventAction;
-    public void Update(float deltaTime)
+    private int currentIndex = GameConst.NotInitialized;
+
+    private DelayEventWraper delayEventWraper = null;
+    public void Start()
+    {
+        currentIndex = GameConst.NotInitialized;
+        RequestExecution();
+    }
+    public void Update(CustomEventController parent,float deltaTime)
     {
         if (bRequestedFlowUpdate)
         {
             bRequestedFlowUpdate = false;
-            ProcessExecutionRequest();
+            ProcessExecutionRequest(parent);
         }
-        if (nextEventAction!=null)
+        if (delayEventWraper != null)
         {
-            nextEventAction.Update(this, deltaTime);
+            delayEventWraper.Update(deltaTime);
+            if (delayEventWraper.IsCompleted())
+            {
+                nextEventData = delayEventWraper.evt;
+                delayEventWraper = null;
+                ExecuteEventData(nextEventData);
+            }
+        }
+        if (nextEventData != null)
+        {
+            nextEventData.Update(this, deltaTime);
         }
     }
-    public void ProcessExecutionRequest()
+    public void ProcessExecutionRequest(CustomEventController parent)
     {
         nextEventData = null;
 
@@ -36,23 +74,34 @@ public class CustomEvent
             if (childIdx == (int)GameConst.ReturnToParent)
             {
                 //执行完毕，返回上一层 通知他的父级，
+                break;
             }
             else if (IsValidIndex(childIdx))
             {
                 nextEventData = datas[childIdx];
             }
         }
-        ProcessPendingExecution();
+        ProcessPendingExecution(parent);
     }
-    public void ProcessPendingExecution()
+    public void ProcessPendingExecution(CustomEventController parent)
     {
         if (nextEventData != null)
         {
-            ExecuteEventData(nextEventData);
+            if (nextEventData.delayTime>0)
+            {
+                delayEventWraper = new DelayEventWraper();
+                delayEventWraper.evt= nextEventData;
+                delayEventWraper.delayTime= nextEventData.delayTime;
+                nextEventData = null;
+            }
+            else
+            {
+                ExecuteEventData(nextEventData);
+            }
         }
         else
         {
-            OnCustomEventFinished();
+            OnCustomEventFinished(parent);
         }
     }
     public int FindEventToExecute()
@@ -92,6 +141,10 @@ public class CustomEvent
         {
             return result;
         }
+        if (!evtData.isWaitForConditionToHold)
+        {
+            return result;
+        }
         for (int conditionIndex = 0; conditionIndex < evtData.conditions.Count; conditionIndex++)
         {
             ConditionData TestCondition = evtData.conditions[conditionIndex];
@@ -115,22 +168,21 @@ public class CustomEvent
     }
     public void ExecuteEventData(EventActionData data)
     {
-        EventActionBase action = ActionFactory.Create(data.actionType);
-        ENodeResult result = action.Execute(data);
-        OnActionFinished(action, result);
+        ENodeResult result = data.Execute(this);
+        OnActionFinished(data, result);
     }
-    public void OnActionFinished(EventActionBase action, ENodeResult result)
+    public void OnActionFinished(EventActionData data, ENodeResult result)
     {
         if (result != ENodeResult.InProgress)
         {
-            action.WrappedOnActionFinished(result);
-
+            //data.WrappedOnActionFinished(result);
+            nextEventData = null;
             RequestExecution();
         }
     }
-    public void OnCustomEventFinished()
+    public void OnCustomEventFinished(CustomEventController parent)
     {
-
+        parent.OnChildFinished();
     }
     public void RequestExecution()
     {

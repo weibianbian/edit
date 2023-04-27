@@ -54,7 +54,7 @@ public class WaypointData
         while (testNode != null && nextTask == null)
         {
             int childIdx = testNode.FindChildToExecute();
-            if (childIdx == (int)ENodeResult.ReturnToParent)
+            if (childIdx == (int)GameConst.ReturnToParent)
             {
                 //Composite已经执行完毕
             }

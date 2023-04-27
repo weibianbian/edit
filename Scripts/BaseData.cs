@@ -95,7 +95,7 @@ public class CompositeNode : Node
     public int FindChildToExecute()
     {
         int childIdx = GetNextChild(currentChild);
-        int RetIdx = (int)ENodeResult.ReturnToParent;
+        int RetIdx = (int)GameConst.ReturnToParent;
         while (IsValidIndex(childIdx))
         {
             if (DoDecoratorsAllowExecution(childIdx))
@@ -149,11 +149,11 @@ public class CompositeNode : Node
     }
     public int GetNextChild(int lastIndex)
     {
-        int nextChildIndex = (int)ENodeResult.ReturnToParent;
-        if (overrideChild != (int)ENodeResult.NotInitialized)
+        int nextChildIndex = (int)GameConst.ReturnToParent;
+        if (overrideChild != (int)GameConst.NotInitialized)
         {
             nextChildIndex = overrideChild;
-            overrideChild = (int)ENodeResult.NotInitialized;
+            overrideChild = (int)GameConst.NotInitialized;
         }
         else
         {
