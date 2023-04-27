@@ -42,7 +42,7 @@ public class CustomEvent
         currentIndex = GameConst.NotInitialized;
         RequestExecution();
     }
-    public void Update(CustomEventController parent,float deltaTime)
+    public void Update(CustomEventController parent, float deltaTime)
     {
         if (bRequestedFlowUpdate)
         {
@@ -87,11 +87,11 @@ public class CustomEvent
     {
         if (nextEventData != null)
         {
-            if (nextEventData.delayTime>0)
+            if (nextEventData.delayTime > 0)
             {
                 delayEventWraper = new DelayEventWraper();
-                delayEventWraper.evt= nextEventData;
-                delayEventWraper.delayTime= nextEventData.delayTime;
+                delayEventWraper.evt = nextEventData;
+                delayEventWraper.delayTime = nextEventData.delayTime;
                 nextEventData = null;
             }
             else
@@ -131,6 +131,7 @@ public class CustomEvent
     }
     public void OnChildActivation(int index)
     {
+        datas[index].OnActivtion();
         currentIndex = index;
     }
     public bool DoConditionAllowExecution(int childIndex)

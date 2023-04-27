@@ -17,16 +17,30 @@ public class EventActionData
     [LabelText("等待条件成立")]
     public bool isWaitForConditionToHold = false;
 
+    private EventActionBase eventAction = null;
+    public void OnActivtion()
+    {
+        eventAction= ActionFactory.Create(actionType);
+    }
+    public void OnDeactivtion()
+    {
+        eventAction = null;
+    }
     public ENodeResult Execute(CustomEvent parent)
     {
-        if (!isBlock)
+        ENodeResult result = ENodeResult.Succeeded;
+        if (eventAction != null)
         {
-            return ENodeResult.Succeeded;
+            result = eventAction.Execute(this);
         }
-        return ENodeResult.Succeeded;
+        return isBlock?result: ENodeResult.Succeeded;
     }
     public void Update(CustomEvent parent,float deltaTime)
     {
+        if (eventAction!=null)
+        {
+            eventAction.Update(this,deltaTime);
+        }
         //parent.OnActionFinished(this, ENodeResult.Succeeded);
     }
 }
