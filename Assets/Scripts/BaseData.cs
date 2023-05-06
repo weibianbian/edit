@@ -1,8 +1,6 @@
 ﻿using Sirenix.OdinInspector;
 using System.Collections;
 using System.Collections.Generic;
-using Newtonsoft;
-using Newtonsoft.Json;
 using UnityEngine;
 using System;
 using UnityEditor;
