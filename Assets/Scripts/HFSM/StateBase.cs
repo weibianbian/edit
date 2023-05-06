@@ -2,13 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MeStateBase
+public class StateBase
 {
     public bool needsExitTime = false;
     public bool isGhostState;
     public string name;
 
-    public IMeStateMachine fsm;
+    public IStateMachine fsm;
     public virtual void Init()
     {
 

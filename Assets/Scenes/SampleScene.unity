@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -123,62 +123,6 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!1 &2756830
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 2756831}
-  - component: {fileID: 2756832}
-  m_Layer: 0
-  m_Name: transition
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &2756831
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2756830}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 581098976}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2756832
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2756830}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 082a0f77585d0ca4ba4a1ffd382a0f38, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  serializationData:
-    SerializedFormat: 2
-    SerializedBytes: 
-    ReferencedUnityObjects: []
-    SerializedBytesString: 
-    Prefab: {fileID: 0}
-    PrefabModificationsReferencedUnityObjects: []
-    PrefabModifications: []
-    SerializationNodes: []
-  des: 
-  from: {fileID: 427652068}
-  to: {fileID: 602344261}
 --- !u!1 &33758775
 GameObject:
   m_ObjectHideFlags: 0
@@ -506,8 +450,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 2756831}
-  - {fileID: 934408164}
   - {fileID: 1554961935}
   m_Father: {fileID: 1122576470}
   m_RootOrder: 0
@@ -536,10 +478,50 @@ MonoBehaviour:
     - Name: state
       Entry: 6
       Data: 
+    - Name: transitions
+      Entry: 7
+      Data: 0|System.Collections.Generic.List`1[[FSMTransitionAgent, Assembly-CSharp]],
+        mscorlib
+    - Name: 
+      Entry: 12
+      Data: 1
+    - Name: 
+      Entry: 7
+      Data: 1|FSMTransitionAgent, Assembly-CSharp
+    - Name: des
+      Entry: 6
+      Data: 
+    - Name: from
+      Entry: 6
+      Data: 
+    - Name: to
+      Entry: 6
+      Data: 
+    - Name: conditions
+      Entry: 7
+      Data: 2|System.Collections.Generic.List`1[[FSMCondition, Assembly-CSharp]],
+        mscorlib
+    - Name: 
+      Entry: 12
+      Data: 0
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
   des: 
-  startState: {fileID: 0}
-  transitions:
-  - {fileID: 2756832}
+  startState: {fileID: 1554961936}
+  isRoot: 1
   states: []
 --- !u!1 &602344259
 GameObject:
@@ -718,7 +700,7 @@ GameObject:
   - component: {fileID: 727196049}
   - component: {fileID: 727196050}
   m_Layer: 0
-  m_Name: subfsm
+  m_Name: subfsmpatrol
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -765,70 +747,60 @@ MonoBehaviour:
     - Name: state
       Entry: 6
       Data: 
+    - Name: transitions
+      Entry: 7
+      Data: 0|System.Collections.Generic.List`1[[FSMTransitionAgent, Assembly-CSharp]],
+        mscorlib
+    - Name: 
+      Entry: 12
+      Data: 1
+    - Name: 
+      Entry: 7
+      Data: 1|FSMTransitionAgent, Assembly-CSharp
+    - Name: des
+      Entry: 6
+      Data: 
+    - Name: from
+      Entry: 6
+      Data: 
+    - Name: to
+      Entry: 6
+      Data: 
+    - Name: conditions
+      Entry: 7
+      Data: 2|System.Collections.Generic.List`1[[FSMCondition, Assembly-CSharp]],
+        mscorlib
+    - Name: 
+      Entry: 12
+      Data: 1
+    - Name: 
+      Entry: 7
+      Data: 3|FSMCondition, Assembly-CSharp
+    - Name: stateType
+      Entry: 3
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
   des: 
   startState: {fileID: 0}
-  transitions:
-  - {fileID: 934408165}
-  - {fileID: 2756832}
-  states:
-  - {fileID: 602344261}
-  - {fileID: 427652068}
---- !u!1 &934408163
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 934408164}
-  - component: {fileID: 934408165}
-  m_Layer: 0
-  m_Name: tosubtransition
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &934408164
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 934408163}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 581098976}
-  m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &934408165
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 934408163}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 082a0f77585d0ca4ba4a1ffd382a0f38, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  serializationData:
-    SerializedFormat: 2
-    SerializedBytes: 
-    ReferencedUnityObjects: []
-    SerializedBytesString: 
-    Prefab: {fileID: 0}
-    PrefabModificationsReferencedUnityObjects: []
-    PrefabModifications: []
-    SerializationNodes: []
-  des: "\u5DE1\u903B"
-  from: {fileID: 427652068}
-  to: {fileID: 1665511647}
+  isRoot: 0
+  states: []
 --- !u!1 &963194225
 GameObject:
   m_ObjectHideFlags: 0
@@ -977,7 +949,7 @@ Transform:
   - {fileID: 727196049}
   - {fileID: 1665511646}
   m_Father: {fileID: 581098976}
-  m_RootOrder: 2
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1554961936
 MonoBehaviour:
@@ -994,7 +966,9 @@ MonoBehaviour:
   serializationData:
     SerializedFormat: 2
     SerializedBytes: 
-    ReferencedUnityObjects: []
+    ReferencedUnityObjects:
+    - {fileID: 1554961936}
+    - {fileID: 727196050}
     SerializedBytesString: 
     Prefab: {fileID: 0}
     PrefabModificationsReferencedUnityObjects: []
@@ -1002,7 +976,7 @@ MonoBehaviour:
     SerializationNodes:
     - Name: state
       Entry: 7
-      Data: 0|MeStateMachine, Assembly-CSharp
+      Data: 0|StateBase, Assembly-CSharp
     - Name: needsExitTime
       Entry: 5
       Data: false
@@ -1010,17 +984,67 @@ MonoBehaviour:
       Entry: 5
       Data: false
     - Name: name
-      Entry: 6
-      Data: 
+      Entry: 1
+      Data: "\u8D77\u59CB\u8282\u70B9"
     - Name: fsm
       Entry: 6
       Data: 
     - Name: 
       Entry: 8
       Data: 
+    - Name: transitions
+      Entry: 7
+      Data: 1|System.Collections.Generic.List`1[[FSMTransitionAgent, Assembly-CSharp]],
+        mscorlib
+    - Name: 
+      Entry: 12
+      Data: 1
+    - Name: 
+      Entry: 7
+      Data: 2|FSMTransitionAgent, Assembly-CSharp
+    - Name: des
+      Entry: 6
+      Data: 
+    - Name: from
+      Entry: 10
+      Data: 0
+    - Name: to
+      Entry: 10
+      Data: 1
+    - Name: conditions
+      Entry: 7
+      Data: 3|System.Collections.Generic.List`1[[FSMCondition, Assembly-CSharp]],
+        mscorlib
+    - Name: 
+      Entry: 12
+      Data: 1
+    - Name: 
+      Entry: 7
+      Data: 4|FSMCondition, Assembly-CSharp
+    - Name: stateType
+      Entry: 3
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
   des: 
   startState: {fileID: 0}
-  transitions: []
+  isRoot: 0
   states:
   - {fileID: 727196050}
   - {fileID: 1665511647}
@@ -1080,9 +1104,59 @@ MonoBehaviour:
     - Name: state
       Entry: 6
       Data: 
+    - Name: transitions
+      Entry: 7
+      Data: 0|System.Collections.Generic.List`1[[FSMTransitionAgent, Assembly-CSharp]],
+        mscorlib
+    - Name: 
+      Entry: 12
+      Data: 1
+    - Name: 
+      Entry: 7
+      Data: 1|FSMTransitionAgent, Assembly-CSharp
+    - Name: des
+      Entry: 6
+      Data: 
+    - Name: from
+      Entry: 6
+      Data: 
+    - Name: to
+      Entry: 6
+      Data: 
+    - Name: conditions
+      Entry: 7
+      Data: 2|System.Collections.Generic.List`1[[FSMCondition, Assembly-CSharp]],
+        mscorlib
+    - Name: 
+      Entry: 12
+      Data: 1
+    - Name: 
+      Entry: 7
+      Data: 3|FSMCondition, Assembly-CSharp
+    - Name: stateType
+      Entry: 3
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
   des: 
   startState: {fileID: 0}
-  transitions: []
+  isRoot: 0
   states: []
 --- !u!1 &1984677372
 GameObject:

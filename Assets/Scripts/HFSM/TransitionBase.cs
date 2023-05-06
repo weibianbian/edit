@@ -1,13 +1,13 @@
-﻿public class MeTransitionBase
+﻿public class TransitionBase
 {
     public string from;
     public string to;
 
     public bool forceInstantly;
 
-    public IMeStateMachine fsm;
+    public IStateMachine fsm;
 
-    public MeTransitionBase(string from, string to, bool forceInstantly = false)
+    public TransitionBase(string from, string to, bool forceInstantly = false)
     {
         this.from = from;
         this.to = to;

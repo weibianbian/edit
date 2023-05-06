@@ -8,14 +8,14 @@ public class FSMStateAgent : SerializedMonoBehaviour
     [LabelText("说明")]
     public string des="";
     [TypeFilter(nameof(Get))]
-    public MeStateBase state;
+    public StateBase state;
 
     public IEnumerable<Type> Get()
     {
-        var q = typeof(MeStateBase).Assembly.GetTypes()
+        var q = typeof(StateBase).Assembly.GetTypes()
            .Where(x => !x.IsAbstract)
            .Where(x => !x.IsGenericTypeDefinition)
-           .Where(x => typeof(MeStateBase).IsAssignableFrom(x));
+           .Where(x => typeof(StateBase).IsAssignableFrom(x));
 
         return q;
     }

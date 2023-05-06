@@ -1,4 +1,4 @@
-﻿public class MeActionState : MeStateBase, IMeActionable
+﻿public class ActionState : StateBase, IActionable
 {
     public void OnAction(string trigger)
     {
@@ -16,11 +16,11 @@
         }
     }
 }
-public class MoveActionState: MeActionState
+public class MoveActionState: ActionState
 {
 
 }
-public class TurnToActionState : MeActionState
+public class TurnToActionState : ActionState
 {
 
 }

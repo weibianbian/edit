@@ -1,16 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 
-public class MeStateMachine : MeStateBase, IMeStateMachine, IMeActionable
+public class StateMachine : StateBase, IStateMachine, IActionable
 {
-    private static readonly List<MeTransitionBase> noTransitions = new List<MeTransitionBase>(0);
-    private List<MeTransitionBase> activeTransitions = noTransitions;
-    private MeStateBase activeState = null;
-    private Dictionary<string, MeStateBundle> nameToStateBundle = new Dictionary<string, MeStateBundle>();
+    private static readonly List<TransitionBase> noTransitions = new List<TransitionBase>(0);
+    private List<TransitionBase> activeTransitions = noTransitions;
+    private StateBase activeState = null;
+    private Dictionary<string, StateBundle> nameToStateBundle = new Dictionary<string, StateBundle>();
     private (string state, bool hasState) startState = (default, false);
     private (string state, bool isPending) pendingState = (default, false);
 
-    public MeStateBase ActiveState => activeState;
+    public StateBase ActiveState => activeState;
 
     public string ActiveStateName => ActiveState.name;
     private bool IsRootFsm => fsm == null;
@@ -35,7 +35,7 @@ public class MeStateMachine : MeStateBase, IMeStateMachine, IMeActionable
     {
         UnityEngine.Debug.LogError($"changeState={name}");
         activeState?.OnExit();
-        MeStateBundle bundle;
+        StateBundle bundle;
         if (nameToStateBundle.TryGetValue(name, out bundle))
         {
 
@@ -49,13 +49,13 @@ public class MeStateMachine : MeStateBase, IMeStateMachine, IMeActionable
             activeTransitions[i].OnEnter();
         }
     }
-    public void AddState(string name, MeStateBase state)
+    public void AddState(string name, StateBase state)
     {
         state.fsm = this;
         state.name = name;
         state.Init();
 
-        MeStateBundle bundle = GetOrCreateStateBundle(name);
+        StateBundle bundle = GetOrCreateStateBundle(name);
         bundle.state = state;
 
         if (nameToStateBundle.Count == 1 && !startState.hasState)
@@ -66,41 +66,41 @@ public class MeStateMachine : MeStateBase, IMeStateMachine, IMeActionable
     public void AddTransition(
             string from,
             string to,
-            Func<MeTransitionBase, bool> condition = null,
+            Func<TransitionBase, bool> condition = null,
             bool forceInstantly = false)
     {
         AddTransition(CreateOptimizedTransition(from, to, condition, forceInstantly));
     }
-    private MeTransitionBase CreateOptimizedTransition(
+    private TransitionBase CreateOptimizedTransition(
         string from,
         string to,
-        Func<MeTransition, bool> condition = null,
+        Func<Transition, bool> condition = null,
         bool forceInstantly = false)
     {
         if (condition == null)
-            return new MeTransitionBase(from, to, forceInstantly);
+            return new TransitionBase(from, to, forceInstantly);
 
-        return new MeTransition(from, to, condition, forceInstantly);
+        return new Transition(from, to, condition, forceInstantly);
     }
-    public void AddTransition(MeTransitionBase transition)
+    public void AddTransition(TransitionBase transition)
     {
         InitTransition(transition);
 
-        MeStateBundle bundle = GetOrCreateStateBundle(transition.from);
+        StateBundle bundle = GetOrCreateStateBundle(transition.from);
         bundle.AddTransition(transition);
     }
-    private void InitTransition(MeTransitionBase transition)
+    private void InitTransition(TransitionBase transition)
     {
         transition.fsm = this;
         transition.Init();
     }
-    private MeStateBundle GetOrCreateStateBundle(string name)
+    private StateBundle GetOrCreateStateBundle(string name)
     {
-        MeStateBundle bundle;
+        StateBundle bundle;
 
         if (!nameToStateBundle.TryGetValue(name, out bundle))
         {
-            bundle = new MeStateBundle();
+            bundle = new StateBundle();
             nameToStateBundle.Add(name, bundle);
         }
 
@@ -124,14 +124,14 @@ public class MeStateMachine : MeStateBase, IMeStateMachine, IMeActionable
     {
         for (int i = 0; i < activeTransitions.Count; i++)
         {
-            MeTransitionBase transition = activeTransitions[i];
+            TransitionBase transition = activeTransitions[i];
             if (TryTransition(transition))
                 return true;
         }
 
         return false;
     }
-    private bool TryTransition(MeTransitionBase transition)
+    private bool TryTransition(TransitionBase transition)
     {
         if (!transition.ShouldTransition())
             return false;

@@ -9,13 +9,13 @@ public class myFSM : MonoBehaviour
 {
     [ShowInInspector]
     [TypeFilter(nameof(GetActionList))]
-    public MeStateMachine fsm;
+    public StateMachine fsm;
     // Start is called before the first frame update
     void Start()
     {
-        fsm = new MeStateMachine();
-        fsm.AddState("a", new MeStateBase());
-        fsm.AddState("b", new MeStateBase());
+        fsm = new StateMachine();
+        fsm.AddState("a", new StateBase());
+        fsm.AddState("b", new StateBase());
         fsm.AddTransition("a", "b");
         fsm.Init();
 
@@ -23,10 +23,10 @@ public class myFSM : MonoBehaviour
     }
     private IEnumerable<Type> GetActionList()
     {
-        var q = typeof(MeStateMachine).Assembly.GetTypes()
+        var q = typeof(StateMachine).Assembly.GetTypes()
             .Where(x => !x.IsAbstract)
             .Where(x => !x.IsGenericTypeDefinition)
-            .Where(x => typeof(MeStateMachine).IsAssignableFrom(x));
+            .Where(x => typeof(StateMachine).IsAssignableFrom(x));
 
         return q;
     }

@@ -1,9 +1,9 @@
-﻿public interface IMeStateMachine
+﻿public interface IStateMachine
 {
     void StateCanExit();
 
     void RequestStateChange(string name, bool forceInstantly = false);
 
-    MeStateBase ActiveState { get; }
+    StateBase ActiveState { get; }
     string ActiveStateName { get; }
 }

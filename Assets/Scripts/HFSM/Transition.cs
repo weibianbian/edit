@@ -1,12 +1,12 @@
 ﻿using System;
 
-public class MeTransition : MeTransitionBase
+public class Transition : TransitionBase
 {
-    public Func<MeTransition, bool> condition;
-    public MeTransition(
+    public Func<Transition, bool> condition;
+    public Transition(
             string from,
             string to,
-            Func<MeTransition, bool> condition = null,
+            Func<Transition, bool> condition = null,
             bool forceInstantly = false) : base(from, to, forceInstantly)
     {
         this.condition = condition;
