@@ -3,12 +3,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-public class FSMStateAgent : SerializedMonoBehaviour
+public class FSMStateGraph : SerializedMonoBehaviour
 {
     [LabelText("说明")]
     public string des="";
-    [TypeFilter(nameof(Get))]
-    public StateBase state;
+    //[TypeFilter(nameof(Get))]
+    //public StateBase state=new StateBase();
 
     public IEnumerable<Type> Get()
     {

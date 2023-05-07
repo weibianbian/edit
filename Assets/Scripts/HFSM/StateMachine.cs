@@ -11,7 +11,10 @@ public class StateMachine : StateBase, IStateMachine, IActionable
     private (string state, bool isPending) pendingState = (default, false);
 
     public StateBase ActiveState => activeState;
-
+    public StateMachine()
+    {
+        nameToStateBundle = new Dictionary<string, StateBundle>();
+    }
     public string ActiveStateName => ActiveState.name;
     private bool IsRootFsm => fsm == null;
     public override void Init()

@@ -412,8 +412,8 @@ MonoBehaviour:
       Entry: 5
       Data: false
     - Name: name
-      Entry: 6
-      Data: 
+      Entry: 1
+      Data: "\u8F6C\u5411\u884C\u4E3A"
     - Name: fsm
       Entry: 6
       Data: 
@@ -469,37 +469,54 @@ MonoBehaviour:
   serializationData:
     SerializedFormat: 2
     SerializedBytes: 
-    ReferencedUnityObjects: []
+    ReferencedUnityObjects:
+    - {fileID: 581098977}
+    - {fileID: 1554961936}
     SerializedBytesString: 
     Prefab: {fileID: 0}
     PrefabModificationsReferencedUnityObjects: []
     PrefabModifications: []
     SerializationNodes:
     - Name: state
+      Entry: 7
+      Data: 0|StateMachine, Assembly-CSharp
+    - Name: needsExitTime
+      Entry: 5
+      Data: true
+    - Name: isGhostState
+      Entry: 5
+      Data: false
+    - Name: name
+      Entry: 1
+      Data: "\u6839\u8282\u70B9"
+    - Name: fsm
       Entry: 6
+      Data: 
+    - Name: 
+      Entry: 8
       Data: 
     - Name: transitions
       Entry: 7
-      Data: 0|System.Collections.Generic.List`1[[FSMTransitionAgent, Assembly-CSharp]],
+      Data: 1|System.Collections.Generic.List`1[[FSMTransitionAgent, Assembly-CSharp]],
         mscorlib
     - Name: 
       Entry: 12
       Data: 1
     - Name: 
       Entry: 7
-      Data: 1|FSMTransitionAgent, Assembly-CSharp
+      Data: 2|FSMTransitionAgent, Assembly-CSharp
     - Name: des
       Entry: 6
       Data: 
     - Name: from
-      Entry: 6
-      Data: 
+      Entry: 10
+      Data: 0
     - Name: to
-      Entry: 6
-      Data: 
+      Entry: 10
+      Data: 1
     - Name: conditions
       Entry: 7
-      Data: 2|System.Collections.Generic.List`1[[FSMCondition, Assembly-CSharp]],
+      Data: 3|System.Collections.Generic.List`1[[FSMCondition, Assembly-CSharp]],
         mscorlib
     - Name: 
       Entry: 12
@@ -522,7 +539,8 @@ MonoBehaviour:
   des: 
   startState: {fileID: 1554961936}
   isRoot: 1
-  states: []
+  states:
+  - {fileID: 1554961936}
 --- !u!1 &602344259
 GameObject:
   m_ObjectHideFlags: 0
@@ -586,8 +604,8 @@ MonoBehaviour:
       Entry: 5
       Data: false
     - Name: name
-      Entry: 6
-      Data: 
+      Entry: 1
+      Data: "\u79FB\u52A8\u884C\u4E3A"
     - Name: fsm
       Entry: 6
       Data: 
@@ -745,62 +763,42 @@ MonoBehaviour:
     PrefabModifications: []
     SerializationNodes:
     - Name: state
+      Entry: 7
+      Data: 0|StateMachine, Assembly-CSharp
+    - Name: needsExitTime
+      Entry: 5
+      Data: false
+    - Name: isGhostState
+      Entry: 5
+      Data: false
+    - Name: name
+      Entry: 1
+      Data: "\u5DE1\u903B\u5B50\u72B6\u6001\u673A"
+    - Name: fsm
       Entry: 6
+      Data: 
+    - Name: 
+      Entry: 8
       Data: 
     - Name: transitions
       Entry: 7
-      Data: 0|System.Collections.Generic.List`1[[FSMTransitionAgent, Assembly-CSharp]],
+      Data: 1|System.Collections.Generic.List`1[[FSMTransitionAgent, Assembly-CSharp]],
         mscorlib
     - Name: 
       Entry: 12
-      Data: 1
-    - Name: 
-      Entry: 7
-      Data: 1|FSMTransitionAgent, Assembly-CSharp
-    - Name: des
-      Entry: 6
-      Data: 
-    - Name: from
-      Entry: 6
-      Data: 
-    - Name: to
-      Entry: 6
-      Data: 
-    - Name: conditions
-      Entry: 7
-      Data: 2|System.Collections.Generic.List`1[[FSMCondition, Assembly-CSharp]],
-        mscorlib
-    - Name: 
-      Entry: 12
-      Data: 1
-    - Name: 
-      Entry: 7
-      Data: 3|FSMCondition, Assembly-CSharp
-    - Name: stateType
-      Entry: 3
       Data: 0
     - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
       Entry: 13
       Data: 
     - Name: 
       Entry: 8
       Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 13
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-  des: 
-  startState: {fileID: 0}
+  des: "\u5DE1\u903B\u5B50\u72B6\u6001\u673A"
+  startState: {fileID: 427652068}
   isRoot: 0
-  states: []
+  states:
+  - {fileID: 602344261}
+  - {fileID: 427652068}
 --- !u!1 &963194225
 GameObject:
   m_ObjectHideFlags: 0
@@ -969,6 +967,7 @@ MonoBehaviour:
     ReferencedUnityObjects:
     - {fileID: 1554961936}
     - {fileID: 727196050}
+    - {fileID: 1665511647}
     SerializedBytesString: 
     Prefab: {fileID: 0}
     PrefabModificationsReferencedUnityObjects: []
@@ -976,16 +975,16 @@ MonoBehaviour:
     SerializationNodes:
     - Name: state
       Entry: 7
-      Data: 0|StateBase, Assembly-CSharp
+      Data: 0|StateMachine, Assembly-CSharp
     - Name: needsExitTime
       Entry: 5
-      Data: false
+      Data: true
     - Name: isGhostState
       Entry: 5
       Data: false
     - Name: name
       Entry: 1
-      Data: "\u8D77\u59CB\u8282\u70B9"
+      Data: "\u5F00\u59CB\u72B6\u6001"
     - Name: fsm
       Entry: 6
       Data: 
@@ -998,13 +997,13 @@ MonoBehaviour:
         mscorlib
     - Name: 
       Entry: 12
-      Data: 1
+      Data: 2
     - Name: 
       Entry: 7
       Data: 2|FSMTransitionAgent, Assembly-CSharp
     - Name: des
-      Entry: 6
-      Data: 
+      Entry: 1
+      Data: "\u5224\u65AD\u662F\u5426\u5DE1\u903B\u72B6\u6001"
     - Name: from
       Entry: 10
       Data: 0
@@ -1037,13 +1036,50 @@ MonoBehaviour:
       Entry: 8
       Data: 
     - Name: 
+      Entry: 7
+      Data: 5|FSMTransitionAgent, Assembly-CSharp
+    - Name: des
+      Entry: 1
+      Data: "\u5224\u65AD\u662F\u5426\u662F\u6218\u6597\u72B6\u6001"
+    - Name: from
+      Entry: 10
+      Data: 0
+    - Name: to
+      Entry: 10
+      Data: 2
+    - Name: conditions
+      Entry: 7
+      Data: 6|System.Collections.Generic.List`1[[FSMCondition, Assembly-CSharp]],
+        mscorlib
+    - Name: 
+      Entry: 12
+      Data: 1
+    - Name: 
+      Entry: 7
+      Data: 7|FSMCondition, Assembly-CSharp
+    - Name: stateType
+      Entry: 3
+      Data: 1
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
       Entry: 13
       Data: 
     - Name: 
       Entry: 8
       Data: 
-  des: 
-  startState: {fileID: 0}
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+  des: "\u5F00\u59CB\u72B6\u6001"
+  startState: {fileID: 727196050}
   isRoot: 0
   states:
   - {fileID: 727196050}
@@ -1059,7 +1095,7 @@ GameObject:
   - component: {fileID: 1665511646}
   - component: {fileID: 1665511647}
   m_Layer: 0
-  m_Name: subfsm
+  m_Name: subfsmcombat
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1102,18 +1138,33 @@ MonoBehaviour:
     PrefabModifications: []
     SerializationNodes:
     - Name: state
+      Entry: 7
+      Data: 0|StateMachine, Assembly-CSharp
+    - Name: needsExitTime
+      Entry: 5
+      Data: false
+    - Name: isGhostState
+      Entry: 5
+      Data: false
+    - Name: name
+      Entry: 1
+      Data: "\u6218\u6597\u5B50\u72B6\u6001\u673A"
+    - Name: fsm
       Entry: 6
+      Data: 
+    - Name: 
+      Entry: 8
       Data: 
     - Name: transitions
       Entry: 7
-      Data: 0|System.Collections.Generic.List`1[[FSMTransitionAgent, Assembly-CSharp]],
+      Data: 1|System.Collections.Generic.List`1[[FSMTransitionAgent, Assembly-CSharp]],
         mscorlib
     - Name: 
       Entry: 12
       Data: 1
     - Name: 
       Entry: 7
-      Data: 1|FSMTransitionAgent, Assembly-CSharp
+      Data: 2|FSMTransitionAgent, Assembly-CSharp
     - Name: des
       Entry: 6
       Data: 
@@ -1125,14 +1176,14 @@ MonoBehaviour:
       Data: 
     - Name: conditions
       Entry: 7
-      Data: 2|System.Collections.Generic.List`1[[FSMCondition, Assembly-CSharp]],
+      Data: 3|System.Collections.Generic.List`1[[FSMCondition, Assembly-CSharp]],
         mscorlib
     - Name: 
       Entry: 12
       Data: 1
     - Name: 
       Entry: 7
-      Data: 3|FSMCondition, Assembly-CSharp
+      Data: 4|FSMCondition, Assembly-CSharp
     - Name: stateType
       Entry: 3
       Data: 0
@@ -1154,7 +1205,7 @@ MonoBehaviour:
     - Name: 
       Entry: 8
       Data: 
-  des: 
+  des: "\u6218\u6597\u5B50\u72B6\u6001\u673A"
   startState: {fileID: 0}
   isRoot: 0
   states: []

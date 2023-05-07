@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-public class FSMTransitionAgent
+public class FSMTransitionGraph
 {
     [LabelText("说明")]
     public string des;
@@ -11,12 +11,12 @@ public class FSMTransitionAgent
     [ShowInInspector]
     [HideReferenceObjectPicker]
     //[TypeFilter(nameof(Get))]
-    public FSMStateAgent from;
+    public FSMStateGraph from;
     
     [ShowInInspector]
     [HideReferenceObjectPicker]
     //[TypeFilter(nameof(Get))]
-    public FSMStateAgent to;
+    public FSMStateGraph to;
     
     [ShowInInspector]
     [HideReferenceObjectPicker]
