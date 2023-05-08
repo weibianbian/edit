@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 public class TransitionBase
 {
@@ -9,13 +10,14 @@ public class TransitionBase
 
     public IStateMachine fsm;
     public List<ConditionBase> conditions=new List<ConditionBase>();
-
+    public Func<TransitionBase, bool> condition = null;
     public TransitionBase(string from, string to, bool forceInstantly = false)
     {
         this.from = from;
         this.to = to;
         this.forceInstantly = forceInstantly;
     }
+  
     public void AddCondition(ConditionBase condition)
     {
         conditions.Add(condition);
@@ -30,10 +32,9 @@ public class TransitionBase
     }
     public virtual bool ShouldTransition()
     {
-        for (int i = 0; i < conditions.Count; i++)
-        {
-
+        if (condition==null) {
+            return true;
         }
-        return true;
+        return condition(this);
     }
 }
