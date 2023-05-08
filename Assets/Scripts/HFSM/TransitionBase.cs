@@ -2,15 +2,15 @@
 
 public class TransitionBase
 {
-    public EStateType from;
-    public EStateType to;
+    public string from;
+    public string to;
 
     public bool forceInstantly;
 
     public IStateMachine fsm;
     public List<ConditionBase> conditions=new List<ConditionBase>();
 
-    public TransitionBase(EStateType from, EStateType to, bool forceInstantly = false)
+    public TransitionBase(string from, string to, bool forceInstantly = false)
     {
         this.from = from;
         this.to = to;

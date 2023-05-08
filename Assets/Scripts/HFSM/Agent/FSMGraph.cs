@@ -1,4 +1,5 @@
 ﻿using Sirenix.OdinInspector;
+using System;
 using System.Collections.Generic;
 public class FSMGraph : FSMStateGraph
 {
@@ -42,4 +43,30 @@ public enum EAgentSubStateType
 {
     Patrol,
     Combat,
+}
+public class StateFactory
+{
+    public static StateBase Create(EStateType stateType)
+    {
+        switch (stateType)
+        {
+            case EStateType.Root:
+                return new StateMachine();
+            case EStateType.Combat:
+                return new StateMachine();
+            case EStateType.Patrol:
+                return new StateMachine();
+            case EStateType.Move: return new MoveActionState();
+            case EStateType.TurnTo: return new TurnToActionState();
+        }
+        return null;
+    }
+}
+public class EStateAttribute : Attribute
+{
+    public EStateType state;
+    public EStateAttribute(EStateType stateType)
+    {
+        this.state = stateType;
+    }
 }

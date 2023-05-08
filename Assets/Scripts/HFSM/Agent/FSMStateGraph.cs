@@ -2,6 +2,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 
 public class FSMStateGraph : SerializedMonoBehaviour
@@ -9,7 +10,7 @@ public class FSMStateGraph : SerializedMonoBehaviour
     [LabelText("说明")]
     public string des="";
     [LabelText("名称")]
-    public EStateType stateName =EStateType.Idle;
+    public string stateName ="";
     public void Awake()
     {
     }
@@ -26,15 +27,19 @@ public class FSMStateGraph : SerializedMonoBehaviour
 
         return new ValueDropdownList<StateBase>()
         {
-            { "StateMachine", new StateMachine() },
+            { EStateType.Root.ToString(), new StateMachine() },
             { "StateBase", new StateBase() },
             { "ActionState", new ActionState() },
         };
     }
 }
 public enum EStateType { 
+    Root,
+    Patrol,
+    Combat,
     Idle,
     Move,
+    TurnTo,
     Walk,
 }
 

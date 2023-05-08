@@ -1079,8 +1079,7 @@ MonoBehaviour:
   des: "\u6218\u6597\u5B50\u72B6\u6001\u673A"
   stateName: "\u6218\u6597\u5B50\u72B6\u6001\u673A"
   startState: {fileID: 0}
-  states:
-  - {fileID: 0}
+  states: []
 --- !u!1 &1984677372
 GameObject:
   m_ObjectHideFlags: 0

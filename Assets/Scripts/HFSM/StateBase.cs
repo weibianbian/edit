@@ -6,7 +6,7 @@ public class StateBase
 {
     public bool needsExitTime = false;
     public bool isGhostState;
-    public EStateType name;
+    public string name;
     public IStateMachine fsm;
     public virtual void Init()
     {
@@ -28,8 +28,4 @@ public class StateBase
     {
 
     }
-}
-public class WalkState: StateBase
-{
-
 }
