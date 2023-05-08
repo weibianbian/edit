@@ -7,16 +7,18 @@ public class FSMStateGraph : SerializedMonoBehaviour
 {
     [LabelText("说明")]
     public string des="";
-    //[TypeFilter(nameof(Get))]
-    //public StateBase state=new StateBase();
+    [LabelText("名称")]
+    public string stateName = "";
 
-    public IEnumerable<Type> Get()
+    public void Awake()
     {
-        var q = typeof(StateBase).Assembly.GetTypes()
-           .Where(x => !x.IsAbstract)
-           .Where(x => !x.IsGenericTypeDefinition)
-           .Where(x => typeof(StateBase).IsAssignableFrom(x));
+    }
+    public virtual void OnSave()
+    {
 
-        return q;
+    }
+    public virtual StateBase CreateFSMFromGraph()
+    {
+        return new StateBase();
     }
 }
