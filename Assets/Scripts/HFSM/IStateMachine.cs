@@ -2,8 +2,8 @@
 {
     void StateCanExit();
 
-    void RequestStateChange(string name, bool forceInstantly = false);
+    void RequestStateChange(EStateType name, bool forceInstantly = false);
 
     StateBase ActiveState { get; }
-    string ActiveStateName { get; }
+    EStateType ActiveStateName { get; }
 }

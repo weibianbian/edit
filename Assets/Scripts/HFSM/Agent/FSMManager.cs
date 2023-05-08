@@ -13,15 +13,15 @@ public class FSMManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (root != null)
-        {
-            root.OnLogic();
-        }
+        //if (root != null)
+        //{
+        //    root.OnLogic();
+        //}
     }
     public void OnSave()
     {
         root = CreateFSMFromGraph();
-        root.Init();
+        //root.Init();
     }
 
     public StateMachine CreateFSMFromGraph()

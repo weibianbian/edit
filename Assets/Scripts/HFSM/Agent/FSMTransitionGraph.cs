@@ -1,5 +1,6 @@
 ﻿using Sirenix.OdinInspector;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -17,18 +18,28 @@ public class FSMTransitionGraph
     public FSMStateGraph to;
 
     [ShowInInspector]
+    [ValueDropdown("@ConditionTypes",ExpandAllMenuItems =true)]
     [HideReferenceObjectPicker]
-    [ListDrawerSettings(CustomAddFunction = "AddCondition")]
-    public List<FSMCondition> conditions = new List<FSMCondition>();
-    private FSMCondition AddCondition => new();
-
+    public List<ConditionBase> conditions = new List<ConditionBase>();
     public TransitionBase CreateFromGraph()
     {
-        Transition tran = new Transition(from.stateName, to.stateName);
+        TransitionBase tran = new TransitionBase(from.stateName, to.stateName);
+        for (int i = 0; i < conditions.Count; i++)
+        {
+            tran.AddCondition(conditions[i]);
+        }
         return tran;
     }
+    public static IEnumerable ConditionTypes = new ValueDropdownList<ConditionBase>()
+    {
+        { "敌人状态", new AIStateCondition() },
+    };
 }
-public class FSMCondition
+public class ConditionBase
 {
-    public EStateType stateType;
+   
+}
+public class AIStateCondition : ConditionBase
+{
+    public EAgentSubStateType stateType;
 }

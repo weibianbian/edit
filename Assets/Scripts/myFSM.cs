@@ -13,11 +13,7 @@ public class myFSM : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        fsm = new StateMachine();
-        fsm.AddState("a", new StateBase());
-        fsm.AddState("b", new StateBase());
-        fsm.AddTransition("a", "b");
-        fsm.Init();
+        
 
 
     }

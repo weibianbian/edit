@@ -1,17 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 public class StateMachine : StateBase, IStateMachine, IActionable
 {
     private static readonly List<TransitionBase> noTransitions = new List<TransitionBase>(0);
     private List<TransitionBase> activeTransitions = noTransitions;
     private StateBase activeState = null;
-    private Dictionary<string, StateBundle> nameToStateBundle = new Dictionary<string, StateBundle>();
-    private (string state, bool hasState) startState = (default, false);
-    private (string state, bool isPending) pendingState = (default, false);
+    private Dictionary<EStateType, StateBundle> nameToStateBundle = new Dictionary<EStateType, StateBundle>();
+    private (EStateType state, bool hasState) startState = (default, false);
+    private (EStateType state, bool isPending) pendingState = (default, false);
 
     public StateBase ActiveState => activeState;
-    public string ActiveStateName => ActiveState.name;
+    public EStateType ActiveStateName => ActiveState.name;
     private bool IsRootFsm => fsm == null;
     public override void Init()
     {
@@ -26,11 +27,11 @@ public class StateMachine : StateBase, IStateMachine, IActionable
         }
         ChangeState(startState.state);
     }
-    public void SetStartState(string name)
+    public void SetStartState(EStateType name)
     {
         startState = (name, true);
     }
-    private void ChangeState(string name)
+    private void ChangeState(EStateType name)
     {
         UnityEngine.Debug.LogError($"changeState={name}");
         activeState?.OnExit();
@@ -48,7 +49,7 @@ public class StateMachine : StateBase, IStateMachine, IActionable
             activeTransitions[i].OnEnter();
         }
     }
-    public void AddState(string name, StateBase state)
+    public void AddState(EStateType name, StateBase state)
     {
         state.fsm = this;
         state.name = name;
@@ -63,23 +64,18 @@ public class StateMachine : StateBase, IStateMachine, IActionable
         }
     }
     public void AddTransition(
-            string from,
-            string to,
-            Func<TransitionBase, bool> condition = null,
+            EStateType from,
+            EStateType to,
             bool forceInstantly = false)
     {
-        AddTransition(CreateOptimizedTransition(from, to, condition, forceInstantly));
+        AddTransition(CreateOptimizedTransition(from, to, forceInstantly));
     }
     private TransitionBase CreateOptimizedTransition(
-        string from,
-        string to,
-        Func<Transition, bool> condition = null,
+        EStateType from,
+        EStateType to,
         bool forceInstantly = false)
     {
-        if (condition == null)
-            return new TransitionBase(from, to, forceInstantly);
-
-        return new Transition(from, to, condition, forceInstantly);
+        return new TransitionBase(from, to, forceInstantly);
     }
     public void AddTransition(TransitionBase transition)
     {
@@ -93,7 +89,7 @@ public class StateMachine : StateBase, IStateMachine, IActionable
         transition.fsm = this;
         transition.Init();
     }
-    private StateBundle GetOrCreateStateBundle(string name)
+    private StateBundle GetOrCreateStateBundle(EStateType name)
     {
         StateBundle bundle;
 
@@ -139,7 +135,7 @@ public class StateMachine : StateBase, IStateMachine, IActionable
 
         return true;
     }
-    public void RequestStateChange(string name, bool forceInstantly = false)
+    public void RequestStateChange(EStateType name, bool forceInstantly = false)
     {
         if (!activeState.needsExitTime || forceInstantly)
         {
@@ -155,7 +151,7 @@ public class StateMachine : StateBase, IStateMachine, IActionable
     {
         if (pendingState.isPending)
         {
-            string state = pendingState.state;
+            EStateType state = pendingState.state;
             pendingState = (default, false);
             ChangeState(state);
         }

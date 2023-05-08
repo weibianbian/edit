@@ -9,7 +9,7 @@ public class FSMStateGraph : SerializedMonoBehaviour
     [LabelText("说明")]
     public string des="";
     [LabelText("名称")]
-    public string stateName = "";
+    public EStateType stateName =EStateType.Idle;
     public void Awake()
     {
     }
@@ -32,3 +32,9 @@ public class FSMStateGraph : SerializedMonoBehaviour
         };
     }
 }
+public enum EStateType { 
+    Idle,
+    Move,
+    Walk,
+}
+

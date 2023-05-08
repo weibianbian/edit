@@ -482,7 +482,7 @@ MonoBehaviour:
       Data: 1
     - Name: conditions
       Entry: 7
-      Data: 2|System.Collections.Generic.List`1[[FSMCondition, Assembly-CSharp]],
+      Data: 2|System.Collections.Generic.List`1[[ConditionBase, Assembly-CSharp]],
         mscorlib
     - Name: 
       Entry: 12
@@ -501,9 +501,6 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 8
-      Data: 
-    - Name: fsm
-      Entry: 6
       Data: 
   des: 
   stateName: 
@@ -740,9 +737,6 @@ MonoBehaviour:
     - Name: 
       Entry: 8
       Data: 
-    - Name: fsm
-      Entry: 6
-      Data: 
   des: "\u5DE1\u903B\u5B50\u72B6\u6001\u673A"
   stateName: "\u5DE1\u903B\u5B50\u72B6\u6001\u673A"
   startState: {fileID: 602344261}
@@ -944,14 +938,14 @@ MonoBehaviour:
       Data: 1
     - Name: conditions
       Entry: 7
-      Data: 2|System.Collections.Generic.List`1[[FSMCondition, Assembly-CSharp]],
+      Data: 2|System.Collections.Generic.List`1[[ConditionBase, Assembly-CSharp]],
         mscorlib
     - Name: 
       Entry: 12
       Data: 1
     - Name: 
       Entry: 7
-      Data: 3|FSMCondition, Assembly-CSharp
+      Data: 3|AIStateCondition, Assembly-CSharp
     - Name: stateType
       Entry: 3
       Data: 0
@@ -981,14 +975,14 @@ MonoBehaviour:
       Data: 2
     - Name: conditions
       Entry: 7
-      Data: 5|System.Collections.Generic.List`1[[FSMCondition, Assembly-CSharp]],
+      Data: 5|System.Collections.Generic.List`1[[ConditionBase, Assembly-CSharp]],
         mscorlib
     - Name: 
       Entry: 12
       Data: 1
     - Name: 
       Entry: 7
-      Data: 6|FSMCondition, Assembly-CSharp
+      Data: 6|AIStateCondition, Assembly-CSharp
     - Name: stateType
       Entry: 3
       Data: 1
@@ -1009,9 +1003,6 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 8
-      Data: 
-    - Name: fsm
-      Entry: 6
       Data: 
   des: "\u5F00\u59CB\u72B6\u6001"
   stateName: "\u5F00\u59CB\u72B6\u6001"
@@ -1085,13 +1076,11 @@ MonoBehaviour:
     - Name: 
       Entry: 8
       Data: 
-    - Name: fsm
-      Entry: 6
-      Data: 
   des: "\u6218\u6597\u5B50\u72B6\u6001\u673A"
   stateName: "\u6218\u6597\u5B50\u72B6\u6001\u673A"
   startState: {fileID: 0}
-  states: []
+  states:
+  - {fileID: 0}
 --- !u!1 &1984677372
 GameObject:
   m_ObjectHideFlags: 0

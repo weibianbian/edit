@@ -1,9 +1,5 @@
 ﻿using Sirenix.OdinInspector;
-using System;
 using System.Collections.Generic;
-using Unity.VisualScripting;
-using UnityEngine;
-[ExecuteInEditMode]
 public class FSMGraph : FSMStateGraph
 {
     [ShowInInspector]
@@ -42,7 +38,7 @@ public class FSMGraph : FSMStateGraph
 
     }
 }
-public enum EStateType
+public enum EAgentSubStateType
 {
     Patrol,
     Combat,
