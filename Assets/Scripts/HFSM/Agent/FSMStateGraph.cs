@@ -1,5 +1,6 @@
 ﻿using Sirenix.OdinInspector;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -9,7 +10,6 @@ public class FSMStateGraph : SerializedMonoBehaviour
     public string des="";
     [LabelText("名称")]
     public string stateName = "";
-
     public void Awake()
     {
     }
@@ -20,5 +20,15 @@ public class FSMStateGraph : SerializedMonoBehaviour
     public virtual StateBase CreateFSMFromGraph()
     {
         return new StateBase();
+    }
+    public static IEnumerable GetStateType1()
+    {
+
+        return new ValueDropdownList<StateBase>()
+        {
+            { "StateMachine", new StateMachine() },
+            { "StateBase", new StateBase() },
+            { "ActionState", new ActionState() },
+        };
     }
 }

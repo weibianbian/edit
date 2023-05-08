@@ -1,8 +1,9 @@
 ﻿using Sirenix.OdinInspector;
 using System;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
-
+[ExecuteInEditMode]
 public class FSMGraph : FSMStateGraph
 {
     [ShowInInspector]
@@ -15,12 +16,10 @@ public class FSMGraph : FSMStateGraph
     [ShowInInspector]
     [HideReferenceObjectPicker]
     public List<FSMStateGraph> states = new List<FSMStateGraph>();
-    [Title("动态创建内容")]
-    public StateMachine fsm = null;
 
     public override StateBase CreateFSMFromGraph()
     {
-        fsm = new StateMachine();
+        StateMachine fsm = new StateMachine();
         for (int i = 0; i < states.Count; i++)
         {
             StateBase state = states[i].CreateFSMFromGraph();
