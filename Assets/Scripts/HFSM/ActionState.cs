@@ -1,5 +1,9 @@
 ﻿public class ActionState : StateBase, IActionable
 {
+    public ActionState(FSMComponent compt) : base(compt)
+    {
+    }
+
     public void OnAction(string trigger)
     {
        
@@ -16,11 +20,15 @@
         }
     }
 }
-public class MoveActionState: ActionState
+public class MoveActionState : ActionState
 {
-
+    public MoveActionState(FSMComponent compt) : base(compt)
+    {
+    }
 }
 public class TurnToActionState : ActionState
 {
-
+    public TurnToActionState(FSMComponent compt) : base(compt)
+    {
+    }
 }

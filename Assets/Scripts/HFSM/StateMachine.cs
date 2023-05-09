@@ -11,6 +11,11 @@ public class StateMachine : StateBase, IStateMachine, IActionable
     private (string state, bool hasState) startState = (default, false);
     private (string state, bool isPending) pendingState = (default, false);
 
+    public StateMachine(FSMComponent compt) : base(compt)
+    {
+
+    }
+
     public StateBase ActiveState => activeState;
     public string ActiveStateName => ActiveState.name;
     private bool IsRootFsm => fsm == null;
@@ -66,16 +71,18 @@ public class StateMachine : StateBase, IStateMachine, IActionable
     public void AddTransition(
             string from,
             string to,
+            ICondition condition,
             bool forceInstantly = false)
     {
-        AddTransition(CreateOptimizedTransition(from, to, forceInstantly));
+        AddTransition(CreateOptimizedTransition(from, to, condition, forceInstantly));
     }
     private TransitionBase CreateOptimizedTransition(
         string from,
         string to,
+        ICondition condition,
         bool forceInstantly = false)
     {
-        return new TransitionBase(from, to, forceInstantly);
+        return new TransitionBase(from, to, condition, forceInstantly);
     }
     public void AddTransition(TransitionBase transition)
     {

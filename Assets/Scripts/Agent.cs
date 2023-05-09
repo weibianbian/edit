@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Agent
 {
-    public StateMachine fsm;
+    public FSMComponent fsmCompt;
+
+    public EAgentSubStateType subState=EAgentSubStateType.Patrol;
 
 }

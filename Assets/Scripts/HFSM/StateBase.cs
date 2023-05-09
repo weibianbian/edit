@@ -8,6 +8,11 @@ public class StateBase
     public bool isGhostState;
     public string name;
     public IStateMachine fsm;
+    public FSMComponent compt;
+    public StateBase(FSMComponent compt)
+    {
+        this.compt = compt;
+    }
     public virtual void Init()
     {
 

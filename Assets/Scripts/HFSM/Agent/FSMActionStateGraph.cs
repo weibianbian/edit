@@ -1,7 +1,7 @@
 ﻿public class FSMActionStateGraph: FSMStateGraph
 {
-    public override StateBase CreateFSMFromGraph()
+    public override StateBase CreateFSMFromGraph(FSMComponentGraph graph)
     {
-        return new ActionState();
+        return new ActionState(graph.compt);
     }
 }

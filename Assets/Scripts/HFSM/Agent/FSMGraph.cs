@@ -14,12 +14,12 @@ public class FSMGraph : FSMStateGraph
     [HideReferenceObjectPicker]
     public List<FSMStateGraph> states = new List<FSMStateGraph>();
 
-    public override StateBase CreateFSMFromGraph()
+    public override StateBase CreateFSMFromGraph(FSMComponentGraph graph)
     {
-        StateMachine fsm = new StateMachine();
+        StateMachine fsm = new StateMachine(graph.compt);
         for (int i = 0; i < states.Count; i++)
         {
-            StateBase state = states[i].CreateFSMFromGraph();
+            StateBase state = states[i].CreateFSMFromGraph(graph);
             fsm.AddState(states[i].stateName, state);
         }
         if (startState != null)
@@ -28,7 +28,7 @@ public class FSMGraph : FSMStateGraph
         }
         for (int i = 0; i < transitions.Count; i++)
         {
-            TransitionBase transition = transitions[i].CreateFromGraph();
+            TransitionBase transition = transitions[i].CreateFromGraph(graph);
             fsm.AddTransition(transition);
         }
         return fsm;
@@ -46,21 +46,21 @@ public enum EAgentSubStateType
 }
 public class StateFactory
 {
-    public static StateBase Create(EStateType stateType)
-    {
-        switch (stateType)
-        {
-            case EStateType.Root:
-                return new StateMachine();
-            case EStateType.Combat:
-                return new StateMachine();
-            case EStateType.Patrol:
-                return new StateMachine();
-            case EStateType.Move: return new MoveActionState();
-            case EStateType.TurnTo: return new TurnToActionState();
-        }
-        return null;
-    }
+    //public static StateBase Create(EStateType stateType)
+    //{
+    //    switch (stateType)
+    //    {
+    //        case EStateType.Root:
+    //            return new StateMachine();
+    //        case EStateType.Combat:
+    //            return new StateMachine();
+    //        case EStateType.Patrol:
+    //            return new StateMachine();
+    //        case EStateType.Move: return new MoveActionState();
+    //        case EStateType.TurnTo: return new TurnToActionState();
+    //    }
+    //    return null;
+    //}
 }
 public class EStateAttribute : Attribute
 {

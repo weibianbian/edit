@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using Unity.VisualScripting;
 
 public class FSMStateGraph : SerializedMonoBehaviour
 {
@@ -18,19 +19,9 @@ public class FSMStateGraph : SerializedMonoBehaviour
     {
 
     }
-    public virtual StateBase CreateFSMFromGraph()
+    public virtual StateBase CreateFSMFromGraph(FSMComponentGraph graph)
     {
-        return new StateBase();
-    }
-    public static IEnumerable GetStateType1()
-    {
-
-        return new ValueDropdownList<StateBase>()
-        {
-            { EStateType.Root.ToString(), new StateMachine() },
-            { "StateBase", new StateBase() },
-            { "ActionState", new ActionState() },
-        };
+        return new StateBase(graph.compt);
     }
 }
 public enum EStateType { 

@@ -718,7 +718,9 @@ MonoBehaviour:
   serializationData:
     SerializedFormat: 2
     SerializedBytes: 
-    ReferencedUnityObjects: []
+    ReferencedUnityObjects:
+    - {fileID: 602344261}
+    - {fileID: 427652068}
     SerializedBytesString: 
     Prefab: {fileID: 0}
     PrefabModificationsReferencedUnityObjects: []
@@ -730,7 +732,44 @@ MonoBehaviour:
         mscorlib
     - Name: 
       Entry: 12
+      Data: 1
+    - Name: 
+      Entry: 7
+      Data: 1|FSMTransitionGraph, Assembly-CSharp
+    - Name: des
+      Entry: 6
+      Data: 
+    - Name: from
+      Entry: 10
       Data: 0
+    - Name: to
+      Entry: 10
+      Data: 1
+    - Name: conditions
+      Entry: 7
+      Data: 2|System.Collections.Generic.List`1[[ConditionBase, Assembly-CSharp]],
+        mscorlib
+    - Name: 
+      Entry: 12
+      Data: 1
+    - Name: 
+      Entry: 7
+      Data: 3|AIStateCondition, Assembly-CSharp
+    - Name: stateType
+      Entry: 3
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
     - Name: 
       Entry: 13
       Data: 
