@@ -21,8 +21,8 @@ public class FSMComponentGraph : MonoBehaviour
     }
     public void OnSave()
     {
-        compt.root = CreateFSMFromGraph();
-        compt.root.Init();
+        compt.fsm = CreateFSMFromGraph();
+        compt.fsm.Init();
     }
 
     public StateMachine CreateFSMFromGraph()
@@ -32,7 +32,7 @@ public class FSMComponentGraph : MonoBehaviour
 }
 public class FSMComponent
 {
-    public StateMachine root;
+    public StateMachine fsm;
     public Agent agent;
 
     public FSMComponent(Agent agent)
@@ -42,9 +42,9 @@ public class FSMComponent
 
     public void Update()
     {
-        if (root != null)
+        if (fsm != null)
         {
-            root.OnLogic();
+            fsm.OnLogic();
         }
     }
 }
