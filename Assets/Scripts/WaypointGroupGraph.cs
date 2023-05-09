@@ -1,12 +1,8 @@
 ﻿using Sirenix.OdinInspector;
-using Sirenix.OdinInspector.Editor;
 using System.Collections.Generic;
-using System.Diagnostics;
-using UnityEditor;
 using UnityEngine;
-using static UnityEditor.PlayerSettings;
 
-public class WaypointGroupAgent:SerializedMonoBehaviour
+public class WaypointGroupGraph:SerializedMonoBehaviour
 {
     
     [HideInInspector]
@@ -15,7 +11,7 @@ public class WaypointGroupAgent:SerializedMonoBehaviour
     [LabelText("路点列表")]
     [ShowInInspector]
     [HideReferenceObjectPicker]
-    public List<WaypointAgent> waypointGroup =new List<WaypointAgent>();
+    public List<WaypointGraph> waypointGrahps = new List<WaypointGraph>();
 
     public void Awake()
     {

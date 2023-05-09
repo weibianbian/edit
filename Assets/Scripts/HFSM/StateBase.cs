@@ -1,8 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
-public class StateBase
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+public class StateBase: IJsonConvertible
 {
     public bool needsExitTime = false;
     public bool isGhostState;
@@ -32,5 +33,16 @@ public class StateBase
     public virtual void OnExitRequest()
     {
 
+    }
+
+    public virtual void WriteJson(JObject writer)
+    {
+        writer.Add("needsExitTime", needsExitTime);
+        writer.Add("isGhostState", isGhostState);
+        writer.Add("name", name);
+    }
+
+    public void ReadJson(JObject reader)
+    {
     }
 }

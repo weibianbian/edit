@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -173,5 +174,16 @@ public class StateMachine : StateBase, IStateMachine, IActionable
     public void OnAction<TData>(string trigger, TData data)
     {
         throw new System.NotImplementedException();
+    }
+    public override void WriteJson(JObject writer)
+    {
+        foreach (var item in nameToStateBundle)
+        {
+            JObject obj = new JObject();
+            writer.Add($"{item.Key}", obj);
+            item.Value.WriteJson(obj);
+        }
+        base.WriteJson(writer);
+
     }
 }

@@ -1,7 +1,8 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 
-public class TransitionBase
+public class TransitionBase:IJsonConvertible
 {
     public string from;
     public string to;
@@ -25,11 +26,23 @@ public class TransitionBase
     {
 
     }
+
+    
+
     public virtual bool ShouldTransition()
     {
         if (condition==null) {
             return true;
         }
         return condition.Condition(this);
+    }
+
+    public void WriteJson(JObject writer)
+    {
+        writer.Add("from",from);
+        writer.Add("to", to);
+    }
+    public void ReadJson(JObject writer)
+    {
     }
 }

@@ -68,19 +68,3 @@ public class FSMTransitionGraph
         { "敌人状态", new AIStateCondition() },
     };
 }
-public class ConditionBase
-{
-    public virtual bool Check(FSMComponent compt)
-    {
-        return true;
-    }
-}
-public class AIStateCondition : ConditionBase
-{
-    public EAgentSubStateType stateType;
-    public override bool Check(FSMComponent compt)
-    {
-        UnityEngine.Debug.LogError("AIStateCondition");
-        return compt.agent.subState == stateType;
-    }
-}
