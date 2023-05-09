@@ -1,6 +1,6 @@
 ﻿public interface IStateMachine
 {
-    void StateCanExit();
+    bool StateCanExit();
 
     void RequestStateChange(string name, bool forceInstantly = false);
 

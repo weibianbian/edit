@@ -1,10 +1,10 @@
 ﻿using Sirenix.OdinInspector;
 using System;
 using System.Collections.Generic;
-public class FSMGraph : FSMStateGraph
+public class FSMGraph : FSMStateBaseGraph
 {
     [ShowInInspector]
-    public FSMStateGraph startState;
+    public FSMStateBaseGraph startState;
     [ShowInInspector]
     [HideReferenceObjectPicker]
     [ListDrawerSettings(CustomAddFunction = "AddTransition")]
@@ -12,15 +12,15 @@ public class FSMGraph : FSMStateGraph
     private FSMTransitionGraph AddTransition => new();
     [ShowInInspector]
     [HideReferenceObjectPicker]
-    public List<FSMStateGraph> states = new List<FSMStateGraph>();
+    public List<FSMStateBaseGraph> states = new List<FSMStateBaseGraph>();
 
-    public override StateBase CreateFSMFromGraph(FSMComponentGraph graph)
+    protected override StateBase OnCreateFSMFromGraph(FSMComponentGraph graph)
     {
         StateMachine fsm = new StateMachine(graph.compt);
         for (int i = 0; i < states.Count; i++)
         {
             StateBase state = states[i].CreateFSMFromGraph(graph);
-            fsm.AddState(states[i].stateName, state);
+            fsm.AddState(state.name, state);
         }
         if (startState != null)
         {

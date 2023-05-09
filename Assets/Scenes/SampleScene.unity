@@ -261,6 +261,7 @@ MonoBehaviour:
       Data: 
   des: "\u5DE1\u903B\u5B50\u72B6\u6001\u673A"
   stateName: "\u5DE1\u903B\u5B50\u72B6\u6001\u673A"
+  isExitState: 0
   startState: {fileID: 1394150747}
   states:
   - {fileID: 1394150747}
@@ -431,6 +432,7 @@ MonoBehaviour:
       Data: 
   des: "\u6218\u6597\u5B50\u72B6\u6001\u673A"
   stateName: "\u6218\u6597\u5B50\u72B6\u6001\u673A"
+  isExitState: 0
   startState: {fileID: 0}
   states: []
 --- !u!1 &413376268
@@ -543,7 +545,8 @@ MonoBehaviour:
     PrefabModifications: []
     SerializationNodes: []
   des: "\u8F6C\u5411\u884C\u4E3A"
-  stateName: "\u8F6C\u5411\u884C\u4E3A"
+  stateName: "\u5DE1\u903B\u5B50\u72B6\u6001\u673A-\u8F6C\u5411\u884C\u4E3A"
+  isExitState: 1
 --- !u!1 &581098975
 GameObject:
   m_ObjectHideFlags: 0
@@ -645,6 +648,7 @@ MonoBehaviour:
       Data: 
   des: 
   stateName: 
+  isExitState: 1
   startState: {fileID: 1554961936}
   states:
   - {fileID: 1554961936}
@@ -661,7 +665,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rootGraph: {fileID: 581098977}
-  agent: {fileID: 1450386737}
 --- !u!114 &581098979
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -738,7 +741,8 @@ MonoBehaviour:
     PrefabModifications: []
     SerializationNodes: []
   des: "\u79FB\u52A8\u884C\u4E3A"
-  stateName: "\u79FB\u52A8\u884C\u4E3A"
+  stateName: "\u5DE1\u903B\u5B50\u72B6\u6001\u673A-\u79FB\u52A8\u884C\u4E3A"
+  isExitState: 0
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0
@@ -885,7 +889,6 @@ MonoBehaviour:
     ReferencedUnityObjects:
     - {fileID: 602344261}
     - {fileID: 427652068}
-    - {fileID: 727196050}
     SerializedBytesString: 
     Prefab: {fileID: 0}
     PrefabModificationsReferencedUnityObjects: []
@@ -897,7 +900,7 @@ MonoBehaviour:
         mscorlib
     - Name: 
       Entry: 12
-      Data: 2
+      Data: 1
     - Name: 
       Entry: 7
       Data: 1|FSMTransitionGraph, Assembly-CSharp
@@ -936,34 +939,6 @@ MonoBehaviour:
       Entry: 8
       Data: 
     - Name: 
-      Entry: 7
-      Data: 4|FSMTransitionGraph, Assembly-CSharp
-    - Name: des
-      Entry: 6
-      Data: 
-    - Name: from
-      Entry: 10
-      Data: 0
-    - Name: to
-      Entry: 10
-      Data: 2
-    - Name: conditions
-      Entry: 7
-      Data: 5|System.Collections.Generic.List`1[[ConditionBase, Assembly-CSharp]],
-        mscorlib
-    - Name: 
-      Entry: 12
-      Data: 0
-    - Name: 
-      Entry: 13
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
       Entry: 13
       Data: 
     - Name: 
@@ -971,6 +946,7 @@ MonoBehaviour:
       Data: 
   des: "\u5DE1\u903B\u5B50\u72B6\u6001\u673A"
   stateName: "\u5DE1\u903B\u5B50\u72B6\u6001\u673A"
+  isExitState: 1
   startState: {fileID: 602344261}
   states:
   - {fileID: 602344261}
@@ -1129,7 +1105,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rootGraph: {fileID: 1028189577}
-  agent: {fileID: 1450386737}
 --- !u!114 &1028189577
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1196,6 +1171,7 @@ MonoBehaviour:
       Data: 
   des: 
   stateName: 
+  isExitState: 0
   startState: {fileID: 1456808398}
   states:
   - {fileID: 1456808398}
@@ -1313,6 +1289,7 @@ MonoBehaviour:
     SerializationNodes: []
   des: "\u8F6C\u5411\u884C\u4E3A"
   stateName: "\u8F6C\u5411\u884C\u4E3A"
+  isExitState: 0
 --- !u!1 &1394150745
 GameObject:
   m_ObjectHideFlags: 0
@@ -1368,17 +1345,7 @@ MonoBehaviour:
     SerializationNodes: []
   des: "\u79FB\u52A8\u884C\u4E3A"
   stateName: "\u79FB\u52A8\u884C\u4E3A"
---- !u!114 &1450386737 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 1326456539790484250, guid: 8cc6ab4bc15044e478c90fe1d06c6d30, type: 3}
-  m_PrefabInstance: {fileID: 1326456538550208043}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cd4bd29efdb7d314eb456530dce6913c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  isExitState: 0
 --- !u!1 &1456808396
 GameObject:
   m_ObjectHideFlags: 0
@@ -1526,6 +1493,7 @@ MonoBehaviour:
       Data: 
   des: "\u5F00\u59CB\u72B6\u6001"
   stateName: "\u5F00\u59CB\u72B6\u6001"
+  isExitState: 0
   startState: {fileID: 128603460}
   states:
   - {fileID: 128603460}
@@ -1677,6 +1645,7 @@ MonoBehaviour:
       Data: 
   des: "\u5F00\u59CB\u72B6\u6001"
   stateName: "\u5F00\u59CB\u72B6\u6001"
+  isExitState: 1
   startState: {fileID: 727196050}
   states:
   - {fileID: 727196050}
@@ -1749,6 +1718,7 @@ MonoBehaviour:
       Data: 
   des: "\u6218\u6597\u5B50\u72B6\u6001\u673A"
   stateName: "\u6218\u6597\u5B50\u72B6\u6001\u673A"
+  isExitState: 0
   startState: {fileID: 0}
   states: []
 --- !u!1001 &1326456538550208043

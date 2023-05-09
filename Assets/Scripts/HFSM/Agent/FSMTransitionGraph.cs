@@ -39,11 +39,11 @@ public class FSMTransitionGraph
 
     [ShowInInspector]
     [HideReferenceObjectPicker]
-    public FSMStateGraph from;
+    public FSMStateBaseGraph from;
 
     [ShowInInspector]
     [HideReferenceObjectPicker]
-    public FSMStateGraph to;
+    public FSMStateBaseGraph to;
 
     [ShowInInspector]
     [ValueDropdown("@ConditionTypes", ExpandAllMenuItems = true)]
