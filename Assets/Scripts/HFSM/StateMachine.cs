@@ -30,7 +30,7 @@ public class StateMachine : StateBase, IStateMachine, IActionable
     {
         if (!startState.hasState)
         {
-
+            Debug.LogError("No start state is selected");
         }
         ChangeState(startState.state);
     }
@@ -112,13 +112,8 @@ public class StateMachine : StateBase, IStateMachine, IActionable
     }
     public override void OnLogic()
     {
-        if (TryToExitStateMachine())
-        {
-            return;
-        }
         TryAllDirectTransitions();
         activeState.OnLogic();
-
     }
     public override void OnExit()
     {
@@ -160,25 +155,27 @@ public class StateMachine : StateBase, IStateMachine, IActionable
             activeState.OnExitRequest();
         }
     }
-    public bool StateCanExit()
+    public void  StateCanExit()
     {
-        Debug.LogError($"状态退出={activeState?.name}");
-        if (TryToExitStateMachine())
+        if (pendingState.isPending)
         {
-            return true;
+            string state = pendingState.state;
+            pendingState = (default, false);
+            ChangeState(state);
         }
 
-        if (!pendingState.isPending)
-        {
-            return false;
-        }
-
-        string state = pendingState.state;
-        pendingState = (default, false);
-        ChangeState(state);
-        return true;
+        fsm?.StateCanExit();
     }
+    public override void OnExitRequest()
+    {
+        if (activeState.needsExitTime)
+        {
+            activeState.OnExitRequest();
+            return;
+        }
 
+        fsm?.StateCanExit();
+    }
     public void OnAction(string trigger)
     {
         throw new System.NotImplementedException();
@@ -188,21 +185,7 @@ public class StateMachine : StateBase, IStateMachine, IActionable
     {
         throw new System.NotImplementedException();
     }
-    private bool TryToExitStateMachine()
-    {
-        if (fsm == null || !activeState.isExitState)
-        {
-            return false;
-        }
-
-        if (activeState.needsExitTime)
-        {
-            activeState.OnExitRequest();
-            return !IsActive;
-        }
-
-        return fsm.StateCanExit();
-    }
+  
     public override void WriteJson(JObject writer)
     {
         foreach (var item in nameToStateBundle)

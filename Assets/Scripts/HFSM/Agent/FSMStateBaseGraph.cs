@@ -11,8 +11,6 @@ public class FSMStateBaseGraph : SerializedMonoBehaviour
     public string des="";
     [LabelText("名称")]
     public string stateName ="";
-    [LabelText("是否退出状态机")]
-    public bool isExitState;
     public void Awake()
     {
     }
@@ -24,7 +22,6 @@ public class FSMStateBaseGraph : SerializedMonoBehaviour
     {
         StateBase state= OnCreateFSMFromGraph(graph);
 
-        state.isExitState = isExitState;
         state.name = stateName;
 
         return state;

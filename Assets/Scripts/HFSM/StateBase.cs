@@ -7,7 +7,6 @@ public class StateBase: IJsonConvertible
 {
     public bool needsExitTime = false;
     public bool isGhostState;
-    public bool isExitState;
     public string name;
     public IStateMachine fsm;
     public FSMComponent compt;
