@@ -7,7 +7,6 @@ using UnityEditor.Callbacks;
 using System.IO;
 using Examples.Editor._05_All;
 using Plugins.Examples.Editor.BaseGraph;
-
 public class GraphAssetCallbacks
 {
 	[MenuItem("Assets/Create/GraphProcessor", false, 10)]
@@ -30,13 +29,12 @@ public class GraphAssetCallbacks
 		var graph = ScriptableObject.CreateInstance< SkillGraph >();
 		ProjectWindowUtil.CreateAsset(graph, "SkillGraph.asset");
 	}
-
-	[OnOpenAsset(0)]
-	public static bool OnBaseGraphOpened(int instanceID, int line)
-	{
-		var baseGraph = EditorUtility.InstanceIDToObject(instanceID) as BaseGraph;
-		return InitializeGraph(baseGraph);
-	}
+ //   [OnOpenAsset(0)]
+	//public static bool OnBaseGraphOpened(int instanceID, int line)
+	//{
+	//	var baseGraph = EditorUtility.InstanceIDToObject(instanceID) as BaseGraph;
+	//	return InitializeGraph(baseGraph);
+	//}
 
 	public static bool InitializeGraph(BaseGraph baseGraph)
 	{
@@ -51,7 +49,7 @@ public class GraphAssetCallbacks
 				EditorWindow.GetWindow<NPBehaveGraphWindow>().InitializeGraph(npBehaveGraph);
 				break;
 			default:
-				EditorWindow.GetWindow<FallbackGraphWindow>().InitializeGraph(baseGraph);
+				//EditorWindow.GetWindow<FallbackGraphWindow>().InitializeGraph(baseGraph);
 				break;
 		}
 

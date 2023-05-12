@@ -789,8 +789,8 @@ MonoBehaviour:
         Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   - position:
       serializedVersion: 2
-      x: 0
-      y: 571
+      x: 237
+      y: 134
       width: 150
       height: 200
     opened: 1
@@ -799,18 +799,29 @@ MonoBehaviour:
         Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   - position:
       serializedVersion: 2
-      x: 0
-      y: 362
+      x: 7
+      y: 203
       width: 150
       height: 200
     opened: 1
     editorType:
       serializedType: GraphProcessor.ProcessorView, com.alelievr.NodeGraphProcessor.Editor,
         Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  - position:
+      serializedVersion: 2
+      x: 105
+      y: 71
+      width: 287
+      height: 336
+    opened: 0
+    editorType:
+      serializedType: ConditionalProcessorView, NodeGraphProcessor.Examples, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
   exposedParameters: []
   serializedParameterList: []
   stickyNotes: []
   position: {x: 141, y: 151, z: 0}
   scale: {x: 0.7561437, y: 0.7561437, z: 1}
   references:
-    version: 1
+    version: 2
+    RefIds: []

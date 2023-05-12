@@ -9,8 +9,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 31390c44c9f3a3d40b424bf6821999a2, type: 3}
-  m_Name: GraphProcessor
+  m_Script: {fileID: 11500000, guid: 6e5a2f92981a68444be7581cb2c3dec4, type: 3}
+  m_Name: BehaviorTreeGraph
   m_EditorClassIdentifier: 
   serializationData:
     SerializedFormat: 2
@@ -27,7 +27,49 @@ MonoBehaviour:
         mscorlib
     - Name: 
       Entry: 12
+      Data: 1
+    - Name: 
+      Entry: 7
+      Data: 1|BehaviorTree.Editor.BTNode, Assembly-CSharp-Editor
+    - Name: nodeCustomName
+      Entry: 6
+      Data: 
+    - Name: GUID
+      Entry: 1
+      Data: 9ab60493-3e35-46f0-813a-80781573e70f
+    - Name: computeOrder
+      Entry: 3
       Data: 0
+    - Name: position
+      Entry: 7
+      Data: UnityEngine.Rect, UnityEngine.CoreModule
+    - Name: 
+      Entry: 4
+      Data: 1077
+    - Name: 
+      Entry: 4
+      Data: 257
+    - Name: 
+      Entry: 4
+      Data: 109
+    - Name: 
+      Entry: 4
+      Data: 42
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: expanded
+      Entry: 5
+      Data: false
+    - Name: debug
+      Entry: 5
+      Data: false
+    - Name: nodeLock
+      Entry: 5
+      Data: false
+    - Name: 
+      Entry: 8
+      Data: 
     - Name: 
       Entry: 13
       Data: 
@@ -36,7 +78,7 @@ MonoBehaviour:
       Data: 
     - Name: groups
       Entry: 7
-      Data: 1|System.Collections.Generic.List`1[[GraphProcessor.Group, com.alelievr.NodeGraphProcessor.Runtime]],
+      Data: 2|System.Collections.Generic.List`1[[GraphProcessor.Group, com.alelievr.NodeGraphProcessor.Runtime]],
         mscorlib
     - Name: 
       Entry: 12
@@ -50,27 +92,7 @@ MonoBehaviour:
   serializedNodes: []
   edges: []
   stackNodes: []
-  pinnedElements:
-  - position:
-      serializedVersion: 2
-      x: 0
-      y: 147
-      width: 150
-      height: 200
-    opened: 0
-    editorType:
-      serializedType: GraphProcessor.ExposedParameterView, com.alelievr.NodeGraphProcessor.Editor,
-        Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  - position:
-      serializedVersion: 2
-      x: 104
-      y: 423
-      width: 150
-      height: 200
-    opened: 0
-    editorType:
-      serializedType: ConditionalProcessorView, NodeGraphProcessor.Examples, Version=0.0.0.0,
-        Culture=neutral, PublicKeyToken=null
+  pinnedElements: []
   exposedParameters: []
   serializedParameterList: []
   stickyNotes: []
