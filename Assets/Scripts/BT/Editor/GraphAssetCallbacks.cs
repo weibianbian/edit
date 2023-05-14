@@ -1,8 +1,9 @@
-﻿using GraphProcessor;
-using Plugins.Examples.Editor.BaseGraph;
-using UnityEditor.Callbacks;
+﻿using BehaviorTree.Runtime;
+using GraphProcessor;
 using UnityEditor;
+using UnityEditor.Callbacks;
 using UnityEngine;
+
 namespace BehaviorTree.Editor
 {
     public class GraphAssetCallbacks

@@ -9,7 +9,7 @@ using System.Linq;
 using System;
 using UnityEditor.SceneManagement;
 using System.Reflection;
-using Unity.EditorCoroutines.Editor;
+
 using Status = UnityEngine.UIElements.DropdownMenuAction.Status;
 using Object = UnityEngine.Object;
 
@@ -114,8 +114,17 @@ namespace GraphProcessor
 		/// <summary>
 		/// Object to handle nodes that shows their UI in the inspector.
 		/// </summary>
-		[NonSerialized]
-		protected NodeInspectorObject		nodeInspector;
+		[SerializeField]
+		protected NodeInspectorObject		nodeInspector
+		{
+			get
+			{
+
+				if (graph.nodeInspectorReference == null)
+					graph.nodeInspectorReference = CreateNodeInspectorObject();
+				return graph.nodeInspectorReference as NodeInspectorObject;
+			}
+		}
 
 		/// <summary>
 		/// Workaround object for creating exposed parameter property fields.
@@ -149,9 +158,6 @@ namespace GraphProcessor
 
 			createNodeMenu = ScriptableObject.CreateInstance< CreateNodeMenuWindow >();
 			createNodeMenu.Initialize(this, window);
-
-			if (nodeInspector == null)
-				nodeInspector = CreateNodeInspectorObject();
 
 			this.StretchToParentSize();
 		}
@@ -360,6 +366,8 @@ namespace GraphProcessor
 							RemoveElement(nodeView);
 							if (Selection.activeObject == nodeInspector)
 								UpdateNodeInspectorSelection();
+
+							SyncSerializedPropertyPathes();
 							return true;
 						case GroupView group:
 							graph.RemoveGroup(group.group);
@@ -594,10 +602,8 @@ namespace GraphProcessor
 			var selectedNodes = selection.Where(s => s is BaseNodeView).ToList();
 			var selectedNodesNotInInspector = selectedNodes.Except(nodeInspector.selectedNodes).ToList();
 			var nodeInInspectorWithoutSelectedNodes = nodeInspector.selectedNodes.Except(selectedNodes).ToList();
-			//有另外一种可能，先选中其中一个节点A，然后选中Assets面板中一个资产，当前激活object就为这个新选中的资产，
-			//此时再回来节点编辑器选择节点A将不会再Inspector面板显示，这不太行，所以需要最后再加一种判断
-			return selectedNodesNotInInspector.Any() || nodeInInspectorWithoutSelectedNodes.Any() || 
-			       Selection.activeObject != nodeInspector;
+
+			return selectedNodesNotInInspector.Any() || nodeInInspectorWithoutSelectedNodes.Any();
 		}
 
 		void DragPerformedCallback(DragPerformEvent e)
@@ -637,9 +643,10 @@ namespace GraphProcessor
 							{
 								var node = BaseNode.CreateFromType(kp.Value.nodeType, mousePos);
 								if ((bool)kp.Value.initalizeNodeFromObject.Invoke(node, new []{obj}))
+								{
 									AddNode(node);
-								else
-									break;	
+									break;
+								}
 							}
 							catch (Exception exception)
 							{
@@ -685,13 +692,51 @@ namespace GraphProcessor
 			// so the one that are not serialized need to be synchronized)
 			graph.Deserialize();
 
-			EditorCoroutineUtility.StartCoroutine(this.Initialize(this.graph), this);
+			// Get selected nodes
+			var selectedNodeGUIDs = new List<string>();
+			foreach (var e in selection)
+			{
+				if (e is BaseNodeView v && this.Contains(v))
+					selectedNodeGUIDs.Add(v.nodeTarget.GUID);
+			}
+
+			// Remove everything
+			RemoveNodeViews();
+			RemoveEdges();
+			RemoveGroups();
+#if UNITY_2020_1_OR_NEWER
+			RemoveStrickyNotes();
+#endif
+			RemoveStackNodeViews();
+
+			UpdateSerializedProperties();
+
+			// And re-add with new up to date datas
+			InitializeNodeViews();
+			InitializeEdgeViews();
+            InitializeGroups();
+			InitializeStickyNotes();
+			InitializeStackNodes();
+
+			Reload();
+
+			UpdateComputeOrder();
+
+			// Restore selection after re-creating all views
+			// selection = nodeViews.Where(v => selectedNodeGUIDs.Contains(v.nodeTarget.GUID)).Select(v => v as ISelectable).ToList();
+			foreach (var guid in selectedNodeGUIDs)
+			{
+				AddToSelection(nodeViews.FirstOrDefault(n => n.nodeTarget.GUID == guid));
+			}
+
+			UpdateNodeInspectorSelection();
 		}
 
-		public IEnumerator Initialize(BaseGraph graph)
+		public void Initialize(BaseGraph graph)
 		{
 			if (this.graph != null)
 			{
+				SaveGraphToDisk();
 				// Close pinned windows from old graph:
 				ClearGraphElements();
 				NodeProvider.UnloadGraph(graph);
@@ -715,14 +760,12 @@ namespace GraphProcessor
 			ClearGraphElements();
 
 			InitializeGraphView();
-			
-			yield return InitializeNodeViews();
-			
-			yield return InitializeEdgeViews();
-			yield return InitializeViews();
-			yield return InitializeGroups();
-			yield return InitializeStickyNotes();
-			yield return InitializeStackNodes();
+			InitializeNodeViews();
+			InitializeEdgeViews();
+			InitializeViews();
+            InitializeGroups();
+			InitializeStickyNotes();
+			InitializeStackNodes();
 
 			initialized?.Invoke();
 			UpdateComputeOrder();
@@ -795,26 +838,23 @@ namespace GraphProcessor
 			onExposedParameterListChanged?.Invoke();
 		}
 
-		IEnumerator InitializeNodeViews()
+		void InitializeNodeViews()
 		{
 			graph.nodes.RemoveAll(n => n == null);
 
 			foreach (var node in graph.nodes)
 			{
-				yield return 0;
 				var v = AddNodeView(node);
 			}
 		}
 
-		IEnumerator InitializeEdgeViews()
+		void InitializeEdgeViews()
 		{
 			// Sanitize edges in case a node broke something while loading
 			graph.edges.RemoveAll(edge => edge == null || edge.inputNode == null || edge.outputNode == null);
 
 			foreach (var serializedEdge in graph.edges)
 			{
-				if(EditorApplication.timeSinceStartup - BaseGraphWindow.LastTimePoint > BaseGraphWindow.LoadViewsMaxLimitTime)
-					yield return 0;
 				nodeViewsPerNode.TryGetValue(serializedEdge.inputNode, out var inputNodeView);
 				nodeViewsPerNode.TryGetValue(serializedEdge.outputNode, out var outputNodeView);
 				if (inputNodeView == null || outputNodeView == null)
@@ -830,47 +870,33 @@ namespace GraphProcessor
 			}
 		}
 
-		IEnumerator InitializeViews()
+		void InitializeViews()
 		{
 			foreach (var pinnedElement in graph.pinnedElements)
 			{
-				if(EditorApplication.timeSinceStartup - BaseGraphWindow.LastTimePoint > BaseGraphWindow.LoadViewsMaxLimitTime)
-					yield return 0;
 				if (pinnedElement.opened)
 					OpenPinned(pinnedElement.editorType.type);
 			}
 		}
 
-        IEnumerator InitializeGroups()
+        void InitializeGroups()
         {
-	        foreach (var group in graph.groups)
-	        {
-		        if(EditorApplication.timeSinceStartup - BaseGraphWindow.LastTimePoint > BaseGraphWindow.LoadViewsMaxLimitTime)
-			        yield return 0;
-		        AddGroupView(group);
-	        }
+            foreach (var group in graph.groups)
+                AddGroupView(group);
         }
 
-		IEnumerator InitializeStickyNotes()
+		void InitializeStickyNotes()
 		{
 #if UNITY_2020_1_OR_NEWER
-			foreach (var group in graph.stickyNotes)
-			{
-				if(EditorApplication.timeSinceStartup - BaseGraphWindow.LastTimePoint > BaseGraphWindow.LoadViewsMaxLimitTime)
-					yield return 0;
-				AddStickyNoteView(group);
-			}
+            foreach (var group in graph.stickyNotes)
+                AddStickyNoteView(group);
 #endif
 		}
 
-		IEnumerator InitializeStackNodes()
+		void InitializeStackNodes()
 		{
 			foreach (var stackNode in graph.stackNodes)
-			{
-				if(EditorApplication.timeSinceStartup - BaseGraphWindow.LastTimePoint > BaseGraphWindow.LoadViewsMaxLimitTime)
-					yield return 0;
 				AddStackNodeView(stackNode);
-			}
 		}
 
 		protected virtual void InitializeManipulators()
@@ -888,17 +914,20 @@ namespace GraphProcessor
 
 		public void UpdateNodeInspectorSelection()
 		{
+			if (nodeInspector.previouslySelectedObject != Selection.activeObject)
+				nodeInspector.previouslySelectedObject = Selection.activeObject;
+
+			HashSet<BaseNodeView> selectedNodeViews = new HashSet<BaseNodeView>();
 			nodeInspector.selectedNodes.Clear();
 			foreach (var e in selection)
 			{
 				if (e is BaseNodeView v && this.Contains(v) && v.nodeTarget.needsInspector)
-					nodeInspector.selectedNodes.Add(v);
+					selectedNodeViews.Add(v);
 			}
 
-			if (nodeInspector.selectedNodes.Count > 0)
-			{
+			nodeInspector.UpdateSelectedNodes(selectedNodeViews);
+			if (Selection.activeObject != nodeInspector && selectedNodeViews.Count > 0)
 				Selection.activeObject = nodeInspector;
-			}
 		}
 
 		public BaseNodeView AddNode(BaseNode node)
@@ -1246,7 +1275,7 @@ namespace GraphProcessor
 			if (graph == null)
 				return ;
 
-			GraphCreateAndSaveHelper.SaveGraphToDisk(graph);
+			EditorUtility.SetDirty(graph);
 		}
 
 		public void ToggleView< T >() where T : PinnedElementView
@@ -1358,11 +1387,21 @@ namespace GraphProcessor
 		}
 
 		/// <summary>
+		/// Update all the serialized property bindings (in case a node was deleted / added, the property pathes needs to be updated)
+		/// </summary>
+		public void SyncSerializedPropertyPathes()
+		{
+			foreach (var nodeView in nodeViews)
+				nodeView.SyncSerializedPropertyPathes();
+			nodeInspector.RefreshNodes();
+		}
+
+		/// <summary>
 		/// Call this function when you want to remove this view
 		/// </summary>
         public void Dispose()
         {
-	        ClearGraphElements();
+			ClearGraphElements();
 			RemoveFromHierarchy();
 			Undo.undoRedoPerformed -= ReloadView;
 			Object.DestroyImmediate(nodeInspector);

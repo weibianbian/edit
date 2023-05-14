@@ -21,181 +21,49 @@ ExposedParameterFieldView #contentItem > Label {
 }
 
 ExposedParameterFieldView .pill #contents > #top > #icon {
-	width: 12px;
-	height: 12px;
+	width: 4px;
+	height: 4px;
 	border-radius: 2px;
 	margin-top: 0px;
 	margin-left: 2px;
 }
 
-/**************/
-/* ExposedParameter icons */
-/**************/
-.PortViewIcon_Texture2D{
-	width: 12px;
-	height: 12px;
-	background-image: resource("Icons/2DTexture@x3");
+ExposedParameterFieldView Image {
+	background-color: #ffffff;
 }
 
-.PortViewIcon_Float2,
-.PortViewIcon_Vector2 {
-	width: 12px;
-	height: 12px;
-	background-image: resource("Icons/Vector2@x3");
-	-unity-background-image-tint-color: aqua;
+.parameter-Boolean {
+	background-color: #30FFFF;
 }
 
-.PortViewIcon_Float3,
-.PortViewIcon_Vector3 {
-	width: 12px;
-	height: 12px;
-	background-image: resource("Icons/Vector3@x3");
-	-unity-background-image-tint-color: aquamarine;
+.parameter-Single {
+	background-color: #2080FF;
 }
 
-.PortViewIcon_Float4,
-.PortViewIcon_Vector4 {
-	width: 12px;
-	height: 12px;
-	background-image: resource("Icons/Vector4@x3");
+.parameter-Int32 {
+	background-color: #325dff;
 }
 
-.PortViewIcon_Quaternion {
-	width: 12px;
-	height: 12px;
-	background-image: resource("Icons/Quaternion@x3");
+.parameter-Object {
+	background-color: #80FF00;
 }
 
-.PortViewIcon_Boolean{
-	width: 12px;
-	height: 12px;
-	background-image: resource("Icons/Boolean@x3");
+.parameter-String {
+	background-color: #80FF80;
 }
 
-.PortViewIcon_Double,
-.PortViewIcon_Single{
-	width: 12px;
-	height: 12px;
-	background-image: resource("Icons/Double@x3");
+.parameter-GameObject {
+	background-color: #FF0000;
 }
 
-.PortViewIcon_Int32{
-	width: 12px;
-	height: 12px;
-	background-image: resource("Icons/Integer32@x3");
+.parameter-Color {
+	background-color: #FF00FF;
 }
 
-.PortViewIcon_Int64{
-	width: 12px;
-	height: 12px;
-	background-image: resource("Icons/Integer64@x3");
+.parameter-AnimationCurve{
+	background-color: #FF0080;
 }
 
-.PortViewIcon_Matrix,
-.PortViewIcon_Matrix4x4 {
-	width: 12px;
-	height: 12px;
-	background-image: resource("Icons/Matrix@x3");
-}
-
-.PortViewIcon_Object {
-	width: 12px;
-	height: 12px;
-	background-image: resource("Icons/Advanced@x3");
-}
-
-.PortViewIcon_Array {
-	width: 12px;
-	height: 12px;
-	background-image: resource("Icons/Array@x3");
-}
-
-.PortViewIcon_String {
-	width: 12px;
-	height: 12px;
-	background-image: resource("Icons/String@x3");
-}
-
-.PortViewIcon_GameObject {
-	width: 12px;
-	height: 12px;
-	background-image: resource("Icons/GameObject@x3");
-}
-
-.PortViewIcon_Color {
-	width: 12px;
-	height: 12px;
-	background-image: resource("Icons/Color@x3");
-}
-
-.PortViewIcon_Component {
-	width: 12px;
-	height: 12px;
-	background-image: resource("Icons/Component@x3");
-}
-
-.PortViewIcon_Condition {
-	width: 12px;
-	height: 12px;
-	background-image: resource("Icons/Condition@x3");
-}
-
-.PortViewIcon_ForEachLoop {
-	width: 12px;
-	height: 12px;
-	background-image: resource("Icons/ForEachLoop@x3");
-}
-
-.PortViewIcon_Action {
-	width: 12px;
-	height: 12px;
-	background-image: resource("Icons/Function@x3");
-}
-
-.PortViewIcon_IfCondition {
-	width: 12px;
-	height: 12px;
-	background-image: resource("Icons/IfCondition@x3");
-}
-
-.PortViewIcon_KeyCode {
-	width: 12px;
-	height: 12px;
-	background-image: resource("Icons/KeyCode@x3");
-}
-
-.PortViewIcon_RaycastHit {
-	width: 12px;
-	height: 12px;
-	background-image: resource("Icons/RaycastHit@x3");
-}
-
-.PortViewIcon_Text {
-	width: 12px;
-	height: 12px;
-	background-image: resource("Icons/Text@x3");
-}
-
-.PortViewIcon_Transform {
-	width: 12px;
-	height: 12px;
-	background-image: resource("Icons/Transform@x3");
-}
-
-.PortViewIcon_WhileLoop {
-	width: 12px;
-	height: 12px;
-	background-image: resource("Icons/WhileLoop@x3");
-}
-
-.PortViewIcon_Material {
-	width: 12px;
-	height: 12px;
-	background-image: resource("Icons/Material@x3");
-}
-
-.PortViewIcon_Rigidbody {
-	width: 12px;
-	height: 12px;
-	background-image: resource("Icons/RigidBody@x3");
+.parameter-Gradient{
+	background-color: #FF8000;
 }

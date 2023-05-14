@@ -4,10 +4,6 @@ using UnityEngine;
 
 namespace GraphProcessor
 {
-	/// <summary>
-	/// 注意，Edge的出端口和入端口取决于连接时两个端口的类型
-	/// output A ----------------- input B      出端口就是A，入端口就是B
-	/// </summary>
 	[System.Serializable]
 	public class SerializableEdge : ISerializationCallbackReceiver
 	{
@@ -28,6 +24,10 @@ namespace GraphProcessor
 		public NodePort	inputPort;
 		[System.NonSerialized]
 		public NodePort outputPort;
+
+		//temporary object used to send port to port data when a custom input/output function is used.
+		[System.NonSerialized]
+		public object	passThroughBuffer;
 
 		[System.NonSerialized]
 		public BaseNode	outputNode;

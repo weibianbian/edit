@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor.UIElements;
@@ -8,18 +7,16 @@ using UnityEngine.UIElements;
 
 namespace GraphProcessor
 {
-    public class MiniMapView : MiniMap
-    {
-        public MiniMapView(BaseGraphView baseGraphView)
-        {
-            this.graphView = baseGraphView;
-            SetPosition(new Rect(2, 20, 100, 100));
-        }
+	public class MiniMapView : MiniMap
+	{
+		new BaseGraphView	graphView;
+		Vector2				size;
 
-        public override void UpdatePresenterPosition()
-        {
-            Rect pos = GetPosition();
-            SetPosition(new Rect(2, Math.Max(20, pos.y), pos.width, pos.height));
-        }
-    }
+		public MiniMapView(BaseGraphView baseGraphView)
+		{
+			this.graphView = baseGraphView;
+			SetPosition(new Rect(0, 0, 100, 100));
+			size = new Vector2(100, 100);
+		}
+	}
 }

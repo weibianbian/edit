@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine.UIElements;
 using UnityEngine;
@@ -14,12 +13,6 @@ namespace GraphProcessor
 		readonly string				edgeStyle = "GraphProcessorStyles/EdgeView";
 
 		protected BaseGraphView		owner => ((input ?? output) as PortView).owner.owner;
-
-		public Vector2[] GetPointsAndTangents => PointsAndTangents;
-
-		public List<VisualElement> EdgeFlowPointVisualElements;
-		
-		public List<float> FlowPointProgress = new List<float>();
 
 		public EdgeView() : base()
 		{

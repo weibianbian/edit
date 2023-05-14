@@ -68,14 +68,14 @@ namespace GraphProcessor
         protected virtual Settings CreateSettings() => new Settings();
 
         public virtual object value { get; set; }
-        public virtual Type GetValueType() => value.GetType();
+        public virtual Type GetValueType() => value == null ? typeof(object) : value.GetType();
 
         static Dictionary<Type, Type> exposedParameterTypeCache = new Dictionary<Type, Type>();
         internal ExposedParameter Migrate()
         {
             if (exposedParameterTypeCache.Count == 0)
             {
-                foreach (var type in UtilityRefelection.GetAllTypes())
+                foreach (var type in AppDomain.CurrentDomain.GetAllTypes())
                 {
                     if (type.IsSubclassOf(typeof(ExposedParameter)) && !type.IsAbstract)
                     {

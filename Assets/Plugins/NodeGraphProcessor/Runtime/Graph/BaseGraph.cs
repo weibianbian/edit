@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using System;
-using Sirenix.OdinInspector;
 using UnityEngine.Serialization;
 using UnityEngine.SceneManagement;
 
@@ -32,8 +31,9 @@ namespace GraphProcessor
 		DepthFirst,
 		BreadthFirst,
 	}
-	
-	public class BaseGraph : SerializedScriptableObject
+
+	[System.Serializable]
+	public class BaseGraph : ScriptableObject, ISerializationCallbackReceiver
 	{
 		static readonly int			maxComputeOrderDepth = 1000;
 		
@@ -48,7 +48,6 @@ namespace GraphProcessor
 		/// <typeparam name="JsonElement"></typeparam>
 		/// <returns></returns>
 		[SerializeField, Obsolete("Use BaseGraph.nodes instead")]
-		[HideInInspector]
 		public List< JsonElement >						serializedNodes = new List< JsonElement >();
 
 		/// <summary>
@@ -56,6 +55,7 @@ namespace GraphProcessor
 		/// </summary>
 		/// <typeparam name="BaseNode"></typeparam>
 		/// <returns></returns>
+		[SerializeReference]
 		public List< BaseNode >							nodes = new List< BaseNode >();
 
 		/// <summary>
@@ -73,7 +73,6 @@ namespace GraphProcessor
 		/// <typeparam name="SerializableEdge"></typeparam>
 		/// <returns></returns>
 		[SerializeField]
-		[HideInInspector]
 		public List< SerializableEdge >					edges = new List< SerializableEdge >();
 		/// <summary>
 		/// Dictionary of edges per GUID, faster than a search in a list
@@ -89,15 +88,14 @@ namespace GraphProcessor
 		/// </summary>
 		/// <typeparam name="Group"></typeparam>
 		/// <returns></returns>
-		[HideInInspector]
-		public List< Group >                     		groups = new List< Group >();
+        [SerializeField, FormerlySerializedAs("commentBlocks")]
+        public List< Group >                     		groups = new List< Group >();
 
 		/// <summary>
 		/// All Stack Nodes in the graph
 		/// </summary>
 		/// <typeparam name="stackNodes"></typeparam>
 		/// <returns></returns>
-		[HideInInspector]
 		[SerializeField, SerializeReference] // Polymorphic serialization
 		public List< BaseStackNode >					stackNodes = new List< BaseStackNode >();
 
@@ -107,7 +105,6 @@ namespace GraphProcessor
 		/// <typeparam name="PinnedElement"></typeparam>
 		/// <returns></returns>
 		[SerializeField]
-		[HideInInspector]
 		public List< PinnedElement >					pinnedElements = new List< PinnedElement >();
 
 		/// <summary>
@@ -116,15 +113,12 @@ namespace GraphProcessor
 		/// <typeparam name="ExposedParameter"></typeparam>
 		/// <returns></returns>
 		[SerializeField, SerializeReference]
-		[HideInInspector]
 		public List< ExposedParameter >					exposedParameters = new List< ExposedParameter >();
 
-		[HideInInspector]
 		[SerializeField, FormerlySerializedAs("exposedParameters")] // We keep this for upgrade
 		List< ExposedParameter >						serializedParameterList = new List<ExposedParameter>();
 
 		[SerializeField]
-		[HideInInspector]
 		public List< StickyNote >						stickyNotes = new List<StickyNote>();
 
 		[System.NonSerialized]
@@ -133,10 +127,12 @@ namespace GraphProcessor
 		[NonSerialized]
 		Scene							linkedScene;
 
+		// Trick to keep the node inspector alive during the editor session
+		[SerializeField]
+		internal UnityEngine.Object		nodeInspectorReference;
+
 		//graph visual properties
-		[HideInInspector]
 		public Vector3					position = Vector3.zero;
-		[HideInInspector]
 		public Vector3					scale = Vector3.one;
 
 		/// <summary>
@@ -152,6 +148,11 @@ namespace GraphProcessor
 		public event Action< Scene >			onSceneLinked;
 
 		/// <summary>
+		/// Triggered when the graph is enabled
+		/// </summary>
+		public event Action				onEnabled;
+
+		/// <summary>
 		/// Triggered when the graph is changed
 		/// </summary>
 		public event Action< GraphChanges > onGraphChanges;
@@ -162,16 +163,17 @@ namespace GraphProcessor
 		
 		public HashSet< BaseNode >		graphOutputs { get; private set; } = new HashSet<BaseNode>();
 
-        public void OnGraphEnable()
+        protected virtual void OnEnable()
         {
 			if (isEnabled)
-				return;
+				OnDisable();
 
 			MigrateGraphIfNeeded();
 			InitializeGraphElements();
 			DestroyBrokenGraphElements();
 			UpdateComputeOrder();
 			isEnabled = true;
+			onEnabled?.Invoke();
         }
 
 		void InitializeGraphElements()
@@ -205,12 +207,14 @@ namespace GraphProcessor
 			}
 		}
 
-		public void OnGraphDisable()
+		protected virtual void OnDisable()
 		{
 			isEnabled = false;
 			foreach (var node in nodes)
 				node.DisableInternal();
 		}
+
+		public virtual void OnAssetDeleted() {}
 
 		/// <summary>
 		/// Adds a node to the graph
@@ -438,8 +442,9 @@ namespace GraphProcessor
 			pinned.opened = false;
 		}
 
-		protected override void OnBeforeSerialize()
+		public void OnBeforeSerialize()
 		{
+			// Cleanup broken elements
 			stackNodes.RemoveAll(s => s == null);
 			nodes.RemoveAll(n => n == null);
 		}
@@ -496,6 +501,8 @@ namespace GraphProcessor
 			}
 #pragma warning restore CS0618
 		}
+
+		public void OnAfterDeserialize() {}
 
 		/// <summary>
 		/// Update the compute order of the nodes in the graph
@@ -597,6 +604,9 @@ namespace GraphProcessor
 			if (exposedParameters.RemoveAll(e => e.guid == guid) != 0)
 				onExposedParameterListChanged?.Invoke();
 		}
+
+		internal void NotifyExposedParameterListChanged()
+			=> onExposedParameterListChanged?.Invoke();
 
 		/// <summary>
 		/// Update an exposed parameter value
@@ -823,6 +833,10 @@ namespace GraphProcessor
 
 			if (TypeAdapter.AreIncompatible(t1, t2))
 				return false;
+
+			//Check if there is custom adapters for this assignation
+			if (CustomPortIO.IsAssignable(t1, t2))
+				return true;
 
 			//Check for type assignability
 			if (t2.IsReallyAssignableFrom(t1))

@@ -97,18 +97,17 @@ namespace GraphProcessor
 			parameter = graph.GetExposedParameterFromGUID(parameterGUID);
 #endif
 
+			ClearMessages();
+			if (parameter == null)
+			{
+				AddMessage($"Parameter not found: {parameterGUID}", NodeMessageType.Error);
+				return;
+			}
+
 			if (accessor == ParameterAccessor.Get)
 				output = parameter.value;
 			else
 				graph.UpdateExposedParameter(parameter.guid, input);
-		}
-
-		public override void TryGetOutputValue<T>(NodePort outputPort, NodePort inputPort, ref T value)
-		{
-			if (output is T finalValue)
-			{
-				value = finalValue;
-			}
 		}
 	}
 

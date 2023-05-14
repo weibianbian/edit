@@ -20,7 +20,7 @@ namespace GraphProcessor
 			this.graphView = graphView;
 			parameter = param;
 			this.AddManipulator(new ContextualMenuManipulator(BuildContextualMenu));
-			this.Q("icon").AddToClassList("PortViewIcon_" + param.shortType);
+			this.Q("icon").AddToClassList("parameter-" + param.shortType);
 			this.Q("icon").visible = true;
 
 			(this.Q("textField") as TextField).RegisterValueChangedCallback((e) => {

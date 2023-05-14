@@ -10,7 +10,7 @@ namespace GraphProcessor
 	public class NodeCustomEditor : Attribute
 	{
 		public Type nodeType;
-		
+
 		public NodeCustomEditor(Type nodeType)
 		{
 			this.nodeType = nodeType;

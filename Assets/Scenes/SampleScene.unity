@@ -261,7 +261,6 @@ MonoBehaviour:
       Data: 
   des: "\u5DE1\u903B\u5B50\u72B6\u6001\u673A"
   stateName: "\u5DE1\u903B\u5B50\u72B6\u6001\u673A"
-  isExitState: 0
   startState: {fileID: 1394150747}
   states:
   - {fileID: 1394150747}
@@ -364,6 +363,51 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &158915368
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 158915369}
+  - component: {fileID: 158915370}
+  m_Layer: 0
+  m_Name: bt
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &158915369
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 158915368}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 9.930636, y: -2.3588152, z: -6.128448}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &158915370
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 158915368}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 343386a09c3c86f4dbc1fa393cb092d2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  btGraph: {fileID: 11400000, guid: ef945697272d1384688b0c8d36b43c7a, type: 2}
 --- !u!1 &255578785
 GameObject:
   m_ObjectHideFlags: 0
@@ -432,7 +476,6 @@ MonoBehaviour:
       Data: 
   des: "\u6218\u6597\u5B50\u72B6\u6001\u673A"
   stateName: "\u6218\u6597\u5B50\u72B6\u6001\u673A"
-  isExitState: 0
   startState: {fileID: 0}
   states: []
 --- !u!1 &413376268
@@ -451,7 +494,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &413376269
 Transform:
   m_ObjectHideFlags: 0
@@ -546,7 +589,6 @@ MonoBehaviour:
     SerializationNodes: []
   des: "\u8F6C\u5411\u884C\u4E3A"
   stateName: "\u5DE1\u903B\u5B50\u72B6\u6001\u673A-\u8F6C\u5411\u884C\u4E3A"
-  isExitState: 1
 --- !u!1 &581098975
 GameObject:
   m_ObjectHideFlags: 0
@@ -648,7 +690,6 @@ MonoBehaviour:
       Data: 
   des: 
   stateName: 
-  isExitState: 1
   startState: {fileID: 1554961936}
   states:
   - {fileID: 1554961936}
@@ -742,7 +783,6 @@ MonoBehaviour:
     SerializationNodes: []
   des: "\u79FB\u52A8\u884C\u4E3A"
   stateName: "\u5DE1\u903B\u5B50\u72B6\u6001\u673A-\u79FB\u52A8\u884C\u4E3A"
-  isExitState: 0
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0
@@ -946,7 +986,6 @@ MonoBehaviour:
       Data: 
   des: "\u5DE1\u903B\u5B50\u72B6\u6001\u673A"
   stateName: "\u5DE1\u903B\u5B50\u72B6\u6001\u673A"
-  isExitState: 1
   startState: {fileID: 602344261}
   states:
   - {fileID: 602344261}
@@ -1171,7 +1210,6 @@ MonoBehaviour:
       Data: 
   des: 
   stateName: 
-  isExitState: 0
   startState: {fileID: 1456808398}
   states:
   - {fileID: 1456808398}
@@ -1289,7 +1327,6 @@ MonoBehaviour:
     SerializationNodes: []
   des: "\u8F6C\u5411\u884C\u4E3A"
   stateName: "\u8F6C\u5411\u884C\u4E3A"
-  isExitState: 0
 --- !u!1 &1394150745
 GameObject:
   m_ObjectHideFlags: 0
@@ -1345,7 +1382,6 @@ MonoBehaviour:
     SerializationNodes: []
   des: "\u79FB\u52A8\u884C\u4E3A"
   stateName: "\u79FB\u52A8\u884C\u4E3A"
-  isExitState: 0
 --- !u!1 &1456808396
 GameObject:
   m_ObjectHideFlags: 0
@@ -1493,7 +1529,6 @@ MonoBehaviour:
       Data: 
   des: "\u5F00\u59CB\u72B6\u6001"
   stateName: "\u5F00\u59CB\u72B6\u6001"
-  isExitState: 0
   startState: {fileID: 128603460}
   states:
   - {fileID: 128603460}
@@ -1645,7 +1680,6 @@ MonoBehaviour:
       Data: 
   des: "\u5F00\u59CB\u72B6\u6001"
   stateName: "\u5F00\u59CB\u72B6\u6001"
-  isExitState: 1
   startState: {fileID: 727196050}
   states:
   - {fileID: 727196050}
@@ -1718,7 +1752,6 @@ MonoBehaviour:
       Data: 
   des: "\u6218\u6597\u5B50\u72B6\u6001\u673A"
   stateName: "\u6218\u6597\u5B50\u72B6\u6001\u673A"
-  isExitState: 0
   startState: {fileID: 0}
   states: []
 --- !u!1001 &1326456538550208043

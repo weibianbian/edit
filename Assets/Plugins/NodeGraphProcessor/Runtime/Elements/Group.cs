@@ -7,6 +7,7 @@ namespace GraphProcessor
 	/// <summary>
 	/// Group the selected node when created
 	/// </summary>
+	[System.Serializable]
 	public class Group
 	{
 		public string			title;

@@ -24,15 +24,5 @@ namespace BehaviorTree.Editor
             base.BuildContextualMenu(evt);
         }
     }
-    [System.Serializable, NodeMenuItem("BT/BTNode")]
-    public class BTNode:BaseNode
-    {
-
-    }
-    [CustomEditor(typeof(BTNode))]
-    public class BTNodeGraph:BaseNodeView
-    {
-
-    }
 }
 
