@@ -20,5 +20,6 @@ namespace BehaviorTree.Runtime
 
             return nextChildIdx;
         }
+    }
 }
 

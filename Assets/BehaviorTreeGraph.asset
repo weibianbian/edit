@@ -15,27 +15,11 @@ MonoBehaviour:
   serializedNodes: []
   nodes:
   - rid: 7208758103608131585
-  - rid: 4907807932119515136
   - rid: 4907807932119515138
   - rid: 4907807932119515141
   - rid: 4907807932119515146
+  - rid: 4907807932119515148
   edges:
-  - GUID: 725d0b77-b963-4004-9118-45fc1430a25b
-    owner: {fileID: 11400000}
-    inputNodeGUID: 083972d4-18cf-4695-9f84-3479cbb8d7ca
-    outputNodeGUID: 317eda4b-e597-4127-aa6e-2909f6a22644
-    inputFieldName: input
-    outputFieldName: output
-    inputPortIdentifier: 
-    outputPortIdentifier: 
-  - GUID: a7e5989d-794d-4f87-803c-05919e4e5439
-    owner: {fileID: 11400000}
-    inputNodeGUID: 301b4452-dd07-4253-a3f3-7a57c145dff3
-    outputNodeGUID: 317eda4b-e597-4127-aa6e-2909f6a22644
-    inputFieldName: input
-    outputFieldName: output
-    inputPortIdentifier: 
-    outputPortIdentifier: 
   - GUID: 8397b942-5c94-4a18-8ff5-c827ff665477
     owner: {fileID: 11400000}
     inputNodeGUID: 70155453-16b1-47fe-8ca3-2000c8a736d9
@@ -52,6 +36,22 @@ MonoBehaviour:
     outputFieldName: output
     inputPortIdentifier: 
     outputPortIdentifier: 
+  - GUID: 9d6c93ac-4703-452b-b3d4-bb9060fc4ee6
+    owner: {fileID: 11400000}
+    inputNodeGUID: 672650dc-f879-4ce6-8d14-58a2d8a789f6
+    outputNodeGUID: 317eda4b-e597-4127-aa6e-2909f6a22644
+    inputFieldName: input
+    outputFieldName: output
+    inputPortIdentifier: 
+    outputPortIdentifier: 
+  - GUID: d287ecfc-311d-4b63-a5e3-0d3ad44a188c
+    owner: {fileID: 11400000}
+    inputNodeGUID: 301b4452-dd07-4253-a3f3-7a57c145dff3
+    outputNodeGUID: 672650dc-f879-4ce6-8d14-58a2d8a789f6
+    inputFieldName: input
+    outputFieldName: output
+    inputPortIdentifier: 
+    outputPortIdentifier: 
   groups: []
   stackNodes: []
   pinnedElements: []
@@ -59,28 +59,11 @@ MonoBehaviour:
   serializedParameterList: []
   stickyNotes: []
   nodeInspectorReference: {fileID: 0}
-  position: {x: -348, y: -369, z: 0}
-  scale: {x: 1.15, y: 1.15, z: 1}
+  position: {x: 157, y: -216, z: 0}
+  scale: {x: 0.8695652, y: 0.8695652, z: 1}
   references:
     version: 2
     RefIds:
-    - rid: 4907807932119515136
-      type: {class: BTCompositeNodeSelector, ns: BehaviorTree.Runtime, asm: Assembly-CSharp}
-      data:
-        nodeCustomName: 
-        GUID: 083972d4-18cf-4695-9f84-3479cbb8d7ca
-        computeOrder: 3
-        position:
-          serializedVersion: 2
-          x: 763.34784
-          y: 504.99994
-          width: 197
-          height: 54
-        expanded: 0
-        debug: 0
-        nodeLock: 0
-        input: 0
-        output: 0
     - rid: 4907807932119515138
       type: {class: BTNodeRoot, ns: BehaviorTree.Runtime, asm: Assembly-CSharp}
       data:
@@ -102,11 +85,11 @@ MonoBehaviour:
       data:
         nodeCustomName: "\u5FAA\u73AF"
         GUID: 301b4452-dd07-4253-a3f3-7a57c145dff3
-        computeOrder: 1
+        computeOrder: 2
         position:
           serializedVersion: 2
-          x: 1236.0001
-          y: 426.9565
+          x: 1078.5
+          y: 574.2684
           width: 67
           height: 54
         expanded: 0
@@ -122,24 +105,41 @@ MonoBehaviour:
         computeOrder: 4
         position:
           serializedVersion: 2
-          x: 1188
-          y: 934.04004
+          x: 1046
+          y: 767.03094
           width: 132
           height: 48
         expanded: 1
         debug: 0
         nodeLock: 0
         input: 0
+    - rid: 4907807932119515148
+      type: {class: BTCompositeNodeSequence, ns: BehaviorTree.Runtime, asm: Assembly-CSharp}
+      data:
+        nodeCustomName: 
+        GUID: 672650dc-f879-4ce6-8d14-58a2d8a789f6
+        computeOrder: 1
+        position:
+          serializedVersion: 2
+          x: 1055
+          y: 433
+          width: 100
+          height: 100
+        expanded: 0
+        debug: 0
+        nodeLock: 0
+        input: 0
+        output: 0
     - rid: 7208758103608131585
       type: {class: BTCompositeNodeSequence, ns: BehaviorTree.Runtime, asm: Assembly-CSharp}
       data:
         nodeCustomName: BTCompositeNodeSequence
         GUID: 70155453-16b1-47fe-8ca3-2000c8a736d9
-        computeOrder: 2
+        computeOrder: 3
         position:
           serializedVersion: 2
-          x: 1166
-          y: 518
+          x: 1008.49994
+          y: 664.76935
           width: 207
           height: 54
         expanded: 0
