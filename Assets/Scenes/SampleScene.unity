@@ -421,7 +421,7 @@ MonoBehaviour:
     expanded: 0
     debug: 0
     nodeLock: 0
-    output: 0
+    output: 1
 --- !u!1 &255578785
 GameObject:
   m_ObjectHideFlags: 0

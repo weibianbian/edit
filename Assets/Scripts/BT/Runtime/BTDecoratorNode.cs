@@ -11,9 +11,5 @@ namespace BehaviorTree.Runtime
         public ENodeResult output;
         public override Color color => new Color(0, 53/255f, 131/255f);
     }
-    [System.Serializable, NodeMenuItem("BT/Decorator/Loop")]
-    public class BTDecoratorNodeLoop: BTDecoratorNode
-    {
-    }
 }
 

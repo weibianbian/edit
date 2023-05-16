@@ -3,6 +3,7 @@ using UnityEngine;
 
 namespace BehaviorTree.Runtime
 {
+    [System.Serializable]
     public class BTCompositeNode: BTNode
     {
         [Input(name = "", allowMultiple=false), Vertical]

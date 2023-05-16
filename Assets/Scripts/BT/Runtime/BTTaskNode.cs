@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace BehaviorTree.Runtime
 {
-    
+    [System.Serializable]
     public class BTTaskNode : BTNode
     {
         [Input(name = ""), Vertical]

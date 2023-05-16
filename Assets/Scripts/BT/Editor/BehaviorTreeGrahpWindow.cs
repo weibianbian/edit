@@ -23,6 +23,9 @@ namespace BehaviorTree.Editor
         {
             var graphView = new BehaviorTreeGraphView(this);
             rootView.Add(graphView);
+
+            graphView.Add(new BTToolbarView(graphView));
+
             Debug.LogError("InitializeWindow");
         }
         private void OnGUI()
