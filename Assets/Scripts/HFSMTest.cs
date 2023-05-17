@@ -11,22 +11,23 @@ public class HFSMTest : MonoBehaviour
         StateMachine root = new StateMachine("Root");
 
         StateMachine sub = new StateMachine("L");
-        sub.AddState("L.x", new StateBase("L.x"));
-        sub.AddState("L.y", new StateBase("L.y"));
-        sub.SetInitState("L.x");
+        sub.AddState("L.A", new StateBase("L.A"));
+        sub.AddState("L.B", new StateBase("L.B"));
+        sub.AddState("L.C", new StateBase("L.C"));
+        sub.SetInitState("L.A");
 
         root.AddState("L", sub);
         root.AddState("M", new StateBase("M"));
 
         root.SetInitState("L");
 
-        root.AddTrasition("L.x", "M");
+        root.AddTrasition("L.A", "M",1);
 
         root.Enter();
 
         for (int i = 0; i < 100; i++)
         {
-            root.OnLogic();
+            root.Update();
         }
     }
 

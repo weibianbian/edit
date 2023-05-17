@@ -60,11 +60,11 @@ namespace HFSM
             StateBundle bundle = new StateBundle(state);
             stateBundles.Add(name, bundle);
         }
-        public void AddTrasition(string from, string to)
+        public void AddTrasition(string from, string to,int level)
         {
             if (stateBundles.TryGetValue(from, out StateBundle bundle))
             {
-                bundle.AddTransition(new Transition(from, to));
+                bundle.AddTransition(new Transition(from, to, level));
             }
             else
             {
@@ -91,7 +91,7 @@ namespace HFSM
             currentState.Enter();
             Debug.Log($"========");
         }
-        public override void OnLogic()
+        public override void Update()
         {
             for (int i = 0; i < currentTransitions.Count; i++)
             {
@@ -99,7 +99,7 @@ namespace HFSM
             }
             if (currentState != null)
             {
-                currentState.OnLogic();
+                currentState.Update();
             }
         }
     }
