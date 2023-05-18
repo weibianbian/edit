@@ -7,6 +7,7 @@ namespace HFSM
         List<State> states = new List<State>();
         State initialState;
         protected State currentState;
+        Game game;
         public override List<State> GetStates()
         {
             if (currentState != null)
@@ -17,6 +18,34 @@ namespace HFSM
             {
                 return new List<State>();
             }
+        }
+        public HierarchicalStateMachine(Game g)
+            : base()
+        {
+            this.game = g;
+        }
+
+        public HierarchicalStateMachine(Game g, State initialState, params State[] states)
+            : this(g)
+        {
+            this.initialState = initialState;
+            this.states = new List<State>();
+            this.states.Add(initialState);
+            initialState.parent = this;
+            for (int i = 0; i < states.Length; ++i)
+            {
+                this.states.Add(states[i]);
+                states[i].parent = this;
+            }
+        }
+
+        public HierarchicalStateMachine(Game g, State initialState)
+            : this(g)
+        {
+            this.initialState = initialState;
+            this.states = new List<State>();
+            this.states.Add(initialState);
+            initialState.parent = this;
         }
         public override UpdateResult Update(Game g, Entity e)
         {
@@ -46,10 +75,12 @@ namespace HFSM
             }
             else
             {
-                if (currentState is SubMachineState)
-                    result = ((SubMachineState)currentState).Update(g, e);
-                else
-                    result = currentState.Update(g, e);
+                //if (currentState is SubMachineState)
+                //    result = ((SubMachineState)currentState).Update(g, e);
+                //else
+                //    result = currentState.Update(g, e);
+
+                result = currentState.Update(g, e);
             }
             if (result.transition != null)
             {
@@ -117,6 +148,16 @@ namespace HFSM
                 actions.Add(a);
 
             return actions;
+        }
+        public override string ToString()
+        {
+            if (currentState != null)
+            {
+                if (currentState is SubMachineState)
+                    return ((SubMachineState)currentState).ToString();
+                else return currentState.name;
+            }
+            else return "NULL";
         }
     }
 }

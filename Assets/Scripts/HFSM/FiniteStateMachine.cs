@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace HFSM
 {
@@ -40,6 +41,7 @@ namespace HFSM
             if (triggeredTransition != null)
             {
                 State targetState = triggeredTransition.GetTargetState();
+                UnityEngine.Debug.Log($"targetState={targetState.name}");
                 List<IAction> actions = new List<IAction>();
                 foreach (IAction a in currentState.GetExitAction())
                 {

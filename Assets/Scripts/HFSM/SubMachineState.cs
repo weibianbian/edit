@@ -8,6 +8,10 @@ namespace HFSM
         protected State state=new State();
         public HierarchicalStateMachine hfsm;
 
+        public SubMachineState(Game g) : base(g)
+        {
+        }
+
         public override List<IAction> GetActions()
         {
             return state.GetAction();
@@ -28,6 +32,14 @@ namespace HFSM
             else
                 states.Add(state);
             return states;
+        }
+        public override string ToString()
+        {
+            if (currentState != null)
+            {
+                return base.currentState.name;
+            }
+            else return "NULL SMS";
         }
     }
 }

@@ -80,6 +80,7 @@ namespace HFSM
                 transitions.Add(tran);
             }
         }
+       
     }
 }
 
