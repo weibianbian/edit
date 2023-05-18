@@ -1,12 +1,12 @@
 ﻿namespace HFSM
 {
-    public class AndCondition : Condition
+    public class AndCondition : ICondition
     {
-        public Condition conditionA;
-        public Condition conditionB;
-        public override bool Test()
+        public ICondition conditionA;
+        public ICondition conditionB;
+        public bool Test(Game g,Entity e)
         {
-            return conditionA.Test() && conditionB.Test();
+            return conditionA.Test(g,e) && conditionB.Test(g,e);
         }
     }
 }

@@ -1,31 +1,46 @@
-﻿using System.Collections.Generic;
-
+﻿using HFSM;
+using System.Collections.Generic;
+public class Game { }
+public class Entity { }
 namespace HFSM
 {
-    public class Transition
+    public interface ITransition
     {
-        public int level = 0;
-        public StateBase from;
-        public StateBase to;
+        bool IsTriggered(Game g, Entity e);
+        State GetTargetState();
+        List<IAction> GetActions();
+        int GetLevel();
+    }
 
-        public Condition condition;
-        public Transition(StateBase from, StateBase to,int level)
+    public class Transition : ITransition
+    {
+        public List<IAction> actions;
+        public int level = 0;
+        public State targetState;
+
+        public ICondition condition;
+        public Transition(ICondition condition, State targetState, int level)
         {
-            this.from = from;
-            this.to = to;
+            this.condition = condition;
+            this.targetState = targetState;
+            actions = new List<IAction>();
             this.level = level;
         }
-        public bool IsTriggered()
+        public bool IsTriggered(Game g, Entity e)
         {
-            return condition.Test();
+            return condition.Test(g,e);
         }
-        public StateBase GetTargetState()
+        public State GetTargetState()
         {
-            return to;
+            return targetState;
         }
-        public virtual List<FSMAction> GetActions()
+        public void AddActions(IAction a)
         {
-            return new List<FSMAction>(0);
+            actions.Add(a);
+        }
+        public virtual List<IAction> GetActions()
+        {
+            return new List<IAction>(0);
         }
         public int GetLevel()
         {
