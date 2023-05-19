@@ -6,26 +6,6 @@ using static Unity.VisualScripting.Metadata;
 
 namespace CopyBT
 {
-    public class BehaviourTree
-    {
-        BehaviourNode root = null;
-        public BehaviourTree(BehaviourNode root)
-        {
-            this.root = root;
-        }
-        public void Update()
-        {
-            root.Visit();
-            root.Step();
-        }
-    }
-    public enum ENodeStatus
-    {
-        READY,
-        RUNNING,
-        SUCCESS,
-        FAILED,
-    }
     public class BehaviourNode
     {
         public static int NODE_COUNT = 0;
@@ -37,6 +17,10 @@ namespace CopyBT
         public float nextUpdateTick = 0;
         public int idx = 0;
 
+        public BehaviourNode(string name):this(name,null)
+        {
+
+        }
         public BehaviourNode(string name, List<BehaviourNode> children)
         {
             this.name = name;
@@ -60,6 +44,20 @@ namespace CopyBT
 
         }
         public virtual void Step()
+        {
+            if (status != ENodeStatus.RUNNING)
+            {
+                Reset();
+            }
+            else if (children != null)
+            {
+                for (int i = 0; i < children.Count; i++)
+                {
+                    children[i].Step();
+                }
+            }
+        }
+        public virtual void Reset()
         {
 
         }

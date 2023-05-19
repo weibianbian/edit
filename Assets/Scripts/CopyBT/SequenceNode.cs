@@ -4,10 +4,9 @@ namespace CopyBT
 {
     public class SequenceNode : BehaviourNode
     {
-        public SequenceNode(string name, List<BehaviourNode> children) : base(name, children)
+        public SequenceNode(List<BehaviourNode> children) : base("SequenceNode", children)
         {
             idx = 0;
-            this.name = "SequenceNode";
         }
         public override void Visit()
         {

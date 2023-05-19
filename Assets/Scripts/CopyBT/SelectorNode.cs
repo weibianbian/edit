@@ -4,10 +4,9 @@ namespace CopyBT
 {
     public class SelectorNode : BehaviourNode
     {
-        public SelectorNode(string name, List<BehaviourNode> children) : base(name, children)
+        public SelectorNode(List<BehaviourNode> children) : base("SelectorNode", children)
         {
             idx = 0;
-            this.name = "SelectorNode";
         }
         public override void Visit()
         {
