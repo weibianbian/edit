@@ -2,10 +2,25 @@
 
 namespace CopyBT
 {
+    public class LoopNode : BehaviourNode
+    {
+        public LoopNode(string name) : base(name)
+        {
+        }
+    }
     public class SelectorNode : BehaviourNode
     {
         public SelectorNode(List<BehaviourNode> children) : base("SelectorNode", children)
         {
+            idx = 0;
+        }
+        public override string DBString()
+        {
+            return idx.ToString();
+        }
+        public override void Reset()
+        {
+            base.Reset();
             idx = 0;
         }
         public override void Visit()

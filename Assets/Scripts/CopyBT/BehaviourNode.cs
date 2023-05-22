@@ -1,6 +1,6 @@
+using System;
 using System.Collections.Generic;
 using System.Text;
-using Unity.VisualScripting;
 
 namespace CopyBT
 {
@@ -44,6 +44,14 @@ namespace CopyBT
         public virtual void Visit()
         {
 
+        }
+        public  virtual void DoToParents(Action<BehaviourNode> fn)
+        {
+            if (parent!=null)
+            {
+                fn(parent);
+                parent.DoToParents(fn);
+            }
         }
         public virtual void Step()
         {
