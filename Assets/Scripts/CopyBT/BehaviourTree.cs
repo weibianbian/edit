@@ -1,4 +1,6 @@
-﻿namespace CopyBT
+﻿using System.Diagnostics;
+
+namespace CopyBT
 {
 
     public class BehaviourTree
@@ -11,11 +13,17 @@
         public void Update()
         {
             root.Visit();
+            root.SaveStatus();
             root.Step();
+            UnityEngine.Debug.Log(__ToString());
         }
         public void Reset()
         {
             root.Reset();
+        }
+        public string __ToString()
+        {
+            return root.GetTreeString();
         }
     }
 }

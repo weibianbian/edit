@@ -9,34 +9,34 @@ namespace CopyBT
     {
         protected override void OnStart()
         {
-            BehaviourNode watch_game = WhileNode(ShouldWatchMinigame, "Watching Game",
+            BehaviourNode watch_game = BehaviourNodeExtension.WhileNode(ShouldWatchMinigame, "Watching Game",
                 new PriorityNode(new List<BehaviourNode>()
                 {
                     new Follow(""),
                 }, 0.25f)
                 );
 
-            BehaviourNode dance = WhileNode(ShouldDanceParty, "Dance Party",
+            BehaviourNode dance = BehaviourNodeExtension.WhileNode(ShouldDanceParty, "Dance Party",
                 new PriorityNode(new List<BehaviourNode>()
                 {
                     new ActionNode("Action",()=>{ UnityEngine.Debug.Log("DanceParty"); })
                 }, 0.25f)
                 ); ;
 
-            BehaviourNode defensive_mode = WhileNode(IsDefensive, "DefensiveMove",
+            BehaviourNode defensive_mode = BehaviourNodeExtension.WhileNode(IsDefensive, "DefensiveMove",
                 new PriorityNode(new List<BehaviourNode>()
                 {
                     dance,
                     watch_game,
 
-                    WhileNode(DefensiveCanFight,"CanFight",new ChaseAndAttack("")),
+                    BehaviourNodeExtension.WhileNode(DefensiveCanFight,"CanFight",new ChaseAndAttack("")),
                 }));
-            BehaviourNode  aggressive_mode= new PriorityNode(new List<BehaviourNode>()
+            BehaviourNode aggressive_mode = new PriorityNode(new List<BehaviourNode>()
                 {
                     dance,
                     watch_game,
 
-                    WhileNode(DefensiveCanFight,"CanFight",new ChaseAndAttack("")),
+                   BehaviourNodeExtension.WhileNode(DefensiveCanFight,"CanFight",new ChaseAndAttack("")),
                 });
             BehaviourNode root = new PriorityNode(new List<BehaviourNode>()
             {
@@ -44,16 +44,9 @@ namespace CopyBT
                 aggressive_mode
             }); ;
 
+            bt = new BehaviourTree(root);
+        }
 
-        }
-        public BehaviourNode WhileNode(Func<bool> cond, string name, BehaviourNode node)
-        {
-            return new ParallelNode(new List<BehaviourNode>()
-            {
-                new ConditionNode(cond),
-                node
-            });
-        }
         public bool ShouldWatchMinigame()
         {
             return true;

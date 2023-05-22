@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace CopyBT
 {
@@ -8,6 +7,26 @@ namespace CopyBT
         public ParallelNode(List<BehaviourNode> children, string name = "ParallelNode") : base(name, children)
         {
 
+        }
+        public override void Step()
+        {
+            if (status != ENodeStatus.RUNNING)
+            {
+                Reset();
+            }
+            else
+            {
+                if (children != null)
+                {
+                    for (int i = 0; i < children.Count; i++)
+                    {
+                        if (children[i].status == ENodeStatus.SUCCESS && children[i] is ConditionNode)
+                        {
+                            children[i].Reset();
+                        }
+                    }
+                }
+            }
         }
         public override void Visit()
         {
@@ -46,26 +65,6 @@ namespace CopyBT
             {
                 status = ENodeStatus.RUNNING;
             }
-        }
-    }
-    public class ConditionNode : BehaviourNode
-    {
-        Func<bool> fn;
-        public ConditionNode(Func<bool> fn, string name = "ConditionNode") : base(name)
-        {
-            this.fn = fn;
-        }
-        public override void Visit()
-        {
-            if (fn())
-            {
-                status = ENodeStatus.SUCCESS;
-            }
-            else
-            {
-                status = ENodeStatus.FAILED;
-            }
-
         }
     }
 }

@@ -2,7 +2,7 @@
 {
     public class Brain
     {
-        BehaviourTree bt = null;
+        public BehaviourTree bt = null;
 
         public void Start()
         {

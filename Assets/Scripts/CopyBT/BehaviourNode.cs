@@ -1,8 +1,6 @@
-using System.Collections;
 using System.Collections.Generic;
+using System.Text;
 using Unity.VisualScripting;
-using UnityEngine;
-using static Unity.VisualScripting.Metadata;
 
 namespace CopyBT
 {
@@ -17,7 +15,7 @@ namespace CopyBT
         public float nextUpdateTick = 0;
         public int idx = 0;
 
-        public BehaviourNode(string name):this(name,null)
+        public BehaviourNode(string name) : this(name, null)
         {
 
         }
@@ -39,6 +37,10 @@ namespace CopyBT
                 }
             }
         }
+        public virtual string DBString()
+        {
+            return "";
+        }
         public virtual void Visit()
         {
 
@@ -59,7 +61,54 @@ namespace CopyBT
         }
         public virtual void Reset()
         {
-
+            if (status != ENodeStatus.READY)
+            {
+                status = ENodeStatus.READY;
+                if (children != null)
+                {
+                    for (int i = 0; i < children.Count; i++)
+                    {
+                        children[i].Reset();
+                    }
+                }
+            }
+        }
+        public void SaveStatus()
+        {
+            lastResult = status;
+            if (children != null)
+            {
+                for (int i = 0; i < children.Count; i++)
+                {
+                    children[i].SaveStatus();
+                }
+            }
+        }
+        public bool IsValidIndex(int idx)
+        {
+            return idx >= 0 && idx < children.Count;
+        }
+        public string GetTreeString()
+        {
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.Append($"{GetString()}");
+            if (children != null)
+            {
+                for (int i = 0; i < children.Count; i++)
+                {
+                    stringBuilder.Append($"{children[i].GetTreeString()}   >");
+                }
+            }
+            return stringBuilder.ToString();
+        }
+        public string GetString()
+        {
+            string str = "";
+            if (status == ENodeStatus.RUNNING)
+            {
+                str = DBString();
+            }
+            return $"{name}-{status} <{lastResult}>  ({str})";
         }
     }
 }
