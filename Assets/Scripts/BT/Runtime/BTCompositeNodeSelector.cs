@@ -1,4 +1,5 @@
-﻿using GraphProcessor;
+﻿using CopyBT;
+using GraphProcessor;
 using System;
 
 namespace BehaviorTree.Runtime
@@ -6,7 +7,7 @@ namespace BehaviorTree.Runtime
     [System.Serializable, NodeMenuItem("BT/CompositeNode/Selector")]
     public class BTCompositeNodeSelector : BTCompositeNode
     {
-        public override int GetChild(int prevChild, ENodeResult lastResult)
+        public override int GetChild(int prevChild, ENodeStatus lastResult)
         {
             int nextChildIdx = BTSpecialChild.ReturnToParent;
 
@@ -14,7 +15,7 @@ namespace BehaviorTree.Runtime
             {
                 nextChildIdx = 0;
             }
-            else if (lastResult == ENodeResult.Failed && (prevChild + 1) < GetChildrenNum())
+            else if (lastResult == ENodeStatus.FAILED && (prevChild + 1) < GetChildrenNum())
             {
                 nextChildIdx = prevChild + 1;
             }

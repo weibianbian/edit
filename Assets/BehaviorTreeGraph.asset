@@ -17,25 +17,15 @@ MonoBehaviour:
   - rid: 7208758103608131585
   - rid: 4907807932119515138
   - rid: 4907807932119515141
-  - rid: 4907807932119515146
   - rid: 4907807932119515148
+  - rid: 7208758330816987136
+  - rid: 7208758330816987137
+  - rid: 7208758330816987138
+  - rid: 7208758330816987139
+  - rid: 7208758330816987140
+  - rid: 7208758330816987141
+  - rid: 7208758419203031041
   edges:
-  - GUID: 8397b942-5c94-4a18-8ff5-c827ff665477
-    owner: {fileID: 11400000}
-    inputNodeGUID: 70155453-16b1-47fe-8ca3-2000c8a736d9
-    outputNodeGUID: 301b4452-dd07-4253-a3f3-7a57c145dff3
-    inputFieldName: input
-    outputFieldName: output
-    inputPortIdentifier: 
-    outputPortIdentifier: 
-  - GUID: 34da0c14-b646-436a-82df-20699c17bd58
-    owner: {fileID: 11400000}
-    inputNodeGUID: a1034b2c-a2bb-4924-a0a1-93bf76e1d9a1
-    outputNodeGUID: 70155453-16b1-47fe-8ca3-2000c8a736d9
-    inputFieldName: input
-    outputFieldName: output
-    inputPortIdentifier: 
-    outputPortIdentifier: 
   - GUID: 9d6c93ac-4703-452b-b3d4-bb9060fc4ee6
     owner: {fileID: 11400000}
     inputNodeGUID: 672650dc-f879-4ce6-8d14-58a2d8a789f6
@@ -48,6 +38,70 @@ MonoBehaviour:
     owner: {fileID: 11400000}
     inputNodeGUID: 301b4452-dd07-4253-a3f3-7a57c145dff3
     outputNodeGUID: 672650dc-f879-4ce6-8d14-58a2d8a789f6
+    inputFieldName: input
+    outputFieldName: output
+    inputPortIdentifier: 
+    outputPortIdentifier: 
+  - GUID: aa893fdb-5008-470b-8a88-1dd814ce5552
+    owner: {fileID: 11400000}
+    inputNodeGUID: 7b231d19-c513-43f4-8b8e-c7469c743813
+    outputNodeGUID: 70155453-16b1-47fe-8ca3-2000c8a736d9
+    inputFieldName: input
+    outputFieldName: output
+    inputPortIdentifier: 
+    outputPortIdentifier: 
+  - GUID: d04cf666-4630-4db6-80af-22ef2d3ad0d5
+    owner: {fileID: 11400000}
+    inputNodeGUID: bb993b0a-9a93-4bbe-9bbf-b108ae2ab4e6
+    outputNodeGUID: 672650dc-f879-4ce6-8d14-58a2d8a789f6
+    inputFieldName: input
+    outputFieldName: output
+    inputPortIdentifier: 
+    outputPortIdentifier: 
+  - GUID: 8b83c749-a090-4db4-9cb3-b20784807e74
+    owner: {fileID: 11400000}
+    inputNodeGUID: 70155453-16b1-47fe-8ca3-2000c8a736d9
+    outputNodeGUID: 301b4452-dd07-4253-a3f3-7a57c145dff3
+    inputFieldName: input
+    outputFieldName: output
+    inputPortIdentifier: 
+    outputPortIdentifier: 
+  - GUID: c17fed26-7e6f-42a7-8247-e39cdf503262
+    owner: {fileID: 11400000}
+    inputNodeGUID: 293b77b1-d438-496c-a5b5-8c430aedf5e6
+    outputNodeGUID: bb993b0a-9a93-4bbe-9bbf-b108ae2ab4e6
+    inputFieldName: input
+    outputFieldName: output
+    inputPortIdentifier: 
+    outputPortIdentifier: 
+  - GUID: d8a819c3-42dc-4c6d-a414-058601bdb36b
+    owner: {fileID: 11400000}
+    inputNodeGUID: c0728919-f71b-4167-b491-b81ab6c13193
+    outputNodeGUID: 293b77b1-d438-496c-a5b5-8c430aedf5e6
+    inputFieldName: input
+    outputFieldName: output
+    inputPortIdentifier: 
+    outputPortIdentifier: 
+  - GUID: aa1445a6-a00d-4d61-9d89-1de6449b8d3a
+    owner: {fileID: 11400000}
+    inputNodeGUID: 2834671e-c6ee-4157-825b-96b061e000d1
+    outputNodeGUID: 293b77b1-d438-496c-a5b5-8c430aedf5e6
+    inputFieldName: input
+    outputFieldName: output
+    inputPortIdentifier: 
+    outputPortIdentifier: 
+  - GUID: 24548a7a-800e-4507-bb13-cede70d8ee85
+    owner: {fileID: 11400000}
+    inputNodeGUID: a741d6e2-dfd5-4184-ae92-1d4c6076ed83
+    outputNodeGUID: 2834671e-c6ee-4157-825b-96b061e000d1
+    inputFieldName: input
+    outputFieldName: output
+    inputPortIdentifier: 
+    outputPortIdentifier: 
+  - GUID: 4cc0c393-a99f-472c-9c82-eda57add211d
+    owner: {fileID: 11400000}
+    inputNodeGUID: be75bb75-e7b0-48b8-b4c5-9b5f73098d59
+    outputNodeGUID: 70155453-16b1-47fe-8ca3-2000c8a736d9
     inputFieldName: input
     outputFieldName: output
     inputPortIdentifier: 
@@ -89,8 +143,8 @@ MonoBehaviour:
   serializedParameterList: []
   stickyNotes: []
   nodeInspectorReference: {fileID: 0}
-  position: {x: 342, y: 8, z: 0}
-  scale: {x: 0.8695652, y: 0.8695652, z: 1}
+  position: {x: 162.66667, y: 49.333332, z: 0}
+  scale: {x: 1, y: 1, z: 1}
   references:
     version: 2
     RefIds:
@@ -102,13 +156,15 @@ MonoBehaviour:
         computeOrder: 0
         position:
           serializedVersion: 2
-          x: 1043.8484
-          y: 134.42935
-          width: 180
-          height: 188
+          x: 637.913
+          y: 102.69568
+          width: 68
+          height: 50.000008
         expanded: 0
-        debug: 0
+        debug: 1
         nodeLock: 0
+        lastResult: 0
+        status: 0
         output: 0
     - rid: 4907807932119515141
       type: {class: BTDecoratorNodeLoop, ns: BehaviorTree.Runtime, asm: Assembly-CSharp}
@@ -118,33 +174,19 @@ MonoBehaviour:
         computeOrder: 2
         position:
           serializedVersion: 2
-          x: 1138.3225
-          y: 454.00003
-          width: 91
-          height: 54
+          x: 731.913
+          y: 422.69568
+          width: 92
+          height: 56
         expanded: 0
-        debug: 0
+        debug: 1
         nodeLock: 0
+        lastResult: 0
+        status: 0
         input: 0
         output: 0
         loopTime: 33
         i: 3
-    - rid: 4907807932119515146
-      type: {class: BTTaskMoveTo, ns: BehaviorTree.Runtime, asm: Assembly-CSharp}
-      data:
-        nodeCustomName: BTTaskMoveTo
-        GUID: a1034b2c-a2bb-4924-a0a1-93bf76e1d9a1
-        computeOrder: 4
-        position:
-          serializedVersion: 2
-          x: 1071
-          y: 833
-          width: 132
-          height: 48
-        expanded: 0
-        debug: 0
-        nodeLock: 0
-        input: 0
     - rid: 4907807932119515148
       type: {class: BTCompositeNodeSequence, ns: BehaviorTree.Runtime, asm: Assembly-CSharp}
       data:
@@ -153,13 +195,15 @@ MonoBehaviour:
         computeOrder: 1
         position:
           serializedVersion: 2
-          x: 1071
-          y: 336.6775
-          width: 207
-          height: 54
+          x: 665.2465
+          y: 305.36234
+          width: 208
+          height: 56
         expanded: 0
-        debug: 0
+        debug: 1
         nodeLock: 0
+        lastResult: 0
+        status: 0
         input: 0
         output: 0
     - rid: 7208758103608131585
@@ -170,12 +214,148 @@ MonoBehaviour:
         computeOrder: 3
         position:
           serializedVersion: 2
-          x: 1197
-          y: 613.6
-          width: 207
-          height: 140
+          x: 791.2464
+          y: 582.02905
+          width: 208
+          height: 56
         expanded: 0
-        debug: 0
+        debug: 1
         nodeLock: 0
+        lastResult: 0
+        status: 0
         input: 0
         output: 0
+    - rid: 7208758330816987136
+      type: {class: BTTaskMoveTo, ns: BehaviorTree.Runtime, asm: Assembly-CSharp}
+      data:
+        nodeCustomName: 
+        GUID: 7b231d19-c513-43f4-8b8e-c7469c743813
+        computeOrder: 4
+        position:
+          serializedVersion: 2
+          x: 429.85507
+          y: 741.3334
+          width: 132.66666
+          height: 90
+        expanded: 0
+        debug: 1
+        nodeLock: 0
+        lastResult: 0
+        status: 0
+        input: 0
+    - rid: 7208758330816987137
+      type: {class: BTDecoratorNodeLoop, ns: BehaviorTree.Runtime, asm: Assembly-CSharp}
+      data:
+        nodeCustomName: 
+        GUID: bb993b0a-9a93-4bbe-9bbf-b108ae2ab4e6
+        computeOrder: 5
+        position:
+          serializedVersion: 2
+          x: 1023.8834
+          y: 468.8167
+          width: 100
+          height: 100
+        expanded: 0
+        debug: 1
+        nodeLock: 0
+        lastResult: 0
+        status: 0
+        input: 0
+        output: 0
+        loopTime: 0
+        i: 0
+    - rid: 7208758330816987138
+      type: {class: BTCompositeNodeSequence, ns: BehaviorTree.Runtime, asm: Assembly-CSharp}
+      data:
+        nodeCustomName: 
+        GUID: 293b77b1-d438-496c-a5b5-8c430aedf5e6
+        computeOrder: 6
+        position:
+          serializedVersion: 2
+          x: 1119.4501
+          y: 582
+          width: 208
+          height: 56
+        expanded: 0
+        debug: 1
+        nodeLock: 0
+        lastResult: 0
+        status: 0
+        input: 0
+        output: 0
+    - rid: 7208758330816987139
+      type: {class: BTDecoratorNodeLoop, ns: BehaviorTree.Runtime, asm: Assembly-CSharp}
+      data:
+        nodeCustomName: 
+        GUID: c0728919-f71b-4167-b491-b81ab6c13193
+        computeOrder: 7
+        position:
+          serializedVersion: 2
+          x: 999.3333
+          y: 713.33344
+          width: 174.66669
+          height: 56
+        expanded: 0
+        debug: 1
+        nodeLock: 0
+        lastResult: 0
+        status: 0
+        input: 0
+        output: 0
+        loopTime: 0
+        i: 0
+    - rid: 7208758330816987140
+      type: {class: BTCompositeNodeSelector, ns: BehaviorTree.Runtime, asm: Assembly-CSharp}
+      data:
+        nodeCustomName: 
+        GUID: 2834671e-c6ee-4157-825b-96b061e000d1
+        computeOrder: 8
+        position:
+          serializedVersion: 2
+          x: 1303.3334
+          y: 741.3667
+          width: 100
+          height: 100
+        expanded: 0
+        debug: 1
+        nodeLock: 0
+        lastResult: 0
+        status: 0
+        input: 0
+        output: 0
+    - rid: 7208758330816987141
+      type: {class: BTTaskMoveTo, ns: BehaviorTree.Runtime, asm: Assembly-CSharp}
+      data:
+        nodeCustomName: 
+        GUID: a741d6e2-dfd5-4184-ae92-1d4c6076ed83
+        computeOrder: 9
+        position:
+          serializedVersion: 2
+          x: 1272.1853
+          y: 866.27734
+          width: 132.66663
+          height: 63.333374
+        expanded: 0
+        debug: 1
+        nodeLock: 0
+        lastResult: 0
+        status: 0
+        input: 0
+    - rid: 7208758419203031041
+      type: {class: BTTaskMoveTo, ns: BehaviorTree.Runtime, asm: Assembly-CSharp}
+      data:
+        nodeCustomName: 
+        GUID: be75bb75-e7b0-48b8-b4c5-9b5f73098d59
+        computeOrder: 10
+        position:
+          serializedVersion: 2
+          x: 676.84436
+          y: 719.3334
+          width: 132.66669
+          height: 90
+        expanded: 0
+        debug: 1
+        nodeLock: 0
+        lastResult: 0
+        status: 0
+        input: 0

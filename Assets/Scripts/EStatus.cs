@@ -7,12 +7,12 @@ public enum EStatus
     Combat,
     Alert,
 }
-public enum ENodeResult
-{
-    Succeeded=0,
-    Failed=1,
-    InProgress=2,
-}
+//public enum ENodeResult
+//{
+//    Succeeded=0,
+//    Failed=1,
+//    InProgress=2,
+//}
 public enum EMoveCommand
 {
     MOVE_NONE,

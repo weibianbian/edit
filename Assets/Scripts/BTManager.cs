@@ -10,7 +10,7 @@ public class BTManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        root= btGraph.nodes.Find(e => e is BTNodeRoot) as BTNodeRoot;
+        root = btGraph.nodes.Find(e => e is BTNodeRoot) as BTNodeRoot;
         for (int i = 0; i < root.outputPorts.Count; i++)
         {
             //NodePort port = root.outputPorts[i];
@@ -23,13 +23,33 @@ public class BTManager : MonoBehaviour
             //}
         }
         SerializableEdge edge = root.outputPorts[0].GetEdges()[0];
+        BaseNode node = edge.inputPort.owner;
+        Debug.Log($"根节点的第一个子节点 {node}");
+
+        Find(node);
     }
-    public void RequestExecution(BTCompositeNode requestedOn,int requestedIndex,BTNode requestedBy)
+    public void Find(BaseNode node)
+    {
+        foreach (var outNode in node.GetOutputNodes())
+        {
+            {
+                Debug.Log($"节点信息=父节点 {node}   子节点  {outNode}={outNode}");
+                Find(outNode);
+            }
+        }
+        return;
+    }
+    public void RequestExecution(BTCompositeNode requestedOn, int requestedIndex, BTNode requestedBy)
     {
 
     }
     // Update is called once per frame
     void Update()
     {
+        if (btGraph != null)
+        {
+            root.Visit();
+            root.Step();
+        }
     }
 }

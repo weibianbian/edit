@@ -1,4 +1,5 @@
-﻿using GraphProcessor;
+﻿using CopyBT;
+using GraphProcessor;
 using UnityEngine;
 
 namespace BehaviorTree.Runtime
@@ -7,7 +8,7 @@ namespace BehaviorTree.Runtime
     public class BTNodeRoot : BTNode
     {
         [Output("", false), Vertical]
-        public ENodeResult output;
+        public ENodeStatus output;
         public override Color color => Color.green;
     }
 }
