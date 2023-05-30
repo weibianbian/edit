@@ -17,6 +17,7 @@ MonoBehaviour:
   - rid: 4907808279739236357
   - rid: 4907808279739236358
   - rid: 4907808279739236359
+  - rid: 4907808279739236360
   edges:
   - GUID: 0719769b-10b9-4b03-bab2-832c932b6b8b
     owner: {fileID: 11400000}
@@ -30,6 +31,14 @@ MonoBehaviour:
     owner: {fileID: 11400000}
     inputNodeGUID: b5b8002f-c395-4dcb-9e2b-10911fb58bdf
     outputNodeGUID: f38b97e0-fcc8-42b9-8c16-d8773fc3811b
+    inputFieldName: input
+    outputFieldName: output
+    inputPortIdentifier: 
+    outputPortIdentifier: 
+  - GUID: b1f00335-5846-4973-9514-ae3aecbb3435
+    owner: {fileID: 11400000}
+    inputNodeGUID: 7a2c651c-14f6-46cf-a9b4-f115988e6042
+    outputNodeGUID: b5b8002f-c395-4dcb-9e2b-10911fb58bdf
     inputFieldName: input
     outputFieldName: output
     inputPortIdentifier: 
@@ -71,8 +80,8 @@ MonoBehaviour:
   serializedParameterList: []
   stickyNotes: []
   nodeInspectorReference: {fileID: 0}
-  position: {x: 303, y: -15, z: 0}
-  scale: {x: 0.8695652, y: 0.8695652, z: 1}
+  position: {x: 68, y: -97, z: 0}
+  scale: {x: 1.15, y: 1.15, z: 1}
   references:
     version: 2
     RefIds:
@@ -84,22 +93,21 @@ MonoBehaviour:
         computeOrder: 1
         position:
           serializedVersion: 2
-          x: 811
-          y: 406.15
+          x: 874.46466
+          y: 389.41922
           width: 114
           height: 54
         expanded: 0
-        debug: 0
+        debug: 1
         nodeLock: 0
         status: 0
         lastResult: 0
         nextUpdateTick: 0
-        idx: 0
+        idx: -1
         input: 0
         output: 0
-        nil: -1
         period: 0
-        lastTime: -1
+        lastTime: 999
     - rid: 4907808279739236358
       type: {class: EntryNode, ns: CopyBT.GraphProcessor, asm: Assembly-CSharp}
       data:
@@ -113,13 +121,16 @@ MonoBehaviour:
           width: 100
           height: 100
         expanded: 0
-        debug: 0
+        debug: 1
         nodeLock: 0
         status: 0
         lastResult: 0
         nextUpdateTick: 0
-        idx: 0
+        idx: -1
+        input: 0
         output: 0
+        period: 0
+        lastTime: 999
     - rid: 4907808279739236359
       type: {class: SelectorNode, ns: CopyBT.GraphProcessor, asm: Assembly-CSharp}
       data:
@@ -133,7 +144,7 @@ MonoBehaviour:
           width: 100
           height: 100
         expanded: 0
-        debug: 0
+        debug: 1
         nodeLock: 0
         status: 0
         lastResult: 0
@@ -141,3 +152,23 @@ MonoBehaviour:
         idx: 0
         input: 0
         output: 0
+    - rid: 4907808279739236360
+      type: {class: ActionNode, ns: CopyBT.GraphProcessor, asm: Assembly-CSharp}
+      data:
+        nodeCustomName: 
+        GUID: 7a2c651c-14f6-46cf-a9b4-f115988e6042
+        computeOrder: 3
+        position:
+          serializedVersion: 2
+          x: 1022.6087
+          y: 705.2174
+          width: 100
+          height: 100
+        expanded: 0
+        debug: 1
+        nodeLock: 0
+        status: 0
+        lastResult: 0
+        nextUpdateTick: 0
+        idx: 0
+        input: 0

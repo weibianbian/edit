@@ -12,10 +12,15 @@ namespace CopyBT.GraphProcessor
         public ENodeStatus input;
         [Output("", true), Vertical]
         public ENodeStatus output;
-        public int nil = -1;
-        public float period = 0;
-        public float lastTime = -1;
-       
+        public static readonly int nil = -1;
+        public float period = 0.25f;
+        public float lastTime = nil;
+
+        protected override void Enable()
+        {
+            base.Enable();
+            lastTime = nil;
+        }
         public override void Reset()
         {
             base.Reset();
@@ -39,7 +44,7 @@ namespace CopyBT.GraphProcessor
                 bool found = false;
                 for (int i = 0; i < ChildCount; i++)
                 {
-                    BehaviourNode child = ChildAtIndex(idx);
+                    BehaviourNode child = ChildAtIndex(i);
                     bool should_test_anyway = oldEvent != null && child is EventNode && oldEvent.priority <= (child as EventNode).priority;
                     if (!found || should_test_anyway)
                     {

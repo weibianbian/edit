@@ -1,7 +1,9 @@
 using BehaviorTree.Runtime;
+using CopyBT;
 using CopyBT.GraphProcessor;
 using GraphProcessor;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Unity.VisualScripting;
 using UnityEngine;
 public class BTManager : MonoBehaviour
@@ -43,7 +45,7 @@ public class BTManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (btGraph != null)
+        if (entry != null)
         {
             entry.Visit();
             entry.SaveStatus();

@@ -10,6 +10,12 @@ namespace CopyBT.GraphProcessor
         public ENodeStatus lastResult = ENodeStatus.READY;
         public float nextUpdateTick = 0;
         public int idx = 0;
+        public event Action onVisit;
+        protected override void Enable()
+        {
+            base.Enable();
+            debug = true;
+        }
         protected int ChildCount
         {
             get
@@ -35,7 +41,6 @@ namespace CopyBT.GraphProcessor
         }
         public virtual void Visit()
         {
-
         }
         public virtual void DoToParents(Action<BehaviourNode> fn)
         {
@@ -47,6 +52,8 @@ namespace CopyBT.GraphProcessor
         }
         public virtual void Step()
         {
+            onVisit?.Invoke();
+
             if (status != ENodeStatus.RUNNING)
             {
                 Reset();

@@ -30,7 +30,7 @@ namespace BehaviorTree.Editor
             }
             SetRunningState();
 
-            
+            node.onVisit += SetRunningState;
 
         }
         public void SetRunningState()
@@ -52,7 +52,7 @@ namespace BehaviorTree.Editor
                         break;
                     case ENodeStatus.READY:
                         runColor = new Color(0.5f, 0.5f, 0.5f, 1);
-                        returnLabel.text = "○ Inactive";
+                        returnLabel.text = "○ Ready";
                         break;
                     case ENodeStatus.RUNNING:
                         runColor = new Color(1f, 1f, 0f, 1);
