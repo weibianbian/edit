@@ -1,25 +1,20 @@
-﻿using BehaviorTree.Runtime;
-using CopyBT;
+﻿using CopyBT;
 using GraphProcessor;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using UnityEditor;
-using UnityEditor.Experimental.GraphView;
-using CopyBT.GraphProcessor;
-using GraphProcessor;
 using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace BehaviorTree.Editor
 {
-    [NodeCustomEditor(typeof(BehaviourNode))]
+    [NodeCustomEditor(typeof(CopyBT.GraphProcessor.BehaviourNode))]
     public class BehaviourNodeView : BaseNodeView
     {
         Label returnLabel;
         public override void Enable()
         {
             base.Enable();
-            BTNode node = nodeTarget as BTNode;
+            CopyBT.GraphProcessor.BehaviourNode node = nodeTarget as CopyBT.GraphProcessor.BehaviourNode;
             returnLabel = new Label();
             debugContainer.Add(returnLabel);
             returnLabel.text = "✔ Success";
@@ -41,7 +36,7 @@ namespace BehaviorTree.Editor
         public void SetRunningState()
         {
 
-            if (nodeTarget is BTNode node)
+            if (nodeTarget is CopyBT.GraphProcessor.BehaviourNode node)
             {
                 ENodeStatus taskStatus = node.lastResult;
                 Color runColor = Color.clear;

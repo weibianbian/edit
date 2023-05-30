@@ -9,9 +9,9 @@ namespace CopyBT.GraphProcessor
     public class PriorityNode : BehaviourNode
     {
         [Input(name = "", allowMultiple = false), Vertical]
-        public ENodeResult input;
+        public ENodeStatus input;
         [Output("", true), Vertical]
-        public ENodeResult output;
+        public ENodeStatus output;
         public int nil = -1;
         public float period = 0;
         public float lastTime = -1;

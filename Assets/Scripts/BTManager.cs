@@ -1,4 +1,5 @@
 using BehaviorTree.Runtime;
+using CopyBT.GraphProcessor;
 using GraphProcessor;
 using System.Collections.Generic;
 using Unity.VisualScripting;
@@ -6,12 +7,12 @@ using UnityEngine;
 public class BTManager : MonoBehaviour
 {
     public BehaviorTreeGraph btGraph;
-    public BTNodeRoot root;
+    public EntryNode entry;
     // Start is called before the first frame update
     void Start()
     {
-        root = btGraph.nodes.Find(e => e is BTNodeRoot) as BTNodeRoot;
-        for (int i = 0; i < root.outputPorts.Count; i++)
+        entry = btGraph.nodes.Find(e => e is EntryNode) as EntryNode;
+        for (int i = 0; i < entry.outputPorts.Count; i++)
         {
             //NodePort port = root.outputPorts[i];
             //List < SerializableEdge > edges = port.GetEdges();
@@ -22,7 +23,7 @@ public class BTManager : MonoBehaviour
             //    Debug.Log(edge);
             //}
         }
-        SerializableEdge edge = root.outputPorts[0].GetEdges()[0];
+        SerializableEdge edge = entry.outputPorts[0].GetEdges()[0];
         BaseNode node = edge.inputPort.owner;
         Debug.Log($"根节点的第一个子节点 {node}");
 
@@ -39,17 +40,14 @@ public class BTManager : MonoBehaviour
         }
         return;
     }
-    public void RequestExecution(BTCompositeNode requestedOn, int requestedIndex, BTNode requestedBy)
-    {
-
-    }
     // Update is called once per frame
     void Update()
     {
         if (btGraph != null)
         {
-            root.Visit();
-            root.Step();
+            entry.Visit();
+            entry.SaveStatus();
+            entry.Step();
         }
     }
 }

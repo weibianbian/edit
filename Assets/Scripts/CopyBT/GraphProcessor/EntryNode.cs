@@ -7,7 +7,7 @@ namespace CopyBT.GraphProcessor
     public class EntryNode : BehaviourNode
     {
         [Output("", false), Vertical]
-        public ENodeResult output;
+        public ENodeStatus output;
         public override Color color => Color.green;
     }
 }

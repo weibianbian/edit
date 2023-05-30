@@ -7,9 +7,9 @@ namespace CopyBT.GraphProcessor
     public class SequenceNode : BehaviourNode
     {
         [Input(name = "", allowMultiple = false), Vertical]
-        public ENodeResult input;
+        public ENodeStatus input;
         [Output("", true), Vertical]
-        public ENodeResult output;
+        public ENodeStatus output;
         public override void Visit()
         {
             if (status != ENodeStatus.RUNNING)
