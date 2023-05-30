@@ -2,7 +2,6 @@
 
 namespace BehaviorTree.Runtime
 {
-    [System.Serializable, NodeMenuItem("BT/CompositeNode/Sequence")]
     public class BTCompositeNodeSequence : BTCompositeNode
     {
         public override int GetChild(int prevChild, ENodeResult lastResult)

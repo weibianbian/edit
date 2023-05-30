@@ -3,7 +3,6 @@ using System;
 
 namespace BehaviorTree.Runtime
 {
-    [System.Serializable, NodeMenuItem("BT/CompositeNode/Selector")]
     public class BTCompositeNodeSelector : BTCompositeNode
     {
         public override int GetChild(int prevChild, ENodeResult lastResult)

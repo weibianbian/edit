@@ -1,13 +1,13 @@
 ﻿using GraphProcessor;
 using UnityEngine;
 
-namespace BehaviorTree.Runtime
+namespace CopyBT.GraphProcessor
 {
-    public class BTNodeRoot : BTNode
+    [System.Serializable, NodeMenuItem("BT/EntryNode")]
+    public class EntryNode : BehaviourNode
     {
         [Output("", false), Vertical]
         public ENodeResult output;
         public override Color color => Color.green;
     }
 }
-

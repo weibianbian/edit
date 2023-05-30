@@ -1,12 +1,12 @@
 ﻿using BehaviorTree.Runtime;
+using CopyBT.GraphProcessor;
 using GraphProcessor;
-using UnityEditor;
 using UnityEngine;
 
 namespace BehaviorTree.Editor
 {
-    [NodeCustomEditor(typeof(BTNode))]
-    public class BTNodeGraphView : BaseNodeView
+    [NodeCustomEditor(typeof(BehaviourNode))]
+    public class BehaviourNodeView : BaseNodeView
     {
         public override void Enable()
         {

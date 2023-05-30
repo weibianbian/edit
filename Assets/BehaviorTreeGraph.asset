@@ -14,44 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   serializedNodes: []
   nodes:
-  - rid: 7208758103608131585
   - rid: 4907807932119515138
-  - rid: 4907807932119515141
-  - rid: 4907807932119515146
-  - rid: 4907807932119515148
-  edges:
-  - GUID: 8397b942-5c94-4a18-8ff5-c827ff665477
-    owner: {fileID: 11400000}
-    inputNodeGUID: 70155453-16b1-47fe-8ca3-2000c8a736d9
-    outputNodeGUID: 301b4452-dd07-4253-a3f3-7a57c145dff3
-    inputFieldName: input
-    outputFieldName: output
-    inputPortIdentifier: 
-    outputPortIdentifier: 
-  - GUID: 34da0c14-b646-436a-82df-20699c17bd58
-    owner: {fileID: 11400000}
-    inputNodeGUID: a1034b2c-a2bb-4924-a0a1-93bf76e1d9a1
-    outputNodeGUID: 70155453-16b1-47fe-8ca3-2000c8a736d9
-    inputFieldName: input
-    outputFieldName: output
-    inputPortIdentifier: 
-    outputPortIdentifier: 
-  - GUID: 9d6c93ac-4703-452b-b3d4-bb9060fc4ee6
-    owner: {fileID: 11400000}
-    inputNodeGUID: 672650dc-f879-4ce6-8d14-58a2d8a789f6
-    outputNodeGUID: 317eda4b-e597-4127-aa6e-2909f6a22644
-    inputFieldName: input
-    outputFieldName: output
-    inputPortIdentifier: 
-    outputPortIdentifier: 
-  - GUID: d287ecfc-311d-4b63-a5e3-0d3ad44a188c
-    owner: {fileID: 11400000}
-    inputNodeGUID: 301b4452-dd07-4253-a3f3-7a57c145dff3
-    outputNodeGUID: 672650dc-f879-4ce6-8d14-58a2d8a789f6
-    inputFieldName: input
-    outputFieldName: output
-    inputPortIdentifier: 
-    outputPortIdentifier: 
+  - rid: 4907808279739236354
+  edges: []
   groups: []
   stackNodes: []
   pinnedElements:
@@ -89,7 +54,7 @@ MonoBehaviour:
   serializedParameterList: []
   stickyNotes: []
   nodeInspectorReference: {fileID: 0}
-  position: {x: 342, y: 8, z: 0}
+  position: {x: 303, y: -15, z: 0}
   scale: {x: 0.8695652, y: 0.8695652, z: 1}
   references:
     version: 2
@@ -110,72 +75,19 @@ MonoBehaviour:
         debug: 0
         nodeLock: 0
         output: 0
-    - rid: 4907807932119515141
-      type: {class: BTDecoratorNodeLoop, ns: BehaviorTree.Runtime, asm: Assembly-CSharp}
+    - rid: 4907808279739236354
+      type: {class: BTNodeRoot, ns: BehaviorTree.Runtime, asm: Assembly-CSharp}
       data:
-        nodeCustomName: "\u5FAA\u73AF\u6B21\u6570"
-        GUID: 301b4452-dd07-4253-a3f3-7a57c145dff3
-        computeOrder: 2
+        nodeCustomName: 
+        GUID: a2a0e344-208a-45e9-bb68-73b20e970867
+        computeOrder: 1
         position:
           serializedVersion: 2
-          x: 1138.3225
-          y: 454.00003
-          width: 91
-          height: 54
-        expanded: 0
-        debug: 0
-        nodeLock: 0
-        input: 0
-        output: 0
-        loopTime: 33
-        i: 3
-    - rid: 4907807932119515146
-      type: {class: BTTaskMoveTo, ns: BehaviorTree.Runtime, asm: Assembly-CSharp}
-      data:
-        nodeCustomName: BTTaskMoveTo
-        GUID: a1034b2c-a2bb-4924-a0a1-93bf76e1d9a1
-        computeOrder: 4
-        position:
-          serializedVersion: 2
-          x: 1071
-          y: 833
-          width: 132
+          x: 810.94995
+          y: 289.00003
+          width: 115
           height: 48
         expanded: 0
         debug: 0
         nodeLock: 0
-        input: 0
-    - rid: 4907807932119515148
-      type: {class: BTCompositeNodeSequence, ns: BehaviorTree.Runtime, asm: Assembly-CSharp}
-      data:
-        nodeCustomName: 
-        GUID: 672650dc-f879-4ce6-8d14-58a2d8a789f6
-        computeOrder: 1
-        position:
-          serializedVersion: 2
-          x: 1071
-          y: 336.6775
-          width: 207
-          height: 54
-        expanded: 0
-        debug: 0
-        nodeLock: 0
-        input: 0
-        output: 0
-    - rid: 7208758103608131585
-      type: {class: BTCompositeNodeSequence, ns: BehaviorTree.Runtime, asm: Assembly-CSharp}
-      data:
-        nodeCustomName: BTCompositeNodeSequence
-        GUID: 70155453-16b1-47fe-8ca3-2000c8a736d9
-        computeOrder: 3
-        position:
-          serializedVersion: 2
-          x: 1197
-          y: 613.6
-          width: 207
-          height: 140
-        expanded: 0
-        debug: 0
-        nodeLock: 0
-        input: 0
         output: 0
