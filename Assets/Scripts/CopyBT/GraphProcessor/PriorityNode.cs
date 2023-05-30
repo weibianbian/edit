@@ -28,7 +28,7 @@ namespace CopyBT.GraphProcessor
         }
         public override void Visit()
         {
-            float time = DateTime.Now.Millisecond;
+            float time =Time.realtimeSinceStartup;
             bool do_eval = (lastTime == nil) || (period == nil) || (lastTime + period) < time;
             if (do_eval)
             {

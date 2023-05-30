@@ -14,31 +14,49 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   serializedNodes: []
   nodes:
-  - rid: 4907808279739236357
   - rid: 4907808279739236358
-  - rid: 4907808279739236359
   - rid: 4907808279739236360
+  - rid: 7208758465771864064
+  - rid: 7208758465771864065
+  - rid: 7208758465771864066
+  - rid: 7208758465771864067
   edges:
-  - GUID: 0719769b-10b9-4b03-bab2-832c932b6b8b
+  - GUID: 0cf6ceb1-af83-4c55-8c69-c3dd71ff0ffd
     owner: {fileID: 11400000}
-    inputNodeGUID: f38b97e0-fcc8-42b9-8c16-d8773fc3811b
+    inputNodeGUID: abdda7d6-6302-4eba-85ff-303d00f3a0f6
     outputNodeGUID: 17f98e98-fb9d-44d8-94ba-1dcbe8dc9a36
     inputFieldName: input
     outputFieldName: output
     inputPortIdentifier: 
     outputPortIdentifier: 
-  - GUID: 213674c7-6f37-4593-b939-1841da66d678
+  - GUID: 5d0b6ac0-d2cc-4b04-adb5-714465174c20
     owner: {fileID: 11400000}
-    inputNodeGUID: b5b8002f-c395-4dcb-9e2b-10911fb58bdf
-    outputNodeGUID: f38b97e0-fcc8-42b9-8c16-d8773fc3811b
+    inputNodeGUID: 7a2c651c-14f6-46cf-a9b4-f115988e6042
+    outputNodeGUID: abdda7d6-6302-4eba-85ff-303d00f3a0f6
     inputFieldName: input
     outputFieldName: output
     inputPortIdentifier: 
     outputPortIdentifier: 
-  - GUID: b1f00335-5846-4973-9514-ae3aecbb3435
+  - GUID: db06adf1-c756-4883-aba7-936b331889e6
     owner: {fileID: 11400000}
-    inputNodeGUID: 7a2c651c-14f6-46cf-a9b4-f115988e6042
-    outputNodeGUID: b5b8002f-c395-4dcb-9e2b-10911fb58bdf
+    inputNodeGUID: 70c2fe37-43d5-4a19-926f-cb5dc31f0300
+    outputNodeGUID: abdda7d6-6302-4eba-85ff-303d00f3a0f6
+    inputFieldName: input
+    outputFieldName: output
+    inputPortIdentifier: 
+    outputPortIdentifier: 
+  - GUID: 85aae07f-9269-4145-9c5c-2e781c300241
+    owner: {fileID: 11400000}
+    inputNodeGUID: 15d8a508-68f1-4e63-8dc8-f1ade6fcdaff
+    outputNodeGUID: abdda7d6-6302-4eba-85ff-303d00f3a0f6
+    inputFieldName: input
+    outputFieldName: output
+    inputPortIdentifier: 
+    outputPortIdentifier: 
+  - GUID: 85f2156b-4c06-4ebb-8b4e-08219ea8bd17
+    owner: {fileID: 11400000}
+    inputNodeGUID: 255ef20f-bb94-4808-af72-2ae8f069346b
+    outputNodeGUID: 15d8a508-68f1-4e63-8dc8-f1ade6fcdaff
     inputFieldName: input
     outputFieldName: output
     inputPortIdentifier: 
@@ -80,34 +98,11 @@ MonoBehaviour:
   serializedParameterList: []
   stickyNotes: []
   nodeInspectorReference: {fileID: 0}
-  position: {x: 68, y: -97, z: 0}
-  scale: {x: 1.15, y: 1.15, z: 1}
+  position: {x: -141.33333, y: -68.666664, z: 0}
+  scale: {x: 1, y: 1, z: 1}
   references:
     version: 2
     RefIds:
-    - rid: 4907808279739236357
-      type: {class: PriorityNode, ns: CopyBT.GraphProcessor, asm: Assembly-CSharp}
-      data:
-        nodeCustomName: 
-        GUID: f38b97e0-fcc8-42b9-8c16-d8773fc3811b
-        computeOrder: 1
-        position:
-          serializedVersion: 2
-          x: 874.46466
-          y: 389.41922
-          width: 114
-          height: 54
-        expanded: 0
-        debug: 1
-        nodeLock: 0
-        status: 0
-        lastResult: 0
-        nextUpdateTick: 0
-        idx: -1
-        input: 0
-        output: 0
-        period: 0
-        lastTime: 999
     - rid: 4907808279739236358
       type: {class: EntryNode, ns: CopyBT.GraphProcessor, asm: Assembly-CSharp}
       data:
@@ -124,23 +119,105 @@ MonoBehaviour:
         debug: 1
         nodeLock: 0
         status: 0
-        lastResult: 0
+        lastResult: 3
         nextUpdateTick: 0
         idx: -1
         input: 0
         output: 0
         period: 0
-        lastTime: 999
-    - rid: 4907808279739236359
-      type: {class: SelectorNode, ns: CopyBT.GraphProcessor, asm: Assembly-CSharp}
+        lastTime: 4.5336456
+    - rid: 4907808279739236360
+      type: {class: ActionNode, ns: CopyBT.GraphProcessor, asm: Assembly-CSharp}
       data:
         nodeCustomName: 
-        GUID: b5b8002f-c395-4dcb-9e2b-10911fb58bdf
+        GUID: 7a2c651c-14f6-46cf-a9b4-f115988e6042
         computeOrder: 2
         position:
           serializedVersion: 2
-          x: 948.75006
-          y: 557.75006
+          x: 641.99994
+          y: 709.0146
+          width: 128.66669
+          height: 90
+        expanded: 0
+        debug: 1
+        nodeLock: 0
+        status: 0
+        lastResult: 2
+        nextUpdateTick: 0
+        idx: 0
+        input: 0
+    - rid: 7208758465771864064
+      type: {class: ActionNode, ns: CopyBT.GraphProcessor, asm: Assembly-CSharp}
+      data:
+        nodeCustomName: 
+        GUID: 70c2fe37-43d5-4a19-926f-cb5dc31f0300
+        computeOrder: 3
+        position:
+          serializedVersion: 2
+          x: 909.8551
+          y: 643.7681
+          width: 100
+          height: 100
+        expanded: 0
+        debug: 1
+        nodeLock: 0
+        status: 0
+        lastResult: 2
+        nextUpdateTick: 0
+        idx: 0
+        input: 0
+    - rid: 7208758465771864065
+      type: {class: SequenceNode, ns: CopyBT.GraphProcessor, asm: Assembly-CSharp}
+      data:
+        nodeCustomName: 
+        GUID: abdda7d6-6302-4eba-85ff-303d00f3a0f6
+        computeOrder: 1
+        position:
+          serializedVersion: 2
+          x: 887.24646
+          y: 434.20294
+          width: 100
+          height: 100
+        expanded: 0
+        debug: 1
+        nodeLock: 0
+        status: 0
+        lastResult: 3
+        nextUpdateTick: 0
+        idx: 2
+        input: 0
+        output: 0
+    - rid: 7208758465771864066
+      type: {class: SelectorNode, ns: CopyBT.GraphProcessor, asm: Assembly-CSharp}
+      data:
+        nodeCustomName: 
+        GUID: 15d8a508-68f1-4e63-8dc8-f1ade6fcdaff
+        computeOrder: 4
+        position:
+          serializedVersion: 2
+          x: 1208
+          y: 708.6667
+          width: 121.33325
+          height: 96
+        expanded: 0
+        debug: 1
+        nodeLock: 0
+        status: 0
+        lastResult: 3
+        nextUpdateTick: 0
+        idx: 0
+        input: 0
+        output: 0
+    - rid: 7208758465771864067
+      type: {class: DecoratorNode, ns: CopyBT.GraphProcessor, asm: Assembly-CSharp}
+      data:
+        nodeCustomName: 
+        GUID: 255ef20f-bb94-4808-af72-2ae8f069346b
+        computeOrder: 5
+        position:
+          serializedVersion: 2
+          x: 1272.3334
+          y: 891.6666
           width: 100
           height: 100
         expanded: 0
@@ -152,23 +229,3 @@ MonoBehaviour:
         idx: 0
         input: 0
         output: 0
-    - rid: 4907808279739236360
-      type: {class: ActionNode, ns: CopyBT.GraphProcessor, asm: Assembly-CSharp}
-      data:
-        nodeCustomName: 
-        GUID: 7a2c651c-14f6-46cf-a9b4-f115988e6042
-        computeOrder: 3
-        position:
-          serializedVersion: 2
-          x: 1022.6087
-          y: 705.2174
-          width: 100
-          height: 100
-        expanded: 0
-        debug: 1
-        nodeLock: 0
-        status: 0
-        lastResult: 0
-        nextUpdateTick: 0
-        idx: 0
-        input: 0

@@ -52,7 +52,7 @@ namespace CopyBT.GraphProcessor
         }
         public virtual void Step()
         {
-            onVisit?.Invoke();
+            
 
             if (status != ENodeStatus.RUNNING)
             {
@@ -84,6 +84,7 @@ namespace CopyBT.GraphProcessor
             {
                 ChildAtIndex(i).SaveStatus();
             }
+            onVisit?.Invoke();
         }
         public bool IsValidIndex(int idx)
         {

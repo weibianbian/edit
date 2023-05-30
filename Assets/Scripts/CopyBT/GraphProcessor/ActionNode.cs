@@ -1,5 +1,7 @@
 ﻿using GraphProcessor;
 using System;
+using System.Collections.Generic;
+using static Unity.VisualScripting.Metadata;
 
 namespace CopyBT.GraphProcessor
 {
@@ -11,7 +13,7 @@ namespace CopyBT.GraphProcessor
         public Action action;
         public override void Visit()
         {
-            action.Invoke();
+            action?.Invoke();
             status = ENodeStatus.SUCCESS;
         }
     }
