@@ -1,6 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using CopyBT;
+using System.Collections.Generic;
 
-namespace CopyBT.GraphProcessor
+namespace BT.GraphProcessor
 {
     public class EventNode : BehaviourNode
     {

@@ -1,17 +1,14 @@
 ﻿using BehaviorTree.Runtime;
+using CopyBT;
 using GraphProcessor;
 using System;
 using UnityEngine;
 
-namespace CopyBT.GraphProcessor
+namespace BT.GraphProcessor
 {
-    [System.Serializable, NodeMenuItem("BT/CompositeNode/Priority")]
-    public class PriorityNode : BehaviourNode
+    [System.Serializable, NodeMenuItem("BT/Composite/Priority")]
+    public class PriorityNode : CompositieNode
     {
-        [Input(name = "", allowMultiple = false), Vertical]
-        public ENodeStatus input;
-        [Output("", true), Vertical]
-        public ENodeStatus output;
         public static readonly int nil = -1;
         public float period = 0.25f;
         public float lastTime = nil;

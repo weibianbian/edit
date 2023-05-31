@@ -1,7 +1,5 @@
-﻿using BehaviorTree.Runtime;
-using CopyBT.GraphProcessor;
+﻿using BT.GraphProcessor;
 using GraphProcessor;
-using UnityEditor;
 
 namespace BehaviorTree.Editor
 {

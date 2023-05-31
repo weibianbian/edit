@@ -1,16 +1,17 @@
-﻿using GraphProcessor;
+﻿using CopyBT;
+using GraphProcessor;
 using System;
-using System.Collections.Generic;
-using static Unity.VisualScripting.Metadata;
+using UnityEngine;
 
-namespace CopyBT.GraphProcessor
+namespace BT.GraphProcessor
 {
-    [System.Serializable, NodeMenuItem("BT/ActionNode")]
+    //[System.Serializable, NodeMenuItem("BT/ActionNode")]
     public class ActionNode : BehaviourNode
     {
         [Input(name = "", allowMultiple = false), Vertical]
         public ENodeStatus input;
         public Action action;
+        public override Color color =>new Color(0.4f, 0.8f, 0.4f);
         public override void Visit()
         {
             action?.Invoke();

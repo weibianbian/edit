@@ -7,19 +7,19 @@ using UnityEngine.UIElements;
 
 namespace BehaviorTree.Editor
 {
-    [NodeCustomEditor(typeof(CopyBT.GraphProcessor.BehaviourNode))]
+    [NodeCustomEditor(typeof(BT.GraphProcessor.BehaviourNode))]
     public class BehaviourNodeView : BaseNodeView
     {
         Label returnLabel;
         public override void Enable()
         {
             base.Enable();
-            CopyBT.GraphProcessor.BehaviourNode node = nodeTarget as CopyBT.GraphProcessor.BehaviourNode;
+            BT.GraphProcessor.BehaviourNode node = nodeTarget as BT.GraphProcessor.BehaviourNode;
             returnLabel = new Label();
             debugContainer.Add(returnLabel);
             returnLabel.text = "✔ Success";
             returnLabel.style.color = new Color(0f, 1f, 0f, 1);
-            returnLabel.style.fontSize = 22;
+            returnLabel.style.fontSize = 14;
             returnLabel.style.alignSelf = new StyleEnum<Align>(Align.Stretch);
             //EnumField accessorSelector = new EnumField(node.accessor);
             //accessorSelector.SetValueWithoutNotify(parameterNode.accessor);
@@ -36,7 +36,7 @@ namespace BehaviorTree.Editor
         public void SetRunningState()
         {
 
-            if (nodeTarget is CopyBT.GraphProcessor.BehaviourNode node)
+            if (nodeTarget is BT.GraphProcessor.BehaviourNode node)
             {
                 ENodeStatus taskStatus = node.lastResult;
                 Color runColor = Color.clear;

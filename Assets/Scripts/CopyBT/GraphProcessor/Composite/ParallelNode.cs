@@ -1,10 +1,10 @@
-﻿using GraphProcessor;
-using System.Collections.Generic;
+﻿using CopyBT;
+using GraphProcessor;
 
-namespace CopyBT.GraphProcessor
+namespace BT.GraphProcessor
 {
-    [System.Serializable, NodeMenuItem("BT/CompositeNode/ParallelNode")]
-    public class ParallelNode : BehaviourNode
+    [System.Serializable, NodeMenuItem("BT/Composite/ParallelNode")]
+    public class ParallelNode : CompositieNode
     {
         public override void Step()
         {
@@ -16,7 +16,7 @@ namespace CopyBT.GraphProcessor
             {
                 for (int i = 0; i < ChildCount; i++)
                 {
-                    if (ChildAtIndex(i).status == ENodeStatus.SUCCESS && ChildAtIndex(i) is ConditionNode)
+                    if (ChildAtIndex(i).status == ENodeStatus.SUCCESS && ChildAtIndex(i) is Condition)
                     {
                         ChildAtIndex(i).Reset();
                     }
@@ -26,14 +26,9 @@ namespace CopyBT.GraphProcessor
         public override void Visit()
         {
             bool done = true;
-            bool anyDone = false;
             for (int i = 0; i < ChildCount; i++)
             {
                 BehaviourNode child = ChildAtIndex(i);
-                if (child is ConditionNode)
-                {
-                    child.Reset();
-                }
                 if (child.status != ENodeStatus.SUCCESS)
                 {
                     child.Visit();
@@ -46,10 +41,6 @@ namespace CopyBT.GraphProcessor
                 if (child.status == ENodeStatus.RUNNING)
                 {
                     done = false;
-                }
-                else
-                {
-                    anyDone = true;
                 }
             }
             if (done)

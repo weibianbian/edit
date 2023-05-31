@@ -1,14 +1,11 @@
-﻿using GraphProcessor;
+﻿using CopyBT;
+using GraphProcessor;
 
-namespace CopyBT.GraphProcessor
+namespace BT.GraphProcessor
 {
-    [System.Serializable, NodeMenuItem("BT/CompositeNode/Selector")]
-    public class SelectorNode : BehaviourNode
+    [System.Serializable, NodeMenuItem("BT/Composite/Selector")]
+    public class SelectorNode : CompositieNode
     {
-        [Input(name = "", allowMultiple = false), Vertical]
-        public ENodeStatus input;
-        [Output("", true), Vertical]
-        public ENodeStatus output;
         public override void Reset()
         {
             base.Reset();

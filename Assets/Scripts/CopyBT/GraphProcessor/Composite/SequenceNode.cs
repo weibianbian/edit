@@ -1,15 +1,12 @@
-﻿using GraphProcessor;
+﻿using CopyBT;
+using GraphProcessor;
 using System.Collections.Generic;
 
-namespace CopyBT.GraphProcessor
+namespace BT.GraphProcessor
 {
-    [System.Serializable, NodeMenuItem("BT/CompositeNode/Sequence")]
-    public class SequenceNode : BehaviourNode
+    [System.Serializable, NodeMenuItem("BT/Composite/Sequence")]
+    public class SequenceNode : CompositieNode
     {
-        [Input(name = "", allowMultiple = false), Vertical]
-        public ENodeStatus input;
-        [Output("", true), Vertical]
-        public ENodeStatus output;
         public override void Visit()
         {
             if (status != ENodeStatus.RUNNING)

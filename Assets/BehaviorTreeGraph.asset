@@ -14,49 +14,274 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   serializedNodes: []
   nodes:
-  - rid: 4907808279739236358
-  - rid: 4907808279739236360
-  - rid: 7208758465771864064
-  - rid: 7208758465771864065
-  - rid: 7208758465771864066
-  - rid: 7208758465771864067
+  - rid: 4907808297568174089
+  - rid: 4907808297568174091
+  - rid: 4907808297568174092
+  - rid: 4907808297568174093
+  - rid: 4907808297568174094
+  - rid: 4907808297568174095
+  - rid: 4907808297568174096
+  - rid: 4907808297568174097
+  - rid: 4907808297568174098
+  - rid: 4907808297568174099
+  - rid: 4907808297568174100
+  - rid: 4907808297568174102
+  - rid: 4907808297568174103
+  - rid: 4907808297568174104
+  - rid: 4907808297568174107
+  - rid: 4907808297568174108
+  - rid: 4907808297568174111
+  - rid: 4907808297568174112
+  - rid: 4907808297568174113
+  - rid: 4907808297568174117
+  - rid: 4907808297568174118
+  - rid: 4907808297568174119
+  - rid: 4907808297568174120
+  - rid: 4907808297568174121
+  - rid: 4907808297568174122
+  - rid: 4907808297568174123
+  - rid: 4907808297568174124
+  - rid: 4907808297568174127
+  - rid: 4907808297568174128
+  - rid: 4907808297568174132
+  - rid: 4907808297568174133
   edges:
-  - GUID: 0cf6ceb1-af83-4c55-8c69-c3dd71ff0ffd
+  - GUID: 14af5d32-0679-4350-956e-e8e928561308
     owner: {fileID: 11400000}
-    inputNodeGUID: abdda7d6-6302-4eba-85ff-303d00f3a0f6
-    outputNodeGUID: 17f98e98-fb9d-44d8-94ba-1dcbe8dc9a36
+    inputNodeGUID: d6253433-4df6-48e1-a713-c0356b06a550
+    outputNodeGUID: bc3bc9bf-9852-4e01-93d0-81985077125f
     inputFieldName: input
     outputFieldName: output
     inputPortIdentifier: 
     outputPortIdentifier: 
-  - GUID: 5d0b6ac0-d2cc-4b04-adb5-714465174c20
+  - GUID: c30b7d75-f029-4424-b5d3-08fe6cd5bc07
     owner: {fileID: 11400000}
-    inputNodeGUID: 7a2c651c-14f6-46cf-a9b4-f115988e6042
-    outputNodeGUID: abdda7d6-6302-4eba-85ff-303d00f3a0f6
+    inputNodeGUID: 5788cbb2-ed26-46b9-a0f1-6ec29e6dfde4
+    outputNodeGUID: bc3bc9bf-9852-4e01-93d0-81985077125f
     inputFieldName: input
     outputFieldName: output
     inputPortIdentifier: 
     outputPortIdentifier: 
-  - GUID: db06adf1-c756-4883-aba7-936b331889e6
+  - GUID: f46839d2-3e66-41fa-b197-07951c201b5d
     owner: {fileID: 11400000}
-    inputNodeGUID: 70c2fe37-43d5-4a19-926f-cb5dc31f0300
-    outputNodeGUID: abdda7d6-6302-4eba-85ff-303d00f3a0f6
+    inputNodeGUID: c2205976-0506-4bc8-9d2c-c6f66f58452a
+    outputNodeGUID: a31674ad-91a4-4a17-a1eb-15911ff073ba
     inputFieldName: input
     outputFieldName: output
     inputPortIdentifier: 
     outputPortIdentifier: 
-  - GUID: 85aae07f-9269-4145-9c5c-2e781c300241
+  - GUID: b8cf7c3b-7106-4289-844c-644327705eed
     owner: {fileID: 11400000}
-    inputNodeGUID: 15d8a508-68f1-4e63-8dc8-f1ade6fcdaff
-    outputNodeGUID: abdda7d6-6302-4eba-85ff-303d00f3a0f6
+    inputNodeGUID: a31674ad-91a4-4a17-a1eb-15911ff073ba
+    outputNodeGUID: e9ddb607-73b6-4c82-9162-3c0fbd046799
     inputFieldName: input
     outputFieldName: output
     inputPortIdentifier: 
     outputPortIdentifier: 
-  - GUID: 85f2156b-4c06-4ebb-8b4e-08219ea8bd17
+  - GUID: ab982e1f-fe65-4168-9708-4c5c1a4fe0dc
     owner: {fileID: 11400000}
-    inputNodeGUID: 255ef20f-bb94-4808-af72-2ae8f069346b
-    outputNodeGUID: 15d8a508-68f1-4e63-8dc8-f1ade6fcdaff
+    inputNodeGUID: 3f2ebe40-4e8c-4151-88d8-44c323868346
+    outputNodeGUID: e9ddb607-73b6-4c82-9162-3c0fbd046799
+    inputFieldName: input
+    outputFieldName: output
+    inputPortIdentifier: 
+    outputPortIdentifier: 
+  - GUID: 9b2108f8-3c82-448b-b3dc-71a0d6ef05c2
+    owner: {fileID: 11400000}
+    inputNodeGUID: 766e35be-b9fa-4cf1-a7cd-8f292cd7757b
+    outputNodeGUID: a31674ad-91a4-4a17-a1eb-15911ff073ba
+    inputFieldName: input
+    outputFieldName: output
+    inputPortIdentifier: 
+    outputPortIdentifier: 
+  - GUID: fcf30842-a97c-4176-945c-e797f3f8de5f
+    owner: {fileID: 11400000}
+    inputNodeGUID: d7bf342f-c8d0-4fd5-8a91-88da28ba3060
+    outputNodeGUID: 4baa9576-3e8d-41b7-82e9-6ae3b0d6e424
+    inputFieldName: input
+    outputFieldName: output
+    inputPortIdentifier: 
+    outputPortIdentifier: 
+  - GUID: c8d3408c-6fda-4795-bc75-931087481e72
+    owner: {fileID: 11400000}
+    inputNodeGUID: c73e5a35-c6ea-4b31-aa0e-48964c892d93
+    outputNodeGUID: 4baa9576-3e8d-41b7-82e9-6ae3b0d6e424
+    inputFieldName: input
+    outputFieldName: output
+    inputPortIdentifier: 
+    outputPortIdentifier: 
+  - GUID: ac256767-a4a8-4ed1-a906-ec131c24bb11
+    owner: {fileID: 11400000}
+    inputNodeGUID: e9ddb607-73b6-4c82-9162-3c0fbd046799
+    outputNodeGUID: c73e5a35-c6ea-4b31-aa0e-48964c892d93
+    inputFieldName: input
+    outputFieldName: output
+    inputPortIdentifier: 
+    outputPortIdentifier: 
+  - GUID: 8cf83975-c9a0-4c5e-b69d-4fa277fc9224
+    owner: {fileID: 11400000}
+    inputNodeGUID: bc3bc9bf-9852-4e01-93d0-81985077125f
+    outputNodeGUID: c73e5a35-c6ea-4b31-aa0e-48964c892d93
+    inputFieldName: input
+    outputFieldName: output
+    inputPortIdentifier: 
+    outputPortIdentifier: 
+  - GUID: caa6e2ae-3a4e-40ad-a5f1-f257ccc3523c
+    owner: {fileID: 11400000}
+    inputNodeGUID: efb89b0b-aaca-4a87-a40b-69f70f7e64af
+    outputNodeGUID: c73e5a35-c6ea-4b31-aa0e-48964c892d93
+    inputFieldName: input
+    outputFieldName: output
+    inputPortIdentifier: 
+    outputPortIdentifier: 
+  - GUID: 3dd5bc79-c63a-4ce7-aebd-22b6f78b3b3b
+    owner: {fileID: 11400000}
+    inputNodeGUID: 42145862-153c-401f-8d67-0cfd077a9064
+    outputNodeGUID: efb89b0b-aaca-4a87-a40b-69f70f7e64af
+    inputFieldName: input
+    outputFieldName: output
+    inputPortIdentifier: 
+    outputPortIdentifier: 
+  - GUID: 1ef9552e-4ac7-4609-9053-5ba627d01acd
+    owner: {fileID: 11400000}
+    inputNodeGUID: f3f1ca2b-b497-4450-b1e8-f7504af9b9d6
+    outputNodeGUID: efb89b0b-aaca-4a87-a40b-69f70f7e64af
+    inputFieldName: input
+    outputFieldName: output
+    inputPortIdentifier: 
+    outputPortIdentifier: 
+  - GUID: 0322dcec-3af1-422e-ad3c-62c3eb3c4a5a
+    owner: {fileID: 11400000}
+    inputNodeGUID: 8315f5d6-ce89-447f-8e6c-bb18bd71f12d
+    outputNodeGUID: c73e5a35-c6ea-4b31-aa0e-48964c892d93
+    inputFieldName: input
+    outputFieldName: output
+    inputPortIdentifier: 
+    outputPortIdentifier: 
+  - GUID: e0c997dc-3126-4e8c-af78-1e625f684a76
+    owner: {fileID: 11400000}
+    inputNodeGUID: 1b980187-64c9-4d2d-830a-7b2223231bdf
+    outputNodeGUID: e20bd4d0-90af-4a75-90a3-2ee54293f70e
+    inputFieldName: input
+    outputFieldName: output
+    inputPortIdentifier: 
+    outputPortIdentifier: 
+  - GUID: 52a926c2-179b-40d3-8536-7f375b22a3f8
+    owner: {fileID: 11400000}
+    inputNodeGUID: 8b9e2420-c32d-472f-b7b8-8f0ad13c7c4b
+    outputNodeGUID: e20bd4d0-90af-4a75-90a3-2ee54293f70e
+    inputFieldName: input
+    outputFieldName: output
+    inputPortIdentifier: 
+    outputPortIdentifier: 
+  - GUID: 83b906f8-0db1-44c5-8fef-51d70c09c30e
+    owner: {fileID: 11400000}
+    inputNodeGUID: e20bd4d0-90af-4a75-90a3-2ee54293f70e
+    outputNodeGUID: 55798a0e-ab65-4386-8da0-62d3d011c5bf
+    inputFieldName: input
+    outputFieldName: output
+    inputPortIdentifier: 
+    outputPortIdentifier: 
+  - GUID: d5aef84f-7477-4f4d-a19d-cff08b549e02
+    owner: {fileID: 11400000}
+    inputNodeGUID: 20b8e265-87a0-4d53-8f2e-6be47ebbe8bb
+    outputNodeGUID: e3b6efa6-853f-4349-9ed1-93a7af481781
+    inputFieldName: input
+    outputFieldName: output
+    inputPortIdentifier: 
+    outputPortIdentifier: 
+  - GUID: d4bac146-ec5b-43cb-a0c1-8f1f8428c1f2
+    owner: {fileID: 11400000}
+    inputNodeGUID: 2a8b59ba-a6d2-4156-8a29-2b9284e91534
+    outputNodeGUID: e3b6efa6-853f-4349-9ed1-93a7af481781
+    inputFieldName: input
+    outputFieldName: output
+    inputPortIdentifier: 
+    outputPortIdentifier: 
+  - GUID: 03e700da-40de-4d83-9487-14fa502cf0d0
+    owner: {fileID: 11400000}
+    inputNodeGUID: e3b6efa6-853f-4349-9ed1-93a7af481781
+    outputNodeGUID: e872b68d-02b7-4f3d-8cef-1c95667cbf86
+    inputFieldName: input
+    outputFieldName: output
+    inputPortIdentifier: 
+    outputPortIdentifier: 
+  - GUID: 10f6f25a-8f6d-4770-b18b-55f9bfa1bc2a
+    owner: {fileID: 11400000}
+    inputNodeGUID: ab223bd3-e3ac-49a0-a92c-0027751df5b4
+    outputNodeGUID: e872b68d-02b7-4f3d-8cef-1c95667cbf86
+    inputFieldName: input
+    outputFieldName: output
+    inputPortIdentifier: 
+    outputPortIdentifier: 
+  - GUID: 9c3047f9-4d29-4d04-991d-71aca6920fb9
+    owner: {fileID: 11400000}
+    inputNodeGUID: e872b68d-02b7-4f3d-8cef-1c95667cbf86
+    outputNodeGUID: 55798a0e-ab65-4386-8da0-62d3d011c5bf
+    inputFieldName: input
+    outputFieldName: output
+    inputPortIdentifier: 
+    outputPortIdentifier: 
+  - GUID: 59d005ae-3dda-4757-a7e2-42dbb6ed3b01
+    owner: {fileID: 11400000}
+    inputNodeGUID: 875072f9-bdad-45f6-bc7c-a4c49d5bbe76
+    outputNodeGUID: 5038c0f1-12d0-4a9c-97fa-bf7a6e506b5e
+    inputFieldName: input
+    outputFieldName: output
+    inputPortIdentifier: 
+    outputPortIdentifier: 
+  - GUID: 567a32a0-1b6b-41ef-a5be-2287e1154b58
+    owner: {fileID: 11400000}
+    inputNodeGUID: 6d82972e-ce67-40d5-88d1-6f178971a4c9
+    outputNodeGUID: 5038c0f1-12d0-4a9c-97fa-bf7a6e506b5e
+    inputFieldName: input
+    outputFieldName: output
+    inputPortIdentifier: 
+    outputPortIdentifier: 
+  - GUID: 52ef1ec5-01c4-4ae1-83cd-75d219e2cdaf
+    owner: {fileID: 11400000}
+    inputNodeGUID: 5038c0f1-12d0-4a9c-97fa-bf7a6e506b5e
+    outputNodeGUID: 55798a0e-ab65-4386-8da0-62d3d011c5bf
+    inputFieldName: input
+    outputFieldName: output
+    inputPortIdentifier: 
+    outputPortIdentifier: 
+  - GUID: 6a94aabc-18e0-443c-a253-3d1c657e24f4
+    owner: {fileID: 11400000}
+    inputNodeGUID: a7a913e0-d75c-4880-8fb8-d2342b545213
+    outputNodeGUID: 55798a0e-ab65-4386-8da0-62d3d011c5bf
+    inputFieldName: input
+    outputFieldName: output
+    inputPortIdentifier: 
+    outputPortIdentifier: 
+  - GUID: 035b4fd5-7650-4e98-a8d0-8325160ffadc
+    owner: {fileID: 11400000}
+    inputNodeGUID: 4baa9576-3e8d-41b7-82e9-6ae3b0d6e424
+    outputNodeGUID: e0113cb9-9087-448d-8acd-2848d1bfb1ec
+    inputFieldName: input
+    outputFieldName: output
+    inputPortIdentifier: 
+    outputPortIdentifier: 
+  - GUID: 491b3492-96b8-42be-9661-cac9c40cdcd2
+    owner: {fileID: 11400000}
+    inputNodeGUID: e0113cb9-9087-448d-8acd-2848d1bfb1ec
+    outputNodeGUID: 3c7175f0-3da8-4035-b017-457383159e0f
+    inputFieldName: input
+    outputFieldName: output
+    inputPortIdentifier: 
+    outputPortIdentifier: 
+  - GUID: b070693b-a528-40cc-94a0-560bb99f3f65
+    owner: {fileID: 11400000}
+    inputNodeGUID: 3c7175f0-3da8-4035-b017-457383159e0f
+    outputNodeGUID: 6ac871cd-1b1f-4993-b5e2-63c481ff8b0a
+    inputFieldName: input
+    outputFieldName: output
+    inputPortIdentifier: 
+    outputPortIdentifier: 
+  - GUID: 452f72be-9d79-4039-a09f-2a033741ccc7
+    owner: {fileID: 11400000}
+    inputNodeGUID: 55798a0e-ab65-4386-8da0-62d3d011c5bf
+    outputNodeGUID: e0113cb9-9087-448d-8acd-2848d1bfb1ec
     inputFieldName: input
     outputFieldName: output
     inputPortIdentifier: 
@@ -98,128 +323,649 @@ MonoBehaviour:
   serializedParameterList: []
   stickyNotes: []
   nodeInspectorReference: {fileID: 0}
-  position: {x: -141.33333, y: -68.666664, z: 0}
-  scale: {x: 1, y: 1, z: 1}
+  position: {x: -4081, y: -153, z: 0}
+  scale: {x: 1.3225, y: 1.3225, z: 1}
   references:
     version: 2
     RefIds:
-    - rid: 4907808279739236358
-      type: {class: EntryNode, ns: CopyBT.GraphProcessor, asm: Assembly-CSharp}
+    - rid: 4907808297568174089
+      type: {class: PriorityNode, ns: BT.GraphProcessor, asm: Assembly-CSharp}
       data:
         nodeCustomName: 
-        GUID: 17f98e98-fb9d-44d8-94ba-1dcbe8dc9a36
-        computeOrder: 0
+        GUID: d6253433-4df6-48e1-a713-c0356b06a550
+        computeOrder: 6
         position:
           serializedVersion: 2
-          x: 971.75006
-          y: 242.65002
-          width: 100
-          height: 100
+          x: 2274
+          y: 1572
+          width: 114
+          height: 85
         expanded: 0
         debug: 1
         nodeLock: 0
         status: 0
-        lastResult: 3
+        lastResult: 0
+        nextUpdateTick: 0
+        idx: 0
+        input: 0
+        output: 0
+        period: 0.25
+        lastTime: -1
+    - rid: 4907808297568174091
+      type: {class: ParallelNode, ns: BT.GraphProcessor, asm: Assembly-CSharp}
+      data:
+        nodeCustomName: watch_game
+        GUID: bc3bc9bf-9852-4e01-93d0-81985077125f
+        computeOrder: 5
+        position:
+          serializedVersion: 2
+          x: 2037.1252
+          y: 1361
+          width: 114
+          height: 85
+        expanded: 0
+        debug: 1
+        nodeLock: 0
+        status: 0
+        lastResult: 0
+        nextUpdateTick: 0
+        idx: 0
+        input: 0
+        output: 0
+    - rid: 4907808297568174092
+      type: {class: Condition, ns: BT.GraphProcessor, asm: Assembly-CSharp}
+      data:
+        nodeCustomName: ShouldWatchMinigame
+        GUID: 5788cbb2-ed26-46b9-a0f1-6ec29e6dfde4
+        computeOrder: 7
+        position:
+          serializedVersion: 2
+          x: 2048
+          y: 1572
+          width: 173
+          height: 79
+        expanded: 0
+        debug: 1
+        nodeLock: 0
+        status: 0
+        lastResult: 0
+        nextUpdateTick: 0
+        idx: 0
+        input: 0
+    - rid: 4907808297568174093
+      type: {class: PlayAnimation, ns: BT.GraphProcessor, asm: Assembly-CSharp}
+      data:
+        nodeCustomName: DanceParty
+        GUID: 766e35be-b9fa-4cf1-a7cd-8f292cd7757b
+        computeOrder: 10
+        position:
+          serializedVersion: 2
+          x: 1811.5
+          y: 1810.2107
+          width: 109
+          height: 79
+        expanded: 0
+        debug: 1
+        nodeLock: 0
+        status: 0
+        lastResult: 0
+        nextUpdateTick: 0
+        idx: 0
+        input: 0
+    - rid: 4907808297568174094
+      type: {class: ActionLeash, ns: BT.GraphProcessor, asm: Assembly-CSharp}
+      data:
+        nodeCustomName: 
+        GUID: c2205976-0506-4bc8-9d2c-c6f66f58452a
+        computeOrder: 11
+        position:
+          serializedVersion: 2
+          x: 1655.5
+          y: 1810.2107
+          width: 113
+          height: 79
+        expanded: 0
+        debug: 1
+        nodeLock: 0
+        status: 0
+        lastResult: 0
+        nextUpdateTick: 0
+        idx: 0
+        input: 0
+    - rid: 4907808297568174095
+      type: {class: PriorityNode, ns: BT.GraphProcessor, asm: Assembly-CSharp}
+      data:
+        nodeCustomName: 
+        GUID: a31674ad-91a4-4a17-a1eb-15911ff073ba
+        computeOrder: 9
+        position:
+          serializedVersion: 2
+          x: 1775
+          y: 1572
+          width: 114
+          height: 85
+        expanded: 0
+        debug: 1
+        nodeLock: 0
+        status: 0
+        lastResult: 0
         nextUpdateTick: 0
         idx: -1
         input: 0
         output: 0
-        period: 0
-        lastTime: 4.5336456
-    - rid: 4907808279739236360
-      type: {class: ActionNode, ns: CopyBT.GraphProcessor, asm: Assembly-CSharp}
+        period: 0.25
+        lastTime: -1
+    - rid: 4907808297568174096
+      type: {class: ParallelNode, ns: BT.GraphProcessor, asm: Assembly-CSharp}
       data:
-        nodeCustomName: 
-        GUID: 7a2c651c-14f6-46cf-a9b4-f115988e6042
-        computeOrder: 2
+        nodeCustomName: dance
+        GUID: e9ddb607-73b6-4c82-9162-3c0fbd046799
+        computeOrder: 8
         position:
           serializedVersion: 2
-          x: 641.99994
-          y: 709.0146
-          width: 128.66669
-          height: 90
+          x: 1723.5
+          y: 1361.4175
+          width: 103
+          height: 85
         expanded: 0
         debug: 1
         nodeLock: 0
         status: 0
-        lastResult: 2
+        lastResult: 0
         nextUpdateTick: 0
         idx: 0
         input: 0
-    - rid: 7208758465771864064
-      type: {class: ActionNode, ns: CopyBT.GraphProcessor, asm: Assembly-CSharp}
+        output: 0
+    - rid: 4907808297568174097
+      type: {class: Condition, ns: BT.GraphProcessor, asm: Assembly-CSharp}
       data:
-        nodeCustomName: 
-        GUID: 70c2fe37-43d5-4a19-926f-cb5dc31f0300
+        nodeCustomName: ShouldDanceParty
+        GUID: 3f2ebe40-4e8c-4151-88d8-44c323868346
+        computeOrder: 12
+        position:
+          serializedVersion: 2
+          x: 1559.4772
+          y: 1572
+          width: 148
+          height: 79
+        expanded: 0
+        debug: 1
+        nodeLock: 0
+        status: 0
+        lastResult: 0
+        nextUpdateTick: 0
+        idx: 0
+        input: 0
+    - rid: 4907808297568174098
+      type: {class: ParallelNode, ns: BT.GraphProcessor, asm: Assembly-CSharp}
+      data:
+        nodeCustomName: defensive_mode
+        GUID: 4baa9576-3e8d-41b7-82e9-6ae3b0d6e424
         computeOrder: 3
         position:
           serializedVersion: 2
-          x: 909.8551
-          y: 643.7681
-          width: 100
-          height: 100
+          x: 3257.4514
+          y: 696.63715
+          width: 136
+          height: 85
         expanded: 0
         debug: 1
         nodeLock: 0
         status: 0
-        lastResult: 2
+        lastResult: 0
         nextUpdateTick: 0
         idx: 0
         input: 0
-    - rid: 7208758465771864065
-      type: {class: SequenceNode, ns: CopyBT.GraphProcessor, asm: Assembly-CSharp}
+        output: 0
+    - rid: 4907808297568174099
+      type: {class: Condition, ns: BT.GraphProcessor, asm: Assembly-CSharp}
       data:
-        nodeCustomName: 
-        GUID: abdda7d6-6302-4eba-85ff-303d00f3a0f6
-        computeOrder: 1
+        nodeCustomName: is_defensive
+        GUID: d7bf342f-c8d0-4fd5-8a91-88da28ba3060
+        computeOrder: 13
         position:
           serializedVersion: 2
-          x: 887.24646
-          y: 434.20294
-          width: 100
-          height: 100
+          x: 2937
+          y: 923.45087
+          width: 113
+          height: 79
         expanded: 0
         debug: 1
         nodeLock: 0
         status: 0
-        lastResult: 3
+        lastResult: 0
         nextUpdateTick: 0
-        idx: 2
+        idx: 0
         input: 0
-        output: 0
-    - rid: 7208758465771864066
-      type: {class: SelectorNode, ns: CopyBT.GraphProcessor, asm: Assembly-CSharp}
+    - rid: 4907808297568174100
+      type: {class: PriorityNode, ns: BT.GraphProcessor, asm: Assembly-CSharp}
       data:
-        nodeCustomName: 
-        GUID: 15d8a508-68f1-4e63-8dc8-f1ade6fcdaff
+        nodeCustomName: DefensiveMove
+        GUID: c73e5a35-c6ea-4b31-aa0e-48964c892d93
         computeOrder: 4
         position:
           serializedVersion: 2
-          x: 1208
-          y: 708.6667
-          width: 121.33325
-          height: 96
+          x: 3166
+          y: 923.45087
+          width: 114
+          height: 85
         expanded: 0
         debug: 1
         nodeLock: 0
         status: 0
-        lastResult: 3
+        lastResult: 0
+        nextUpdateTick: 0
+        idx: -1
+        input: 0
+        output: 0
+        period: 0.25
+        lastTime: -1
+    - rid: 4907808297568174102
+      type: {class: ParallelNode, ns: BT.GraphProcessor, asm: Assembly-CSharp}
+      data:
+        nodeCustomName: CanFight
+        GUID: efb89b0b-aaca-4a87-a40b-69f70f7e64af
+        computeOrder: 14
+        position:
+          serializedVersion: 2
+          x: 2494.85
+          y: 1360.9999
+          width: 114
+          height: 85
+        expanded: 0
+        debug: 1
+        nodeLock: 0
+        status: 0
+        lastResult: 0
         nextUpdateTick: 0
         idx: 0
         input: 0
         output: 0
-    - rid: 7208758465771864067
-      type: {class: DecoratorNode, ns: CopyBT.GraphProcessor, asm: Assembly-CSharp}
+    - rid: 4907808297568174103
+      type: {class: Condition, ns: BT.GraphProcessor, asm: Assembly-CSharp}
       data:
         nodeCustomName: 
-        GUID: 255ef20f-bb94-4808-af72-2ae8f069346b
-        computeOrder: 5
+        GUID: 42145862-153c-401f-8d67-0cfd077a9064
+        computeOrder: 15
         position:
           serializedVersion: 2
-          x: 1272.3334
-          y: 891.6666
-          width: 100
-          height: 100
+          x: 2467.85
+          y: 1571.9999
+          width: 108
+          height: 79
+        expanded: 0
+        debug: 1
+        nodeLock: 0
+        status: 0
+        lastResult: 0
+        nextUpdateTick: 0
+        idx: 0
+        input: 0
+    - rid: 4907808297568174104
+      type: {class: ActionChaseAndAttack, ns: BT.GraphProcessor, asm: Assembly-CSharp}
+      data:
+        nodeCustomName: 
+        GUID: f3f1ca2b-b497-4450-b1e8-f7504af9b9d6
+        computeOrder: 16
+        position:
+          serializedVersion: 2
+          x: 2576
+          y: 1682.5001
+          width: 174
+          height: 79
+        expanded: 0
+        debug: 1
+        nodeLock: 0
+        status: 0
+        lastResult: 0
+        nextUpdateTick: 0
+        idx: 0
+        input: 0
+    - rid: 4907808297568174107
+      type: {class: ActionWander, ns: BT.GraphProcessor, asm: Assembly-CSharp}
+      data:
+        nodeCustomName: 
+        GUID: 8315f5d6-ce89-447f-8e6c-bb18bd71f12d
+        computeOrder: 17
+        position:
+          serializedVersion: 2
+          x: 3165.8003
+          y: 1361
+          width: 123
+          height: 79
+        expanded: 0
+        debug: 1
+        nodeLock: 0
+        status: 0
+        lastResult: 0
+        nextUpdateTick: 0
+        idx: 0
+        input: 0
+    - rid: 4907808297568174108
+      type: {class: PriorityNode, ns: BT.GraphProcessor, asm: Assembly-CSharp}
+      data:
+        nodeCustomName: aggressive_mode
+        GUID: 55798a0e-ab65-4386-8da0-62d3d011c5bf
+        computeOrder: 18
+        position:
+          serializedVersion: 2
+          x: 3672
+          y: 697
+          width: 142
+          height: 85
+        expanded: 0
+        debug: 1
+        nodeLock: 0
+        status: 0
+        lastResult: 0
+        nextUpdateTick: 0
+        idx: -1
+        input: 0
+        output: 0
+        period: 0.25
+        lastTime: -1
+    - rid: 4907808297568174111
+      type: {class: ParallelNode, ns: BT.GraphProcessor, asm: Assembly-CSharp}
+      data:
+        nodeCustomName: watch_game
+        GUID: e20bd4d0-90af-4a75-90a3-2ee54293f70e
+        computeOrder: 19
+        position:
+          serializedVersion: 2
+          x: 3841.086
+          y: 923.00006
+          width: 114
+          height: 85
+        expanded: 0
+        debug: 1
+        nodeLock: 0
+        status: 0
+        lastResult: 0
+        nextUpdateTick: 0
+        idx: 0
+        input: 0
+        output: 0
+    - rid: 4907808297568174112
+      type: {class: Condition, ns: BT.GraphProcessor, asm: Assembly-CSharp}
+      data:
+        nodeCustomName: ShouldWatchMinigame
+        GUID: 1b980187-64c9-4d2d-830a-7b2223231bdf
+        computeOrder: 20
+        position:
+          serializedVersion: 2
+          x: 3852.086
+          y: 1134
+          width: 173
+          height: 79
+        expanded: 0
+        debug: 1
+        nodeLock: 0
+        status: 0
+        lastResult: 0
+        nextUpdateTick: 0
+        idx: 0
+        input: 0
+    - rid: 4907808297568174113
+      type: {class: PriorityNode, ns: BT.GraphProcessor, asm: Assembly-CSharp}
+      data:
+        nodeCustomName: 
+        GUID: 8b9e2420-c32d-472f-b7b8-8f0ad13c7c4b
+        computeOrder: 21
+        position:
+          serializedVersion: 2
+          x: 4078.0857
+          y: 1134
+          width: 114
+          height: 85
+        expanded: 0
+        debug: 1
+        nodeLock: 0
+        status: 0
+        lastResult: 0
+        nextUpdateTick: 0
+        idx: 0
+        input: 0
+        output: 0
+        period: 0.25
+        lastTime: -1
+    - rid: 4907808297568174117
+      type: {class: PlayAnimation, ns: BT.GraphProcessor, asm: Assembly-CSharp}
+      data:
+        nodeCustomName: DanceParty
+        GUID: 2a8b59ba-a6d2-4156-8a29-2b9284e91534
+        computeOrder: 24
+        position:
+          serializedVersion: 2
+          x: 3666.086
+          y: 1372
+          width: 110
+          height: 79
+        expanded: 0
+        debug: 1
+        nodeLock: 0
+        status: 0
+        lastResult: 0
+        nextUpdateTick: 0
+        idx: 0
+        input: 0
+    - rid: 4907808297568174118
+      type: {class: ActionLeash, ns: BT.GraphProcessor, asm: Assembly-CSharp}
+      data:
+        nodeCustomName: 
+        GUID: 20b8e265-87a0-4d53-8f2e-6be47ebbe8bb
+        computeOrder: 25
+        position:
+          serializedVersion: 2
+          x: 3510.086
+          y: 1372
+          width: 113
+          height: 79
+        expanded: 0
+        debug: 1
+        nodeLock: 0
+        status: 0
+        lastResult: 0
+        nextUpdateTick: 0
+        idx: 0
+        input: 0
+    - rid: 4907808297568174119
+      type: {class: PriorityNode, ns: BT.GraphProcessor, asm: Assembly-CSharp}
+      data:
+        nodeCustomName: 
+        GUID: e3b6efa6-853f-4349-9ed1-93a7af481781
+        computeOrder: 23
+        position:
+          serializedVersion: 2
+          x: 3629.086
+          y: 1134
+          width: 114
+          height: 85
+        expanded: 0
+        debug: 1
+        nodeLock: 0
+        status: 0
+        lastResult: 0
+        nextUpdateTick: 0
+        idx: 0
+        input: 0
+        output: 0
+        period: 0.25
+        lastTime: -1
+    - rid: 4907808297568174120
+      type: {class: Condition, ns: BT.GraphProcessor, asm: Assembly-CSharp}
+      data:
+        nodeCustomName: ShouldDanceParty
+        GUID: ab223bd3-e3ac-49a0-a92c-0027751df5b4
+        computeOrder: 26
+        position:
+          serializedVersion: 2
+          x: 3413.0857
+          y: 1134
+          width: 148
+          height: 79
+        expanded: 0
+        debug: 1
+        nodeLock: 0
+        status: 0
+        lastResult: 0
+        nextUpdateTick: 0
+        idx: 0
+        input: 0
+    - rid: 4907808297568174121
+      type: {class: ParallelNode, ns: BT.GraphProcessor, asm: Assembly-CSharp}
+      data:
+        nodeCustomName: dance
+        GUID: e872b68d-02b7-4f3d-8cef-1c95667cbf86
+        computeOrder: 22
+        position:
+          serializedVersion: 2
+          x: 3578.086
+          y: 923.00006
+          width: 110
+          height: 85
+        expanded: 0
+        debug: 1
+        nodeLock: 0
+        status: 0
+        lastResult: 0
+        nextUpdateTick: 0
+        idx: 0
+        input: 0
+        output: 0
+    - rid: 4907808297568174122
+      type: {class: Condition, ns: BT.GraphProcessor, asm: Assembly-CSharp}
+      data:
+        nodeCustomName: 
+        GUID: 875072f9-bdad-45f6-bc7c-a4c49d5bbe76
+        computeOrder: 28
+        position:
+          serializedVersion: 2
+          x: 4563.001
+          y: 1400.5001
+          width: 110
+          height: 79
+        expanded: 0
+        debug: 1
+        nodeLock: 0
+        status: 0
+        lastResult: 0
+        nextUpdateTick: 0
+        idx: 0
+        input: 0
+    - rid: 4907808297568174123
+      type: {class: ParallelNode, ns: BT.GraphProcessor, asm: Assembly-CSharp}
+      data:
+        nodeCustomName: CanFight
+        GUID: 5038c0f1-12d0-4a9c-97fa-bf7a6e506b5e
+        computeOrder: 27
+        position:
+          serializedVersion: 2
+          x: 4618.001
+          y: 1194
+          width: 110
+          height: 85
+        expanded: 0
+        debug: 1
+        nodeLock: 0
+        status: 0
+        lastResult: 0
+        nextUpdateTick: 0
+        idx: 0
+        input: 0
+        output: 0
+    - rid: 4907808297568174124
+      type: {class: ActionChaseAndAttack, ns: BT.GraphProcessor, asm: Assembly-CSharp}
+      data:
+        nodeCustomName: 
+        GUID: 6d82972e-ce67-40d5-88d1-6f178971a4c9
+        computeOrder: 29
+        position:
+          serializedVersion: 2
+          x: 4738.751
+          y: 1405.0002
+          width: 174
+          height: 79
+        expanded: 0
+        debug: 1
+        nodeLock: 0
+        status: 0
+        lastResult: 0
+        nextUpdateTick: 0
+        idx: 0
+        input: 0
+    - rid: 4907808297568174127
+      type: {class: ActionWander, ns: BT.GraphProcessor, asm: Assembly-CSharp}
+      data:
+        nodeCustomName: 
+        GUID: a7a913e0-d75c-4880-8fb8-d2342b545213
+        computeOrder: 30
+        position:
+          serializedVersion: 2
+          x: 5460.1016
+          y: 1194.0002
+          width: 123
+          height: 79
+        expanded: 0
+        debug: 1
+        nodeLock: 0
+        status: 0
+        lastResult: 0
+        nextUpdateTick: 0
+        idx: 0
+        input: 0
+    - rid: 4907808297568174128
+      type: {class: EntryNode, ns: BT.GraphProcessor, asm: Assembly-CSharp}
+      data:
+        nodeCustomName: 
+        GUID: 6ac871cd-1b1f-4993-b5e2-63c481ff8b0a
+        computeOrder: 0
+        position:
+          serializedVersion: 2
+          x: 3577.5
+          y: 157.91751
+          width: 103
+          height: 79
+        expanded: 0
+        debug: 1
+        nodeLock: 0
+        status: 0
+        lastResult: 0
+        nextUpdateTick: 0
+        idx: -1
+        output: 0
+    - rid: 4907808297568174132
+      type: {class: SelectorNode, ns: BT.GraphProcessor, asm: Assembly-CSharp}
+      data:
+        nodeCustomName: 
+        GUID: e0113cb9-9087-448d-8acd-2848d1bfb1ec
+        computeOrder: 2
+        position:
+          serializedVersion: 2
+          x: 3535.9382
+          y: 458.71002
+          width: 120
+          height: 85
+        expanded: 0
+        debug: 1
+        nodeLock: 0
+        status: 0
+        lastResult: 0
+        nextUpdateTick: 0
+        idx: 0
+        input: 0
+        output: 0
+    - rid: 4907808297568174133
+      type: {class: Repeat, ns: BT.GraphProcessor, asm: Assembly-CSharp}
+      data:
+        nodeCustomName: 
+        GUID: 3c7175f0-3da8-4035-b017-457383159e0f
+        computeOrder: 1
+        position:
+          serializedVersion: 2
+          x: 3580
+          y: 314.6575
+          width: 101
+          height: 85
         expanded: 0
         debug: 1
         nodeLock: 0

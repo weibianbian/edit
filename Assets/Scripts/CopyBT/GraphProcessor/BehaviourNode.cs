@@ -1,7 +1,8 @@
+using CopyBT;
 using GraphProcessor;
 using System;
 
-namespace CopyBT.GraphProcessor
+namespace BT.GraphProcessor
 {
     public class BehaviourNode : BaseNode
     {
@@ -16,6 +17,7 @@ namespace CopyBT.GraphProcessor
             base.Enable();
             debug = true;
         }
+        public override bool isRenamable => true;
         protected int ChildCount
         {
             get

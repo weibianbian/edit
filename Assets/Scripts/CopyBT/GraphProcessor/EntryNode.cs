@@ -1,11 +1,15 @@
-﻿using GraphProcessor;
+﻿using CopyBT;
+using GraphProcessor;
+using System.Threading.Tasks;
 using UnityEngine;
 
-namespace CopyBT.GraphProcessor
+namespace BT.GraphProcessor
 {
     [System.Serializable, NodeMenuItem("BT/EntryNode")]
-    public class EntryNode : PriorityNode
+    public class EntryNode : BehaviourNode
     {
+        [Output("", false), Vertical]
+        public ENodeStatus output;
         public override Color color => Color.green;
 
     }
