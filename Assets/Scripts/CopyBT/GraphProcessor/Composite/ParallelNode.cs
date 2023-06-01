@@ -23,7 +23,7 @@ namespace BT.GraphProcessor
                 }
             }
         }
-        public override void Visit()
+        protected override void OnVisit()
         {
             bool done = true;
             for (int i = 0; i < ChildCount; i++)

@@ -12,7 +12,7 @@ namespace BT.GraphProcessor
         public ENodeStatus input;
         public Action action;
         public override Color color =>new Color(0.4f, 0.8f, 0.4f);
-        public override void Visit()
+        protected override void OnVisit()
         {
             action?.Invoke();
             status = ENodeStatus.SUCCESS;

@@ -23,7 +23,7 @@ namespace BT.GraphProcessor
             base.Reset();
             idx = nil;
         }
-        public override void Visit()
+        protected override void OnVisit()
         {
             float time =Time.realtimeSinceStartup;
             bool do_eval = (lastTime == nil) || (period == nil) || (lastTime + period) < time;

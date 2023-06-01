@@ -1,6 +1,7 @@
 ﻿using CopyBT;
 using GraphProcessor;
 using System.Collections.Generic;
+using System.Diagnostics;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -11,33 +12,70 @@ namespace BehaviorTree.Editor
     public class BehaviourNodeView : BaseNodeView
     {
         Label returnLabel;
+        private bool isRuned;//节点运行过。
         public override void Enable()
         {
             base.Enable();
-            BT.GraphProcessor.BehaviourNode node = nodeTarget as BT.GraphProcessor.BehaviourNode;
             returnLabel = new Label();
-            debugContainer.Add(returnLabel);
-            returnLabel.text = "✔ Success";
-            returnLabel.style.color = new Color(0f, 1f, 0f, 1);
+            returnLabel.style.color = Color.black;
             returnLabel.style.fontSize = 14;
             returnLabel.style.alignSelf = new StyleEnum<Align>(Align.Stretch);
-            //EnumField accessorSelector = new EnumField(node.accessor);
-            //accessorSelector.SetValueWithoutNotify(parameterNode.accessor);
-            for (int i = 0; i < outputPortViews.Count; i++)
+            EditorApplication.playModeStateChanged -= OnPlayModeStateChanged;
+            EditorApplication.playModeStateChanged += OnPlayModeStateChanged;
+        }
+        private void OnPlayModeStateChanged(PlayModeStateChange state)
+        {
+            BT.GraphProcessor.BehaviourNode node = nodeTarget as BT.GraphProcessor.BehaviourNode;
+            if (state == PlayModeStateChange.EnteredPlayMode)
             {
-                List<EdgeView> edgeView = outputPortViews[i].GetEdges();
-                edgeView.Sort((e1, e2) => e1.serializedEdge.inputNode.position.x < e2.serializedEdge.inputNode.position.x ? -1 : 1);
+                Add(returnLabel);
+                SetRunningState();
+                node.onVisit = SetRunningState;
             }
-            SetRunningState();
-
-            node.onVisit += SetRunningState;
-
+            else if (state == PlayModeStateChange.ExitingPlayMode)
+            {
+                Remove(returnLabel);
+                if (isRuned)
+                {
+                    isRuned = false;
+                    schedule.Execute(() =>
+                    {
+                        SetHighlightColor(Color.clear);
+                        returnLabel.text = "";
+                        if (inputPortViews.Count > 0)
+                        {
+                            var edges = inputPortViews[0].GetEdges();
+                            if (edges.Count > 0)
+                            {
+                                edges[0].output.portColor = Color.white;
+                                SetLineColorByEnable();
+                            }
+                        }
+                        MarkDirtyRepaint();
+                    }).ExecuteLater(50);
+                }
+            }
+        }
+        private void SetLineColorByEnable()
+        {
+            if (inputPortViews.Count > 0)
+            {
+                var edges = inputPortViews[0]?.GetEdges();
+                if (edges?.Count > 0)
+                {
+                    Color color = Color.white;
+                    //edges[0].output.portColor = color;
+                    edges[0].input.portColor = color;
+                    edges[0].OnSelected();
+                }
+            }
         }
         public void SetRunningState()
         {
 
             if (nodeTarget is BT.GraphProcessor.BehaviourNode node)
             {
+                isRuned = true;
                 ENodeStatus taskStatus = node.lastResult;
                 Color runColor = Color.clear;
                 switch (taskStatus)
@@ -108,7 +146,6 @@ namespace BehaviorTree.Editor
         }
         protected override void DrawDefaultInspector(bool fromInspector = false)
         {
-            Debug.Log("override DrawDefaultInspector");
             this.expanded = false;
         }
     }

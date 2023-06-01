@@ -1,6 +1,7 @@
 using CopyBT;
 using GraphProcessor;
 using System;
+using UnityEditor;
 
 namespace BT.GraphProcessor
 {
@@ -11,11 +12,11 @@ namespace BT.GraphProcessor
         public ENodeStatus lastResult = ENodeStatus.READY;
         public float nextUpdateTick = 0;
         public int idx = 0;
-        public event Action onVisit;
+        public Action onVisit;
         protected override void Enable()
         {
             base.Enable();
-            debug = true;
+            
         }
         public override bool isRenamable => true;
         protected int ChildCount
@@ -29,6 +30,7 @@ namespace BT.GraphProcessor
                 return 0;
             }
         }
+       
         protected BehaviourNode ChildAtIndex(int index)
         {
             if (outputPorts.Count > 0)
@@ -41,8 +43,14 @@ namespace BT.GraphProcessor
             }
             return null;
         }
-        public virtual void Visit()
+        public void Visit()
         {
+            OnVisit();
+            onVisit?.Invoke();
+        }
+        protected virtual void OnVisit()
+        {
+
         }
         public virtual void DoToParents(Action<BehaviourNode> fn)
         {
@@ -54,8 +62,6 @@ namespace BT.GraphProcessor
         }
         public virtual void Step()
         {
-            
-
             if (status != ENodeStatus.RUNNING)
             {
                 Reset();
@@ -86,7 +92,6 @@ namespace BT.GraphProcessor
             {
                 ChildAtIndex(i).SaveStatus();
             }
-            onVisit?.Invoke();
         }
         public bool IsValidIndex(int idx)
         {

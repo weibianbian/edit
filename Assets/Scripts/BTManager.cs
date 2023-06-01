@@ -1,6 +1,7 @@
 using BehaviorTree.Runtime;
 using BT.GraphProcessor;
 using GraphProcessor;
+using System.Collections.Generic;
 using UnityEngine;
 public class BTManager : MonoBehaviour
 {
@@ -10,33 +11,27 @@ public class BTManager : MonoBehaviour
     void Start()
     {
         entry = btGraph.nodes.Find(e => e is EntryNode) as EntryNode;
-        for (int i = 0; i < entry.outputPorts.Count; i++)
-        {
-            //NodePort port = root.outputPorts[i];
-            //List < SerializableEdge > edges = port.GetEdges();
-            //edges.Sort((e1, e2) => e1.inputNode.position.x < e2.inputNode.position.x ? -1 : 1);
-            //for (int j = 0; j< edges.Count; j++)
-            //{
-            //    SerializableEdge edge = edges[j];
-            //    Debug.Log(edge);
-            //}
-        }
-        SerializableEdge edge = entry.outputPorts[0].GetEdges()[0];
-        BaseNode node = edge.inputPort.owner;
-        Debug.Log($"根节点的第一个子节点 {node}");
-
-        Find(node);
+        Find(entry);
     }
     public void Find(BaseNode node)
     {
-        foreach (var outNode in node.GetOutputNodes())
+        List<SerializableEdge> edges = SortChildren(node);
+
+        for (int i = 0; i < edges.Count; i++)
         {
-            {
-                Debug.Log($"节点信息=父节点 {node}   子节点  {outNode}={outNode}");
-                Find(outNode);
-            }
+            Find(edges[i].inputNode);
         }
         return;
+    }
+    private List<SerializableEdge> SortChildren(BaseNode node)
+    {
+        if (node.outputPorts.Count > 0)
+        {
+            var edges = node.outputPorts[0].GetEdges();
+            edges.Sort((e1, e2) => e1.inputNode.position.x < e2.inputNode.position.x ? -1 : 1);
+            return edges;
+        }
+        return new List<SerializableEdge>();
     }
     // Update is called once per frame
     void Update()

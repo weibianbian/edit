@@ -12,5 +12,11 @@ namespace BT.GraphProcessor
         public ENodeStatus output;
         public override Color color => Color.green;
 
+        protected override void OnVisit()
+        {
+            var child = ChildAtIndex(0);
+            child.Visit();
+            status = child.status;
+        }
     }
 }

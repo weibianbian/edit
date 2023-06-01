@@ -11,7 +11,7 @@ namespace BT.GraphProcessor
             base.Reset();
             idx = 0;
         }
-        public override void Visit()
+        protected override void OnVisit()
         {
             if (status != ENodeStatus.RUNNING)
             {

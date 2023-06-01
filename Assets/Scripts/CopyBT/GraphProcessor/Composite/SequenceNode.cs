@@ -7,7 +7,7 @@ namespace BT.GraphProcessor
     [System.Serializable, NodeMenuItem("BT/Composite/Sequence")]
     public class SequenceNode : CompositieNode
     {
-        public override void Visit()
+        protected override void OnVisit()
         {
             if (status != ENodeStatus.RUNNING)
             {
