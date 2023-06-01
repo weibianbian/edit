@@ -1,7 +1,6 @@
 using CopyBT;
 using GraphProcessor;
 using System;
-using UnityEditor;
 
 namespace BT.GraphProcessor
 {

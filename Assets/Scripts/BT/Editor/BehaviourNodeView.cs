@@ -20,8 +20,29 @@ namespace BehaviorTree.Editor
             returnLabel.style.color = Color.black;
             returnLabel.style.fontSize = 14;
             returnLabel.style.alignSelf = new StyleEnum<Align>(Align.Stretch);
+            SetNodeRunningColor();
+            SetLineColorByEnable();
             EditorApplication.playModeStateChanged -= OnPlayModeStateChanged;
             EditorApplication.playModeStateChanged += OnPlayModeStateChanged;
+            RegisterCallback<GeometryChangedEvent>(OnGeometryChangedEvent);
+        }
+        protected void OnGeometryChangedEvent(GeometryChangedEvent evt)
+        {
+            //首次进来更新线的颜色
+            SetLineColorByEnable();
+        }
+        private void SetNodeRunningColor()
+        {
+            EditorApplication.playModeStateChanged += OnPlayModeStateChanged;
+            if (EditorApplication.isPlaying)
+            {
+                //如果打开Graph编辑器时Unity在Play，那么主动设置一下运行时效果。
+                OnPlayModeStateChanged(PlayModeStateChange.EnteredPlayMode);
+            }
+            if (nodeTarget is BT.GraphProcessor.BehaviourNode node)
+            {
+                node.onVisit = SetRunningState;
+            }
         }
         private void OnPlayModeStateChanged(PlayModeStateChange state)
         {
@@ -30,7 +51,6 @@ namespace BehaviorTree.Editor
             {
                 Add(returnLabel);
                 SetRunningState();
-                node.onVisit = SetRunningState;
             }
             else if (state == PlayModeStateChange.ExitingPlayMode)
             {

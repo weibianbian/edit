@@ -6,11 +6,6 @@ namespace BT.GraphProcessor
     [System.Serializable, NodeMenuItem("BT/Composite/Selector")]
     public class SelectorNode : CompositieNode
     {
-        public override void Reset()
-        {
-            base.Reset();
-            idx = 0;
-        }
         protected override void OnVisit()
         {
             if (status != ENodeStatus.RUNNING)
