@@ -20,8 +20,8 @@ MonoBehaviour:
   - rid: 4542289268781088779
   - rid: 4542289268781088780
   - rid: 4542289268781088781
-  - rid: 4542289268781088782
   - rid: 4542289268781088783
+  - rid: 4542289268781088787
   edges:
   - GUID: 374c6ceb-5b45-46b1-b6c5-63f802940ed5
     owner: {fileID: 11400000}
@@ -47,22 +47,6 @@ MonoBehaviour:
     outputFieldName: output
     inputPortIdentifier: 
     outputPortIdentifier: 
-  - GUID: ebd19423-ad62-49b1-8f56-17ea0dbe57ae
-    owner: {fileID: 11400000}
-    inputNodeGUID: c31ea3eb-29e1-4156-b464-234f6336b12f
-    outputNodeGUID: 3a330861-e743-412d-8b5c-831b51954dc8
-    inputFieldName: input
-    outputFieldName: output
-    inputPortIdentifier: 
-    outputPortIdentifier: 
-  - GUID: cac8f152-598a-48c9-92f2-fac47484cc51
-    owner: {fileID: 11400000}
-    inputNodeGUID: 3a330861-e743-412d-8b5c-831b51954dc8
-    outputNodeGUID: 6ac871cd-1b1f-4993-b5e2-63c481ff8b0a
-    inputFieldName: input
-    outputFieldName: output
-    inputPortIdentifier: 
-    outputPortIdentifier: 
   - GUID: f0dcf4b0-a800-44ab-a30f-4f18589eee6d
     owner: {fileID: 11400000}
     inputNodeGUID: 662fed32-8f37-4538-817d-92b88a91d97c
@@ -75,6 +59,22 @@ MonoBehaviour:
     owner: {fileID: 11400000}
     inputNodeGUID: 2a05b535-be3c-4fe2-92cf-e807b2796322
     outputNodeGUID: 662fed32-8f37-4538-817d-92b88a91d97c
+    inputFieldName: input
+    outputFieldName: output
+    inputPortIdentifier: 
+    outputPortIdentifier: 
+  - GUID: efbbd87d-bb54-4d39-867b-3a7da67ed88d
+    owner: {fileID: 11400000}
+    inputNodeGUID: c31ea3eb-29e1-4156-b464-234f6336b12f
+    outputNodeGUID: 4060b11d-9974-495c-abc1-db96cb0d6a13
+    inputFieldName: input
+    outputFieldName: output
+    inputPortIdentifier: 
+    outputPortIdentifier: 
+  - GUID: 2fc311dd-ac30-4677-a0fc-3e24d24b1434
+    owner: {fileID: 11400000}
+    inputNodeGUID: 4060b11d-9974-495c-abc1-db96cb0d6a13
+    outputNodeGUID: 6ac871cd-1b1f-4993-b5e2-63c481ff8b0a
     inputFieldName: input
     outputFieldName: output
     inputPortIdentifier: 
@@ -116,8 +116,8 @@ MonoBehaviour:
   serializedParameterList: []
   stickyNotes: []
   nodeInspectorReference: {fileID: 0}
-  position: {x: -2813, y: 33, z: 0}
-  scale: {x: 1, y: 1, z: 1}
+  position: {x: -2506, y: 34, z: 0}
+  scale: {x: 0.8695652, y: 0.8695652, z: 1}
   references:
     version: 2
     RefIds:
@@ -129,15 +129,15 @@ MonoBehaviour:
         computeOrder: 3
         position:
           serializedVersion: 2
-          x: 3314
-          y: 449
+          x: 3389
+          y: 507.65002
           width: 130
           height: 71
         expanded: 0
         debug: 0
         nodeLock: 0
         status: 0
-        lastResult: 2
+        lastResult: 0
         nextUpdateTick: 0
         idx: 0
         input: 0
@@ -150,15 +150,15 @@ MonoBehaviour:
         computeOrder: 5
         position:
           serializedVersion: 2
-          x: 3738.7827
-          y: 463
+          x: 3952.0002
+          y: 644.65
           width: 120
-          height: 85
+          height: 71
         expanded: 0
         debug: 0
         nodeLock: 0
         status: 0
-        lastResult: 2
+        lastResult: 0
         nextUpdateTick: 0
         idx: 0
         input: 0
@@ -171,15 +171,15 @@ MonoBehaviour:
         computeOrder: 6
         position:
           serializedVersion: 2
-          x: 3321
-          y: 586
+          x: 3396
+          y: 644.65
           width: 123
-          height: 48
+          height: 65
         expanded: 0
         debug: 0
         nodeLock: 0
         status: 0
-        lastResult: 2
+        lastResult: 0
         nextUpdateTick: 0
         idx: 0
         input: 0
@@ -191,15 +191,15 @@ MonoBehaviour:
         computeOrder: 7
         position:
           serializedVersion: 2
-          x: 3793
-          y: 594
-          width: 100
-          height: 100
+          x: 3952.0002
+          y: 771.65
+          width: 123
+          height: 65
         expanded: 0
         debug: 0
         nodeLock: 0
         status: 0
-        lastResult: 2
+        lastResult: 0
         nextUpdateTick: 0
         idx: 0
         input: 0
@@ -211,38 +211,17 @@ MonoBehaviour:
         computeOrder: 2
         position:
           serializedVersion: 2
-          x: 3578
-          y: 331
+          x: 3637.9998
+          y: 281
           width: 130
           height: 54
-        expanded: 0
-        debug: 0
-        nodeLock: 0
-        status: 0
-        lastResult: 2
-        nextUpdateTick: 0
-        idx: 0
-        input: 0
-        output: 0
-    - rid: 4542289268781088782
-      type: {class: Repeat, ns: BT.GraphProcessor, asm: Assembly-CSharp}
-      data:
-        nodeCustomName: 
-        GUID: 3a330861-e743-412d-8b5c-831b51954dc8
-        computeOrder: 1
-        position:
-          serializedVersion: 2
-          x: 3598
-          y: 234
-          width: 83
-          height: 71
         expanded: 0
         debug: 0
         nodeLock: 0
         status: 1
         lastResult: 1
         nextUpdateTick: 0
-        idx: 0
+        idx: 1
         input: 0
         output: 0
     - rid: 4542289268781088783
@@ -253,10 +232,10 @@ MonoBehaviour:
         computeOrder: 4
         position:
           serializedVersion: 2
-          x: 3809.5
-          y: 345
+          x: 3952.0002
+          y: 507.65002
           width: 99
-          height: 54
+          height: 71
         expanded: 0
         debug: 0
         nodeLock: 0
@@ -266,6 +245,28 @@ MonoBehaviour:
         idx: 0
         input: 0
         output: 0
+    - rid: 4542289268781088787
+      type: {class: Loop, ns: BT.GraphProcessor, asm: Assembly-CSharp}
+      data:
+        nodeCustomName: 
+        GUID: 4060b11d-9974-495c-abc1-db96cb0d6a13
+        computeOrder: 1
+        position:
+          serializedVersion: 2
+          x: 3667.5
+          y: 186.65002
+          width: 71
+          height: 54
+        expanded: 0
+        debug: 0
+        nodeLock: 0
+        status: 1
+        lastResult: 1
+        nextUpdateTick: 0
+        idx: 0
+        input: 0
+        output: 0
+        loop: 4
     - rid: 4907808297568174128
       type: {class: EntryNode, ns: BT.GraphProcessor, asm: Assembly-CSharp}
       data:

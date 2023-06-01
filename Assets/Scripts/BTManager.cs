@@ -2,11 +2,13 @@ using BehaviorTree.Runtime;
 using BT.GraphProcessor;
 using GraphProcessor;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 public class BTManager : MonoBehaviour
 {
     public BehaviorTreeGraph btGraph;
     public EntryNode entry;
+    private CopyBT.ENodeStatus lastResult = CopyBT.ENodeStatus.READY;
     // Start is called before the first frame update
     void Start()
     {
@@ -36,11 +38,12 @@ public class BTManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (entry != null)
+        if (entry != null && lastResult == CopyBT.ENodeStatus.READY || lastResult == CopyBT.ENodeStatus.RUNNING)
         {
             entry.Visit();
             entry.SaveStatus();
             entry.Step();
+            lastResult = entry.lastResult;
         }
     }
 }
