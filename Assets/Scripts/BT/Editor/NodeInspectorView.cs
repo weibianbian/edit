@@ -7,20 +7,21 @@ using UnityEditor;
 using UnityEditor.Experimental.GraphView;
 using UnityEditor.UIElements;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 namespace BehaviorTree.Editor
 {
     [NodeCustomEditor(typeof(BaseNode))]
     public class NodeInspectorView : PinnedElementView
     {
+        private Label subTitleLabel;
+        
         private Dictionary<string, PropertyField> showPropertyFields = new Dictionary<string, PropertyField>();
         protected override void Initialize(BaseGraphView graphView)
         {
             title = "NodeInspector";
-
+            subTitleLabel = new Label();
             int onSelectNodeCount = graphView.selection.Count(e => e is BaseNodeView);
-
-            UnityEngine.Debug.Log(onSelectNodeCount);
 
             if (onSelectNodeCount == 1)
             {
@@ -33,9 +34,17 @@ namespace BehaviorTree.Editor
             }
             else
             {
-                //content.Clear();
-                //content.Add(subTitleLabel);
-                //SetOnSelectNodeCount();
+                content.Clear();
+                content.Add(subTitleLabel);
+                SetOnSelectNodeCount(graphView);
+            }
+        }
+        private void SetOnSelectNodeCount(BaseGraphView graphView)
+        {
+            int count = graphView.selection.Count(e => e is BaseNodeView);
+            if (count != 1)
+            {
+                subTitleLabel.text = $"Select a node to view its properties. \nCurrent select node count : {count}.";
             }
         }
         public void OnSelectNodeView(BaseGraphView graphView,BaseNodeView nodeView)
@@ -43,12 +52,12 @@ namespace BehaviorTree.Editor
             if (graphView.selection.Count > 1)
             {
                 //选中多个，清空显示。
-                //OnNodeUnSelect();
+                OnNodeUnSelect(nodeView);
                 return;
             }
             showPropertyFields.Clear();
             content.Clear();
-            //content.Add(subTitleLabel);
+            content.Add(subTitleLabel);
             var fields = nodeView.nodeTarget.GetType().GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
                 .Where(f => f.DeclaringType != typeof(BaseNode));
             fields = nodeView.nodeTarget.OverrideFieldOrder(fields).Reverse();
@@ -68,6 +77,12 @@ namespace BehaviorTree.Editor
                 }
                 DrawField(field, nodeView);
             }
+        }
+        public void OnNodeUnSelect(BaseNodeView nodeView)
+        {
+            showPropertyFields.Clear();
+            content.Clear();
+            content.Add(subTitleLabel);
         }
         protected void DrawField(FieldInfo field, BaseNodeView nodeView)
         {

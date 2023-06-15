@@ -19,7 +19,7 @@ namespace BehaviorTree.Editor
         {
             base.UpdateButtonStatus();
             if (showNodeInspector != null)
-                showNodeInspector.value = graphView.GetPinnedElementStatus<ProcessorView>() != UnityEngine.UIElements.DropdownMenuAction.Status.Hidden;
+                showNodeInspector.value = graphView.GetPinnedElementStatus<NodeInspectorView>() != UnityEngine.UIElements.DropdownMenuAction.Status.Hidden;
         }
     }
 }

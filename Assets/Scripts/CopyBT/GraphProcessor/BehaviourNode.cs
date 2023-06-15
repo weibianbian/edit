@@ -4,6 +4,10 @@ using System;
 
 namespace BT.GraphProcessor
 {
+    public class Blackboard
+    {
+
+    }
     public class BehaviourNode : BaseNode
     {
         public BehaviourNode parent;
@@ -12,6 +16,7 @@ namespace BT.GraphProcessor
         public float nextUpdateTick = 0;
         public int idx = 0;
         public Action onVisit;
+        public Blackboard blackboard = null;
         protected override void Enable()
         {
             base.Enable();

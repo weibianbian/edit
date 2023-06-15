@@ -1,7 +1,6 @@
 ﻿using CopyBT;
 using GraphProcessor;
 using System.Collections.Generic;
-using System.Diagnostics;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -117,7 +116,7 @@ namespace BehaviorTree.Editor
                         returnLabel.text = "✈ Running";
                         break;
                 }
-                runColor.a = Random.Range(0.6f, 1f);
+                runColor.a = UnityEngine.Random.Range(0.6f, 1f);
                 SetHighlightColor(runColor);
 
                 schedule.Execute(() =>
@@ -162,7 +161,27 @@ namespace BehaviorTree.Editor
         public override void OnSelected()
         {
             base.OnSelected();
-
+            if (owner == null)
+            {
+                return;
+            }
+            UnityEngine.Debug.Log(owner.GetPinnedElementStatus<NodeInspectorView>());
+            if (owner.GetPinnedElementStatus<NodeInspectorView>()== UnityEngine.UIElements.DropdownMenuAction.Status.Normal)
+            {
+                //owner.pinnedElements.
+            }
+        }
+        public override void OnUnselected()
+        {
+            base.OnUnselected();
+            if (owner == null)
+            {
+                return;
+            }
+            //if (owner.GetPinnedElementStatus<NodeInspectorView>() != UnityEngine.UIElements.DropdownMenuAction.Status.Hidden)
+            //{
+            //    owner.ToggleView<NodeInspectorView>();
+            //}
         }
         protected override void DrawDefaultInspector(bool fromInspector = false)
         {
