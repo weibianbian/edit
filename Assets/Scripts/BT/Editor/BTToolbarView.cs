@@ -12,14 +12,14 @@ namespace BehaviorTree.Editor
         protected override void AddButtons()
         {
             base.AddButtons();
-            bool nodeInspectorVisible = graphView.GetPinnedElementStatus<NodeInspectorView>() != UnityEngine.UIElements.DropdownMenuAction.Status.Hidden;
-            showNodeInspector = AddToggle("Node Inspector", nodeInspectorVisible, (v) => graphView.ToggleView<NodeInspectorView>());
+            //bool nodeInspectorVisible = graphView.GetPinnedElementStatus<NodeInspectorView>() != UnityEngine.UIElements.DropdownMenuAction.Status.Hidden;
+            //showNodeInspector = AddToggle("Node Inspector", nodeInspectorVisible, (v) => graphView.ToggleView<NodeInspectorView>());
         }
         public override void UpdateButtonStatus()
         {
             base.UpdateButtonStatus();
-            if (showNodeInspector != null)
-                showNodeInspector.value = graphView.GetPinnedElementStatus<NodeInspectorView>() != UnityEngine.UIElements.DropdownMenuAction.Status.Hidden;
+            //if (showNodeInspector != null)
+            //    showNodeInspector.value = graphView.GetPinnedElementStatus<NodeInspectorView>() != UnityEngine.UIElements.DropdownMenuAction.Status.Hidden;
         }
     }
 }

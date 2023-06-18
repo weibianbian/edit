@@ -15,21 +15,39 @@ MonoBehaviour:
   serializedNodes: []
   nodes:
   - rid: 4907808297568174128
-  - rid: 810363240065794050
-  - rid: 810363240065794051
+  - rid: 810363536863395848
+  - rid: 810363555739074737
+  - rid: 810363555739074786
+  - rid: 810363555739074819
   edges:
-  - GUID: 4afcde4c-3611-4822-aa9f-3a9acde862e5
+  - GUID: efb0c3c0-d3a8-455f-b02a-0cdc6585bc0e
     owner: {fileID: 11400000}
-    inputNodeGUID: 5810160e-f215-4c46-b673-e31a65e28772
-    outputNodeGUID: 6ac871cd-1b1f-4993-b5e2-63c481ff8b0a
+    inputNodeGUID: 25395e7a-0cc4-4681-a45e-057269c9ada6
+    outputNodeGUID: 13a05558-eda1-475b-8694-70cf99151130
     inputFieldName: input
     outputFieldName: output
     inputPortIdentifier: 
     outputPortIdentifier: 
-  - GUID: a3694a04-5bf0-4225-a3e6-df9eca31d320
+  - GUID: cb354408-7b5c-4d7c-b9f9-8a2b7848d433
     owner: {fileID: 11400000}
-    inputNodeGUID: 00b3245f-d7ee-49e0-be5f-3793cc3c0540
-    outputNodeGUID: 5810160e-f215-4c46-b673-e31a65e28772
+    inputNodeGUID: e2ca2703-d15e-4e1d-b398-32b7e5281989
+    outputNodeGUID: 25395e7a-0cc4-4681-a45e-057269c9ada6
+    inputFieldName: input
+    outputFieldName: output
+    inputPortIdentifier: 
+    outputPortIdentifier: 
+  - GUID: 8f9c2086-a73e-4028-8d1f-92c0be85fa6b
+    owner: {fileID: 11400000}
+    inputNodeGUID: 65076df1-79ed-44b5-9d6d-a0cfb3d19b56
+    outputNodeGUID: 25395e7a-0cc4-4681-a45e-057269c9ada6
+    inputFieldName: input
+    outputFieldName: output
+    inputPortIdentifier: 
+    outputPortIdentifier: 
+  - GUID: 7392ff70-44b6-4d9c-b127-c11b4c5ef1de
+    owner: {fileID: 11400000}
+    inputNodeGUID: 13a05558-eda1-475b-8694-70cf99151130
+    outputNodeGUID: 6ac871cd-1b1f-4993-b5e2-63c481ff8b0a
     inputFieldName: input
     outputFieldName: output
     inputPortIdentifier: 
@@ -63,7 +81,7 @@ MonoBehaviour:
       y: 135
       width: 349
       height: 388
-    opened: 1
+    opened: 0
     editorType:
       serializedType: BehaviorTree.Editor.NodeInspectorView, Assembly-CSharp-Editor,
         Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
@@ -73,52 +91,11 @@ MonoBehaviour:
   serializedParameterList: []
   stickyNotes: []
   nodeInspectorReference: {fileID: 0}
-  position: {x: -2745.3333, y: -18.666666, z: 0}
-  scale: {x: 1, y: 1, z: 1}
+  position: {x: -4432, y: 248.66667, z: 0}
+  scale: {x: 1.3225, y: 1.3225, z: 1}
   references:
     version: 2
     RefIds:
-    - rid: 810363240065794050
-      type: {class: SequenceNode, ns: BT.GraphProcessor, asm: Assembly-CSharp}
-      data:
-        nodeCustomName: 
-        GUID: 5810160e-f215-4c46-b673-e31a65e28772
-        computeOrder: 1
-        position:
-          serializedVersion: 2
-          x: 3624.6667
-          y: 280.66666
-          width: 130.6665
-          height: 56
-        expanded: 0
-        debug: 0
-        nodeLock: 0
-        status: 0
-        lastResult: 0
-        nextUpdateTick: 0
-        idx: 0
-        input: 0
-        output: 0
-    - rid: 810363240065794051
-      type: {class: TurnToward, ns: BT.GraphProcessor, asm: Assembly-CSharp}
-      data:
-        nodeCustomName: 
-        GUID: 00b3245f-d7ee-49e0-be5f-3793cc3c0540
-        computeOrder: 2
-        position:
-          serializedVersion: 2
-          x: 3412.6667
-          y: 479.66666
-          width: 113.33325
-          height: 50
-        expanded: 0
-        debug: 0
-        nodeLock: 0
-        status: 0
-        lastResult: 0
-        nextUpdateTick: 0
-        idx: 0
-        input: 0
     - rid: 810363445469773824
       type: {class: LongParameter, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
       data:
@@ -159,18 +136,102 @@ MonoBehaviour:
         isHidden: 0
         expanded: 1
         guid: 53b10b94-60ba-4fd1-b653-21b81246f70e
+    - rid: 810363536863395848
+      type: {class: MoveTo, ns: BT.GraphProcessor, asm: Assembly-CSharp}
+      data:
+        nodeCustomName: 
+        GUID: e2ca2703-d15e-4e1d-b398-32b7e5281989
+        computeOrder: 3
+        position:
+          serializedVersion: 2
+          x: 3749.3333
+          y: 403.3333
+          width: 90
+          height: 50
+        expanded: 0
+        debug: 0
+        nodeLock: 0
+        status: 1
+        lastResult: 1
+        nextUpdateTick: 0
+        idx: 0
+        input: 0
+        target: {x: 76.57263, y: 0, z: 35.87063}
+    - rid: 810363555739074737
+      type: {class: Repeat, ns: BT.GraphProcessor, asm: Assembly-CSharp}
+      data:
+        nodeCustomName: 
+        GUID: 13a05558-eda1-475b-8694-70cf99151130
+        computeOrder: 1
+        position:
+          serializedVersion: 2
+          x: 3862.755
+          y: 50.40327
+          width: 84
+          height: 56
+        expanded: 0
+        debug: 0
+        nodeLock: 0
+        status: 1
+        lastResult: 1
+        nextUpdateTick: 0
+        idx: 0
+        input: 0
+        output: 0
+    - rid: 810363555739074786
+      type: {class: MoveTo, ns: BT.GraphProcessor, asm: Assembly-CSharp}
+      data:
+        nodeCustomName: 
+        GUID: 65076df1-79ed-44b5-9d6d-a0cfb3d19b56
+        computeOrder: 4
+        position:
+          serializedVersion: 2
+          x: 3881.0798
+          y: 403.3333
+          width: 90
+          height: 50
+        expanded: 0
+        debug: 0
+        nodeLock: 0
+        status: 0
+        lastResult: 0
+        nextUpdateTick: 0
+        idx: 0
+        input: 0
+        target: {x: 3.9131165, y: 0, z: 73.68523}
+    - rid: 810363555739074819
+      type: {class: SelectorNode, ns: BT.GraphProcessor, asm: Assembly-CSharp}
+      data:
+        nodeCustomName: SelectorNode
+        GUID: 25395e7a-0cc4-4681-a45e-057269c9ada6
+        computeOrder: 2
+        position:
+          serializedVersion: 2
+          x: 3749.3333
+          y: 223.6421
+          width: 121.333496
+          height: 55.999985
+        expanded: 0
+        debug: 0
+        nodeLock: 0
+        status: 1
+        lastResult: 1
+        nextUpdateTick: 0
+        idx: 0
+        input: 0
+        output: 0
     - rid: 4907808297568174128
       type: {class: EntryNode, ns: BT.GraphProcessor, asm: Assembly-CSharp}
       data:
-        nodeCustomName: 
+        nodeCustomName: EntryNode
         GUID: 6ac871cd-1b1f-4993-b5e2-63c481ff8b0a
         computeOrder: 0
         position:
           serializedVersion: 2
-          x: 3651.3333
-          y: 140.33334
+          x: 3557.6157
+          y: -110.17014
           width: 104
-          height: 50
+          height: 50.000004
         expanded: 0
         debug: 0
         nodeLock: 0

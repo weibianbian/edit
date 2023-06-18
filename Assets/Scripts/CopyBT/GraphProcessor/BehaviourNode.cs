@@ -7,16 +7,23 @@ namespace BT.GraphProcessor
     public class Blackboard
     {
 
+        
     }
+    [System.Serializable]
     public class BehaviourNode : BaseNode
     {
+        
         public BehaviourNode parent;
+        [ShowInInspector()]
         public ENodeStatus status = ENodeStatus.READY;
         public ENodeStatus lastResult = ENodeStatus.READY;
         public float nextUpdateTick = 0;
+        [ShowInInspector()]
         public int idx = 0;
         public Action onVisit;
         public Blackboard blackboard = null;
+        [NonSerialized]
+        public BTManager ownerTreeManager;
         protected override void Enable()
         {
             base.Enable();

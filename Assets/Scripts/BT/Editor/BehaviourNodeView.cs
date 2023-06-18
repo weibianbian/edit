@@ -165,11 +165,11 @@ namespace BehaviorTree.Editor
             {
                 return;
             }
-            UnityEngine.Debug.Log(owner.GetPinnedElementStatus<NodeInspectorView>());
-            if (owner.GetPinnedElementStatus<NodeInspectorView>()== UnityEngine.UIElements.DropdownMenuAction.Status.Normal)
-            {
-                //owner.pinnedElements.
-            }
+            //UnityEngine.Debug.Log(owner.GetPinnedElementStatus<NodeInspectorView>());
+            //if (owner.GetPinnedElementStatus<NodeInspectorView>()== UnityEngine.UIElements.DropdownMenuAction.Status.Normal)
+            //{
+            //    //owner.pinnedElements.
+            //}
         }
         public override void OnUnselected()
         {

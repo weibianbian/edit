@@ -16,7 +16,7 @@ public class MovementCompt : MonoBehaviour
     void Start()
     {
         move = new MoveState();
-        MoveToPosition(targetPos.transform.position);
+        //MoveToPosition(targetPos.transform.position);
     }
 
     // Update is called once per frame
@@ -79,7 +79,7 @@ public class MovementCompt : MonoBehaviour
 
     public bool ReachedPos(Vector3 pos)
     {
-        MyBounds bnds = new MyBounds(new Vector3(-16f/1000, -16f/1000, -8f/1000), new Vector3(16/1000, 16/1000, 64/1000));
+        MyBounds bnds = new MyBounds(new Vector3(-16f/1000, float.MinValue, -8f/1000), new Vector3(16/1000, float.MaxValue, 64/1000));
         bnds.TranslateSelf(gameObject.transform.position);
         if (bnds.ContainsPoint(pos))
         {

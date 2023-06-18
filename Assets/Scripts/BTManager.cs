@@ -3,15 +3,23 @@ using BT.GraphProcessor;
 using GraphProcessor;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Unity.VisualScripting;
 using UnityEngine;
 public class BTManager : MonoBehaviour
 {
     public BehaviorTreeGraph btGraph;
     public EntryNode entry;
+    public AIController aiController;
     private CopyBT.ENodeStatus lastResult = CopyBT.ENodeStatus.READY;
     // Start is called before the first frame update
     void Start()
     {
+        btGraph.nodes.ForEach(x =>
+        {
+            (x as BehaviourNode).ownerTreeManager = this;
+            (x as BehaviourNode).Reset();
+        });
+        //(x as BehaviourNode).ownerTreeManager = this)
         entry = btGraph.nodes.Find(e => e is EntryNode) as EntryNode;
         Find(entry);
     }
