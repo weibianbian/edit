@@ -2,12 +2,12 @@
 {
     public class NotDecorator : DecoratorNode
     {
-        public NotDecorator(string name, BehaviourNode child) : base("Not", child)
+        public NotDecorator(string name, CopyBTBehaviourNode child) : base("Not", child)
         {
         }
         public override void Visit()
         {
-            BehaviourNode child = children[0];
+            CopyBTBehaviourNode child = children[0];
             child.Visit();
             if (child.status == ENodeStatus.SUCCESS)
             {

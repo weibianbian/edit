@@ -2,9 +2,9 @@
 
 namespace CopyBT
 {
-    public class ParallelNode : BehaviourNode
+    public class ParallelNode : CopyBTBehaviourNode
     {
-        public ParallelNode(List<BehaviourNode> children, string name = "ParallelNode") : base(name, children)
+        public ParallelNode(List<CopyBTBehaviourNode> children, string name = "ParallelNode") : base(name, children)
         {
 
         }
@@ -34,7 +34,7 @@ namespace CopyBT
             bool anyDone = false;
             for (int i = 0; i < children.Count; i++)
             {
-                BehaviourNode child = children[i];
+                CopyBTBehaviourNode child = children[i];
                 if (child is ConditionNode)
                 {
                     child.Reset();

@@ -1,4 +1,5 @@
-﻿using GraphProcessor;
+﻿using BT.GraphProcessor;
+using GraphProcessor;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -7,6 +8,19 @@ namespace BehaviorTree.Editor
 {
     public class BehaviorTreeGraphView : BaseGraphView
     {
+        public Blackboard BlackboardInspector
+        {
+            get
+            {
+                if (_BlackboardInspectorViewer == null)
+                {
+                    _BlackboardInspectorViewer = ScriptableObject.CreateInstance<Blackboard>();
+                }
+
+                return _BlackboardInspectorViewer;
+            }
+        }
+        private Blackboard _BlackboardInspectorViewer;
         public BehaviorTreeGraphView(EditorWindow window) : base(window)
         {
         }

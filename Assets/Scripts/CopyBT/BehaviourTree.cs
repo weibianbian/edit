@@ -5,8 +5,8 @@ namespace CopyBT
 
     public class BehaviourTree
     {
-        BehaviourNode root = null;
-        public BehaviourTree(BehaviourNode root)
+        CopyBTBehaviourNode root = null;
+        public BehaviourTree(CopyBTBehaviourNode root)
         {
             this.root = root;
         }

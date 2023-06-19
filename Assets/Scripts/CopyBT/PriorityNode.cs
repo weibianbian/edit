@@ -5,12 +5,12 @@ using UnityEngine;
 
 namespace CopyBT
 {
-    public class PriorityNode : BehaviourNode
+    public class PriorityNode : CopyBTBehaviourNode
     {
         public int nil = -1;
         public float period = 0;
         public float lastTime = -1;
-        public PriorityNode(List<BehaviourNode> children, float period = 1) : base("Priority", children)
+        public PriorityNode(List<CopyBTBehaviourNode> children, float period = 1) : base("Priority", children)
         {
             this.period = period;
             lastTime = nil;
@@ -44,7 +44,7 @@ namespace CopyBT
                 bool found = false;
                 for (int i = 0; i < children.Count; i++)
                 {
-                    BehaviourNode child = children[i];
+                    CopyBTBehaviourNode child = children[i];
                     bool should_test_anyway = oldEvent != null && child is EventNode && oldEvent.priority <= (child as EventNode).priority;
                     if (!found || should_test_anyway)
                     {
@@ -80,7 +80,7 @@ namespace CopyBT
             {
                 if (IsValidIndex(idx))
                 {
-                    BehaviourNode child = children[idx];
+                    CopyBTBehaviourNode child = children[idx];
                     if (child.status == ENodeStatus.RUNNING)
                     {
                         child.Visit();

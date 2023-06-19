@@ -2,7 +2,7 @@
 {
     public class RepeaterDecoratorNode : DecoratorNode
     {
-        public RepeaterDecoratorNode(string name, BehaviourNode child) : base(name, child)
+        public RepeaterDecoratorNode(string name, CopyBTBehaviourNode child) : base(name, child)
         {
         }
     }

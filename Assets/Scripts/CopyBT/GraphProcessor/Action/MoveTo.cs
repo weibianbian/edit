@@ -7,7 +7,6 @@ namespace BT.GraphProcessor
     [System.Serializable, NodeMenuItem("BT/Action/MoveTo")]
     public class MoveTo : ActionNode
     {
-        [ShowInInspector]
         public Vector3 target;
         protected override void OnVisit()
         {

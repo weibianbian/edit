@@ -2,7 +2,7 @@
 
 namespace CopyBT
 {
-    public class ConditionNode : BehaviourNode
+    public class ConditionNode : CopyBTBehaviourNode
     {
         Func<bool> fn;
         public ConditionNode(Func<bool> fn, string name = "ConditionNode") : base(name)

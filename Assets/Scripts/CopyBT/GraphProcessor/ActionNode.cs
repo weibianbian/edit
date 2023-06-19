@@ -9,7 +9,6 @@ namespace BT.GraphProcessor
     public class ActionNode : BehaviourNode
     {
         [Input(name = "", allowMultiple = false), Vertical]
-        [ShowInInspector(true)]
         public ENodeStatus input;
         public Action action;
         public override Color color =>new Color(0.4f, 0.8f, 0.4f);

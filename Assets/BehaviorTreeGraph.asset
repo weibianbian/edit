@@ -28,14 +28,6 @@ MonoBehaviour:
     outputFieldName: output
     inputPortIdentifier: 
     outputPortIdentifier: 
-  - GUID: cb354408-7b5c-4d7c-b9f9-8a2b7848d433
-    owner: {fileID: 11400000}
-    inputNodeGUID: e2ca2703-d15e-4e1d-b398-32b7e5281989
-    outputNodeGUID: 25395e7a-0cc4-4681-a45e-057269c9ada6
-    inputFieldName: input
-    outputFieldName: output
-    inputPortIdentifier: 
-    outputPortIdentifier: 
   - GUID: 8f9c2086-a73e-4028-8d1f-92c0be85fa6b
     owner: {fileID: 11400000}
     inputNodeGUID: 65076df1-79ed-44b5-9d6d-a0cfb3d19b56
@@ -52,13 +44,21 @@ MonoBehaviour:
     outputFieldName: output
     inputPortIdentifier: 
     outputPortIdentifier: 
+  - GUID: 4a6035c2-274c-4662-a814-3f8e39bfad1c
+    owner: {fileID: 11400000}
+    inputNodeGUID: e2ca2703-d15e-4e1d-b398-32b7e5281989
+    outputNodeGUID: 25395e7a-0cc4-4681-a45e-057269c9ada6
+    inputFieldName: input
+    outputFieldName: output
+    inputPortIdentifier: 
+    outputPortIdentifier: 
   groups: []
   stackNodes: []
   pinnedElements:
   - position:
       serializedVersion: 2
-      x: 113
-      y: 79
+      x: 91
+      y: 167
       width: 670
       height: 375
     opened: 0
@@ -85,57 +85,15 @@ MonoBehaviour:
     editorType:
       serializedType: BehaviorTree.Editor.NodeInspectorView, Assembly-CSharp-Editor,
         Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  exposedParameters:
-  - rid: 810363445469773824
-  - rid: 810363445469773828
+  exposedParameters: []
   serializedParameterList: []
   stickyNotes: []
   nodeInspectorReference: {fileID: 0}
-  position: {x: -4432, y: 248.66667, z: 0}
-  scale: {x: 1.3225, y: 1.3225, z: 1}
+  position: {x: 721, y: -19, z: 0}
+  scale: {x: 1.520875, y: 1.520875, z: 1}
   references:
     version: 2
     RefIds:
-    - rid: 810363445469773824
-      type: {class: LongParameter, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
-      data:
-        guid: f828334b-531d-48d1-a321-ead8a339605c
-        name: New Long
-        type: 
-        serializedValue:
-          serializedType: 
-          serializedName: 
-          serializedValue: 
-        input: 1
-        settings:
-          rid: 810363445469773825
-        val: 0
-    - rid: 810363445469773825
-      type: {class: ExposedParameter/Settings, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
-      data:
-        isHidden: 0
-        expanded: 1
-        guid: f828334b-531d-48d1-a321-ead8a339605c
-    - rid: 810363445469773828
-      type: {class: GameObjectParameter, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
-      data:
-        guid: 53b10b94-60ba-4fd1-b653-21b81246f70e
-        name: New Game Object
-        type: 
-        serializedValue:
-          serializedType: 
-          serializedName: 
-          serializedValue: 
-        input: 1
-        settings:
-          rid: 810363445469773829
-        val: {fileID: 0}
-    - rid: 810363445469773829
-      type: {class: ExposedParameter/Settings, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
-      data:
-        isHidden: 0
-        expanded: 1
-        guid: 53b10b94-60ba-4fd1-b653-21b81246f70e
     - rid: 810363536863395848
       type: {class: MoveTo, ns: BT.GraphProcessor, asm: Assembly-CSharp}
       data:
@@ -144,10 +102,10 @@ MonoBehaviour:
         computeOrder: 3
         position:
           serializedVersion: 2
-          x: 3749.3333
-          y: 403.3333
-          width: 90
-          height: 50
+          x: -189
+          y: 774
+          width: 353
+          height: 165
         expanded: 0
         debug: 0
         nodeLock: 0
@@ -156,7 +114,7 @@ MonoBehaviour:
         nextUpdateTick: 0
         idx: 0
         input: 0
-        target: {x: 76.57263, y: 0, z: 35.87063}
+        target: {x: 57.90029, y: 0, z: 38.214417}
     - rid: 810363555739074737
       type: {class: Repeat, ns: BT.GraphProcessor, asm: Assembly-CSharp}
       data:
@@ -165,10 +123,10 @@ MonoBehaviour:
         computeOrder: 1
         position:
           serializedVersion: 2
-          x: 3862.755
-          y: 50.40327
-          width: 84
-          height: 56
+          x: 0
+          y: 268
+          width: 0
+          height: 0
         expanded: 0
         debug: 0
         nodeLock: 0
@@ -186,10 +144,10 @@ MonoBehaviour:
         computeOrder: 4
         position:
           serializedVersion: 2
-          x: 3881.0798
-          y: 403.3333
-          width: 90
-          height: 50
+          x: 334.2761
+          y: 720.72565
+          width: 351
+          height: 168
         expanded: 0
         debug: 0
         nodeLock: 0
@@ -207,10 +165,10 @@ MonoBehaviour:
         computeOrder: 2
         position:
           serializedVersion: 2
-          x: 3749.3333
-          y: 223.6421
-          width: 121.333496
-          height: 55.999985
+          x: -0.00008216112
+          y: 481.1305
+          width: 120
+          height: 54
         expanded: 0
         debug: 0
         nodeLock: 0
@@ -228,10 +186,10 @@ MonoBehaviour:
         computeOrder: 0
         position:
           serializedVersion: 2
-          x: 3557.6157
-          y: -110.17014
-          width: 104
-          height: 50.000004
+          x: -0.000004053116
+          y: 43.345936
+          width: 238
+          height: 128
         expanded: 0
         debug: 0
         nodeLock: 0

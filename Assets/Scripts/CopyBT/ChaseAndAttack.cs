@@ -1,6 +1,6 @@
 ﻿namespace CopyBT
 {
-    public class ChaseAndAttack : BehaviourNode
+    public class ChaseAndAttack : CopyBTBehaviourNode
     {
         public ChaseAndAttack(string name) : base(name)
         {

@@ -2,9 +2,9 @@
 
 namespace CopyBT
 {
-    public class SequenceNode : BehaviourNode
+    public class SequenceNode : CopyBTBehaviourNode
     {
-        public SequenceNode(List<BehaviourNode> children) : base("SequenceNode", children)
+        public SequenceNode(List<CopyBTBehaviourNode> children) : base("SequenceNode", children)
         {
             idx = 0;
         }
@@ -17,7 +17,7 @@ namespace CopyBT
             bool done = false;
             while (idx < children.Count)
             {
-                BehaviourNode child = children[idx];
+                CopyBTBehaviourNode child = children[idx];
                 child.Visit();
                 if (child.status == ENodeStatus.RUNNING || child.status == ENodeStatus.FAILED)
                 {

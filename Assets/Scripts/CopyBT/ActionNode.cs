@@ -2,7 +2,7 @@
 
 namespace CopyBT
 {
-    public class ActionNode : BehaviourNode
+    public class ActionNode : CopyBTBehaviourNode
     {
         public Action action;
         public ActionNode(string name, Action action) : base(name)
@@ -15,7 +15,7 @@ namespace CopyBT
             status = ENodeStatus.SUCCESS;
         }
     }
-    public class Leash : BehaviourNode
+    public class Leash : CopyBTBehaviourNode
     {
         public Leash(string name) : base(name)
         {

@@ -2,7 +2,7 @@
 
 namespace CopyBT
 {
-    public class MultiConditionNode : BehaviourNode
+    public class MultiConditionNode : CopyBTBehaviourNode
     {
         bool isStart = false;
         bool running = false;

@@ -1,6 +1,6 @@
 ﻿namespace CopyBT
 {
-    public class Follow : BehaviourNode
+    public class Follow : CopyBTBehaviourNode
     {
         public Follow(string name) : base("Follow")
         {

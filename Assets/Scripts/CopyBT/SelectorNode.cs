@@ -2,15 +2,15 @@
 
 namespace CopyBT
 {
-    public class LoopNode : BehaviourNode
+    public class LoopNode : CopyBTBehaviourNode
     {
         public LoopNode(string name) : base(name)
         {
         }
     }
-    public class SelectorNode : BehaviourNode
+    public class SelectorNode : CopyBTBehaviourNode
     {
-        public SelectorNode(List<BehaviourNode> children) : base("SelectorNode", children)
+        public SelectorNode(List<CopyBTBehaviourNode> children) : base("SelectorNode", children)
         {
             idx = 0;
         }
@@ -32,7 +32,7 @@ namespace CopyBT
             bool done = false;
             while (idx < children.Count)
             {
-                BehaviourNode child = children[idx];
+                CopyBTBehaviourNode child = children[idx];
                 child.Visit();
                 if (child.status == ENodeStatus.RUNNING || child.status == ENodeStatus.SUCCESS)
                 {

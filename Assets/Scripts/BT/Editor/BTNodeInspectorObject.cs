@@ -6,17 +6,20 @@ using UnityEngine.UIElements;
 
 namespace BehaviorTree.Editor
 {
-    //[CustomEditor(typeof(NodeInspectorView))]
+    //[CustomEditor(typeof(BTNodeInspectorObject))]
     //public class BTNodeInspectorObjectEditor : NodeInspectorObjectEditor
     //{
     //    protected override void OnEnable()
     //    {
     //        base.OnEnable();
     //    }
-
+    //    public override void OnInspectorGUI()
+    //    {
+    //        base.OnInspectorGUI();
+    //    }
     //}
 
-    //public class NodeInspectorView : NodeInspectorObject
+    //public class BTNodeInspectorObject : NodeInspectorObject
     //{
     //    private Label subTitleLabel;
     //    public override void UpdateSelectedNodes(HashSet<BaseNodeView> views)

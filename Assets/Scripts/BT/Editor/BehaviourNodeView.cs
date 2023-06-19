@@ -183,10 +183,10 @@ namespace BehaviorTree.Editor
             //    owner.ToggleView<NodeInspectorView>();
             //}
         }
-        protected override void DrawDefaultInspector(bool fromInspector = false)
-        {
-            this.expanded = false;
-        }
+        //protected override void DrawDefaultInspector(bool fromInspector = false)
+        //{
+        //    this.expanded = false;
+        //}
     }
 }
 

@@ -9,36 +9,36 @@ namespace CopyBT
     {
         protected override void OnStart()
         {
-            BehaviourNode watch_game = BehaviourNodeExtension.WhileNode(ShouldWatchMinigame, "Watching Game",
-                new PriorityNode(new List<BehaviourNode>()
+            CopyBTBehaviourNode watch_game = BehaviourNodeExtension.WhileNode(ShouldWatchMinigame, "Watching Game",
+                new PriorityNode(new List<CopyBTBehaviourNode>()
                 {
                     new Follow(""),
                 }, 0.25f)
                 );
 
-            BehaviourNode dance = BehaviourNodeExtension.WhileNode(ShouldDanceParty, "Dance Party",
-                new PriorityNode(new List<BehaviourNode>()
+            CopyBTBehaviourNode dance = BehaviourNodeExtension.WhileNode(ShouldDanceParty, "Dance Party",
+                new PriorityNode(new List<CopyBTBehaviourNode>()
                 {
                     new ActionNode("Action",()=>{ UnityEngine.Debug.Log("DanceParty"); })
                 }, 0.25f)
                 ); ;
 
-            BehaviourNode defensive_mode = BehaviourNodeExtension.WhileNode(IsDefensive, "DefensiveMove",
-                new PriorityNode(new List<BehaviourNode>()
+            CopyBTBehaviourNode defensive_mode = BehaviourNodeExtension.WhileNode(IsDefensive, "DefensiveMove",
+                new PriorityNode(new List<CopyBTBehaviourNode>()
                 {
                     dance,
                     watch_game,
 
                     BehaviourNodeExtension.WhileNode(DefensiveCanFight,"CanFight",new ChaseAndAttack("")),
                 }));
-            BehaviourNode aggressive_mode = new PriorityNode(new List<BehaviourNode>()
+            CopyBTBehaviourNode aggressive_mode = new PriorityNode(new List<CopyBTBehaviourNode>()
                 {
                     dance,
                     watch_game,
 
                    BehaviourNodeExtension.WhileNode(DefensiveCanFight,"CanFight",new ChaseAndAttack("")),
                 });
-            BehaviourNode root = new PriorityNode(new List<BehaviourNode>()
+            CopyBTBehaviourNode root = new PriorityNode(new List<CopyBTBehaviourNode>()
             {
                 defensive_mode,
                 aggressive_mode

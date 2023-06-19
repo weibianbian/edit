@@ -4,30 +4,30 @@ using System.Text;
 
 namespace CopyBT
 {
-    public class BehaviourNode
+    public class CopyBTBehaviourNode
     {
         public static int NODE_COUNT = 0;
         public string name;
-        public List<BehaviourNode> children;
-        public BehaviourNode parent;
+        public List<CopyBTBehaviourNode> children;
+        public CopyBTBehaviourNode parent;
         public ENodeStatus status = ENodeStatus.READY;
         public ENodeStatus lastResult = ENodeStatus.READY;
         public float nextUpdateTick = 0;
         public int idx = 0;
 
-        public BehaviourNode(string name) : this(name, null)
+        public CopyBTBehaviourNode(string name) : this(name, null)
         {
 
         }
-        public BehaviourNode(string name, List<BehaviourNode> children)
+        public CopyBTBehaviourNode(string name, List<CopyBTBehaviourNode> children)
         {
             this.name = name;
             this.children = children;
             status = ENodeStatus.READY;
             lastResult = ENodeStatus.READY;
             nextUpdateTick = 0;
-            idx = BehaviourNode.NODE_COUNT;
-            BehaviourNode.NODE_COUNT++;
+            idx = CopyBTBehaviourNode.NODE_COUNT;
+            CopyBTBehaviourNode.NODE_COUNT++;
 
             if (children != null)
             {
@@ -45,7 +45,7 @@ namespace CopyBT
         {
 
         }
-        public  virtual void DoToParents(Action<BehaviourNode> fn)
+        public  virtual void DoToParents(Action<CopyBTBehaviourNode> fn)
         {
             if (parent!=null)
             {

@@ -2,9 +2,9 @@
 
 namespace CopyBT
 {
-    public class DecoratorNode : BehaviourNode
+    public class DecoratorNode : CopyBTBehaviourNode
     {
-        public DecoratorNode(string name, BehaviourNode child) : base(name, new List<BehaviourNode>() { child })
+        public DecoratorNode(string name, CopyBTBehaviourNode child) : base(name, new List<CopyBTBehaviourNode>() { child })
         {
 
         }

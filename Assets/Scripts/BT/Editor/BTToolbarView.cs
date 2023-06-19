@@ -1,10 +1,14 @@
-﻿using GraphProcessor;
+﻿using BT.GraphProcessor;
+using GraphProcessor;
+using UnityEditor;
+using UnityEngine;
 
 namespace BehaviorTree.Editor
 {
     public class BTToolbarView : ToolbarView
     {
         ToolbarButtonData showNodeInspector;
+        
         public BTToolbarView(BaseGraphView graphView) : base(graphView)
         {
 
@@ -12,8 +16,11 @@ namespace BehaviorTree.Editor
         protected override void AddButtons()
         {
             base.AddButtons();
-            //bool nodeInspectorVisible = graphView.GetPinnedElementStatus<NodeInspectorView>() != UnityEngine.UIElements.DropdownMenuAction.Status.Hidden;
-            //showNodeInspector = AddToggle("Node Inspector", nodeInspectorVisible, (v) => graphView.ToggleView<NodeInspectorView>());
+            AddButton(new GUIContent("Blackboard", "黑板"),
+                () =>
+                {
+                    Selection.activeObject = (graphView as BehaviorTreeGraphView).BlackboardInspector;
+                }, false);
         }
         public override void UpdateButtonStatus()
         {

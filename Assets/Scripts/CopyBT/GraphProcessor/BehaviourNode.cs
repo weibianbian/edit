@@ -1,33 +1,30 @@
 using CopyBT;
 using GraphProcessor;
 using System;
+using UnityEngine;
 
 namespace BT.GraphProcessor
 {
-    public class Blackboard
+    public class Blackboard : ScriptableObject
     {
 
-        
     }
     [System.Serializable]
     public class BehaviourNode : BaseNode
     {
-        
+        [ShowInInspector]
         public BehaviourNode parent;
-        [ShowInInspector()]
         public ENodeStatus status = ENodeStatus.READY;
         public ENodeStatus lastResult = ENodeStatus.READY;
         public float nextUpdateTick = 0;
-        [ShowInInspector()]
         public int idx = 0;
         public Action onVisit;
-        public Blackboard blackboard = null;
         [NonSerialized]
         public BTManager ownerTreeManager;
         protected override void Enable()
         {
             base.Enable();
-            
+
         }
         public override bool isRenamable => true;
         protected int ChildCount
@@ -41,7 +38,7 @@ namespace BT.GraphProcessor
                 return 0;
             }
         }
-       
+
         protected BehaviourNode ChildAtIndex(int index)
         {
             if (outputPorts.Count > 0)
