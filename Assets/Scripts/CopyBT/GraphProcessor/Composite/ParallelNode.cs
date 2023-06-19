@@ -6,6 +6,7 @@ namespace BT.GraphProcessor
     [System.Serializable, NodeMenuItem("BT/Composite/ParallelNode")]
     public class ParallelNode : CompositieNode
     {
+        public override string name => "并行结点";
         public override void Step()
         {
             if (status != ENodeStatus.RUNNING)

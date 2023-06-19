@@ -7,6 +7,7 @@ using UnityEngine;
 
 namespace BehaviorTree.Editor
 {
+   
     public class BehaviorTreeGrahpWindow: BaseGraphWindow
     {
         protected override void OnEnable()

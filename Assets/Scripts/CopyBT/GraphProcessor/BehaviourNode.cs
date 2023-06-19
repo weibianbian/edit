@@ -10,7 +10,7 @@ namespace BT.GraphProcessor
 
     }
     [System.Serializable]
-    public class BehaviourNode : BaseNode
+    public abstract class BehaviourNode : BaseNode
     {
         [ShowInInspector]
         public BehaviourNode parent;
@@ -104,6 +104,10 @@ namespace BT.GraphProcessor
         public bool IsValidIndex(int idx)
         {
             return idx >= 0 && idx < ChildCount;
+        }
+        public virtual NodeDataBase GetNodeData()
+        {
+            return null;
         }
     }
 }

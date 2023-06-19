@@ -6,6 +6,7 @@ namespace BT.GraphProcessor
     [System.Serializable, NodeMenuItem("BT/Composite/Selector")]
     public class SelectorNode : CompositieNode
     {
+        public override string name => "选择结点";
         protected override void OnVisit()
         {
             if (status != ENodeStatus.RUNNING)

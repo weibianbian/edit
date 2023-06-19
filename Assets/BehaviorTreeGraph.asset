@@ -14,40 +14,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   serializedNodes: []
   nodes:
-  - rid: 4907808297568174128
-  - rid: 810363536863395848
-  - rid: 810363555739074737
-  - rid: 810363555739074786
-  - rid: 810363555739074819
+  - rid: 4542289676001607739
+  - rid: 4542289676001607740
+  - rid: 4542289676001607741
   edges:
-  - GUID: efb0c3c0-d3a8-455f-b02a-0cdc6585bc0e
+  - GUID: dd47bfcc-2be2-46ba-8ac1-d4b7284a8fca
     owner: {fileID: 11400000}
-    inputNodeGUID: 25395e7a-0cc4-4681-a45e-057269c9ada6
-    outputNodeGUID: 13a05558-eda1-475b-8694-70cf99151130
+    inputNodeGUID: 60894624-03a6-4f65-a796-869e9aa9b4e4
+    outputNodeGUID: 0e5a8c71-9638-44dc-bbc3-e217df6ecc04
     inputFieldName: input
     outputFieldName: output
     inputPortIdentifier: 
     outputPortIdentifier: 
-  - GUID: 8f9c2086-a73e-4028-8d1f-92c0be85fa6b
+  - GUID: 0d3a41e6-0d59-4100-bba3-fc7b2314981d
     owner: {fileID: 11400000}
-    inputNodeGUID: 65076df1-79ed-44b5-9d6d-a0cfb3d19b56
-    outputNodeGUID: 25395e7a-0cc4-4681-a45e-057269c9ada6
-    inputFieldName: input
-    outputFieldName: output
-    inputPortIdentifier: 
-    outputPortIdentifier: 
-  - GUID: 7392ff70-44b6-4d9c-b127-c11b4c5ef1de
-    owner: {fileID: 11400000}
-    inputNodeGUID: 13a05558-eda1-475b-8694-70cf99151130
-    outputNodeGUID: 6ac871cd-1b1f-4993-b5e2-63c481ff8b0a
-    inputFieldName: input
-    outputFieldName: output
-    inputPortIdentifier: 
-    outputPortIdentifier: 
-  - GUID: 4a6035c2-274c-4662-a814-3f8e39bfad1c
-    owner: {fileID: 11400000}
-    inputNodeGUID: e2ca2703-d15e-4e1d-b398-32b7e5281989
-    outputNodeGUID: 25395e7a-0cc4-4681-a45e-057269c9ada6
+    inputNodeGUID: 09b470c0-95de-45fc-aa4d-442be549646e
+    outputNodeGUID: 60894624-03a6-4f65-a796-869e9aa9b4e4
     inputFieldName: input
     outputFieldName: output
     inputPortIdentifier: 
@@ -89,65 +71,23 @@ MonoBehaviour:
   serializedParameterList: []
   stickyNotes: []
   nodeInspectorReference: {fileID: 0}
-  position: {x: 721, y: -19, z: 0}
-  scale: {x: 1.520875, y: 1.520875, z: 1}
+  position: {x: 820, y: 172, z: 0}
+  scale: {x: 0.8695652, y: 0.8695652, z: 1}
   references:
     version: 2
     RefIds:
-    - rid: 810363536863395848
-      type: {class: MoveTo, ns: BT.GraphProcessor, asm: Assembly-CSharp}
+    - rid: 4542289676001607739
+      type: {class: EntryNode, ns: BT.GraphProcessor, asm: Assembly-CSharp}
       data:
         nodeCustomName: 
-        GUID: e2ca2703-d15e-4e1d-b398-32b7e5281989
-        computeOrder: 3
+        GUID: 0e5a8c71-9638-44dc-bbc3-e217df6ecc04
+        computeOrder: 0
         position:
           serializedVersion: 2
-          x: -189
-          y: 774
-          width: 353
-          height: 165
-        expanded: 0
-        debug: 0
-        nodeLock: 0
-        status: 1
-        lastResult: 1
-        nextUpdateTick: 0
-        idx: 0
-        input: 0
-        target: {x: 57.90029, y: 0, z: 38.214417}
-    - rid: 810363555739074737
-      type: {class: Repeat, ns: BT.GraphProcessor, asm: Assembly-CSharp}
-      data:
-        nodeCustomName: 
-        GUID: 13a05558-eda1-475b-8694-70cf99151130
-        computeOrder: 1
-        position:
-          serializedVersion: 2
-          x: 0
-          y: 268
-          width: 0
-          height: 0
-        expanded: 0
-        debug: 0
-        nodeLock: 0
-        status: 1
-        lastResult: 1
-        nextUpdateTick: 0
-        idx: 0
-        input: 0
-        output: 0
-    - rid: 810363555739074786
-      type: {class: MoveTo, ns: BT.GraphProcessor, asm: Assembly-CSharp}
-      data:
-        nodeCustomName: 
-        GUID: 65076df1-79ed-44b5-9d6d-a0cfb3d19b56
-        computeOrder: 4
-        position:
-          serializedVersion: 2
-          x: 334.2761
-          y: 720.72565
-          width: 351
-          height: 168
+          x: 151.90063
+          y: 192.1255
+          width: 223
+          height: 128
         expanded: 0
         debug: 0
         nodeLock: 0
@@ -155,46 +95,42 @@ MonoBehaviour:
         lastResult: 0
         nextUpdateTick: 0
         idx: 0
-        input: 0
-        target: {x: 3.9131165, y: 0, z: 73.68523}
-    - rid: 810363555739074819
-      type: {class: SelectorNode, ns: BT.GraphProcessor, asm: Assembly-CSharp}
+    - rid: 4542289676001607740
+      type: {class: SequenceNode, ns: BT.GraphProcessor, asm: Assembly-CSharp}
       data:
-        nodeCustomName: SelectorNode
-        GUID: 25395e7a-0cc4-4681-a45e-057269c9ada6
+        nodeCustomName: 
+        GUID: 60894624-03a6-4f65-a796-869e9aa9b4e4
+        computeOrder: 1
+        position:
+          serializedVersion: 2
+          x: -34.17903
+          y: 381.79477
+          width: 223
+          height: 134
+        expanded: 0
+        debug: 0
+        nodeLock: 0
+        status: 0
+        lastResult: 0
+        nextUpdateTick: 0
+        idx: 0
+    - rid: 4542289676001607741
+      type: {class: MoveTo, ns: BT.GraphProcessor, asm: Assembly-CSharp}
+      data:
+        nodeCustomName: 
+        GUID: 09b470c0-95de-45fc-aa4d-442be549646e
         computeOrder: 2
         position:
           serializedVersion: 2
-          x: -0.00008216112
-          y: 481.1305
-          width: 120
-          height: 54
+          x: 250.5137
+          y: 553.62866
+          width: 100
+          height: 100
         expanded: 0
         debug: 0
         nodeLock: 0
-        status: 1
-        lastResult: 1
+        status: 0
+        lastResult: 0
         nextUpdateTick: 0
         idx: 0
-        input: 0
-        output: 0
-    - rid: 4907808297568174128
-      type: {class: EntryNode, ns: BT.GraphProcessor, asm: Assembly-CSharp}
-      data:
-        nodeCustomName: EntryNode
-        GUID: 6ac871cd-1b1f-4993-b5e2-63c481ff8b0a
-        computeOrder: 0
-        position:
-          serializedVersion: 2
-          x: -0.000004053116
-          y: 43.345936
-          width: 238
-          height: 128
-        expanded: 0
-        debug: 0
-        nodeLock: 0
-        status: 1
-        lastResult: 1
-        nextUpdateTick: 0
-        idx: -1
-        output: 0
+        target: {x: 0, y: 0, z: 0}

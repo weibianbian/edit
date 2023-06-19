@@ -1,6 +1,4 @@
-﻿using CopyBT;
-using GraphProcessor;
-using System.Threading.Tasks;
+﻿using GraphProcessor;
 using UnityEngine;
 
 namespace BT.GraphProcessor
@@ -9,7 +7,8 @@ namespace BT.GraphProcessor
     public class EntryNode : BehaviourNode
     {
         [Output("", false), Vertical]
-        public ENodeStatus output;
+        public BehaviourNode output;
+        public override string name => "入口节点";
         public override Color color => Color.green;
 
         protected override void OnVisit()

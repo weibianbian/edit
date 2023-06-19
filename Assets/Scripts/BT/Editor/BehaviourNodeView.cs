@@ -1,4 +1,5 @@
-﻿using CopyBT;
+﻿using BT.GraphProcessor;
+using CopyBT;
 using GraphProcessor;
 using System.Collections.Generic;
 using UnityEditor;
@@ -7,7 +8,7 @@ using UnityEngine.UIElements;
 
 namespace BehaviorTree.Editor
 {
-    [NodeCustomEditor(typeof(BT.GraphProcessor.BehaviourNode))]
+    [NodeCustomEditor(typeof(BehaviourNode))]
     public class BehaviourNodeView : BaseNodeView
     {
         Label returnLabel;
