@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace BT.GraphProcessor
 {
-    //[System.Serializable, NodeMenuItem("BT/ActionNode")]
+    [System.Serializable]
     public abstract class ActionNode : BehaviourNode
     {
         [Input(name = "", allowMultiple = false), Vertical]

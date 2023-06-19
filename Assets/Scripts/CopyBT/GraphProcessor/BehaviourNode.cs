@@ -1,14 +1,9 @@
 using CopyBT;
 using GraphProcessor;
 using System;
-using UnityEngine;
 
 namespace BT.GraphProcessor
 {
-    public class Blackboard : ScriptableObject
-    {
-
-    }
     [System.Serializable]
     public abstract class BehaviourNode : BaseNode
     {

@@ -7,7 +7,7 @@ namespace BT.GraphProcessor
     [System.Serializable, NodeMenuItem("BT/Composite/Sequence")]
     public class SequenceNode : CompositieNode
     {
-        public override string name => "序列结点";
+        public override string name => "序列节点";
         protected override void OnVisit()
         {
             if (status != ENodeStatus.RUNNING)
