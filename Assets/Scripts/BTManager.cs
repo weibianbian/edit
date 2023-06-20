@@ -11,6 +11,7 @@ public class BTManager : MonoBehaviour
     public EntryNode entry;
     public AIController aiController;
     private CopyBT.ENodeStatus lastResult = CopyBT.ENodeStatus.READY;
+    public Blackboard blackboard = new Blackboard();
     // Start is called before the first frame update
     void Start()
     {

@@ -11,6 +11,10 @@ namespace BT.GraphProcessor
         [Input(name = "", allowMultiple = false), Vertical]
         public BehaviourNode input;
         public Action action;
+        public Blackboard Blackboard
+        {
+            get { return ownerTreeManager.blackboard; }
+        }
         public override Color color =>new Color(0.4f, 0.8f, 0.4f);
         protected override void OnVisit()
         {
