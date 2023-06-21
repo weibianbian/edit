@@ -1,9 +1,9 @@
-﻿using BehaviorTree.Runtime;
+﻿using BT.Runtime;
 using GraphProcessor;
 using UnityEditor;
 using UnityEngine.UIElements;
 
-namespace BehaviorTree.Editor
+namespace BT.Editor
 {
     [CustomEditor(typeof(BehaviorTreeGraph))]
     public class BehaviorTreeInspector : GraphInspector

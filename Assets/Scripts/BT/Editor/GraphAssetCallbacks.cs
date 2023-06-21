@@ -1,10 +1,10 @@
-﻿using BehaviorTree.Runtime;
+﻿using BT.Runtime;
 using GraphProcessor;
 using UnityEditor;
 using UnityEditor.Callbacks;
 using UnityEngine;
 
-namespace BehaviorTree.Editor
+namespace BT.Editor
 {
     public class GraphAssetCallbacks
     {

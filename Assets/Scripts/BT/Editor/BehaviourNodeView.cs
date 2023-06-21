@@ -1,4 +1,4 @@
-﻿using BT.GraphProcessor;
+﻿using BT.Editor;
 using CopyBT;
 using GraphProcessor;
 using System.Collections.Generic;
@@ -6,7 +6,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace BehaviorTree.Editor
+namespace BT.Editor
 {
     [NodeCustomEditor(typeof(BehaviourNode))]
     public class BehaviourNodeView : BaseNodeView
@@ -39,14 +39,14 @@ namespace BehaviorTree.Editor
                 //如果打开Graph编辑器时Unity在Play，那么主动设置一下运行时效果。
                 OnPlayModeStateChanged(PlayModeStateChange.EnteredPlayMode);
             }
-            if (nodeTarget is BT.GraphProcessor.BehaviourNode node)
+            if (nodeTarget is BT.Editor.BehaviourNode node)
             {
                 node.onVisit = SetRunningState;
             }
         }
         private void OnPlayModeStateChanged(PlayModeStateChange state)
         {
-            BT.GraphProcessor.BehaviourNode node = nodeTarget as BT.GraphProcessor.BehaviourNode;
+            BT.Editor.BehaviourNode node = nodeTarget as BT.Editor.BehaviourNode;
             if (state == PlayModeStateChange.EnteredPlayMode)
             {
                 Add(returnLabel);
@@ -93,7 +93,7 @@ namespace BehaviorTree.Editor
         public void SetRunningState()
         {
 
-            if (nodeTarget is BT.GraphProcessor.BehaviourNode node)
+            if (nodeTarget is BT.Editor.BehaviourNode node)
             {
                 isRuned = true;
                 ENodeStatus taskStatus = node.lastResult;

@@ -1,9 +1,9 @@
-﻿using BT.GraphProcessor;
+﻿using BT.Editor;
 using GraphProcessor;
 using UnityEditor;
 using UnityEngine;
 
-namespace BehaviorTree.Editor
+namespace BT.Editor
 {
     public class BTToolbarView : ToolbarView
     {

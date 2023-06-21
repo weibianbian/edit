@@ -1,10 +1,10 @@
-﻿using BT.GraphProcessor;
+﻿using BT.Editor;
 using GraphProcessor;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace BehaviorTree.Editor
+namespace BT.Editor
 {
     public class BehaviorTreeGraphView : BaseGraphView
     {

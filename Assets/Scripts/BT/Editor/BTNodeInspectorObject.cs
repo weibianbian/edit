@@ -4,7 +4,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace BehaviorTree.Editor
+namespace BT.Editor
 {
     //[CustomEditor(typeof(BTNodeInspectorObject))]
     //public class BTNodeInspectorObjectEditor : NodeInspectorObjectEditor

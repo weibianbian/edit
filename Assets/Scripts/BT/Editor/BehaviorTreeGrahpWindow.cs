@@ -5,7 +5,7 @@ using UnityEditor;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
-namespace BehaviorTree.Editor
+namespace BT.Editor
 {
    
     public class BehaviorTreeGrahpWindow: BaseGraphWindow
