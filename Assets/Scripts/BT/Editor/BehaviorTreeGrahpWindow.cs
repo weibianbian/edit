@@ -10,6 +10,7 @@ namespace BehaviorTree.Editor
    
     public class BehaviorTreeGrahpWindow: BaseGraphWindow
     {
+        UnityEditor.Experimental.GraphView.Blackboard xxxxxxx;
         protected override void OnEnable()
         {
             base.OnEnable();

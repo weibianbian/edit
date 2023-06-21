@@ -13,7 +13,7 @@ namespace BT.GraphProcessor
         public Action action;
         public Blackboard Blackboard
         {
-            get { return ownerTreeManager.blackboard; }
+            get { return null; }
         }
         public override Color color =>new Color(0.4f, 0.8f, 0.4f);
         protected override void OnVisit()
