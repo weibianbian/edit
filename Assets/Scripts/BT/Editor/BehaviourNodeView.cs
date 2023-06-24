@@ -1,5 +1,4 @@
-﻿using BT.Editor;
-using CopyBT;
+﻿using BT.Runtime;
 using GraphProcessor;
 using System.Collections.Generic;
 using UnityEditor;
@@ -93,7 +92,7 @@ namespace BT.Editor
         public void SetRunningState()
         {
 
-            if (nodeTarget is BT.Editor.BehaviourNode node)
+            if (nodeTarget is BehaviourNode node)
             {
                 isRuned = true;
                 ENodeStatus taskStatus = node.lastResult;

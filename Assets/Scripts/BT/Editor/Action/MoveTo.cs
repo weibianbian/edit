@@ -1,6 +1,7 @@
 ﻿using GraphProcessor;
 using CopyBT;
 using UnityEngine;
+using BT.Runtime;
 
 namespace BT.Editor
 {
@@ -23,7 +24,7 @@ namespace BT.Editor
                 else
                 {
                     ownerTreeManager.aiController.MoveToPosition(data.target);
-                    status = CopyBT.ENodeStatus.RUNNING;
+                    status = ENodeStatus.RUNNING;
                 }
             }
             else if (status == ENodeStatus.RUNNING)
