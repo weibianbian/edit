@@ -13,126 +13,17 @@ MonoBehaviour:
   m_Name: BehaviorTreeGraph
   m_EditorClassIdentifier: 
   serializedNodes: []
-  nodes:
-  - rid: 4542289676001607739
-  - rid: 4542289676001607740
-  - rid: 4542289676001607741
-  edges:
-  - GUID: dd47bfcc-2be2-46ba-8ac1-d4b7284a8fca
-    owner: {fileID: 11400000}
-    inputNodeGUID: 60894624-03a6-4f65-a796-869e9aa9b4e4
-    outputNodeGUID: 0e5a8c71-9638-44dc-bbc3-e217df6ecc04
-    inputFieldName: input
-    outputFieldName: output
-    inputPortIdentifier: 
-    outputPortIdentifier: 
-  - GUID: 0d3a41e6-0d59-4100-bba3-fc7b2314981d
-    owner: {fileID: 11400000}
-    inputNodeGUID: 09b470c0-95de-45fc-aa4d-442be549646e
-    outputNodeGUID: 60894624-03a6-4f65-a796-869e9aa9b4e4
-    inputFieldName: input
-    outputFieldName: output
-    inputPortIdentifier: 
-    outputPortIdentifier: 
+  nodes: []
+  edges: []
   groups: []
   stackNodes: []
-  pinnedElements:
-  - position:
-      serializedVersion: 2
-      x: 91
-      y: 167
-      width: 670
-      height: 375
-    opened: 0
-    editorType:
-      serializedType: GraphProcessor.ExposedParameterView, com.alelievr.NodeGraphProcessor.Editor,
-        Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  - position:
-      serializedVersion: 2
-      x: 0
-      y: 54
-      width: 150
-      height: 200
-    opened: 0
-    editorType:
-      serializedType: GraphProcessor.ProcessorView, com.alelievr.NodeGraphProcessor.Editor,
-        Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  - position:
-      serializedVersion: 2
-      x: 257
-      y: 135
-      width: 349
-      height: 388
-    opened: 0
-    editorType:
-      serializedType: BehaviorTree.Editor.NodeInspectorView, Assembly-CSharp-Editor,
-        Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  pinnedElements: []
   exposedParameters: []
   serializedParameterList: []
   stickyNotes: []
   nodeInspectorReference: {fileID: 0}
-  position: {x: 369, y: -400, z: 0}
-  scale: {x: 1.520875, y: 1.520875, z: 1}
+  position: {x: 0, y: 0, z: 0}
+  scale: {x: 1, y: 1, z: 1}
   references:
     version: 2
-    RefIds:
-    - rid: 4542289676001607739
-      type: {class: EntryNode, ns: BT.GraphProcessor, asm: Assembly-CSharp}
-      data:
-        nodeCustomName: 
-        GUID: 0e5a8c71-9638-44dc-bbc3-e217df6ecc04
-        computeOrder: 0
-        position:
-          serializedVersion: 2
-          x: 153
-          y: 192
-          width: 238
-          height: 128
-        expanded: 0
-        debug: 0
-        nodeLock: 0
-        status: 0
-        lastResult: 2
-        nextUpdateTick: 0
-        idx: 0
-    - rid: 4542289676001607740
-      type: {class: SequenceNode, ns: BT.GraphProcessor, asm: Assembly-CSharp}
-      data:
-        nodeCustomName: 
-        GUID: 60894624-03a6-4f65-a796-869e9aa9b4e4
-        computeOrder: 1
-        position:
-          serializedVersion: 2
-          x: -34.17903
-          y: 381.79477
-          width: 223
-          height: 134
-        expanded: 0
-        debug: 0
-        nodeLock: 0
-        status: 0
-        lastResult: 2
-        nextUpdateTick: 0
-        idx: 0
-    - rid: 4542289676001607741
-      type: {class: MoveTo, ns: BT.GraphProcessor, asm: Assembly-CSharp}
-      data:
-        nodeCustomName: 
-        GUID: 09b470c0-95de-45fc-aa4d-442be549646e
-        computeOrder: 2
-        position:
-          serializedVersion: 2
-          x: 250.5137
-          y: 553.62866
-          width: 100
-          height: 100
-        expanded: 0
-        debug: 0
-        nodeLock: 0
-        status: 0
-        lastResult: 2
-        nextUpdateTick: 0
-        idx: 0
-        data:
-          NodeDes: 2345345
-          target: {x: 16.53427, y: 0, z: 91.79971}
+    RefIds: []

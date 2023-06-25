@@ -12,6 +12,7 @@ namespace BT.Editor
         public static void GraphProcessor_BehaviourTree()
         {
             var graph = ScriptableObject.CreateInstance<BehaviorTreeGraph>();
+            graph.behaviorTree = new BehaviorTree();
             ProjectWindowUtil.CreateAsset(graph, "BehaviorTreeGraph.asset");
         }
         [OnOpenAsset(1)]

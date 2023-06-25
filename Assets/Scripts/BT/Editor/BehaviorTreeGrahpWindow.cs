@@ -1,13 +1,9 @@
 using GraphProcessor;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEditor;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 namespace BT.Editor
 {
-   
     public class BehaviorTreeGrahpWindow: BaseGraphWindow
     {
         UnityEditor.Experimental.GraphView.Blackboard xxxxxxx;

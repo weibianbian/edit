@@ -1,7 +1,5 @@
-using BT.Runtime;
-using GraphProcessor;
-using System.Collections.Generic;
 using UnityEngine;
+
 public class BTManager : MonoBehaviour
 {
     //public BehaviorTreeGraph btGraph;
