@@ -1,14 +1,13 @@
-﻿using System.Collections;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using System;
-using UnityEngine.Serialization;
 using UnityEngine.SceneManagement;
+using UnityEngine.Serialization;
 
 namespace GraphProcessor
 {
-	public class GraphChanges
+    public class GraphChanges
 	{
 		public SerializableEdge	removedEdge;
 		public SerializableEdge	addedEdge;

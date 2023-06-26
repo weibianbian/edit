@@ -5,6 +5,6 @@ namespace BT.Runtime
     [Serializable]
     public class BehaviorTree
     {
-        BTCompositieNode entryNode;
+        public BTCompositieNode entryNode;
     }
 }

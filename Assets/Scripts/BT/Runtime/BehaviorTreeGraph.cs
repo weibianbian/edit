@@ -1,8 +1,7 @@
-using BT.Runtime;
 using GraphProcessor;
 using System;
 
-namespace BT.Editor
+namespace BT.Runtime
 {
     [Serializable]
     public class BehaviorTreeGraph : BaseGraph

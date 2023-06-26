@@ -1,13 +1,14 @@
-﻿using UnityEngine;
+﻿using BT.Runtime;
+using UnityEngine;
 
 public class AIController : MonoBehaviour
 {
-    public ScriptableObject so;
+    public BehaviorTreeGraph so;
     public void Start()
     {
         if (so == null)
         {
-
+            LoadTree(so.behaviorTree);
         }
     }
     public void MoveToPosition(Vector3 pos)
@@ -17,5 +18,9 @@ public class AIController : MonoBehaviour
     public bool ReachedPos(Vector3 pos)
     {
        return GetComponent<MovementCompt>().ReachedPos(pos);
+    }
+    public void LoadTree(BehaviorTree assets)
+    {
+
     }
 }
