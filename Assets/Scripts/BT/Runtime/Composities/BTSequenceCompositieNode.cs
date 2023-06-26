@@ -1,6 +1,6 @@
 ﻿namespace BT.Runtime
 {
-    public class BTSelectorNode : BTCompositieNode
+    public class BTSequenceCompositieNode : BTCompositieNode
     {
         protected override void OnVisit()
         {
@@ -13,14 +13,14 @@
             {
                 BTNode child = ChildAtIndex(idx);
                 child.Visit();
-                if (child.status == ENodeStatus.RUNNING || child.status == ENodeStatus.SUCCESS)
+                if (child.status == ENodeStatus.RUNNING || child.status == ENodeStatus.FAILED)
                 {
                     status = child.status;
                     return;
                 }
                 idx++;
             }
-            status = ENodeStatus.FAILED;
+            status = ENodeStatus.SUCCESS;
         }
         public BTSequenceNodeData NP_SequenceNodeData = new BTSequenceNodeData { NodeDes = "序列组合器" };
         public override BTNodeDataBase GetNodeData()

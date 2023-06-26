@@ -1,5 +1,6 @@
 ﻿using BT.Runtime;
 using GraphProcessor;
+using Unity.Plastic.Antlr3.Runtime.Debug;
 using UnityEditor;
 using UnityEditor.Callbacks;
 using UnityEngine;
@@ -13,6 +14,7 @@ namespace BT.Editor
         {
             var graph = ScriptableObject.CreateInstance<BehaviorTreeGraph>();
             graph.behaviorTree = new BehaviorTree();
+            UnityEngine.Debug.Log("Create BehaviorTee");
             ProjectWindowUtil.CreateAsset(graph, "BehaviorTreeGraph.asset");
         }
         [OnOpenAsset(1)]

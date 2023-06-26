@@ -11,10 +11,13 @@ namespace BT.Editor
         public BehaviourGraphNode output;
         public override string name => "入口节点";
         public override Color color => Color.green;
+        public EntryGraphNode()
+        {
+            classData = typeof(BTEntryNode);
+        }
         protected override void Enable()
         {
             base.Enable();
-            nodeInstance = new BTEntryNode();
         }
 
         protected override void OnVisit()

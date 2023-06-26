@@ -230,7 +230,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 158915369}
-  - component: {fileID: 158915370}
   m_Layer: 0
   m_Name: bt
   m_TagString: Untagged
@@ -253,38 +252,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &158915370
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 158915368}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 343386a09c3c86f4dbc1fa393cb092d2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  btGraph: {fileID: 11400000, guid: ef945697272d1384688b0c8d36b43c7a, type: 2}
-  entry:
-    nodeCustomName: 
-    GUID: 
-    computeOrder: -1
-    position:
-      serializedVersion: 2
-      x: 0
-      y: 0
-      width: 0
-      height: 0
-    expanded: 0
-    debug: 0
-    nodeLock: 0
-    status: 0
-    lastResult: 0
-    nextUpdateTick: 0
-    idx: 0
-    output: 0
-  aiController: {fileID: 354730108}
 --- !u!1 &176628627
 GameObject:
   m_ObjectHideFlags: 0
@@ -416,6 +383,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8c768ab19a9d58249a33d2889af3ca3c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  so: {fileID: 11400000, guid: ef945697272d1384688b0c8d36b43c7a, type: 2}
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0

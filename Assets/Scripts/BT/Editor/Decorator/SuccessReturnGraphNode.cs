@@ -4,8 +4,12 @@ using GraphProcessor;
 namespace BT.Editor
 {
     [System.Serializable, NodeMenuItem("BT/Decorator/SuccessReturn")]
-    public class SuccessReturnGraph : DecoratorGraphNode
+    public class SuccessReturnGraphNode : DecoratorGraphNode
     {
+        public SuccessReturnGraphNode()
+        {
+            classData = typeof(SuccessReturnGraphNode);
+        }
         protected override void OnVisit()
         {
             BehaviourGraphNode child = ChildAtIndex(0);

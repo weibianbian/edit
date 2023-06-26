@@ -6,6 +6,10 @@ namespace BT.Editor
     [System.Serializable, NodeMenuItem("BT/Composite/ParallelNode")]
     public class ParallelGraphNode : CompositieGraphNode
     {
+        public ParallelGraphNode()
+        {
+            classData = typeof(BTParallelCompositieNode);
+        }
         public override string name => "并行结点";
         public override void Step()
         {
@@ -17,7 +21,7 @@ namespace BT.Editor
             {
                 for (int i = 0; i < ChildCount; i++)
                 {
-                    if (ChildAtIndex(i).status == ENodeStatus.SUCCESS && ChildAtIndex(i) is ConditionGraph)
+                    if (ChildAtIndex(i).status == ENodeStatus.SUCCESS && ChildAtIndex(i) is ConditionGraphNode)
                     {
                         ChildAtIndex(i).Reset();
                     }

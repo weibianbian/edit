@@ -5,9 +5,13 @@ using UnityEngine;
 namespace BT.Editor
 {
     [System.Serializable, NodeMenuItem("BT/Action/MoveTo")]
-    public class MoveToGraph : ActionGraphNode
+    public class MoveToGraphNode : ActionGraphNode
     {
         public BTMoveToActionData data = new BTMoveToActionData();
+        public MoveToGraphNode()
+        {
+            classData = typeof(BTMoveToAction);
+        }
         public override string name => "移动到指定地点";
        
         protected override void OnVisit()

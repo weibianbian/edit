@@ -4,9 +4,13 @@ using GraphProcessor;
 namespace BT.Editor
 {
     [System.Serializable, NodeMenuItem("BT/Action/Wait")]
-    public class ActionWaitGraph : ActionGraphNode
+    public class ActionWaitGraphNode : ActionGraphNode
     {
         public BTWaitNodeData data=new BTWaitNodeData();
+        public ActionWaitGraphNode()
+        {
+            classData = typeof(BTWaitAction);
+        }
         public override string name => "等待指定时间";
         protected override void OnVisit()
         {

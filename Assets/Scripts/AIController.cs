@@ -2,6 +2,14 @@
 
 public class AIController : MonoBehaviour
 {
+    public ScriptableObject so;
+    public void Start()
+    {
+        if (so == null)
+        {
+
+        }
+    }
     public void MoveToPosition(Vector3 pos)
     {
         GetComponent<MovementCompt>().MoveToPosition(pos);

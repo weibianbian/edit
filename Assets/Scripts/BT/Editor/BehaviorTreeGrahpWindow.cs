@@ -24,7 +24,7 @@ namespace BT.Editor
 
             graphView.Add(new BTToolbarView(graphView));
 
-            Debug.LogError("InitializeWindow");
+            Debug.LogError($"InitializeWindow  {(graph as BehaviorTreeGraph).behaviorTree}");
         }
         private void OnGUI()
         {
@@ -39,7 +39,6 @@ namespace BT.Editor
                 result = true;
             }
         }
-
     }
 
 }

@@ -4,8 +4,12 @@ using GraphProcessor;
 namespace BT.Editor
 {
     [System.Serializable, NodeMenuItem("BT/Decorator/Repeat")]
-    public class RepeatGraph : DecoratorGraphNode
+    public class RepeatGraphNode : DecoratorGraphNode
     {
+        public RepeatGraphNode()
+        {
+            classData = typeof(RepeatGraphNode);
+        }
         public override string name => "重复节点";
         protected override void OnVisit()
         {

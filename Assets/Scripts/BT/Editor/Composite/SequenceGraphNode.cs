@@ -6,6 +6,10 @@ namespace BT.Editor
     [System.Serializable, NodeMenuItem("BT/Composite/Sequence")]
     public class SequenceGraphNode : CompositieGraphNode
     {
+        public SequenceGraphNode()
+        {
+            classData = typeof(BTSequenceCompositieNode);
+        }
         public override string name => "序列节点";
         protected override void OnVisit()
         {

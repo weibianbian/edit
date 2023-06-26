@@ -4,8 +4,12 @@ using GraphProcessor;
 namespace BT.Editor
 {
     [System.Serializable, NodeMenuItem("BT/Decorator/FailReturn")]
-    public class FailReturnGraph : DecoratorGraphNode
+    public class FailReturnGraphNode : DecoratorGraphNode
     {
+        public FailReturnGraphNode()
+        {
+            classData = typeof(FailReturnGraphNode);
+        }
         protected override void OnVisit()
         {
             BehaviourGraphNode child= ChildAtIndex(0);

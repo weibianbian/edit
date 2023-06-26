@@ -1,12 +1,18 @@
 ﻿using BT.Runtime;
 using GraphProcessor;
+using UnityEditor.Experimental.GraphView;
 
 namespace BT.Editor
 {
     [System.Serializable, NodeMenuItem("BT/Composite/Selector")]
     public class SelectorGraphNode : CompositieGraphNode
     {
+        public SelectorGraphNode()
+        {
+            classData=typeof(BTSelectorCompositieNode);
+        }
         public override string name => "选择结点";
+       
         protected override void OnVisit()
         {
             if (status != ENodeStatus.RUNNING)

@@ -1,6 +1,8 @@
 using BT.Runtime;
 using GraphProcessor;
 using System;
+using System.Runtime.Remoting;
+using UnityEngine;
 
 namespace BT.Editor
 {
@@ -17,10 +19,30 @@ namespace BT.Editor
         [NonSerialized]
         public BTManager ownerTreeManager;
         public BTNode nodeInstance;
+        public Type classData;
         protected override void Enable()
         {
             base.Enable();
 
+        }
+        public override void OnNodeCreated()
+        {
+            onAfterEdgeConnected -= Action;
+            onAfterEdgeConnected += Action;
+            base.OnNodeCreated();
+            PostPlaceNewNode();
+
+        }
+        public void PostPlaceNewNode()
+        {
+            if (nodeInstance==null)
+            {
+                nodeInstance = Activator.CreateInstance(classData) as BTNode;
+            }
+        }
+        public void Action(SerializableEdge e)
+        {
+            UnityEngine.Debug.LogError($"{this}    {e.ToString()}");
         }
         public override bool isRenamable => true;
         protected int ChildCount

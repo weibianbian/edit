@@ -4,8 +4,12 @@ using GraphProcessor;
 namespace BT.Editor
 {
     [System.Serializable, NodeMenuItem("BT/Decorator/Loop")]
-    public class LoopGraph : DecoratorGraphNode
+    public class LoopGraphNode : DecoratorGraphNode
     {
+        public LoopGraphNode()
+        {
+            classData = typeof(LoopGraphNode);
+        }
         public int loop = 4;
         protected override void OnVisit()
         {
