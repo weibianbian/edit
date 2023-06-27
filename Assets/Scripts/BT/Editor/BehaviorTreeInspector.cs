@@ -13,10 +13,10 @@ namespace BT.Editor
         {
             base.CreateInspector();
 
-            root.Add(new Button(() => EditorWindow.GetWindow<BehaviorTreeGrahpWindow>().InitializeGraph(target as BehaviorTreeGraph))
-            {
-                text = "Open"
-            });
+            //root.Add(new Button(() => EditorWindow.GetWindow<BehaviorTreeGrahpWindow>().InitializeGraph(target as BehaviorTreeGraph))
+            //{
+            //    text = "Open"
+            //});
         }
     }
 

@@ -31,7 +31,7 @@ namespace BT.Editor
             switch (baseGraph)
             {
                 case BehaviorTreeGraph btGraph:
-                    EditorWindow.GetWindow<BehaviorTreeGrahpWindow>().InitializeGraph(btGraph);
+                    //EditorWindow.GetWindow<BehaviorTreeGrahpWindow>().InitializeGraph(btGraph);
                     break;
                 default:
                     break;

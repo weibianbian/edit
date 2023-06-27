@@ -1,41 +1,46 @@
-﻿using BT.Editor;
-using GraphProcessor;
+﻿using BT.Runtime;
+using System;
+using System.Collections.Generic;
 using UnityEditor;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace BT.Editor
 {
-    public class BehaviorTreeGraphView : BaseGraphView
+    public class BehaviorTreeGraphView : GraphView
     {
-        public Blackboard BlackboardInspector
+        BTCreateNodeMenuWindow createNodeMenu;
+        EditorWindow window;
+        public event Action initialized;
+        public BehaviorTreeGraphView(EditorWindow window) : base()
         {
-            get
-            {
-                if (_BlackboardInspectorViewer == null)
-                {
-                    _BlackboardInspectorViewer = ScriptableObject.CreateInstance<Blackboard>();
-                }
+            this.window = window;
+            createNodeMenu = ScriptableObject.CreateInstance<BTCreateNodeMenuWindow>();
+            createNodeMenu.Initialize(this, window);
+            this.StretchToParentSize();
+        }
+        public void Initialize(BehaviorTree graph)
+        {
+            InitializeGraphView();
 
-                return _BlackboardInspectorViewer;
+            initialized?.Invoke();
+        }
+        void InitializeGraphView()
+        {
+            nodeCreationRequest += OpenSearchWindow;
+        }
+        void OpenSearchWindow(NodeCreationContext c)
+        {
+            if (EditorWindow.focusedWindow == window)
+            {
+                SearchWindow.Open(new SearchWindowContext(c.screenMousePosition), createNodeMenu);
             }
         }
-        private Blackboard _BlackboardInspectorViewer;
-        public BehaviorTreeGraphView(EditorWindow window) : base(window)
+        public IEnumerable<(string path, Type type)> FilterCreateNodeMenuEntries()
         {
-        }
-        protected void BuildStackNodeContextualMenu(ContextualMenuPopulateEvent evt)
-        {
-            evt.menu.AppendSeparator();
-            Vector2 position =
-                (evt.currentTarget as VisualElement).ChangeCoordinatesTo(contentViewContainer, evt.localMousePosition);
-            evt.menu.AppendAction("New Stack", (e) => AddStackNode(new BaseStackNode(position)),
-                DropdownMenuAction.AlwaysEnabled);
-        }
-        public override void BuildContextualMenu(ContextualMenuPopulateEvent evt)
-        {
-            BuildStackNodeContextualMenu(evt);
-            base.BuildContextualMenu(evt);
+            foreach (var nodeMenuItem in TreeNodeProvider.GetNodeMenuEntries())
+                yield return nodeMenuItem;
         }
     }
 }
