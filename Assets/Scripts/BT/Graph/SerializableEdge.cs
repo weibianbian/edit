@@ -13,7 +13,7 @@ namespace BT.Graph
 		string			outputNodeGUID;
 
 		[System.NonSerialized]
-		public BehaviourGraphNode inputNode;
+		public BehaviorGraphNode inputNode;
 
 		[System.NonSerialized]
 		public NodePort	inputPort;
@@ -25,7 +25,7 @@ namespace BT.Graph
 		public object	passThroughBuffer;
 
 		[System.NonSerialized]
-		public BehaviourGraphNode outputNode;
+		public BehaviorGraphNode outputNode;
 
 		public string	inputFieldName;
 		public string	outputFieldName;

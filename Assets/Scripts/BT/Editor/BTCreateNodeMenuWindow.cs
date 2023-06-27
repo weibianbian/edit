@@ -4,6 +4,9 @@ using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UIElements;
 using System.Linq;
+using System;
+using BT.Runtime;
+using BT.Graph;
 
 namespace BT.Editor
 {
@@ -36,6 +39,11 @@ namespace BT.Editor
             var windowRoot = window.rootVisualElement;
             var windowMousePosition = windowRoot.ChangeCoordinatesTo(windowRoot.parent, context.screenMousePosition - window.position.position);
             var graphMousePosition = graphView.contentViewContainer.WorldToLocal(windowMousePosition);
+
+            var nodeType = SearchTreeEntry.userData is Type ? (Type)SearchTreeEntry.userData : ((TreeNodeProvider.PortDescription)SearchTreeEntry.userData).nodeType;
+            //graphView.RegisterCompleteObjectUndo("Added " + nodeType);
+            BehaviorGraphNode node= BehaviorGraphNode.CreateFromType(nodeType, graphMousePosition);
+            var view = graphView.AddNode(node);
             return true;
         }
         void CreateStandardNodeMenu(List<SearchTreeEntry> tree)

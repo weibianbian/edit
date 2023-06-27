@@ -1,4 +1,6 @@
-﻿using BT.Runtime;
+﻿using BT.Graph;
+using BT.Runtime;
+using GraphProcessor;
 using System;
 using System.Collections.Generic;
 using UnityEditor;
@@ -41,6 +43,26 @@ namespace BT.Editor
         {
             foreach (var nodeMenuItem in TreeNodeProvider.GetNodeMenuEntries())
                 yield return nodeMenuItem;
+        }
+        public BehaviorGraphNodeView AddNode(BehaviorGraphNode node)
+        {
+            return null;
+        }
+        public BehaviorGraphNodeView AddNodeView(BehaviorGraphNode node)
+        {
+            var viewType = TreeNodeProvider.GetNodeViewTypeFromType(node.GetType());
+
+            if (viewType == null)
+                viewType = typeof(BehaviorGraphNodeView);
+
+            var baseNodeView = Activator.CreateInstance(viewType) as BehaviorGraphNodeView;
+            baseNodeView.Initialize(this, node);
+            AddElement(baseNodeView);
+
+            nodeViews.Add(baseNodeView);
+            nodeViewsPerNode[node] = baseNodeView;
+
+            return baseNodeView;
         }
     }
 }

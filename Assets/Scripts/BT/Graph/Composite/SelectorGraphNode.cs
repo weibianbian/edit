@@ -20,7 +20,7 @@ namespace BT.Graph
             bool done = false;
             while (idx < ChildCount)
             {
-                BehaviourGraphNode child = ChildAtIndex(idx);
+                BehaviorGraphNode child = ChildAtIndex(idx);
                 child.Visit();
                 if (child.status == ENodeStatus.RUNNING || child.status == ENodeStatus.SUCCESS)
                 {

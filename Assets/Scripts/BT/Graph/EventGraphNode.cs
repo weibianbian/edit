@@ -2,7 +2,7 @@
 
 namespace BT.Graph
 {
-    public class EventGraphNode : BehaviourGraphNode
+    public class EventGraphNode : BehaviorGraphNode
     {
         public float priority = 0;
         bool triggered = false;

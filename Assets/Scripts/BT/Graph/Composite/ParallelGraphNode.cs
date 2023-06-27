@@ -32,7 +32,7 @@ namespace BT.Graph
             bool done = true;
             for (int i = 0; i < ChildCount; i++)
             {
-                BehaviourGraphNode child = ChildAtIndex(i);
+                BehaviorGraphNode child = ChildAtIndex(i);
                 if (child.status != ENodeStatus.SUCCESS)
                 {
                     child.Visit();

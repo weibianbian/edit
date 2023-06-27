@@ -4,10 +4,10 @@ using UnityEngine;
 namespace BT.Graph
 {
     [System.Serializable, TreeNodeMenuItem("BT/EntryNode")]
-    public class EntryGraphNode : BehaviourGraphNode
+    public class EntryGraphNode : BehaviorGraphNode
     {
         [Output("", false), Vertical]
-        public BehaviourGraphNode output;
+        public BehaviorGraphNode output;
         public override string name => "入口节点";
         public override Color color => Color.green;
         public EntryGraphNode()

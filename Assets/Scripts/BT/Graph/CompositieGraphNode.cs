@@ -3,12 +3,12 @@ using UnityEngine;
 
 namespace BT.Graph
 {
-    public class CompositieGraphNode : BehaviourGraphNode
+    public class CompositieGraphNode : BehaviorGraphNode
     {
         [Input(name = "", allowMultiple = false), Vertical]
-        public BehaviourGraphNode input;
+        public BehaviorGraphNode input;
         [Output("", true), Vertical]
-        public BehaviourGraphNode output;
+        public BehaviorGraphNode output;
         public override Color color => new Color(0.1f, 0.3f, 0.7f);
         public override void Reset()
         {

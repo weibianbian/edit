@@ -44,7 +44,7 @@ namespace BT.Graph
 	public class NodePort
 	{
 		public string				fieldName;
-		public BehaviourGraphNode owner;
+		public BehaviorGraphNode owner;
 		public FieldInfo			fieldInfo;
 		public PortData				portData;
 		List< SerializableEdge >	edges = new List< SerializableEdge >();
@@ -54,9 +54,9 @@ namespace BT.Graph
 
 		public delegate void PushDataDelegate();
 
-		public NodePort(BehaviourGraphNode owner, string fieldName, PortData portData) : this(owner, owner, fieldName, portData) {}
+		public NodePort(BehaviorGraphNode owner, string fieldName, PortData portData) : this(owner, owner, fieldName, portData) {}
 
-		public NodePort(BehaviourGraphNode owner, object fieldOwner, string fieldName, PortData portData)
+		public NodePort(BehaviorGraphNode owner, object fieldOwner, string fieldName, PortData portData)
 		{
 			this.fieldName = fieldName;
 			this.owner     = owner;
@@ -197,9 +197,9 @@ namespace BT.Graph
 	
 	public abstract class NodePortContainer : List< NodePort >
 	{
-		protected BehaviourGraphNode node;
+		protected BehaviorGraphNode node;
 
-		public NodePortContainer(BehaviourGraphNode node)
+		public NodePortContainer(BehaviorGraphNode node)
 		{
 			this.node = node;
 		}
@@ -234,7 +234,7 @@ namespace BT.Graph
 
 	public class NodeInputPortContainer : NodePortContainer
 	{
-		public NodeInputPortContainer(BehaviourGraphNode node) : base(node) {}
+		public NodeInputPortContainer(BehaviorGraphNode node) : base(node) {}
 
 		public void PullDatas()
 		{
@@ -244,7 +244,7 @@ namespace BT.Graph
 
 	public class NodeOutputPortContainer : NodePortContainer
 	{
-		public NodeOutputPortContainer(BehaviourGraphNode node) : base(node) {}
+		public NodeOutputPortContainer(BehaviorGraphNode node) : base(node) {}
 
 		public void PushDatas()
 		{

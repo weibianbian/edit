@@ -34,11 +34,11 @@ namespace BT.Editor
         }
         public static void LoadGraph()
         {
-         
+            
         }
         static void BuildGenericNodeCache()
         {
-            foreach (var nodeType in TypeCache.GetTypesDerivedFrom<BehaviourGraphNode>())
+            foreach (var nodeType in TypeCache.GetTypesDerivedFrom<BehaviorGraphNode>())
             {
                 if (!IsNodeAccessibleFromMenu(nodeType))
                     continue;
@@ -72,7 +72,7 @@ namespace BT.Editor
         }
         static void ProvideNodePortCreationDescription(Type nodeType, NodeDescriptions targetDescription)
         {
-            var node = Activator.CreateInstance(nodeType) as BehaviourGraphNode;
+            var node = Activator.CreateInstance(nodeType) as BehaviorGraphNode;
             try
             {
                 //SetGraph.SetValue(node, graph);
@@ -103,6 +103,28 @@ namespace BT.Editor
         {
             foreach (var node in genericNodes.nodePerMenuTitle)
                 yield return (node.Key, node.Value);
+        }
+        public static Type GetNodeViewTypeFromType(Type nodeType)
+        {
+            Type view;
+
+            if (nodeViewPerType.TryGetValue(nodeType, out view))
+                return view;
+
+            Type baseType = null;
+
+            // Allow for inheritance in node views: multiple C# node using the same view
+            foreach (var type in nodeViewPerType)
+            {
+                // Find a view (not first fitted view) of nodeType
+                if (nodeType.IsSubclassOf(type.Key) && (baseType == null || type.Value.IsSubclassOf(baseType)))
+                    baseType = type.Value;
+            }
+
+            if (baseType != null)
+                return baseType;
+
+            return view;
         }
     }
 

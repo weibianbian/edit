@@ -5,10 +5,10 @@ using UnityEngine;
 namespace BT.Graph
 {
     [System.Serializable]
-    public abstract class ActionGraphNode : BehaviourGraphNode
+    public abstract class ActionGraphNode : BehaviorGraphNode
     {
         [Input(name = "", allowMultiple = false), Vertical]
-        public BehaviourGraphNode input;
+        public BehaviorGraphNode input;
         public Action action;
         //public Blackboard Blackboard
         //{

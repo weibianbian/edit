@@ -1,19 +1,16 @@
 ﻿using BT.Graph;
-using GraphProcessor;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
-
+using NodeView = UnityEditor.Experimental.GraphView.Node;
 namespace BT.Editor
 {
-    [NodeCustomEditor(typeof(BehaviourGraphNode))]
-    public class BehaviourGraphNodeView : BaseNodeView
+    public class BehaviorGraphNodeView : NodeView
     {
         Label returnLabel;
         private bool isRuned;//节点运行过。
-        public override void Enable()
+        public void Enable()
         {
-            base.Enable();
             returnLabel = new Label();
             returnLabel.style.color = Color.black;
             returnLabel.style.fontSize = 14;
@@ -22,7 +19,6 @@ namespace BT.Editor
             SetLineColorByEnable();
             EditorApplication.playModeStateChanged -= OnPlayModeStateChanged;
             EditorApplication.playModeStateChanged += OnPlayModeStateChanged;
-            RegisterCallback<GeometryChangedEvent>(OnGeometryChangedEvent);
         }
         protected void OnGeometryChangedEvent(GeometryChangedEvent evt)
         {
@@ -76,17 +72,17 @@ namespace BT.Editor
         }
         private void SetLineColorByEnable()
         {
-            if (inputPortViews.Count > 0)
-            {
-                var edges = inputPortViews[0]?.GetEdges();
-                if (edges?.Count > 0)
-                {
-                    Color color = Color.white;
-                    //edges[0].output.portColor = color;
-                    edges[0].input.portColor = color;
-                    edges[0].OnSelected();
-                }
-            }
+            //if (inputPortViews.Count > 0)
+            //{
+            //    var edges = inputPortViews[0]?.GetEdges();
+            //    if (edges?.Count > 0)
+            //    {
+            //        Color color = Color.white;
+            //        //edges[0].output.portColor = color;
+            //        edges[0].input.portColor = color;
+            //        edges[0].OnSelected();
+            //    }
+            //}
         }
         public void SetRunningState()
         {
@@ -160,10 +156,10 @@ namespace BT.Editor
         public override void OnSelected()
         {
             base.OnSelected();
-            if (owner == null)
-            {
-                return;
-            }
+            //if (owner == null)
+            //{
+            //    return;
+            //}
             //UnityEngine.Debug.Log(owner.GetPinnedElementStatus<NodeInspectorView>());
             //if (owner.GetPinnedElementStatus<NodeInspectorView>()== UnityEngine.UIElements.DropdownMenuAction.Status.Normal)
             //{
@@ -173,10 +169,10 @@ namespace BT.Editor
         public override void OnUnselected()
         {
             base.OnUnselected();
-            if (owner == null)
-            {
-                return;
-            }
+            //if (owner == null)
+            //{
+            //    return;
+            //}
             //if (owner.GetPinnedElementStatus<NodeInspectorView>() != UnityEngine.UIElements.DropdownMenuAction.Status.Hidden)
             //{
             //    owner.ToggleView<NodeInspectorView>();

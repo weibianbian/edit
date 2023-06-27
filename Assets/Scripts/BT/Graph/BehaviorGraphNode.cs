@@ -5,14 +5,14 @@ using UnityEngine;
 namespace BT.Graph
 {
     [System.Serializable]
-    public abstract class BehaviourGraphNode
+    public abstract class BehaviorGraphNode
     {
         public string GUID;
         [NonSerialized]
         public readonly NodeInputPortContainer inputPorts;
         [NonSerialized]
         public readonly NodeOutputPortContainer outputPorts;
-        public BehaviourGraphNode parent;
+        public BehaviorGraphNode parent;
         public ENodeStatus status = ENodeStatus.READY;
         public ENodeStatus lastResult = ENodeStatus.READY;
         public float nextUpdateTick = 0;
@@ -22,9 +22,15 @@ namespace BT.Graph
         public BTManager ownerTreeManager;
         public BTNode nodeInstance;
         public Type classData;
-        
+        public Rect position;
+
         public virtual Color color => new Color(0.1f, 0.3f, 0.7f);
         public virtual string name => "";
+
+        public virtual void OnNodeCreated()
+        {
+
+        }
         public void PostPlaceNewNode()
         {
             if (nodeInstance==null)
@@ -48,7 +54,7 @@ namespace BT.Graph
             }
         }
 
-        protected BehaviourGraphNode ChildAtIndex(int index)
+        protected BehaviorGraphNode ChildAtIndex(int index)
         {
             //if (outputPorts.Count > 0)
             //{
@@ -69,7 +75,7 @@ namespace BT.Graph
         {
 
         }
-        public virtual void DoToParents(Action<BehaviourGraphNode> fn)
+        public virtual void DoToParents(Action<BehaviorGraphNode> fn)
         {
             if (parent != null)
             {
@@ -117,6 +123,19 @@ namespace BT.Graph
         public virtual BTNodeDataBase GetNodeData()
         {
             return null;
+        }
+        public static BehaviorGraphNode CreateFromType(Type nodeType, Vector2 position)
+        {
+            if (!nodeType.IsSubclassOf(typeof(BehaviorGraphNode)))
+                return null;
+
+            var node = Activator.CreateInstance(nodeType) as BehaviorGraphNode;
+
+            //node.position = new Rect(position, new Vector2(100, 100));
+
+            node.OnNodeCreated();
+
+            return node;
         }
     }
 }

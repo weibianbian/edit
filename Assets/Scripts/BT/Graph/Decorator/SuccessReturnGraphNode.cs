@@ -11,7 +11,7 @@ namespace BT.Graph
         }
         protected override void OnVisit()
         {
-            BehaviourGraphNode child = ChildAtIndex(0);
+            BehaviorGraphNode child = ChildAtIndex(0);
             child.Visit();
             if (child.status != ENodeStatus.RUNNING)
             {
