@@ -1,9 +1,8 @@
 ﻿using BT.Runtime;
-using GraphProcessor;
 
 namespace BT.Graph
 {
-    [System.Serializable, NodeMenuItem("BT/Action/FaceEntity")]
+    [System.Serializable, TreeNodeMenuItem("BT/Action/FaceEntity")]
     public class FaceEntityGraphNode : ActionGraphNode
     {
         public FaceEntityGraphNode()

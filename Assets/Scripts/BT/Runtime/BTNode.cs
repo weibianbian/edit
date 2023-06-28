@@ -1,10 +1,12 @@
 ﻿using System;
+using UnityEngine;
 
 namespace BT.Runtime
 {
-    public abstract class BTNode
+    [Serializable]
+    public class BTNode : ISerializationCallbackReceiver
     {
-        public BTNode parent;
+        public BTCompositieNode parentNode;
         public ENodeStatus status = ENodeStatus.READY;
         public ENodeStatus lastResult = ENodeStatus.READY;
         public float nextUpdateTick = 0;
@@ -21,10 +23,10 @@ namespace BT.Runtime
         }
         public virtual void DoToParents(Action<BTNode> fn)
         {
-            if (parent != null)
+            if (parentNode != null)
             {
-                fn(parent);
-                parent.DoToParents(fn);
+                fn(parentNode);
+                parentNode.DoToParents(fn);
             }
         }
         public virtual void Step()
@@ -48,6 +50,16 @@ namespace BT.Runtime
         public virtual BTNodeDataBase GetNodeData()
         {
             return null;
+        }
+
+        public virtual void OnBeforeSerialize()
+        {
+            Debug.Log("OnBeforeSerialize");
+        }
+
+        public virtual void OnAfterDeserialize()
+        {
+            Debug.Log("OnAfterDeserialize");
         }
     }
 }

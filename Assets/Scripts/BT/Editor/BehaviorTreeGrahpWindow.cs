@@ -1,8 +1,4 @@
-using BT.Runtime;
-using GraphProcessor;
-using System.Linq;
 using UnityEditor;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -19,7 +15,8 @@ namespace BT.Editor
         }
         protected VisualElement rootView;
         protected BehaviorTreeGraphView graphView;
-        protected BehaviorTree treeAsset;
+        
+       
 
         readonly string graphWindowStyle= "GraphProcessorStyles/BaseGraphView";
         public void OnEnable()
@@ -39,21 +36,20 @@ namespace BT.Editor
 
             rootView.name = "graphRootView";
 
-            titleContent = new GUIContent("BehaviorTree Graph",
-                AssetDatabase.LoadAssetAtPath<Texture2D>($"{GraphCreateAndSaveHelper.NodeGraphProcessorPathPrefix}/Editor/Icon_Dark.png"));
-            rootView.styleSheets.Add(Resources.Load<StyleSheet>(graphWindowStyle));
+            titleContent = new GUIContent("BehaviorTree Graph");
+            //    AssetDatabase.LoadAssetAtPath<Texture2D>($"{GraphCreateAndSaveHelper.NodeGraphProcessorPathPrefix}/Editor/Icon_Dark.png"));
+            //rootView.styleSheets.Add(Resources.Load<StyleSheet>(graphWindowStyle));
         }
         void LoadGraph()
         {
-            InitializeGraph(null);
+            InitializeGraph();
         }
-        public void InitializeGraph(BehaviorTree graph)
+        public void InitializeGraph()
         {
-            treeAsset=graph;
-            InitializeWindow(graph);
-            graphView.Initialize(graph);
+            InitializeWindow();
+            graphView.Initialize();
         }
-        protected void InitializeWindow(BehaviorTree graph)
+        protected void InitializeWindow()
         {
             graphView = new BehaviorTreeGraphView(this)
             {

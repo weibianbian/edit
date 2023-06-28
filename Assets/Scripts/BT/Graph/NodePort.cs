@@ -1,15 +1,14 @@
-using System.Linq;
-using System.Collections.Generic;
-using System.Collections;
-using UnityEngine;
-using System.Reflection;
-using System.Linq.Expressions;
 using System;
-using GraphProcessor;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
+using System.Reflection;
+using UnityEngine;
 
 namespace BT.Graph
 {
-	public class PortData : IEquatable< PortData >
+    public class PortData : IEquatable< PortData >
 	{
 		public string	identifier;
 		public string	displayName;
@@ -85,36 +84,37 @@ namespace BT.Graph
 
 		PushDataDelegate CreatePushDataDelegateForEdge(SerializableEdge edge)
 		{
-			try
-			{
-				//Creation of the delegate to move the data from the input node to the output node:
-				FieldInfo inputField = edge.inputNode.GetType().GetField(edge.inputFieldName, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
-				FieldInfo outputField = edge.outputNode.GetType().GetField(edge.outputFieldName, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
-				Type inType, outType;
-				Expression inputParamField = Expression.Field(Expression.Constant(edge.inputNode), inputField);
-				Expression outputParamField = Expression.Field(Expression.Constant(edge.outputNode), outputField);
-				inType = edge.inputPort.portData.displayType ?? inputField.FieldType;
-				outType = edge.outputPort.portData.displayType ?? outputField.FieldType;
+			//try
+			//{
+			//	//Creation of the delegate to move the data from the input node to the output node:
+			//	FieldInfo inputField = edge.inputNode.GetType().GetField(edge.inputFieldName, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+			//	FieldInfo outputField = edge.outputNode.GetType().GetField(edge.outputFieldName, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+			//	Type inType, outType;
+			//	Expression inputParamField = Expression.Field(Expression.Constant(edge.inputNode), inputField);
+			//	Expression outputParamField = Expression.Field(Expression.Constant(edge.outputNode), outputField);
+			//	inType = edge.inputPort.portData.displayType ?? inputField.FieldType;
+			//	outType = edge.outputPort.portData.displayType ?? outputField.FieldType;
 
-				// If there is a user defined convertion function, then we call it
-				if (TypeAdapter.AreAssignable(outType, inType))
-				{
-					// We add a cast in case there we're calling the conversion method with a base class parameter (like object)
-					var convertedParam = Expression.Convert(outputParamField, outType);
-					outputParamField = Expression.Call(TypeAdapter.GetConvertionMethod(outType, inType), convertedParam);
-					// In case there is a custom port behavior in the output, then we need to re-cast to the base type because
-					// the convertion method return type is not always assignable directly:
-					outputParamField = Expression.Convert(outputParamField, inputField.FieldType);
-				}
-				else // otherwise we cast
-					outputParamField = Expression.Convert(outputParamField, inputField.FieldType);
+			//	// If there is a user defined convertion function, then we call it
+			//	if (TypeAdapter.AreAssignable(outType, inType))
+			//	{
+			//		// We add a cast in case there we're calling the conversion method with a base class parameter (like object)
+			//		var convertedParam = Expression.Convert(outputParamField, outType);
+			//		outputParamField = Expression.Call(TypeAdapter.GetConvertionMethod(outType, inType), convertedParam);
+			//		// In case there is a custom port behavior in the output, then we need to re-cast to the base type because
+			//		// the convertion method return type is not always assignable directly:
+			//		outputParamField = Expression.Convert(outputParamField, inputField.FieldType);
+			//	}
+			//	else // otherwise we cast
+			//		outputParamField = Expression.Convert(outputParamField, inputField.FieldType);
 
-				BinaryExpression assign = Expression.Assign(inputParamField, outputParamField);
-				return Expression.Lambda< PushDataDelegate >(assign).Compile();
-			} catch (Exception e) {
-				Debug.LogError(e);
-				return null;
-			}
+			//	BinaryExpression assign = Expression.Assign(inputParamField, outputParamField);
+			//	return Expression.Lambda< PushDataDelegate >(assign).Compile();
+			//} catch (Exception e) {
+			//	Debug.LogError(e);
+			//	return null;
+			//}
+			return null;
 		}
 
 		/// <summary>
@@ -186,9 +186,9 @@ namespace BT.Graph
 				var passThroughObject = edges.First().passThroughBuffer;
 
 				// We do an extra convertion step in case the buffer output is not compatible with the input port
-				if (passThroughObject != null)
-					if (TypeAdapter.AreAssignable(fieldInfo.FieldType, passThroughObject.GetType()))
-						passThroughObject = TypeAdapter.Convert(passThroughObject, fieldInfo.FieldType);
+				//if (passThroughObject != null)
+				//	if (TypeAdapter.AreAssignable(fieldInfo.FieldType, passThroughObject.GetType()))
+				//		passThroughObject = TypeAdapter.Convert(passThroughObject, fieldInfo.FieldType);
 
 				fieldInfo.SetValue(fieldOwner, passThroughObject);
 			}

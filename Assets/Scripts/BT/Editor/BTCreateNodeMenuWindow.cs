@@ -40,12 +40,33 @@ namespace BT.Editor
             var windowMousePosition = windowRoot.ChangeCoordinatesTo(windowRoot.parent, context.screenMousePosition - window.position.position);
             var graphMousePosition = graphView.contentViewContainer.WorldToLocal(windowMousePosition);
 
-            var nodeType = SearchTreeEntry.userData is Type ? (Type)SearchTreeEntry.userData : ((TreeNodeProvider.PortDescription)SearchTreeEntry.userData).nodeType;
+            var nodeType = SearchTreeEntry.userData is Type ? (Type)SearchTreeEntry.userData : ((BTNodeProvider.PortDescription)SearchTreeEntry.userData).nodeType;
             //graphView.RegisterCompleteObjectUndo("Added " + nodeType);
-            BehaviorGraphNode node= BehaviorGraphNode.CreateFromType(nodeType, graphMousePosition);
-            var view = graphView.AddNode(node);
+            BehaviorGraphNodeView nodeView=new  BehaviorGraphNodeView();
+            graphView.AddNode(nodeView);
+            nodeView.classData = new GraphNodeClassData();
+            nodeView.classData.classType = nodeType;
+            nodeView.PostPlaceNewNode();
+            nodeView.SetPosition(new Rect(graphMousePosition, new Vector2(100, 100)));
+            //BTNode node= BehaviorGraphNode.CreateFromType(nodeType, graphMousePosition);
+            //nodeView.position = ;
             return true;
         }
+
+        public static BehaviorGraphNode CreateFromType(Type nodeType, Vector2 position)
+        {
+            if (!nodeType.IsSubclassOf(typeof(BehaviorGraphNode)))
+                return null;
+
+            var node = Activator.CreateInstance(nodeType) as BehaviorGraphNode;
+
+            //node.position = new Rect(position, new Vector2(100, 100));
+
+            node.OnNodeCreated();
+
+            return node;
+        }
+
         void CreateStandardNodeMenu(List<SearchTreeEntry> tree)
         {
             // Sort menu by alphabetical order and submenus

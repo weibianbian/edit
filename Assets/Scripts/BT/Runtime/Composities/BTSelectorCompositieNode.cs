@@ -1,5 +1,6 @@
 ﻿namespace BT.Runtime
 {
+    [System.Serializable, TreeNodeMenuItem("BT/Composite/Selector")]
     public class BTSelectorCompositieNode : BTCompositieNode
     {
         protected override void OnVisit()

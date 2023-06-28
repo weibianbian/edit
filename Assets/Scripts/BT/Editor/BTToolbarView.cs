@@ -1,9 +1,11 @@
-﻿using System;
+﻿using BT.Runtime;
+using System;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
+using static Codice.CM.WorkspaceServer.WorkspaceTreeDataStore;
 
 namespace BT.Editor
 {
@@ -18,32 +20,26 @@ namespace BT.Editor
             Custom,
             FlexibleSpace,
         }
-       
+
         public BTToolbarView(BehaviorTreeGraphView graphView)
         {
-            graphView.initialized += () => {
+            graphView.initialized += () =>
+            {
                 AddButtons();
             };
             this.StretchToParentSize();
         }
         protected void AddButtons()
         {
-            AddButton("Center",null);
-            //AddButton(new GUIContent("Blackboard", "黑板"),
-            //    () =>
-            //    {
-            //        Selection.activeObject = (graphView as BehaviorTreeGraphView).BlackboardInspector;
-            //    }, false);
+            AddButton("Center", () => { }, TextAnchor.MiddleLeft);
+            AddButton("CreateBehaviorTree", CreateBehaviorTree, TextAnchor.MiddleLeft);
         }
-        protected void AddButton(string name, Action callback, bool left = true)
-            => AddButton(new GUIContent(name), callback, left);
-
-        protected void AddButton(GUIContent content, Action callback, bool left = true)
+        protected void AddButton(string content, Action callback, TextAnchor anchor)
         {
-            var centerButton = new ToolbarButton(() => { });
-            centerButton.style.unityTextAlign = TextAnchor.MiddleLeft;
-            centerButton.text = "Center";
-            Add(centerButton);
+            var btn = new ToolbarButton(callback);
+            btn.style.unityTextAlign = TextAnchor.MiddleLeft;
+            btn.text = content;
+            Add(btn);
         }
         //public override void UpdateButtonStatus()
         //{
@@ -51,6 +47,12 @@ namespace BT.Editor
         //    //if (showNodeInspector != null)
         //    //    showNodeInspector.value = graphView.GetPinnedElementStatus<NodeInspectorView>() != UnityEngine.UIElements.DropdownMenuAction.Status.Hidden;
         //}
+        public void CreateBehaviorTree()
+        {
+            Debug.Log("CreateBehaviorTree");
+            BehaviorTree tree=new BehaviorTree();
+
+        }
         protected virtual void DrawImGUIToolbar()
         {
             //GUILayout.BeginHorizontal(EditorStyles.toolbar);

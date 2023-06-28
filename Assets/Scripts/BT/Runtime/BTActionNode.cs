@@ -2,7 +2,7 @@
 
 namespace BT.Runtime
 {
-    public abstract class BTActionNode : BTNode
+    public class BTActionNode : BTNode
     {
         public Action action;
         protected override void OnVisit()
@@ -11,6 +11,7 @@ namespace BT.Runtime
             status = ENodeStatus.SUCCESS;
         }
     }
+    [Serializable]
     public class BTMoveTo : BTActionNode
     {
         public BTMoveToActionData data = new BTMoveToActionData();

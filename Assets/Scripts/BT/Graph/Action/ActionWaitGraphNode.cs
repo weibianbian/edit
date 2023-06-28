@@ -1,9 +1,8 @@
 ﻿using BT.Runtime;
-using GraphProcessor;
 
 namespace BT.Graph
 {
-    [System.Serializable, NodeMenuItem("BT/Action/Wait")]
+    [System.Serializable, TreeNodeMenuItem("BT/Action/Wait")]
     public class ActionWaitGraphNode : ActionGraphNode
     {
         public BTWaitNodeData data=new BTWaitNodeData();

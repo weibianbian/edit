@@ -1,6 +1,4 @@
-﻿using BT.Graph;
-using BT.Runtime;
-using GraphProcessor;
+﻿using BT.Runtime;
 using System;
 using System.Collections.Generic;
 using UnityEditor;
@@ -14,15 +12,34 @@ namespace BT.Editor
     {
         BTCreateNodeMenuWindow createNodeMenu;
         EditorWindow window;
+        public BehaviorTree treeAsset;
         public event Action initialized;
+
+        public List<BehaviorGraphNodeView> nodeViews=new List<BehaviorGraphNodeView>();
         public BehaviorTreeGraphView(EditorWindow window) : base()
         {
             this.window = window;
+
+            InitializeManipulators();
+            //实现放大或者缩小
+            SetupZoom(0.05f, 2f);
+
             createNodeMenu = ScriptableObject.CreateInstance<BTCreateNodeMenuWindow>();
             createNodeMenu.Initialize(this, window);
             this.StretchToParentSize();
         }
-        public void Initialize(BehaviorTree graph)
+        protected virtual void InitializeManipulators()
+        {
+            ///添加拖拽
+            this.AddManipulator(new SelectionDragger());
+            ///添加框选
+            this.AddManipulator(new RectangleSelector());
+            //添加点击选择
+            this.AddManipulator(new ClickSelector());
+            //添加区域选择
+            this.AddManipulator(new ContentDragger());
+        }
+        public void Initialize()
         {
             InitializeGraphView();
 
@@ -41,29 +58,24 @@ namespace BT.Editor
         }
         public IEnumerable<(string path, Type type)> FilterCreateNodeMenuEntries()
         {
-            foreach (var nodeMenuItem in TreeNodeProvider.GetNodeMenuEntries())
+            foreach (var nodeMenuItem in BTNodeProvider.GetNodeMenuEntries())
                 yield return nodeMenuItem;
         }
-        public BehaviorGraphNodeView AddNode(BehaviorGraphNode node)
+        public void AddNode(BehaviorGraphNodeView node)
         {
-            return null;
+            //var viewType = BTNodeProvider.GetNodeViewTypeFromType(node.GetType());
+
+            //if (viewType == null)
+            //    viewType = typeof(BehaviorGraphNodeView);
+
+            //var baseNodeView = Activator.CreateInstance(viewType) as BehaviorGraphNodeView;
+            //baseNodeView.Initialize(this, node);
+            AddElement(node);
+
+            nodeViews.Add(node);
+            //nodeViewsPerNode[node] = baseNodeView;
         }
-        public BehaviorGraphNodeView AddNodeView(BehaviorGraphNode node)
-        {
-            var viewType = TreeNodeProvider.GetNodeViewTypeFromType(node.GetType());
-
-            if (viewType == null)
-                viewType = typeof(BehaviorGraphNodeView);
-
-            var baseNodeView = Activator.CreateInstance(viewType) as BehaviorGraphNodeView;
-            baseNodeView.Initialize(this, node);
-            AddElement(baseNodeView);
-
-            nodeViews.Add(baseNodeView);
-            nodeViewsPerNode[node] = baseNodeView;
-
-            return baseNodeView;
-        }
+        
     }
 }
 

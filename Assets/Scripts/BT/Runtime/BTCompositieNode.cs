@@ -1,10 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using Unity.VisualScripting;
 
 namespace BT.Runtime
 {
+    [Serializable]
     public class BTCompositieNode : BTNode
     {
-        protected List<BTNode> childrens = new List<BTNode>();
+        public List<BTNode> childrens = new List<BTNode>();
         public override void Reset()
         {
             base.Reset();

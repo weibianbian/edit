@@ -3,13 +3,9 @@ using UnityEngine;
 
 public class AIController : MonoBehaviour
 {
-    public BehaviorTreeGraph so;
     public void Start()
     {
-        if (so == null)
-        {
-            LoadTree(so.behaviorTree);
-        }
+       
     }
     public void MoveToPosition(Vector3 pos)
     {

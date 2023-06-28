@@ -1,10 +1,7 @@
-﻿using System;
-
-namespace BT.Runtime
+﻿namespace BT.Runtime
 {
-    [Serializable]
     public class BehaviorTree
     {
-        public BTCompositieNode entryNode;
+        public BTCompositieNode entryNode=new BTCompositieNode();
     }
 }

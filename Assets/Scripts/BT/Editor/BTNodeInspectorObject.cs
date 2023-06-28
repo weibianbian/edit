@@ -1,10 +1,4 @@
-﻿using GraphProcessor;
-using System.Collections.Generic;
-using UnityEditor;
-using UnityEngine;
-using UnityEngine.UIElements;
-
-namespace BT.Editor
+﻿namespace BT.Editor
 {
     //[CustomEditor(typeof(BTNodeInspectorObject))]
     //public class BTNodeInspectorObjectEditor : NodeInspectorObjectEditor

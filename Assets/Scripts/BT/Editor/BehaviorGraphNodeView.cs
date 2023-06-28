@@ -1,14 +1,68 @@
-﻿using BT.Graph;
+﻿using BT.Runtime;
+using System;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
 using NodeView = UnityEditor.Experimental.GraphView.Node;
+using Status = UnityEngine.UIElements.DropdownMenuAction.Status;
 namespace BT.Editor
 {
+    public class GraphNodeClassData
+    {
+        public Type classType;
+
+    }
     public class BehaviorGraphNodeView : NodeView
     {
         Label returnLabel;
         private bool isRuned;//节点运行过。
+        public BTNode nodeInstance;
+        public GraphNodeClassData classData;
+        public VisualElement controlsContainer;
+        protected VisualElement debugContainer;
+        protected VisualElement rightTitleContainer;
+        protected VisualElement topPortContainer;
+        protected VisualElement bottomPortContainer;
+        private VisualElement inputContainerElement;
+        public void Initialize()
+        {
+            InitializeView();
+        }
+        void InitializeView()
+        {
+            controlsContainer = new VisualElement { name = "controls" };
+            controlsContainer.AddToClassList("NodeControls");
+            mainContainer.Add(controlsContainer);
+            rightTitleContainer = new VisualElement { name = "RightTitleContainer" };
+            titleContainer.Add(rightTitleContainer);
+
+            topPortContainer = new VisualElement { name = "TopPortContainer" };
+            this.Insert(0, topPortContainer);
+
+            bottomPortContainer = new VisualElement { name = "BottomPortContainer" };
+            this.Add(bottomPortContainer);
+        }
+        public override void BuildContextualMenu(ContextualMenuPopulateEvent evt)
+        {
+            evt.menu.AppendAction("Open Node Script", (e) => { }, OpenNodeScriptStatus);
+            evt.menu.AppendAction("Open Node View Script", (e) => { }, OpenNodeScriptStatus);
+            evt.menu.AppendAction("Debug", (e) => { }, OpenNodeScriptStatus);
+        }
+        Status OpenNodeScriptStatus(DropdownMenuAction action)
+        {
+            //if (TreeNodeProvider.GetNodeScript(nodeTarget.GetType()) != null)
+            //    return Status.Normal;
+            return Status.Disabled;
+        }
+        public void PostPlaceNewNode()
+        {
+            if (nodeInstance == null)
+            {
+                nodeInstance = Activator.CreateInstance(classData.classType) as BTNode;
+            }
+            Initialize();
+        }
+        
         public void Enable()
         {
             returnLabel = new Label();
