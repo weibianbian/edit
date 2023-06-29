@@ -61,37 +61,6 @@ namespace BT.Editor
                 foreach (var attr in attrs)
                     targetDescription.nodePerMenuTitle[attr.menuTitle] = nodeType;
             }
-
-            ProvideNodePortCreationDescription(nodeType, targetDescription);
-        }
-        static void ProvideNodePortCreationDescription(Type nodeType, NodeDescriptions targetDescription)
-        {
-            var node = Activator.CreateInstance(nodeType) as BTNode;
-            try
-            {
-                //SetGraph.SetValue(node, graph);
-                //node.InitializePorts();
-                //node.UpdateAllPorts();
-            }
-            catch (Exception) { }
-
-            foreach (var p in node.inputPorts)
-                AddPort(p, true);
-            foreach (var p in node.outputPorts)
-                AddPort(p, false);
-
-            void AddPort(NodePort p, bool input)
-            {
-                targetDescription.nodeCreatePortDescription.Add(new PortDescription
-                {
-                    nodeType = nodeType,
-                    portType = p.portData.displayType ?? p.fieldInfo.FieldType,
-                    isInput = input,
-                    portFieldName = p.fieldName,
-                    portDisplayName = p.portData.displayName ?? p.fieldName,
-                    portIdentifier = p.portData.identifier,
-                });
-            }
         }
         public static IEnumerable<(string path, Type type)> GetNodeMenuEntries()
         {

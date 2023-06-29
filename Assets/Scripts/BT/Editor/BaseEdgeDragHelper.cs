@@ -66,7 +66,8 @@ namespace BT.Editor
             draggedPort.portCapLit = true;
             compatiblePorts.Clear();
 
-            foreach (NodePortView port in graphView.GetCompatiblePorts(draggedPort, nodeAdapter))
+            List<Port> ports= graphView.GetCompatiblePorts(draggedPort, nodeAdapter);
+            foreach (NodePortView port in ports)
             {
                 compatiblePorts.TryGetValue(port.owner, out var portList);
                 if (portList == null)
@@ -320,6 +321,60 @@ namespace BT.Editor
         }
         public override void Reset(bool didConnect = false)
         {
+            if (compatiblePorts != null && graphView != null)
+            {
+                // Reset the highlights.
+                graphView.ports.ForEach((p) => {
+                    p.OnStopEdgeDragging();
+                });
+                compatiblePorts.Clear();
+            }
+
+            // Clean up ghost edge.
+            if ((ghostEdge != null) && (graphView != null))
+            {
+                var pv = ghostEdge.input as NodePortView;
+                graphView.schedule.Execute(() => {
+                    pv.portCapLit = false;
+                    // pv.UpdatePortView(pv.portData);
+                }).ExecuteLater(10);
+                graphView.RemoveElement(ghostEdge);
+            }
+
+            if (wasPanned)
+            {
+                if (!resetPositionOnPan || didConnect)
+                {
+                    Vector3 p = graphView.contentViewContainer.transform.position;
+                    Vector3 s = graphView.contentViewContainer.transform.scale;
+                    graphView.UpdateViewTransform(p, s);
+                }
+            }
+
+            if (panSchedule != null)
+                panSchedule.Pause();
+
+            if (ghostEdge != null)
+            {
+                ghostEdge.input = null;
+                ghostEdge.output = null;
+            }
+
+            if (draggedPort != null && !didConnect)
+            {
+                draggedPort.portCapLit = false;
+                draggedPort = null;
+            }
+
+            if (edgeCandidate != null)
+            {
+                edgeCandidate.SetEnabled(true);
+            }
+
+            ghostEdge = null;
+            edgeCandidate = null;
+
+            graphView = null;
         }
         private void Pan(TimerState ts)
         {
