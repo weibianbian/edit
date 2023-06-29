@@ -10,7 +10,8 @@ namespace BT.Editor
 {
     public class BehaviorTreeGraphView : GraphView
     {
-        BTCreateNodeMenuWindow createNodeMenu;
+        public BaseEdgeConnectorListener connectorListener;
+        public BTCreateNodeMenuWindow createNodeMenu;
         EditorWindow window;
         public BehaviorTree treeAsset;
         public event Action initialized;
@@ -43,6 +44,8 @@ namespace BT.Editor
         }
         public void Initialize()
         {
+            connectorListener = CreateEdgeConnectorListener();
+
             InitializeGraphView();
 
             initialized?.Invoke();
@@ -63,21 +66,18 @@ namespace BT.Editor
             foreach (var nodeMenuItem in BTNodeProvider.GetNodeMenuEntries())
                 yield return nodeMenuItem;
         }
-        public void AddNode(BehaviorGraphNodeView node)
+        public BehaviorGraphNodeView AddNode(Type nodeType)
         {
-            //var viewType = BTNodeProvider.GetNodeViewTypeFromType(node.GetType());
-
-            //if (viewType == null)
-            //    viewType = typeof(BehaviorGraphNodeView);
-
-            //var baseNodeView = Activator.CreateInstance(viewType) as BehaviorGraphNodeView;
-            //baseNodeView.Initialize(this, node);
-            AddElement(node);
-
-            nodeViews.Add(node);
-            //nodeViewsPerNode[node] = baseNodeView;
+            BehaviorGraphNodeView nodeView = new BehaviorGraphNodeView();
+            nodeView.owner = this;
+            nodeView.classData = new GraphNodeClassData();
+            nodeView.classData.classType = nodeType;
+            AddElement(nodeView);
+            nodeViews.Add(nodeView);
+            return nodeView;
         }
-        
+        protected virtual BaseEdgeConnectorListener CreateEdgeConnectorListener()
+         => new BaseEdgeConnectorListener(this);
     }
 }
 

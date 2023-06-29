@@ -8,14 +8,16 @@ using UnityEngine.UIElements;
 
 namespace BT.Editor
 {
-    class BTCreateNodeMenuWindow : ScriptableObject, ISearchWindowProvider
+    public class BTCreateNodeMenuWindow : ScriptableObject, ISearchWindowProvider
     {
         BehaviorTreeGraphView graphView;
         EditorWindow window;
-        public void Initialize(BehaviorTreeGraphView graphView, EditorWindow window)
+        EdgeView edgeFilter;
+        public void Initialize(BehaviorTreeGraphView graphView, EditorWindow window,EdgeView edgeFilter = null)
         {
             this.graphView = graphView;
             this.window = window;
+            this.edgeFilter = edgeFilter;
         }
         public List<SearchTreeEntry> CreateSearchTree(SearchWindowContext context)
         {
@@ -40,14 +42,10 @@ namespace BT.Editor
 
             var nodeType = SearchTreeEntry.userData is Type ? (Type)SearchTreeEntry.userData : ((BTNodeProvider.PortDescription)SearchTreeEntry.userData).nodeType;
             //graphView.RegisterCompleteObjectUndo("Added " + nodeType);
-            BehaviorGraphNodeView nodeView=new  BehaviorGraphNodeView();
-            graphView.AddNode(nodeView);
-            nodeView.classData = new GraphNodeClassData();
-            nodeView.classData.classType = nodeType;
+
+            var nodeView = graphView.AddNode(nodeType);
             nodeView.PostPlaceNewNode();
             nodeView.SetPosition(new Rect(graphMousePosition, new Vector2(100, 100)));
-            //BTNode node= BehaviorGraphNode.CreateFromType(nodeType, graphMousePosition);
-            //nodeView.position = ;
             return true;
         }
 

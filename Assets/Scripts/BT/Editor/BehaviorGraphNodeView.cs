@@ -1,17 +1,22 @@
 ﻿using BT.Runtime;
 using System;
 using System.Collections.Generic;
-using System.Reflection;
 using UnityEditor;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
-using UnityEngine.UI;
 using UnityEngine.UIElements;
-using static UnityEngine.UI.GridLayoutGroup;
 using NodeView = UnityEditor.Experimental.GraphView.Node;
 using Status = UnityEngine.UIElements.DropdownMenuAction.Status;
 namespace BT.Editor
 {
+    public class BehaviorGraphNodeRootView : BehaviorGraphNodeView
+    {
+        protected override void InitializePorts()
+        {
+            var listener = owner.connectorListener;
+            AddPort(Direction.Output, listener);
+        }
+    }
     public class GraphNodeClassData
     {
         public Type classType;
@@ -19,6 +24,7 @@ namespace BT.Editor
     }
     public class BehaviorGraphNodeView : NodeView
     {
+        public BehaviorTreeGraphView owner { set; get; }
         Label returnLabel;
         private bool isRuned;//节点运行过。
         public BTNode nodeInstance;
@@ -32,8 +38,11 @@ namespace BT.Editor
 
         public List<NodePortView> inputPortViews = new List<NodePortView>();
         public List<NodePortView> outputPortViews = new List<NodePortView>();
+
+        readonly string baseNodeStyle = "GraphStyles/BaseNodeView";
         public void Initialize()
         {
+            styleSheets.Add(Resources.Load<StyleSheet>(baseNodeStyle));
             InitializeView();
             InitializePorts();
             UpdateTitle();
@@ -54,24 +63,29 @@ namespace BT.Editor
         }
         protected virtual void InitializePorts()
         {
-            //var listener = owner.connectorListener;
-            AddPort(Direction.Input);
-            AddPort(Direction.Output);
+            var listener = owner.connectorListener;
+            AddPort(Direction.Input, listener);
+            AddPort(Direction.Output, listener);
         }
-        public void AddPort(Direction direction)
+        public void AddPort(Direction direction, BaseEdgeConnectorListener listener)
         {
-            NodePortView p = CreatePortView(direction);
+            NodePortView p = CreatePortView(direction, listener);
+
+
             if (p.direction == Direction.Input)
             {
+                inputPortViews.Add(p);
                 topPortContainer.Add(p);
             }
             else
             {
+                outputPortViews.Add(p);
                 bottomPortContainer.Add(p);
             }
+            p.Initialize(this, "@@@sdfsdfsdfsd");
         }
-        protected virtual NodePortView CreatePortView(Direction direction)
-           => NodePortView.CreatePortView(direction);
+        protected virtual NodePortView CreatePortView(Direction direction, BaseEdgeConnectorListener listener)
+           => NodePortView.CreatePortView(direction, listener);
         public override void BuildContextualMenu(ContextualMenuPopulateEvent evt)
         {
             evt.menu.AppendAction("Open Node Script", (e) => { }, OpenNodeScriptStatus);
@@ -94,7 +108,7 @@ namespace BT.Editor
         }
         void UpdateTitle()
         {
-            title = nodeInstance.nodeName ;
+            title = nodeInstance.nodeName;
         }
         public void Enable()
         {
