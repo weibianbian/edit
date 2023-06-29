@@ -1,4 +1,5 @@
-﻿using UnityEditor;
+﻿using System.Collections.Generic;
+using UnityEditor;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 namespace BT.Editor
@@ -6,7 +7,8 @@ namespace BT.Editor
     public class BaseEdgeConnectorListener : IEdgeConnectorListener
     {
         public readonly BehaviorTreeGraphView graphView;
-
+        Dictionary<Edge, NodePortView> edgeInputPorts = new Dictionary<Edge, NodePortView>();
+        Dictionary<Edge, NodePortView> edgeOutputPorts = new Dictionary<Edge, NodePortView>();
         public BaseEdgeConnectorListener(BehaviorTreeGraphView graphView)
         {
             this.graphView = graphView;
@@ -20,31 +22,34 @@ namespace BT.Editor
                 return;
 
             //If the edge was moved to another port
-            //if (edgeView.isConnected)
-            //{
-            //    if (edgeInputPorts.ContainsKey(edge) && edgeOutputPorts.ContainsKey(edge))
-            //        if (edgeInputPorts[edge] == edge.input && edgeOutputPorts[edge] == edge.output)
-            //            wasOnTheSamePort = true;
+            if (edgeView.isConnected)
+            {
+                if (edgeInputPorts.ContainsKey(edge) && edgeOutputPorts.ContainsKey(edge))
+                    if (edgeInputPorts[edge] == edge.input && edgeOutputPorts[edge] == edge.output)
+                        wasOnTheSamePort = true;
 
-            //    if (!wasOnTheSamePort)
-            //        this.graphView.Disconnect(edgeView);
-            //}
+                //if (!wasOnTheSamePort)
+                //    this.graphView.Disconnect(edgeView);
+            }
 
-            //if (edgeView.input.node == null || edgeView.output.node == null)
-            //    return;
+            if (edgeView.input.node == null || edgeView.output.node == null)
+                return;
 
-            //edgeInputPorts[edge] = edge.input as PortView;
-            //edgeOutputPorts[edge] = edge.output as PortView;
-            //try
-            //{
-            //    this.graphView.RegisterCompleteObjectUndo("Connected " + edgeView.input.node.name + " and " + edgeView.output.node.name);
-            //    if (!this.graphView.Connect(edge as EdgeView, autoDisconnectInputs: !wasOnTheSamePort))
-            //        this.graphView.Disconnect(edge as EdgeView);
-            //}
-            //catch (System.Exception)
-            //{
-            //    this.graphView.Disconnect(edge as EdgeView);
-            //}
+            edgeInputPorts[edge] = edge.input as NodePortView;
+            edgeOutputPorts[edge] = edge.output as NodePortView;
+            try
+            {
+                //this.graphView.RegisterCompleteObjectUndo("Connected " + edgeView.input.node.name + " and " + edgeView.output.node.name);
+                if (!this.graphView.Connect(edge as EdgeView, autoDisconnectInputs: !wasOnTheSamePort))
+                {
+
+                }
+                    //this.graphView.Disconnect(edge as EdgeView);
+            }
+            catch (System.Exception)
+            {
+                //this.graphView.Disconnect(edge as EdgeView);
+            }
         }
 
         public void OnDropOutsidePort(Edge edge, Vector2 position)

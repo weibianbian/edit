@@ -1,7 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Reflection;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
-using UnityEngine.UI;
 using UnityEngine.UIElements;
 
 namespace BT.Editor
@@ -11,6 +12,7 @@ namespace BT.Editor
         string userPortStyleFile = "PortViewTypes";
         readonly string portStyle = "GraphStyles/PortView";
         List<EdgeView> edges = new List<EdgeView>();
+        public bool acceptMultipleEdges;
         public BehaviorGraphNodeView owner { get; private set; }
         protected NodePortView(Direction portDirection) : base(Orientation.Vertical, portDirection, Capacity.Multi, typeof(BehaviorGraphNodeView))
         {

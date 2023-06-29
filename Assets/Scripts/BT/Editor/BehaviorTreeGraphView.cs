@@ -1,6 +1,7 @@
 ﻿using BT.Runtime;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEditor;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
@@ -15,7 +16,7 @@ namespace BT.Editor
         EditorWindow window;
         public BehaviorTree treeAsset;
         public event Action initialized;
-
+        public List<EdgeView> edgeViews = new List<EdgeView>();
         public List<BehaviorGraphNodeView> nodeViews=new List<BehaviorGraphNodeView>();
         public BehaviorTreeGraphView(EditorWindow window) : base()
         {
@@ -66,9 +67,10 @@ namespace BT.Editor
             foreach (var nodeMenuItem in BTNodeProvider.GetNodeMenuEntries())
                 yield return nodeMenuItem;
         }
-        public BehaviorGraphNodeView AddNode(Type nodeType)
+        public BehaviorGraphNodeView AddNode(Type nodeType,Type nodeViewType)
         {
-            BehaviorGraphNodeView nodeView = new BehaviorGraphNodeView();
+           
+            BehaviorGraphNodeView nodeView = Activator.CreateInstance(nodeViewType) as BehaviorGraphNodeView;
             nodeView.owner = this;
             nodeView.classData = new GraphNodeClassData();
             nodeView.classData.classType = nodeType;
@@ -78,6 +80,135 @@ namespace BT.Editor
         }
         protected virtual BaseEdgeConnectorListener CreateEdgeConnectorListener()
          => new BaseEdgeConnectorListener(this);
+        public bool Connect(NodePortView inputPortView, NodePortView outputPortView, bool autoDisconnectInputs = true)
+        {
+            var inputPort = inputPortView.owner.GetPort();
+            var outputPort = outputPortView.owner.GetPort();
+
+            // Checks that the node we are connecting still exists
+            if (inputPortView.owner.parent == null || outputPortView.owner.parent == null)
+                return false;
+
+            var edgeView = new EdgeView();
+            edgeView.input = inputPortView;
+            edgeView.output = outputPortView;
+
+
+            return Connect(edgeView);
+        }
+        public bool Connect(EdgeView e, bool autoDisconnectInputs = true)
+        {
+            if (!CanConnectEdge(e, autoDisconnectInputs))
+                return false;
+
+            var inputPortView = e.input as NodePortView;
+            var outputPortView = e.output as NodePortView;
+            var inputNodeView = inputPortView.node as BehaviorGraphNodeView;
+            var outputNodeView = outputPortView.node as BehaviorGraphNodeView;
+            var inputPort = inputNodeView.GetPort();
+            var outputPort = outputNodeView.GetPort();
+
+            ConnectView(e, autoDisconnectInputs);
+
+            //UpdateComputeOrder();
+
+            return true;
+        }
+        public bool CanConnectEdge(EdgeView e, bool autoDisconnectInputs = true)
+        {
+            if (e.input == null || e.output == null)
+                return false;
+
+            var inputPortView = e.input as NodePortView;
+            var outputPortView = e.output as NodePortView;
+            var inputNodeView = inputPortView.node as BehaviorGraphNodeView;
+            var outputNodeView = outputPortView.node as BehaviorGraphNodeView;
+
+            if (inputNodeView == null || outputNodeView == null)
+            {
+                Debug.LogError("Connect aborted !");
+                return false;
+            }
+
+            return true;
+        }
+        public bool ConnectView(EdgeView e, bool autoDisconnectInputs = true)
+        {
+            if (!CanConnectEdge(e, autoDisconnectInputs))
+                return false;
+
+            var inputPortView = e.input as NodePortView;
+            var outputPortView = e.output as NodePortView;
+            var inputNodeView = inputPortView.node as BehaviorGraphNodeView;
+            var outputNodeView = outputPortView.node as BehaviorGraphNodeView;
+
+            //If the input port does not support multi-connection, we remove them
+            if (autoDisconnectInputs && !(e.input as NodePortView).acceptMultipleEdges)
+            {
+                foreach (var edge in edgeViews.Where(ev => ev.input == e.input).ToList())
+                {
+                    // TODO: do not disconnect them if the connected port is the same than the old connected
+                    DisconnectView(edge);
+                }
+            }
+            // same for the output port:
+            if (autoDisconnectInputs && !(e.output as NodePortView).acceptMultipleEdges)
+            {
+                foreach (var edge in edgeViews.Where(ev => ev.output == e.output).ToList())
+                {
+                    // TODO: do not disconnect them if the connected port is the same than the old connected
+                    DisconnectView(edge);
+                }
+            }
+
+            AddElement(e);
+
+            e.input.Connect(e);
+            e.output.Connect(e);
+
+            // If the input port have been removed by the custom port behavior
+            // we try to find if it's still here
+            if (e.input == null)
+                e.input = inputNodeView.GetPort();
+            if (e.output == null)
+                e.output = inputNodeView.GetPort();
+
+            edgeViews.Add(e);
+
+            inputNodeView.RefreshPorts();
+            outputNodeView.RefreshPorts();
+
+            // In certain cases the edge color is wrong so we patch it
+            schedule.Execute(() => {
+                e.UpdateEdgeControl();
+            }).ExecuteLater(1);
+
+            e.isConnected = true;
+
+            return true;
+        }
+        public void DisconnectView(EdgeView e, bool refreshPorts = true)
+        {
+            if (e == null)
+                return;
+
+            RemoveElement(e);
+
+            if (e?.input?.node is BehaviorGraphNodeView inputNodeView)
+            {
+                e.input.Disconnect(e);
+                if (refreshPorts)
+                    inputNodeView.RefreshPorts();
+            }
+            if (e?.output?.node is BehaviorGraphNodeView outputNodeView)
+            {
+                e.output.Disconnect(e);
+                if (refreshPorts)
+                    outputNodeView.RefreshPorts();
+            }
+
+            edgeViews.Remove(e);
+        }
     }
 }
 

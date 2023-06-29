@@ -3,7 +3,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Unity.VisualScripting;
 using UnityEditor;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 namespace BT.Editor
@@ -33,7 +35,7 @@ namespace BT.Editor
         }
         public static void LoadGraph()
         {
-            
+
         }
         static void BuildGenericNodeCache()
         {
@@ -98,32 +100,39 @@ namespace BT.Editor
             //    });
             //}
         }
-         public static IEnumerable<(string path, Type type)> GetNodeMenuEntries()
+        public static IEnumerable<(string path, Type type)> GetNodeMenuEntries()
         {
             foreach (var node in genericNodes.nodePerMenuTitle)
                 yield return (node.Key, node.Value);
         }
+        public static IEnumerable<PortDescription> GetEdgeCreationNodeMenuEntry(NodePortView portView)
+        {
+            foreach (var description in genericNodes.nodeCreatePortDescription)
+            {
+                if (!IsPortCompatible(description))
+                    continue;
+
+                yield return description;
+            }
+
+            bool IsPortCompatible(PortDescription description)
+            {
+                if ((portView.direction == Direction.Input && description.isInput) || (portView.direction == Direction.Output && !description.isInput))
+                    return false;
+                return true;
+            }
+        }
         public static Type GetNodeViewTypeFromType(Type nodeType)
         {
-            Type view;
-
-            //if (nodeViewPerType.TryGetValue(nodeType, out view))
-                //return view;
-
-            Type baseType = null;
-
-            // Allow for inheritance in node views: multiple C# node using the same view
-            //foreach (var type in nodeViewPerType)
-            //{
-            //    // Find a view (not first fitted view) of nodeType
-            //    if (nodeType.IsSubclassOf(type.Key) && (baseType == null || type.Value.IsSubclassOf(baseType)))
-            //        baseType = type.Value;
-            //}
-
-            if (baseType != null)
-                return baseType;
-
-            return null;
+            if (nodeType == typeof(BTEntryNode))
+            {
+                return typeof(BehaviorGraphNodeRootView);
+            }
+            else if(nodeType.IsSubclassOf(typeof(BTActionNode)))
+            {
+                return typeof(BehaviorGraphNodeActionView);
+            }
+            return typeof(BehaviorGraphNodeView); ;
         }
     }
 

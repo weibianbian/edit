@@ -1,6 +1,7 @@
 ﻿using BT.Runtime;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEditor;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
@@ -9,14 +10,6 @@ using NodeView = UnityEditor.Experimental.GraphView.Node;
 using Status = UnityEngine.UIElements.DropdownMenuAction.Status;
 namespace BT.Editor
 {
-    public class BehaviorGraphNodeRootView : BehaviorGraphNodeView
-    {
-        protected override void InitializePorts()
-        {
-            var listener = owner.connectorListener;
-            AddPort(Direction.Output, listener);
-        }
-    }
     public class GraphNodeClassData
     {
         public Type classType;
@@ -283,6 +276,10 @@ namespace BT.Editor
         //{
         //    this.expanded = false;
         //}
+        public NodePortView GetPort()
+        {
+            return inputPortViews.Concat(outputPortViews).FirstOrDefault();
+        }
     }
 }
 

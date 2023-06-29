@@ -7,6 +7,7 @@ namespace BT.Editor
     public class EdgeView : Edge
     {
         readonly string edgeStyle = "GraphStyles/EdgeView";
+        public bool isConnected = false;
         protected BehaviorTreeGraphView owner => ((input ?? output) as NodePortView).owner.owner;
         public EdgeView() : base()
         {
