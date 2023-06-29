@@ -1,12 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEditor;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UIElements;
-using System.Linq;
-using System;
-using BT.Runtime;
-using BT.Graph;
 
 namespace BT.Editor
 {
@@ -51,20 +49,6 @@ namespace BT.Editor
             //BTNode node= BehaviorGraphNode.CreateFromType(nodeType, graphMousePosition);
             //nodeView.position = ;
             return true;
-        }
-
-        public static BehaviorGraphNode CreateFromType(Type nodeType, Vector2 position)
-        {
-            if (!nodeType.IsSubclassOf(typeof(BehaviorGraphNode)))
-                return null;
-
-            var node = Activator.CreateInstance(nodeType) as BehaviorGraphNode;
-
-            //node.position = new Rect(position, new Vector2(100, 100));
-
-            node.OnNodeCreated();
-
-            return node;
         }
 
         void CreateStandardNodeMenu(List<SearchTreeEntry> tree)

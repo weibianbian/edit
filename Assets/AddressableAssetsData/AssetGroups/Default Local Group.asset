@@ -16,11 +16,7 @@ MonoBehaviour:
   m_Data:
     m_SerializedData: []
   m_GUID: d330bec59b13bbc489906a154804d806
-  m_SerializeEntries:
-  - m_GUID: ef945697272d1384688b0c8d36b43c7a
-    m_Address: Assets/BehaviorTreeGraph.asset
-    m_ReadOnly: 0
-    m_SerializedLabels: []
+  m_SerializeEntries: []
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 3689c0837ed8e04459e6f2888149a54a, type: 2}
   m_SchemaSet:

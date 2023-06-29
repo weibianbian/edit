@@ -1,8 +1,13 @@
 ﻿using BT.Runtime;
 using System;
+using System.Collections.Generic;
+using System.Reflection;
 using UnityEditor;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.UIElements;
+using static UnityEngine.UI.GridLayoutGroup;
 using NodeView = UnityEditor.Experimental.GraphView.Node;
 using Status = UnityEngine.UIElements.DropdownMenuAction.Status;
 namespace BT.Editor
@@ -24,9 +29,14 @@ namespace BT.Editor
         protected VisualElement topPortContainer;
         protected VisualElement bottomPortContainer;
         private VisualElement inputContainerElement;
+
+        public List<NodePortView> inputPortViews = new List<NodePortView>();
+        public List<NodePortView> outputPortViews = new List<NodePortView>();
         public void Initialize()
         {
             InitializeView();
+            InitializePorts();
+            UpdateTitle();
         }
         void InitializeView()
         {
@@ -42,6 +52,26 @@ namespace BT.Editor
             bottomPortContainer = new VisualElement { name = "BottomPortContainer" };
             this.Add(bottomPortContainer);
         }
+        protected virtual void InitializePorts()
+        {
+            //var listener = owner.connectorListener;
+            AddPort(Direction.Input);
+            AddPort(Direction.Output);
+        }
+        public void AddPort(Direction direction)
+        {
+            NodePortView p = CreatePortView(direction);
+            if (p.direction == Direction.Input)
+            {
+                topPortContainer.Add(p);
+            }
+            else
+            {
+                bottomPortContainer.Add(p);
+            }
+        }
+        protected virtual NodePortView CreatePortView(Direction direction)
+           => NodePortView.CreatePortView(direction);
         public override void BuildContextualMenu(ContextualMenuPopulateEvent evt)
         {
             evt.menu.AppendAction("Open Node Script", (e) => { }, OpenNodeScriptStatus);
@@ -62,7 +92,10 @@ namespace BT.Editor
             }
             Initialize();
         }
-        
+        void UpdateTitle()
+        {
+            title = nodeInstance.nodeName ;
+        }
         public void Enable()
         {
             returnLabel = new Label();

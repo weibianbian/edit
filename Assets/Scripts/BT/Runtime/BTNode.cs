@@ -12,6 +12,8 @@ namespace BT.Runtime
         public float nextUpdateTick = 0;
         public int idx = 0;
         public Action onVisit;
+
+        public string nodeName = "";
         public void Visit()
         {
             OnVisit();

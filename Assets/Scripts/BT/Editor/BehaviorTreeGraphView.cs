@@ -24,6 +24,8 @@ namespace BT.Editor
             //实现放大或者缩小
             SetupZoom(0.05f, 2f);
 
+            GridBackground gridBackground = new GridBackground();
+            Insert(0,gridBackground);
             createNodeMenu = ScriptableObject.CreateInstance<BTCreateNodeMenuWindow>();
             createNodeMenu.Initialize(this, window);
             this.StretchToParentSize();

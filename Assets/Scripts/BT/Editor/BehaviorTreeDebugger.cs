@@ -1,12 +1,10 @@
-﻿using BT.Graph;
-using BT.Runtime;
+﻿using BT.Runtime;
 
 namespace BT.Editor
 {
     public class BehaviorTreeDebugger
     {
         BehaviorTree TreeAsset;
-        EntryGraphNode entryNode;
         public void CacheRootNode()
         {
             //entryNode=
