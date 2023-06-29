@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using UnityEditor;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
@@ -28,6 +29,7 @@ namespace BT.Editor
         protected VisualElement topPortContainer;
         protected VisualElement bottomPortContainer;
         private VisualElement inputContainerElement;
+        Dictionary<string, VisualElement> hideElementIfConnected = new Dictionary<string, VisualElement>();
 
         public List<NodePortView> inputPortViews = new List<NodePortView>();
         public List<NodePortView> outputPortViews = new List<NodePortView>();
@@ -57,12 +59,12 @@ namespace BT.Editor
         protected virtual void InitializePorts()
         {
             var listener = owner.connectorListener;
-            AddPort(Direction.Input, listener);
-            AddPort(Direction.Output, listener);
+            AddPort(Direction.Input,true, listener);
+            AddPort(Direction.Output,true, listener);
         }
-        public void AddPort(Direction direction, BaseEdgeConnectorListener listener)
+        public void AddPort(Direction direction,bool allowMultiple, BaseEdgeConnectorListener listener)
         {
-            NodePortView p = CreatePortView(direction, listener);
+            NodePortView p = CreatePortView(direction, allowMultiple, listener);
 
 
             if (p.direction == Direction.Input)
@@ -77,8 +79,8 @@ namespace BT.Editor
             }
             p.Initialize(this, "@@@sdfsdfsdfsd");
         }
-        protected virtual NodePortView CreatePortView(Direction direction, BaseEdgeConnectorListener listener)
-           => NodePortView.CreatePortView(direction, listener);
+        protected virtual NodePortView CreatePortView(Direction direction, bool allowMultiple, BaseEdgeConnectorListener listener)
+           => NodePortView.CreatePortView(direction, allowMultiple, listener);
         public override void BuildContextualMenu(ContextualMenuPopulateEvent evt)
         {
             evt.menu.AppendAction("Open Node Script", (e) => { }, OpenNodeScriptStatus);
@@ -90,6 +92,16 @@ namespace BT.Editor
             //if (TreeNodeProvider.GetNodeScript(nodeTarget.GetType()) != null)
             //    return Status.Normal;
             return Status.Disabled;
+        }
+        internal void OnPortConnected(NodePortView port)
+        {
+            if (port.direction == Direction.Input && inputContainerElement?.Q(port.fieldName) != null)
+                inputContainerElement.Q(port.fieldName).AddToClassList("empty");
+
+            if (hideElementIfConnected.TryGetValue(port.fieldName, out var elem))
+                elem.style.display = DisplayStyle.None;
+
+            //onPortConnected?.Invoke(port);
         }
         public void PostPlaceNewNode()
         {

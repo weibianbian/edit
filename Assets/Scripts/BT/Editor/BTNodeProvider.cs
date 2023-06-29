@@ -24,7 +24,6 @@ namespace BT.Editor
         public class NodeDescriptions
         {
             public Dictionary<string, Type> nodePerMenuTitle = new Dictionary<string, Type>();
-            public List<Type> slotTypes = new List<Type>();
             public List<PortDescription> nodeCreatePortDescription = new List<PortDescription>();
         }
         static NodeDescriptions genericNodes = new NodeDescriptions();
@@ -63,12 +62,6 @@ namespace BT.Editor
                     targetDescription.nodePerMenuTitle[attr.menuTitle] = nodeType;
             }
 
-            foreach (var field in nodeType.GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic))
-            {
-                if (field.GetCustomAttribute<HideInInspector>() == null && field.GetCustomAttributes().Any(c => c is InputAttribute || c is OutputAttribute))
-                    targetDescription.slotTypes.Add(field.FieldType);
-            }
-
             ProvideNodePortCreationDescription(nodeType, targetDescription);
         }
         static void ProvideNodePortCreationDescription(Type nodeType, NodeDescriptions targetDescription)
@@ -82,23 +75,23 @@ namespace BT.Editor
             }
             catch (Exception) { }
 
-            //foreach (var p in node.inputPorts)
-            //    AddPort(p, true);
-            //foreach (var p in node.outputPorts)
-            //    AddPort(p, false);
+            foreach (var p in node.inputPorts)
+                AddPort(p, true);
+            foreach (var p in node.outputPorts)
+                AddPort(p, false);
 
-            //void AddPort(NodePort p, bool input)
-            //{
-            //    targetDescription.nodeCreatePortDescription.Add(new PortDescription
-            //    {
-            //        nodeType = nodeType,
-            //        portType = p.portData.displayType ?? p.fieldInfo.FieldType,
-            //        isInput = input,
-            //        portFieldName = p.fieldName,
-            //        portDisplayName = p.portData.displayName ?? p.fieldName,
-            //        portIdentifier = p.portData.identifier,
-            //    });
-            //}
+            void AddPort(NodePort p, bool input)
+            {
+                targetDescription.nodeCreatePortDescription.Add(new PortDescription
+                {
+                    nodeType = nodeType,
+                    portType = p.portData.displayType ?? p.fieldInfo.FieldType,
+                    isInput = input,
+                    portFieldName = p.fieldName,
+                    portDisplayName = p.portData.displayName ?? p.fieldName,
+                    portIdentifier = p.portData.identifier,
+                });
+            }
         }
         public static IEnumerable<(string path, Type type)> GetNodeMenuEntries()
         {

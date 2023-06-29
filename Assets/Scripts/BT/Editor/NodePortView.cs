@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BT.Runtime;
+using System;
 using System.Collections.Generic;
 using System.Reflection;
 using UnityEditor.Experimental.GraphView;
@@ -14,8 +15,11 @@ namespace BT.Editor
         List<EdgeView> edges = new List<EdgeView>();
         public bool acceptMultipleEdges;
         public BehaviorGraphNodeView owner { get; private set; }
-        protected NodePortView(Direction portDirection) : base(Orientation.Vertical, portDirection, Capacity.Multi, typeof(BehaviorGraphNodeView))
+        public string fieldName => typeof(BTNode).ToString();
+        public Type fieldType => typeof(BTNode);
+        protected NodePortView(Direction portDirection,bool allowMultiple) : base(Orientation.Vertical, portDirection, Capacity.Multi, typeof(BehaviorGraphNodeView))
         {
+            acceptMultipleEdges = allowMultiple;
             styleSheets.Add(Resources.Load<StyleSheet>(portStyle));
             var userPortStyle = Resources.Load<StyleSheet>(userPortStyleFile);
             if (userPortStyle != null)
@@ -25,12 +29,11 @@ namespace BT.Editor
             AddToClassList("Vertical");
             UpdatePortSize();
         }
-        public static NodePortView CreatePortView(Direction direction, BaseEdgeConnectorListener edgeConnectorListener)
+        public static NodePortView CreatePortView(Direction direction, bool allowMultiple, BaseEdgeConnectorListener edgeConnectorListener)
         {
-            var pv = new NodePortView(direction);
+            var pv = new NodePortView(direction, allowMultiple);
             pv.m_EdgeConnector = new BaseEdgeConnector(edgeConnectorListener);
             pv.AddManipulator(pv.m_EdgeConnector);
-            //pv.AddManipulator(pv.m_EdgeConnector);
 
             // Force picking in the port label to enlarge the edge creation zone
             var portLabel = pv.Q("type");
@@ -54,11 +57,11 @@ namespace BT.Editor
             AddToClassList("xixixixixi");
 
             // Correct port type if port accept multiple values (and so is a container)
-            //if (direction == Direction.Input && portData.acceptMultipleEdges && portType == fieldType) // If the user haven't set a custom field type
-            //{
-            //    if (fieldType.GetGenericArguments().Length > 0)
-            //        portType = fieldType.GetGenericArguments()[0];
-            //}
+            if (direction == Direction.Input && acceptMultipleEdges && portType == fieldType) // If the user haven't set a custom field type
+            {
+                if (fieldType.GetGenericArguments().Length > 0)
+                    portType = fieldType.GetGenericArguments()[0];
+            }
 
             if (name != null)
                 portName = name;
@@ -68,9 +71,14 @@ namespace BT.Editor
         public override void Connect(Edge edge)
         {
             base.Connect(edge);
-            var inputNode = (edge.input as NodePortView);
-            var outputNode = (edge.output as NodePortView);
+            var inputNode = (edge.input as NodePortView).owner;
+            var outputNode = (edge.output as NodePortView).owner;
+            edges.Add(edge as EdgeView);
+
+            inputNode.OnPortConnected(edge.input as NodePortView);
+            outputNode.OnPortConnected(edge.output as NodePortView);
         }
+       
         public void UpdatePortSize()
         {
             int size = 8;

@@ -6,7 +6,7 @@ namespace BT.Editor
         protected override void InitializePorts()
         {
             var listener = owner.connectorListener;
-            AddPort(Direction.Output, listener);
+            AddPort(Direction.Output, false, listener);
         }
     }
     public class BehaviorGraphNodeActionView : BehaviorGraphNodeView
@@ -14,7 +14,7 @@ namespace BT.Editor
         protected override void InitializePorts()
         {
             var listener = owner.connectorListener;
-            AddPort(Direction.Input, listener);
+            AddPort(Direction.Input, false, listener);
         }
     }
 }
