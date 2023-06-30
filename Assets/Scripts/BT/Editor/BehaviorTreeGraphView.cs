@@ -50,6 +50,8 @@ namespace BT.Editor
             InitializeGraphView();
 
             initialized?.Invoke();
+
+            BTNodeProvider.LoadGraph();
         }
         void InitializeGraphView()
         {
@@ -109,9 +111,6 @@ namespace BT.Editor
          => new BaseEdgeConnectorListener(this);
         public bool Connect(NodePortView inputPortView, NodePortView outputPortView, bool autoDisconnectInputs = true)
         {
-            var inputPort = inputPortView.owner.GetPort();
-            var outputPort = outputPortView.owner.GetPort();
-
             // Checks that the node we are connecting still exists
             if (inputPortView.owner.parent == null || outputPortView.owner.parent == null)
                 return false;

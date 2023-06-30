@@ -3,6 +3,9 @@
     [System.Serializable, TreeNodeMenuItem("BT/Composite/Sequence")]
     public class BTSequenceCompositieNode : BTCompositieNode
     {
+        public BTSequenceCompositieNode() {
+            nodeName = "序列节点";
+        }
         protected override void OnVisit()
         {
             if (status != ENodeStatus.RUNNING)

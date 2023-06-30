@@ -3,6 +3,10 @@
     [System.Serializable, TreeNodeMenuItem("BT/Composite/Selector")]
     public class BTSelectorCompositieNode : BTCompositieNode
     {
+        public BTSelectorCompositieNode()
+        {
+            nodeName = "选择节点";
+        }
         protected override void OnVisit()
         {
             if (status != ENodeStatus.RUNNING)

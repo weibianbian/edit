@@ -9,6 +9,7 @@ namespace BT.Editor
         public readonly BehaviorTreeGraphView graphView;
         Dictionary<Edge, NodePortView> edgeInputPorts = new Dictionary<Edge, NodePortView>();
         Dictionary<Edge, NodePortView> edgeOutputPorts = new Dictionary<Edge, NodePortView>();
+        BTCreateNodeMenuWindow edgeNodeCreateMenuWindow;
         public BaseEdgeConnectorListener(BehaviorTreeGraphView graphView)
         {
             this.graphView = graphView;
@@ -66,8 +67,12 @@ namespace BT.Editor
         }
         void ShowNodeCreationMenuFromEdge(EdgeView edgeView, Vector2 position)
         {
-            graphView.createNodeMenu.Initialize(graphView, EditorWindow.focusedWindow, edgeView);
-            SearchWindow.Open(new SearchWindowContext(position + EditorWindow.focusedWindow.position.position), graphView.createNodeMenu);
+            if (edgeNodeCreateMenuWindow == null)
+                edgeNodeCreateMenuWindow = new BTCreateNodeMenuWindow();
+
+            edgeNodeCreateMenuWindow.Initialize(graphView, EditorWindow.focusedWindow, edgeView);
+
+            SearchWindow.Open(new SearchWindowContext(position + EditorWindow.focusedWindow.position.position), edgeNodeCreateMenuWindow);
         }
     }
 }

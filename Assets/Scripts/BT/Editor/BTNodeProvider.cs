@@ -6,6 +6,7 @@ using System.Reflection;
 using Unity.VisualScripting;
 using UnityEditor;
 using UnityEditor.Experimental.GraphView;
+using UnityEditor.Graphs;
 using UnityEngine;
 
 namespace BT.Editor
@@ -24,7 +25,6 @@ namespace BT.Editor
         public class NodeDescriptions
         {
             public Dictionary<string, Type> nodePerMenuTitle = new Dictionary<string, Type>();
-            public List<PortDescription> nodeCreatePortDescription = new List<PortDescription>();
         }
         static NodeDescriptions genericNodes = new NodeDescriptions();
 
@@ -34,7 +34,7 @@ namespace BT.Editor
         }
         public static void LoadGraph()
         {
-
+            BuildGenericNodeCache();
         }
         static void BuildGenericNodeCache()
         {
@@ -67,23 +67,25 @@ namespace BT.Editor
             foreach (var node in genericNodes.nodePerMenuTitle)
                 yield return (node.Key, node.Value);
         }
-        public static IEnumerable<PortDescription> GetEdgeCreationNodeMenuEntry(NodePortView portView)
-        {
-            foreach (var description in genericNodes.nodeCreatePortDescription)
-            {
-                if (!IsPortCompatible(description))
-                    continue;
+        //public static IEnumerable<PortDescription> GetEdgeCreationNodeMenuEntry(NodePortView portView)
+        //{
+        //    foreach (var description in genericNodes.nodeCreatePortDescription)
+        //    {
+        //        if (!IsPortCompatible(description))
+        //            continue;
 
-                yield return description;
-            }
+        //        yield return description;
+        //    }
 
-            bool IsPortCompatible(PortDescription description)
-            {
-                if ((portView.direction == Direction.Input && description.isInput) || (portView.direction == Direction.Output && !description.isInput))
-                    return false;
-                return true;
-            }
-        }
+        //    bool IsPortCompatible(PortDescription description)
+        //    {
+        //        if ((portView.direction == Direction.Input && description.isInput) || (portView.direction == Direction.Output && !description.isInput))
+        //            return false;
+        //        if (!BTTypeUtils.TypesAreConnectable(description.portType, portView.portType))
+        //            return false;
+        //        return true;
+        //    }
+        //}
         public static Type GetNodeViewTypeFromType(Type nodeType)
         {
             if (nodeType == typeof(BTEntryNode))
@@ -93,6 +95,10 @@ namespace BT.Editor
             else if(nodeType.IsSubclassOf(typeof(BTActionNode)))
             {
                 return typeof(BehaviorGraphNodeActionView);
+            }
+            else if (nodeType.IsSubclassOf(typeof(BTCompositieNode)))
+            {
+                return typeof(BehaviorGraphNodeCompositeView);
             }
             return typeof(BehaviorGraphNodeView); ;
         }
