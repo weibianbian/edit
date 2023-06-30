@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Codice.Client.BaseCommands;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -66,7 +68,7 @@ namespace BT.Editor
             draggedPort.portCapLit = true;
             compatiblePorts.Clear();
 
-            List<Port> ports= graphView.GetCompatiblePorts(draggedPort, nodeAdapter);
+            List<Port> ports = graphView.GetCompatiblePorts(draggedPort, nodeAdapter);
             foreach (NodePortView port in ports)
             {
                 compatiblePorts.TryGetValue(port.owner, out var portList);
@@ -77,7 +79,8 @@ namespace BT.Editor
             foreach (var kp in compatiblePorts)
                 kp.Value.Sort((e1, e2) => e1.worldBound.y.CompareTo(e2.worldBound.y));
 
-            graphView.ports.ForEach((p) => {
+            graphView.ports.ForEach((p) =>
+            {
                 p.OnStartEdgeDragging();
             });
             foreach (var kp in compatiblePorts)
@@ -170,7 +173,8 @@ namespace BT.Editor
             Vector2 mousePosition = evt.mousePosition;
 
             // Reset the highlights.
-            graphView.ports.ForEach((p) => {
+            graphView.ports.ForEach((p) =>
+            {
                 p.OnStopEdgeDragging();
             });
 
@@ -324,7 +328,8 @@ namespace BT.Editor
             if (compatiblePorts != null && graphView != null)
             {
                 // Reset the highlights.
-                graphView.ports.ForEach((p) => {
+                graphView.ports.ForEach((p) =>
+                {
                     p.OnStopEdgeDragging();
                 });
                 compatiblePorts.Clear();
@@ -334,7 +339,8 @@ namespace BT.Editor
             if ((ghostEdge != null) && (graphView != null))
             {
                 var pv = ghostEdge.input as NodePortView;
-                graphView.schedule.Execute(() => {
+                graphView.schedule.Execute(() =>
+                {
                     pv.portCapLit = false;
                     // pv.UpdatePortView(pv.portData);
                 }).ExecuteLater(10);

@@ -92,6 +92,10 @@ namespace BT.Editor
             // Update connected edge sizes:
             edges.ForEach(e => e.UpdateEdgeSize());
         }
+        public List<EdgeView> GetEdges()
+        {
+            return edges;
+        }
     }
 }
 

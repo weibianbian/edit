@@ -78,6 +78,33 @@ namespace BT.Editor
             nodeViews.Add(nodeView);
             return nodeView;
         }
+        public override List<Port> GetCompatiblePorts(Port startPort, NodeAdapter nodeAdapter)
+        {
+            var compatiblePorts = new List<Port>();
+
+            compatiblePorts.AddRange(ports.ToList().Where(p => {
+                var portView = p as NodePortView;
+
+                if (portView.owner == (startPort as NodePortView).owner)
+                    return false;
+
+                if (p.direction == startPort.direction)
+                    return false;
+
+                //Check for type assignability
+                if (!BTTypeUtils.TypesAreConnectable(startPort.portType, p.portType))
+                    return false;
+
+                //Check if the edge already exists
+                if (portView.GetEdges().Any(e => e.input == startPort || e.output == startPort))
+                    return false;
+
+                return true;
+            }));
+
+            return compatiblePorts;
+        }
+        
         protected virtual BaseEdgeConnectorListener CreateEdgeConnectorListener()
          => new BaseEdgeConnectorListener(this);
         public bool Connect(NodePortView inputPortView, NodePortView outputPortView, bool autoDisconnectInputs = true)
