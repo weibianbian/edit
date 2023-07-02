@@ -162,17 +162,13 @@ namespace BT.Editor
                     return false;
 
                 //Check if the edge already exists
-                if (portView.GetEdges().Any(e=>EEE(e, startPort)))
+                if (portView.GetEdges().Any(e=> e.input == startPort || e.output == startPort))
                     return false;
 
                 return true;
             }));
 
             return compatiblePorts;
-        }
-        private  bool EEE(EdgeView e, Port startPort)
-        {
-          return  e.input == startPort || e.output == startPort;
         }
         protected virtual BaseEdgeConnectorListener CreateEdgeConnectorListener()
          => new BaseEdgeConnectorListener(this);
@@ -302,6 +298,10 @@ namespace BT.Editor
             }
 
             edgeViews.Remove(e);
+        }
+        public void OnSelectedNode(BehaviorGraphNodeView nodeView)
+        {
+
         }
     }
 }

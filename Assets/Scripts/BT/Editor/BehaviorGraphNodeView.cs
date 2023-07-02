@@ -267,11 +267,13 @@ namespace BT.Editor
         }
         public override void OnSelected()
         {
-            base.OnSelected();
-            //if (owner == null)
-            //{
-            //    return;
-            //}
+            Debug.Log($"选中了节点:{this}");
+            
+            if (owner == null)
+            {
+                return;
+            }
+            owner.OnSelectedNode(this);
             //UnityEngine.Debug.Log(owner.GetPinnedElementStatus<NodeInspectorView>());
             //if (owner.GetPinnedElementStatus<NodeInspectorView>()== UnityEngine.UIElements.DropdownMenuAction.Status.Normal)
             //{
