@@ -53,17 +53,17 @@ namespace BT.Editor
             var nodeViewType = BTNodeProvider.GetNodeViewTypeFromType(nodeType);
             var nodeView = graphView.AddNode(nodeType, nodeViewType);
             nodeView.PostPlaceNewNode();
-            nodeView.SetPosition(new Rect(graphMousePosition, new Vector2(100, 100)));
+            nodeView.SetPosition(new Rect(graphMousePosition, new Vector2(200, 200)));
 
             if (searchTreeEntry.userData is BTNodeProvider.PortDescription desc)
             {
                 if (inputPortView == null)
                 {
-                    graphView.Connect(nodeView.inputPortViews[0], outputPortView);
+                    graphView.Connect(nodeView.inputPortView, outputPortView);
                 }
                 else
                 {
-                    graphView.Connect(inputPortView, nodeView.outputPortViews[0]);
+                    graphView.Connect(inputPortView, nodeView.outputPortView);
                 }
             }
             return true;
@@ -91,8 +91,9 @@ namespace BT.Editor
                     {
                         continue;
                     }
-                    else if (portView.owner is BehaviorGraphNodeCompositeView)
+                    else if (portView.owner is BehaviorGraphNodeCompositeView && nodeMenuItem.type == typeof(BTEntryNode))
                     {
+                        continue;
                     }
                     else if (portView.owner is BehaviorGraphNodeActionView)
                     {

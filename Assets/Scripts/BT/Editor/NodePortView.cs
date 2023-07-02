@@ -96,6 +96,23 @@ namespace BT.Editor
         {
             return edges;
         }
+        public override void Disconnect(Edge edge)
+        {
+            //OnDisconnected?.Invoke(this, edge);
+
+            base.Disconnect(edge);
+
+            if (!(edge as EdgeView).isConnected)
+                return;
+
+            var inputNode = (edge.input as NodePortView)?.owner;
+            var outputNode = (edge.output as NodePortView)?.owner;
+
+            //inputNode?.OnPortDisconnected(edge.input as PortView);
+            //outputNode?.OnPortDisconnected(edge.output as PortView);
+
+            edges.Remove(edge as EdgeView);
+        }
     }
 }
 

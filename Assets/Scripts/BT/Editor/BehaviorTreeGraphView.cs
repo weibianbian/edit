@@ -1,4 +1,5 @@
 ﻿using BT.Runtime;
+using Codice.Client.BaseCommands;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,20 +18,20 @@ namespace BT.Editor
         public BehaviorTree treeAsset;
         public event Action initialized;
         public List<EdgeView> edgeViews = new List<EdgeView>();
-        public List<BehaviorGraphNodeView> nodeViews=new List<BehaviorGraphNodeView>();
+        public List<BehaviorGraphNodeView> nodeViews = new List<BehaviorGraphNodeView>();
         public BehaviorTreeGraphView(EditorWindow window) : base()
         {
             this.window = window;
-
+            graphViewChanged = GraphViewChangedCallback;
             InitializeManipulators();
             //实现放大或者缩小
             SetupZoom(0.05f, 2f);
 
             GridBackground gridBackground = new GridBackground();
-            Insert(0,gridBackground);
+            Insert(0, gridBackground);
             createNodeMenu = ScriptableObject.CreateInstance<BTCreateNodeMenuWindow>();
             createNodeMenu.Initialize(this, window);
-            this.StretchToParentSize();
+            //this.StretchToParentSize();
         }
         protected virtual void InitializeManipulators()
         {
@@ -64,14 +65,76 @@ namespace BT.Editor
                 SearchWindow.Open(new SearchWindowContext(c.screenMousePosition), createNodeMenu);
             }
         }
+        GraphViewChange GraphViewChangedCallback(GraphViewChange changes)
+        {
+            if (changes.elementsToRemove != null)
+            {
+                //RegisterCompleteObjectUndo("Remove Graph Elements");
+
+                // Destroy priority of objects
+                // We need nodes to be destroyed first because we can have a destroy operation that uses node connections
+                changes.elementsToRemove.Sort((e1, e2) =>
+                {
+                    int GetPriority(GraphElement e)
+                    {
+                        if (e is BehaviorGraphNodeView)
+                            return 0;
+                        else
+                            return 1;
+                    }
+                    return GetPriority(e1).CompareTo(GetPriority(e2));
+                });
+
+                //Handle ourselves the edge and node remove
+                changes.elementsToRemove.RemoveAll(e =>
+                {
+
+                    switch (e)
+                    {
+                        case EdgeView edge:
+                            Disconnect(edge);
+                            return true;
+                        case BehaviorGraphNodeView nodeView:
+                            // For vertical nodes, we need to delete them ourselves as it's not handled by GraphView
+                            if (nodeView.inputPortView != null)
+                            {
+                                foreach (var edge in nodeView.inputPortView.GetEdges().ToList())
+                                    Disconnect(edge);
+                            }
+                            if (nodeView.outputPortView != null)
+                            {
+                                foreach (var edge in nodeView.outputPortView.GetEdges().ToList())
+                                    Disconnect(edge);
+                            }
+                            //nodeView.OnRemoved();
+                            RemoveElement(nodeView);
+                            return true;
+                        //case GroupView group:
+                        //    graph.RemoveGroup(group.group);
+                        //    UpdateSerializedProperties();
+                        //    RemoveElement(group);
+                        //    return true;
+                    }
+
+                    return false;
+                });
+            }
+
+            return changes;
+        }
+        public void Disconnect(EdgeView e, bool refreshPorts = true)
+        {
+            DisconnectView(e, refreshPorts);
+
+            //UpdateComputeOrder();
+        }
         public IEnumerable<(string path, Type type)> FilterCreateNodeMenuEntries()
         {
             foreach (var nodeMenuItem in BTNodeProvider.GetNodeMenuEntries())
                 yield return nodeMenuItem;
         }
-        public BehaviorGraphNodeView AddNode(Type nodeType,Type nodeViewType)
+        public BehaviorGraphNodeView AddNode(Type nodeType, Type nodeViewType)
         {
-           
             BehaviorGraphNodeView nodeView = Activator.CreateInstance(nodeViewType) as BehaviorGraphNodeView;
             nodeView.owner = this;
             nodeView.classData = new GraphNodeClassData();
@@ -84,7 +147,8 @@ namespace BT.Editor
         {
             var compatiblePorts = new List<Port>();
 
-            compatiblePorts.AddRange(ports.ToList().Where(p => {
+            compatiblePorts.AddRange(ports.ToList().Where(p =>
+            {
                 var portView = p as NodePortView;
 
                 if (portView.owner == (startPort as NodePortView).owner)
@@ -98,7 +162,7 @@ namespace BT.Editor
                     return false;
 
                 //Check if the edge already exists
-                if (portView.GetEdges().Any(e => e.input == startPort || e.output == startPort))
+                if (portView.GetEdges().Any(e=>EEE(e, startPort)))
                     return false;
 
                 return true;
@@ -106,7 +170,10 @@ namespace BT.Editor
 
             return compatiblePorts;
         }
-        
+        private  bool EEE(EdgeView e, Port startPort)
+        {
+          return  e.input == startPort || e.output == startPort;
+        }
         protected virtual BaseEdgeConnectorListener CreateEdgeConnectorListener()
          => new BaseEdgeConnectorListener(this);
         public bool Connect(NodePortView inputPortView, NodePortView outputPortView, bool autoDisconnectInputs = true)
@@ -131,8 +198,8 @@ namespace BT.Editor
             var outputPortView = e.output as NodePortView;
             var inputNodeView = inputPortView.node as BehaviorGraphNodeView;
             var outputNodeView = outputPortView.node as BehaviorGraphNodeView;
-            var inputPort = inputNodeView.GetPort();
-            var outputPort = outputNodeView.GetPort();
+            var inputPort = inputNodeView.inputPortView;
+            var outputPort = outputNodeView.outputPortView;
 
             ConnectView(e, autoDisconnectInputs);
 
@@ -195,9 +262,9 @@ namespace BT.Editor
             // If the input port have been removed by the custom port behavior
             // we try to find if it's still here
             if (e.input == null)
-                e.input = inputNodeView.GetPort();
+                e.input = inputNodeView.inputPortView;
             if (e.output == null)
-                e.output = inputNodeView.GetPort();
+                e.output = inputNodeView.inputPortView;
 
             edgeViews.Add(e);
 
@@ -205,7 +272,8 @@ namespace BT.Editor
             outputNodeView.RefreshPorts();
 
             // In certain cases the edge color is wrong so we patch it
-            schedule.Execute(() => {
+            schedule.Execute(() =>
+            {
                 e.UpdateEdgeControl();
             }).ExecuteLater(1);
 

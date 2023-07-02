@@ -31,8 +31,8 @@ namespace BT.Editor
         private VisualElement inputContainerElement;
         Dictionary<string, VisualElement> hideElementIfConnected = new Dictionary<string, VisualElement>();
 
-        public List<NodePortView> inputPortViews = new List<NodePortView>();
-        public List<NodePortView> outputPortViews = new List<NodePortView>();
+        public NodePortView inputPortView = null;
+        public NodePortView outputPortView = null;
 
         readonly string baseNodeStyle = "GraphStyles/BaseNodeView";
         public void Initialize()
@@ -41,6 +41,8 @@ namespace BT.Editor
             InitializeView();
             InitializePorts();
             UpdateTitle();
+
+            SetNodeColor();
         }
         void InitializeView()
         {
@@ -62,6 +64,10 @@ namespace BT.Editor
             AddPort(Direction.Input,true, listener);
             AddPort(Direction.Output,true, listener);
         }
+        protected virtual void SetNodeColor()
+        {
+            
+        }
         public void AddPort(Direction direction,bool allowMultiple, BaseEdgeConnectorListener listener)
         {
             NodePortView p = CreatePortView(direction, allowMultiple, listener);
@@ -69,12 +75,12 @@ namespace BT.Editor
 
             if (p.direction == Direction.Input)
             {
-                inputPortViews.Add(p);
+                inputPortView=(p);
                 topPortContainer.Add(p);
             }
             else
             {
-                outputPortViews.Add(p);
+                outputPortView=(p);
                 bottomPortContainer.Add(p);
             }
             p.Initialize(this, "@@@sdfsdfsdfsd");
@@ -288,10 +294,6 @@ namespace BT.Editor
         //{
         //    this.expanded = false;
         //}
-        public NodePortView GetPort()
-        {
-            return inputPortViews.Concat(outputPortViews).FirstOrDefault();
-        }
     }
 }
 

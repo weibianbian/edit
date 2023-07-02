@@ -21,13 +21,10 @@ namespace BT.Editor
             FlexibleSpace,
         }
 
-        public BTToolbarView(BehaviorTreeGraphView graphView)
+        public BTToolbarView()
         {
-            graphView.initialized += () =>
-            {
-                AddButtons();
-            };
-            this.StretchToParentSize();
+            AddButtons();
+            //this.StretchToParentSize();
         }
         protected void AddButtons()
         {
