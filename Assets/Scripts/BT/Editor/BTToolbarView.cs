@@ -1,7 +1,10 @@
 ﻿using BT.Runtime;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEditor;
+using UnityEditor.PackageManager.UI;
 using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -20,47 +23,32 @@ namespace BT.Editor
             Custom,
             FlexibleSpace,
         }
-
-        public BTToolbarView()
+        BehaviorTreeGrahpWindow window;
+        public BTToolbarView(BehaviorTreeGrahpWindow window)
         {
+            this.window = window;
             AddButtons();
-            //this.StretchToParentSize();
         }
         protected void AddButtons()
         {
             AddButton("Center", () => { }, TextAnchor.MiddleLeft);
             AddButton("CreateBehaviorTree", CreateBehaviorTree, TextAnchor.MiddleLeft);
+            AddButton("SaveBehaviorTree", SaveBehaviorTree, TextAnchor.MiddleLeft);
         }
         protected void AddButton(string content, Action callback, TextAnchor anchor)
         {
             var btn = new ToolbarButton(callback);
-            btn.style.unityTextAlign = TextAnchor.MiddleLeft;
+            btn.style.unityTextAlign = anchor;
             btn.text = content;
             Add(btn);
         }
-        //public override void UpdateButtonStatus()
-        //{
-        //    base.UpdateButtonStatus();
-        //    //if (showNodeInspector != null)
-        //    //    showNodeInspector.value = graphView.GetPinnedElementStatus<NodeInspectorView>() != UnityEngine.UIElements.DropdownMenuAction.Status.Hidden;
-        //}
         public void CreateBehaviorTree()
         {
-            Debug.Log("CreateBehaviorTree");
-            BehaviorTree tree=new BehaviorTree();
-
+            window.CreateBehaviorTree();
         }
-        protected virtual void DrawImGUIToolbar()
+        public void SaveBehaviorTree()
         {
-            //GUILayout.BeginHorizontal(EditorStyles.toolbar);
-
-            //DrawImGUIButtonList(leftButtonDatas);
-
-            //GUILayout.FlexibleSpace();
-
-            //DrawImGUIButtonList(rightButtonDatas);
-
-            //GUILayout.EndHorizontal();
+            window.SaveBehaviorTree();
         }
     }
 }

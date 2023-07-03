@@ -8,7 +8,7 @@ namespace BT.Editor
     {
         readonly string edgeStyle = "GraphStyles/EdgeView";
         public bool isConnected = false;
-        protected BehaviorTreeGraphView owner => ((input ?? output) as NodePortView).owner.owner;
+        protected BehaviorTreeGraphView owner => ((input ?? output).node as BehaviorGraphNodeView).owner;
         public EdgeView() : base()
         {
             styleSheets.Add(Resources.Load<StyleSheet>(edgeStyle));

@@ -17,7 +17,7 @@ public class JsonTest : MonoBehaviour
 
         BehaviorTree de= JsonConvert.DeserializeObject<BehaviorTree>(str);
 
-        Debug.Log(de.entryNode);
+        Debug.Log(de.rootNode);
     }
 
     // Update is called once per frame

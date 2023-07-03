@@ -1,4 +1,7 @@
+using BT.Runtime;
+using Newtonsoft.Json;
 using UnityEditor;
+using UnityEditor.PackageManager.UI;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -7,6 +10,7 @@ namespace BT.Editor
     public class BehaviorTreeGrahpWindow : EditorWindow
     {
         UnityEditor.Experimental.GraphView.Blackboard xxxxxxx;
+        
         public BTNodeInspector nodeInspector;
         [MenuItem("Window/Open BehaviorTree GraphWindow")]
         public static void Open()
@@ -33,7 +37,6 @@ namespace BT.Editor
             nodeInspector = new BTNodeInspector(this);
 
             leftContainer.Add(nodeInspector);
-            nodeInspector.Show(new Runtime.BTNode());
         }
         public void InitElementView()
         {
@@ -44,7 +47,7 @@ namespace BT.Editor
             mainContainer.pickingMode = PickingMode.Ignore;
             rootVisualElement.Add(mainContainer);
 
-            rootVisualElement.Insert(0, new BTToolbarView());
+            rootVisualElement.Insert(0, new BTToolbarView(this));
 
             leftContainer = new VisualElement()
             {
@@ -87,43 +90,38 @@ namespace BT.Editor
             };
 
             mainContainer.Insert(0, graphView);
-
-
-
-            //Debug.LogError($"InitializeWindow  {(graph as BehaviorTreeGraph).behaviorTree}");
         }
-        //protected override void OnEnable()
-        //{
-        //    base.OnEnable();
 
-        //    titleContent = new GUIContent("BehaviorTree Graph",
-        //        AssetDatabase.LoadAssetAtPath<Texture2D>($"{GraphCreateAndSaveHelper.NodeGraphProcessorPathPrefix}/Editor/Icon_Dark.png"));
-        //    m_HasInitGUIStyles = false;
-        //}
-
-        //private bool m_HasInitGUIStyles;
-        //protected override void InitializeWindow(BaseGraph graph)
-        //{
-        //    var graphView = new BehaviorTreeGraphView(this);
-        //    rootView.Add(graphView);
-
-        //    graphView.Add(new BTToolbarView(graphView));
-
-        //    Debug.LogError($"InitializeWindow  {(graph as BehaviorTreeGraph).behaviorTree}");
-        //}
-        //private void OnGUI()
-        //{
-        //    InitGUIStyles(ref m_HasInitGUIStyles);
-
-        //}
-        //private void InitGUIStyles(ref bool result)
-        //{
-        //    if (!result)
-        //    {
-        //        EditorGUIStyleHelper.SetGUIStylePadding(nameof(EditorStyles.toolbarButton), new RectOffset(15, 15, 0, 0));
-        //        result = true;
-        //    }
-        //}
+        public void OnSelectedNode(BehaviorGraphNodeView nodeView)
+        {
+            if (nodeView != null)
+            {
+                nodeInspector.Show(nodeView.nodeInstance);
+            }
+        }
+        public void OnUnselectedNode(BehaviorGraphNodeView nodeView)
+        {
+            nodeInspector.ClearBoard();
+        }
+        public void CreateBehaviorTree()
+        {
+            Debug.Log("CreateBehaviorTree");
+            graphView.treeAsset = new BehaviorTree();
+        }
+        public void SaveBehaviorTree()
+        {
+            if (graphView.treeAsset != null)
+            {
+                Debug.Log("SaveBehaviorTree");
+                //var setting = new JsonSerializerSettings();
+                //setting.Formatting = Formatting.Indented;
+                //setting.TypeNameHandling = TypeNameHandling.All;
+                //setting.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+                //string str = JsonConvert.SerializeObject(behaviorTree, setting);
+                graphView.OnSave();
+                //Debug.Log(str);
+            }
+        }
     }
 
 }

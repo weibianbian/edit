@@ -71,9 +71,9 @@ namespace BT.Editor
             List<Port> ports = graphView.GetCompatiblePorts(draggedPort, nodeAdapter);
             foreach (NodePortView port in ports)
             {
-                compatiblePorts.TryGetValue(port.owner, out var portList);
+                compatiblePorts.TryGetValue(port.node as BehaviorGraphNodeView, out var portList);
                 if (portList == null)
-                    portList = compatiblePorts[port.owner] = new List<NodePortView>();
+                    portList = compatiblePorts[port.node as BehaviorGraphNodeView] = new List<NodePortView>();
                 portList.Add(port);
             }
             foreach (var kp in compatiblePorts)

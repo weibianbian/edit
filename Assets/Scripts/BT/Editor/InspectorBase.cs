@@ -4,12 +4,12 @@ using UnityEngine.UIElements;
 
 namespace BT.Editor
 {
-    public class Board : VisualElement
+    public class InspectorBase : VisualElement
     {
         protected Label titleLable;
 
         private Color c = new Color(93 / 255f, 93 / 255f, 93 / 255f);
-        public Board(EditorWindow aEditorWindow)
+        public InspectorBase(EditorWindow aEditorWindow)
         {
             //mEditorWindow = aEditorWindow as GraphLogicWindow;
 

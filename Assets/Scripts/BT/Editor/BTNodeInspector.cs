@@ -8,28 +8,36 @@ using UnityEngine.UIElements;
 
 namespace BT.Editor
 {
-    public class BTNodeInspector : Board
+    public class BTNodeInspector : InspectorBase
     {
-        private ScrollView mScrollView;
+        private ScrollView scrollView;
         private int itemWidth = 110;
         private int space = 2;
-        public BTNodeInspector(EditorWindow aEditorWindow) : base(aEditorWindow)
+        private VisualElement currentInspector;
+        public BTNodeInspector(EditorWindow editorWindow) : base(editorWindow)
         {
             titleLable.text = "属性面板";
+            currentInspector = new VisualElement();
+            Add(currentInspector);
         }
 
         public void Show(BTNode node)
         {
-            //Clear();
-            mScrollView = new ScrollView();
-            mScrollView.verticalScroller.style.width = 4;
+            currentInspector.Clear();
+            
+            scrollView = new ScrollView();
+            scrollView.verticalScroller.style.width = 4;
             FieldInfo[] fields = TypeUtils.GetAllFields(node.GetType());
 
             foreach (var item in fields)
             {
                 CheckFieldInfo(item, node);
             }
-            Add(mScrollView);
+            currentInspector.Add(scrollView);
+        }
+        public void ClearBoard()
+        {
+            currentInspector.Clear();
         }
         private void CheckFieldInfo(FieldInfo info,object obj)
         {
@@ -68,8 +76,8 @@ namespace BT.Editor
             });
             line.Add(label);
             line.Add(enumField);
-            mScrollView.Add(line);
-            mScrollView.Add(VisualElementUtils.GetSpace(0, space));
+            scrollView.Add(line);
+            scrollView.Add(VisualElementUtils.GetSpace(0, space));
         }
         private void ShowInt(FieldInfo info, object obj)
         {
@@ -85,8 +93,8 @@ namespace BT.Editor
             });
             line.Add(label);
             line.Add(intField);
-            mScrollView.Add(line);
-            mScrollView.Add(VisualElementUtils.GetSpace(0, space));
+            scrollView.Add(line);
+            scrollView.Add(VisualElementUtils.GetSpace(0, space));
         }
         private void ShowString(FieldInfo info, object obj)
         {
@@ -105,8 +113,8 @@ namespace BT.Editor
             });
             line.Add(label);
             line.Add(stringField);
-            mScrollView.Add(line);
-            mScrollView.Add(GetSpace(0, space));
+            scrollView.Add(line);
+            scrollView.Add(GetSpace(0, space));
         }
         private void ShowBool(FieldInfo info,object obj)
         {
@@ -121,8 +129,8 @@ namespace BT.Editor
             });
             line.Add(label);
             line.Add(boolField);
-            mScrollView.Add(line);
-            mScrollView.Add(GetSpace(0, space));
+            scrollView.Add(line);
+            scrollView.Add(GetSpace(0, space));
         }
         public VisualElement GetSpace(int _width, int _height)
         {

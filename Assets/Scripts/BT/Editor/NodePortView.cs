@@ -14,7 +14,6 @@ namespace BT.Editor
         readonly string portStyle = "GraphStyles/PortView";
         List<EdgeView> edges = new List<EdgeView>();
         public bool acceptMultipleEdges;
-        public BehaviorGraphNodeView owner { get; private set; }
         public string fieldName => typeof(BTNode).ToString();
         public Type fieldType => typeof(BTNode);
         protected NodePortView(Direction portDirection,bool allowMultiple) : base(Orientation.Vertical, portDirection, Capacity.Multi, typeof(BehaviorGraphNodeView))
@@ -51,9 +50,8 @@ namespace BT.Editor
 
             return pv;
         }
-        public virtual void Initialize(BehaviorGraphNodeView nodeView, string name)
+        public virtual void Initialize(string name)
         {
-            this.owner = nodeView;
             AddToClassList("xixixixixi");
 
             // Correct port type if port accept multiple values (and so is a container)
@@ -71,8 +69,8 @@ namespace BT.Editor
         public override void Connect(Edge edge)
         {
             base.Connect(edge);
-            var inputNode = (edge.input as NodePortView).owner;
-            var outputNode = (edge.output as NodePortView).owner;
+            var inputNode = edge.input.node as BehaviorGraphNodeView ;
+            var outputNode = edge.output.node as BehaviorGraphNodeView;
             edges.Add(edge as EdgeView);
 
             inputNode.OnPortConnected(edge.input as NodePortView);
@@ -105,8 +103,8 @@ namespace BT.Editor
             if (!(edge as EdgeView).isConnected)
                 return;
 
-            var inputNode = (edge.input as NodePortView)?.owner;
-            var outputNode = (edge.output as NodePortView)?.owner;
+            var inputNode = (edge.input as NodePortView)?.node as BehaviorGraphNodeView;
+            var outputNode = (edge.output as NodePortView)?.node as BehaviorGraphNodeView;
 
             //inputNode?.OnPortDisconnected(edge.input as PortView);
             //outputNode?.OnPortDisconnected(edge.output as PortView);

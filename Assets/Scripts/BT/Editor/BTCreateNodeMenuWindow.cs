@@ -87,15 +87,15 @@ namespace BT.Editor
                 foreach (var nodeMenuItem in nodePaths)
                 {
                     var nodePath = nodeMenuItem.path;
-                    if (portView.owner is BehaviorGraphNodeRootView && nodeMenuItem.type == typeof(BTEntryNode))
+                    if (portView.node is BehaviorGraphNodeRootView && nodeMenuItem.type == typeof(BTEntryNode))
                     {
                         continue;
                     }
-                    else if (portView.owner is BehaviorGraphNodeCompositeView && nodeMenuItem.type == typeof(BTEntryNode))
+                    else if (portView.node is BehaviorGraphNodeCompositeView && nodeMenuItem.type == typeof(BTEntryNode))
                     {
                         continue;
                     }
-                    else if (portView.owner is BehaviorGraphNodeActionView)
+                    else if (portView.node is BehaviorGraphNodeActionView)
                     {
                     }
                     // Ignore the node if it's not in the create menu
@@ -146,15 +146,15 @@ namespace BT.Editor
                 foreach (var nodeMenuItem in nodePaths)
                 {
                     var nodePath = nodeMenuItem.path;
-                    if (portView.owner is BehaviorGraphNodeRootView && nodeMenuItem.type == typeof(BTEntryNode))
+                    if (portView.node is BehaviorGraphNodeRootView && nodeMenuItem.type == typeof(BTEntryNode))
                     {
                         continue;
                     }
-                    else if (portView.owner is BehaviorGraphNodeCompositeView && nodeMenuItem.type.IsSubclassOf(typeof(BTActionNode)))
+                    else if (portView.node is BehaviorGraphNodeCompositeView && nodeMenuItem.type.IsSubclassOf(typeof(BTActionNode)))
                     {
                         continue;
                     }
-                    else if (portView.owner is BehaviorGraphNodeActionView && nodeMenuItem.type.IsSubclassOf(typeof(BTActionNode)))
+                    else if (portView.node is BehaviorGraphNodeActionView && nodeMenuItem.type.IsSubclassOf(typeof(BTActionNode)))
                     {
                         continue;
                     }

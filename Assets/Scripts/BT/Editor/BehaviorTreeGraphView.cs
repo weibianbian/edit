@@ -1,10 +1,14 @@
 ﻿using BT.Runtime;
 using Codice.Client.BaseCommands;
+using Newtonsoft.Json;
+using Sirenix.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEditor;
 using UnityEditor.Experimental.GraphView;
+using UnityEditor.VersionControl;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -53,6 +57,7 @@ namespace BT.Editor
             initialized?.Invoke();
 
             BTNodeProvider.LoadGraph();
+            treeAsset = new BehaviorTree();
         }
         void InitializeGraphView()
         {
@@ -109,11 +114,11 @@ namespace BT.Editor
                             //nodeView.OnRemoved();
                             RemoveElement(nodeView);
                             return true;
-                        //case GroupView group:
-                        //    graph.RemoveGroup(group.group);
-                        //    UpdateSerializedProperties();
-                        //    RemoveElement(group);
-                        //    return true;
+                            //case GroupView group:
+                            //    graph.RemoveGroup(group.group);
+                            //    UpdateSerializedProperties();
+                            //    RemoveElement(group);
+                            //    return true;
                     }
 
                     return false;
@@ -151,7 +156,7 @@ namespace BT.Editor
             {
                 var portView = p as NodePortView;
 
-                if (portView.owner == (startPort as NodePortView).owner)
+                if (portView.node == (startPort as NodePortView).node)
                     return false;
 
                 if (p.direction == startPort.direction)
@@ -162,7 +167,7 @@ namespace BT.Editor
                     return false;
 
                 //Check if the edge already exists
-                if (portView.GetEdges().Any(e=> e.input == startPort || e.output == startPort))
+                if (portView.GetEdges().Any(e => e.input == startPort || e.output == startPort))
                     return false;
 
                 return true;
@@ -175,7 +180,7 @@ namespace BT.Editor
         public bool Connect(NodePortView inputPortView, NodePortView outputPortView, bool autoDisconnectInputs = true)
         {
             // Checks that the node we are connecting still exists
-            if (inputPortView.owner.parent == null || outputPortView.owner.parent == null)
+            if (inputPortView.node.parent == null || outputPortView.node.parent == null)
                 return false;
 
             var edgeView = new EdgeView();
@@ -301,7 +306,92 @@ namespace BT.Editor
         }
         public void OnSelectedNode(BehaviorGraphNodeView nodeView)
         {
+            BehaviorTreeGrahpWindow win = window as BehaviorTreeGrahpWindow;
+            win.OnSelectedNode(nodeView);
+        }
+        public void OnUnselectedNode(BehaviorGraphNodeView nodeView)
+        {
+            BehaviorTreeGrahpWindow win = window as BehaviorTreeGrahpWindow;
+            win.OnUnselectedNode(nodeView);
+        }
+        public void UpdateAsset()
+        {
+            BehaviorGraphNodeRootView rootNode = null;
+            for (int i = 0; i < nodeViews.Count; i++)
+            {
+                if (rootNode == null)
+                {
+                    rootNode = nodeViews[i] as BehaviorGraphNodeRootView;
+                }
+            }
+            if (rootNode != null && rootNode.outputPortView.GetEdges().Count > 0)
+            {
+                BehaviorGraphNodeView node = (rootNode.outputPortView.GetEdges()[0].input.node as BehaviorGraphNodeView);
+                CreateBTFromGraph(node);
+            }
+        }
+        public void CreateBTFromGraph(BehaviorGraphNodeView rootEdNode)
+        {
+            int executionIndex = 0;
+            int treeDepth = 0;
+            treeAsset.rootNode = rootEdNode.nodeInstance as BTCompositieNode;
+            if (treeAsset.rootNode != null)
+            {
+                treeAsset.rootNode.InitializeNode(null, executionIndex, treeDepth);
+                executionIndex++;
+            }
+            CreateChildren(treeAsset, treeAsset.rootNode, rootEdNode, ref executionIndex, treeDepth + 1);
+        }
+        public void CreateChildren(BehaviorTree btAsset, BTCompositieNode rootNode, BehaviorGraphNodeView rootENode, ref int executionIndex, int treeDepth)
+        {
+            if (rootENode == null)
+            {
+                return;
+            }
+            rootNode.childrens.Clear();
 
+            int childIdx = 0;
+            List<EdgeView> edgeViews = rootENode.outputPortView.GetEdges();
+            edgeViews.Sort(CompareNodeXLocaltion);
+            for (int i = 0; i < edgeViews.Count; i++)
+            {
+                EdgeView edge = edgeViews[i];
+                BehaviorGraphNodeView graphNode = edge.input.node as BehaviorGraphNodeView;
+                if (graphNode == null)
+                {
+                    continue;
+                }
+
+                BTNode childNode = graphNode.nodeInstance;
+                if (childNode == null)
+                {
+                    continue;
+                }
+                childNode.InitializeNode(rootNode, executionIndex, treeDepth);
+                executionIndex++;
+                childIdx++;
+                rootNode.childrens.Add(childNode);
+                if (childNode is BTCompositieNode)
+                {
+                    CreateChildren(btAsset, childNode as BTCompositieNode, graphNode, ref executionIndex, treeDepth + 1);
+                }
+            }
+        }
+        public int CompareNodeXLocaltion(EdgeView e1, EdgeView e2)
+        {
+            return e1.input.node.GetPosition().x < e2.input.node.GetPosition().x ? -1 : 1;
+        }
+        public void OnSave()
+        {
+            UpdateAsset();
+
+            var setting = new JsonSerializerSettings();
+            setting.Formatting = Formatting.Indented;
+            setting.TypeNameHandling = TypeNameHandling.None;
+            setting.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+            string str = JsonConvert.SerializeObject(treeAsset, setting);
+
+            Debug.Log(str);
         }
     }
 }

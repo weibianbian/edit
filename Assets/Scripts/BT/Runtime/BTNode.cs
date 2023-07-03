@@ -14,6 +14,15 @@ namespace BT.Runtime
         public Action onVisit;
 
         public string nodeName = "";
+
+        public int executionIndex = 0;
+        public int treeDepth = 0;
+        public void InitializeNode(BTCompositieNode inParentNode, int inExecutionIndex, int inTreeDepth)
+        {
+            parentNode = inParentNode;
+            executionIndex = inExecutionIndex;
+            treeDepth = inTreeDepth;
+        }
         public void Visit()
         {
             OnVisit();

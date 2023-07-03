@@ -83,7 +83,7 @@ namespace BT.Editor
                 outputPortView=(p);
                 bottomPortContainer.Add(p);
             }
-            p.Initialize(this, "@@@sdfsdfsdfsd");
+            p.Initialize("@@@sdfsdfsdfsd");
         }
         protected virtual NodePortView CreatePortView(Direction direction, bool allowMultiple, BaseEdgeConnectorListener listener)
            => NodePortView.CreatePortView(direction, allowMultiple, listener);
@@ -268,34 +268,21 @@ namespace BT.Editor
         public override void OnSelected()
         {
             Debug.Log($"选中了节点:{this}");
-            
             if (owner == null)
             {
                 return;
             }
             owner.OnSelectedNode(this);
-            //UnityEngine.Debug.Log(owner.GetPinnedElementStatus<NodeInspectorView>());
-            //if (owner.GetPinnedElementStatus<NodeInspectorView>()== UnityEngine.UIElements.DropdownMenuAction.Status.Normal)
-            //{
-            //    //owner.pinnedElements.
-            //}
         }
         public override void OnUnselected()
         {
-            base.OnUnselected();
-            //if (owner == null)
-            //{
-            //    return;
-            //}
-            //if (owner.GetPinnedElementStatus<NodeInspectorView>() != UnityEngine.UIElements.DropdownMenuAction.Status.Hidden)
-            //{
-            //    owner.ToggleView<NodeInspectorView>();
-            //}
+            Debug.Log($"@取消选中了节点:{this}");
+            if (owner == null)
+            {
+                return;
+            }
+            owner.OnUnselectedNode(this);
         }
-        //protected override void DrawDefaultInspector(bool fromInspector = false)
-        //{
-        //    this.expanded = false;
-        //}
     }
 }
 
