@@ -51,6 +51,7 @@ namespace BT.Editor
             var nodeType = searchTreeEntry.userData is Type ? (Type)searchTreeEntry.userData : ((BTNodeProvider.PortDescription)searchTreeEntry.userData).nodeType;
             //graphView.RegisterCompleteObjectUndo("Added " + nodeType);
             var nodeViewType = BTNodeProvider.GetNodeViewTypeFromType(nodeType);
+
             var nodeView = graphView.AddNode(nodeType, nodeViewType);
             nodeView.PostPlaceNewNode();
             nodeView.SetPosition(new Rect(graphMousePosition, new Vector2(200, 200)));

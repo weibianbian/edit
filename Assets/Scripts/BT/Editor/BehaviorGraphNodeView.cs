@@ -13,16 +13,16 @@ namespace BT.Editor
 {
     public class GraphNodeClassData
     {
-        public Type classType;
+        
 
     }
     public class BehaviorGraphNodeView : NodeView
     {
         public BehaviorTreeGraphView owner { set; get; }
+        public virtual Type RuntimeClassType { get; }
         Label returnLabel;
         private bool isRuned;//节点运行过。
         public BTNode nodeInstance;
-        public GraphNodeClassData classData;
         public VisualElement controlsContainer;
         protected VisualElement debugContainer;
         protected VisualElement rightTitleContainer;
@@ -35,6 +35,7 @@ namespace BT.Editor
         public NodePortView outputPortView = null;
 
         readonly string baseNodeStyle = "GraphStyles/BaseNodeView";
+
         public void Initialize()
         {
             styleSheets.Add(Resources.Load<StyleSheet>(baseNodeStyle));
@@ -113,7 +114,7 @@ namespace BT.Editor
         {
             if (nodeInstance == null)
             {
-                nodeInstance = Activator.CreateInstance(classData.classType) as BTNode;
+                nodeInstance = Activator.CreateInstance(RuntimeClassType) as BTNode;
             }
             Initialize();
         }

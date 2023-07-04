@@ -103,6 +103,23 @@ namespace BT.Editor
             return typeof(BehaviorGraphNodeView); ;
         }
     }
-
+    public class BTGraphNodeCreator<T> where T : BehaviorGraphNodeView
+    {
+        public T node;
+        BehaviorTreeGraphView graph;
+        public BTGraphNodeCreator(BehaviorTreeGraphView inGraph)
+        {
+            graph = inGraph;
+        }
+        public T CreateNode()
+        {
+            node = graph.CreateNode(typeof(T)) as T;
+            return node;
+        }
+        public void OnFinalize()
+        {
+            node.PostPlaceNewNode();
+        }
+    }
 }
 

@@ -1,4 +1,6 @@
-﻿using UnityEditor.Experimental.GraphView;
+﻿using BT.Runtime;
+using System;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -6,6 +8,7 @@ namespace BT.Editor
 {
     public class BehaviorGraphNodeRootView : BehaviorGraphNodeView
     {
+        public override Type RuntimeClassType => typeof(BTEntryNode);
         protected override void InitializePorts()
         {
             var listener = owner.connectorListener;

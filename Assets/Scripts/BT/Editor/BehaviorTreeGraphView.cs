@@ -142,8 +142,6 @@ namespace BT.Editor
         {
             BehaviorGraphNodeView nodeView = Activator.CreateInstance(nodeViewType) as BehaviorGraphNodeView;
             nodeView.owner = this;
-            nodeView.classData = new GraphNodeClassData();
-            nodeView.classData.classType = nodeType;
             AddElement(nodeView);
             nodeViews.Add(nodeView);
             return nodeView;
@@ -392,6 +390,84 @@ namespace BT.Editor
             string str = JsonConvert.SerializeObject(treeAsset, setting);
 
             Debug.Log(str);
+        }
+        public BehaviorGraphNodeView CreateNode(Type nodeViewType)
+        {
+            BehaviorGraphNodeView nodeView = Activator.CreateInstance(nodeViewType) as BehaviorGraphNodeView;
+            nodeView.owner = this;
+            AddElement(nodeView);
+            nodeViews.Add(nodeView);
+            return nodeView;
+        }
+        public void RestoreBehaviorTree()
+        {
+
+            //var nodeViewType = BTNodeProvider.GetNodeViewTypeFromType(typeof(BTEntryNode));
+            //var nodeView = AddNode(typeof(BTEntryNode), nodeViewType);
+            CreateDefaultNodesForGraph();
+            OnCreated();
+        }
+        public void CreateDefaultNodesForGraph()
+        {
+            BTGraphNodeCreator<BehaviorGraphNodeRootView> nodeCreator = new BTGraphNodeCreator<BehaviorGraphNodeRootView>(this);
+            BehaviorGraphNodeRootView myNode = nodeCreator.CreateNode();
+            nodeCreator.OnFinalize();
+        }
+        public void OnCreated()
+        {
+            SpawnMissingNodes();
+        }
+        public void SpawnMissingNodes()
+        {
+            if (treeAsset != null)
+            {
+                BehaviorGraphNodeView rootNode = null;
+                for (int i = 0; i < nodeViews.Count; i++)
+                {
+                    rootNode = nodeViews[i] as BehaviorGraphNodeRootView;
+                    if (rootNode != null)
+                    {
+                        break;
+                    }
+                }
+            }
+        }
+        public BehaviorGraphNodeView SpawnMissingGraphNodes(BehaviorTree asset, BehaviorGraphNodeView parentGraphNode)
+        {
+            if (asset == null || parentGraphNode == null)
+            {
+                return null;
+            }
+            BehaviorGraphNodeView graphNodeView = SpawnMissingGraphNodesWorker(asset.rootNode, parentGraphNode, 0);
+            return null;
+        }
+        public BehaviorGraphNodeView SpawnMissingGraphNodesWorker(BTNode node, BehaviorGraphNodeView parentGraphNode, int childIdx)
+        {
+            if (node == null)
+            {
+                return null;
+            }
+            BehaviorGraphNodeView graphNode = null;
+            BTCompositieNode compositeNode = node as BTCompositieNode;
+            if (compositeNode != null)
+            {
+                BTGraphNodeCreator<BehaviorGraphNodeCompositeView> nodeBuilder = new BTGraphNodeCreator<BehaviorGraphNodeCompositeView>(this);
+                graphNode = nodeBuilder.CreateNode();
+                nodeBuilder.OnFinalize();
+            }
+            else
+            {
+                BTGraphNodeCreator<BehaviorGraphNodeActionView> nodeBuilder = new BTGraphNodeCreator<BehaviorGraphNodeActionView>(this);
+                graphNode = nodeBuilder.CreateNode();
+                nodeBuilder.OnFinalize();
+            }
+            if (graphNode != null)
+            {
+                //设置位置
+                //graphNode.SetPosition(new Rect(parentGraphNode.GetPosition().x));
+                graphNode.nodeInstance = node;
+            }
+            return null;
         }
     }
 }
