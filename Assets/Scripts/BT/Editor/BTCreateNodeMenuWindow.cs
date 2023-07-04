@@ -52,8 +52,9 @@ namespace BT.Editor
             //graphView.RegisterCompleteObjectUndo("Added " + nodeType);
             var nodeViewType = BTNodeProvider.GetNodeViewTypeFromType(nodeType);
 
-            var nodeView = graphView.AddNode(nodeType, nodeViewType);
-            nodeView.PostPlaceNewNode();
+            var nodeView = graphView.AddNode(nodeViewType);
+            nodeView.RuntimeClassType = nodeType;
+            nodeView.PostPlacedNewNode();
             nodeView.SetPosition(new Rect(graphMousePosition, new Vector2(200, 200)));
 
             if (searchTreeEntry.userData is BTNodeProvider.PortDescription desc)

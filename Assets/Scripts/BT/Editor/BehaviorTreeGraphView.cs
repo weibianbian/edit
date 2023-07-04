@@ -138,7 +138,7 @@ namespace BT.Editor
             foreach (var nodeMenuItem in BTNodeProvider.GetNodeMenuEntries())
                 yield return nodeMenuItem;
         }
-        public BehaviorGraphNodeView AddNode(Type nodeType, Type nodeViewType)
+        public BehaviorGraphNodeView AddNode(Type nodeViewType)
         {
             BehaviorGraphNodeView nodeView = Activator.CreateInstance(nodeViewType) as BehaviorGraphNodeView;
             nodeView.owner = this;
@@ -401,9 +401,6 @@ namespace BT.Editor
         }
         public void RestoreBehaviorTree()
         {
-
-            //var nodeViewType = BTNodeProvider.GetNodeViewTypeFromType(typeof(BTEntryNode));
-            //var nodeView = AddNode(typeof(BTEntryNode), nodeViewType);
             CreateDefaultNodesForGraph();
             OnCreated();
         }
@@ -464,10 +461,18 @@ namespace BT.Editor
             if (graphNode != null)
             {
                 //设置位置
-                //graphNode.SetPosition(new Rect(parentGraphNode.GetPosition().x));
+                graphNode.SetPosition(new Rect(new Vector2(parentGraphNode.GetPosition().x + childIdx * 400, parentGraphNode.GetPosition().y + 75f), new Vector2(200, 200)));
                 graphNode.nodeInstance = node;
             }
-            return null;
+            if (compositeNode!=null)
+            {
+                for (int idx = 0; idx < compositeNode.childrens.Count; idx++)
+                {
+                    BTNode childNode = compositeNode.ChildAtIndex(idx);
+                    BehaviorGraphNodeView childGraphNode = SpawnMissingGraphNodesWorker(childNode, graphNode, idx);
+                }
+            }
+            return graphNode;
         }
     }
 }

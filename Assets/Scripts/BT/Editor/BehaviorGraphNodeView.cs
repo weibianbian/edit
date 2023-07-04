@@ -13,13 +13,13 @@ namespace BT.Editor
 {
     public class GraphNodeClassData
     {
-        
+
 
     }
     public class BehaviorGraphNodeView : NodeView
     {
         public BehaviorTreeGraphView owner { set; get; }
-        public virtual Type RuntimeClassType { get; }
+        public virtual Type RuntimeClassType { get; set; }
         Label returnLabel;
         private bool isRuned;//节点运行过。
         public BTNode nodeInstance;
@@ -62,26 +62,26 @@ namespace BT.Editor
         protected virtual void InitializePorts()
         {
             var listener = owner.connectorListener;
-            AddPort(Direction.Input,true, listener);
-            AddPort(Direction.Output,true, listener);
+            AddPort(Direction.Input, true, listener);
+            AddPort(Direction.Output, true, listener);
         }
         protected virtual void SetNodeColor()
         {
-            
+
         }
-        public void AddPort(Direction direction,bool allowMultiple, BaseEdgeConnectorListener listener)
+        public void AddPort(Direction direction, bool allowMultiple, BaseEdgeConnectorListener listener)
         {
             NodePortView p = CreatePortView(direction, allowMultiple, listener);
 
 
             if (p.direction == Direction.Input)
             {
-                inputPortView=(p);
+                inputPortView = (p);
                 topPortContainer.Add(p);
             }
             else
             {
-                outputPortView=(p);
+                outputPortView = (p);
                 bottomPortContainer.Add(p);
             }
             p.Initialize("@@@sdfsdfsdfsd");
@@ -110,9 +110,9 @@ namespace BT.Editor
 
             //onPortConnected?.Invoke(port);
         }
-        public void PostPlaceNewNode()
+        public void PostPlacedNewNode()
         {
-            if (nodeInstance == null)
+            if (RuntimeClassType != null && nodeInstance == null)
             {
                 nodeInstance = Activator.CreateInstance(RuntimeClassType) as BTNode;
             }

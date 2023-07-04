@@ -118,7 +118,7 @@ namespace BT.Editor
         }
         public void OnFinalize()
         {
-            node.PostPlaceNewNode();
+            node.PostPlacedNewNode();
         }
     }
 }

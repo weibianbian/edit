@@ -21,7 +21,7 @@ namespace BT.Runtime
             }
         }
 
-        protected BTNode ChildAtIndex(int index)
+        public BTNode ChildAtIndex(int index)
         {
             if (IsValidIndex(index))
             {
