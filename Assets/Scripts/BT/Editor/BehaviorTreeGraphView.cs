@@ -57,7 +57,6 @@ namespace BT.Editor
             initialized?.Invoke();
 
             BTNodeProvider.LoadGraph();
-            treeAsset = new BehaviorTree();
         }
         void InitializeGraphView()
         {
@@ -399,17 +398,7 @@ namespace BT.Editor
             nodeViews.Add(nodeView);
             return nodeView;
         }
-        public void RestoreBehaviorTree()
-        {
-            CreateDefaultNodesForGraph();
-            OnCreated();
-        }
-        public void CreateDefaultNodesForGraph()
-        {
-            BTGraphNodeCreator<BehaviorGraphNodeRootView> nodeCreator = new BTGraphNodeCreator<BehaviorGraphNodeRootView>(this);
-            BehaviorGraphNodeRootView myNode = nodeCreator.CreateNode();
-            nodeCreator.OnFinalize();
-        }
+
         public void OnCreated()
         {
             SpawnMissingNodes();
@@ -426,6 +415,11 @@ namespace BT.Editor
                     {
                         break;
                     }
+                }
+                BehaviorGraphNodeView spawnedRootNode = SpawnMissingGraphNodes(treeAsset, rootNode);
+                if (spawnedRootNode != null && rootNode != null)
+                {
+                    rootNode.outputPortView.ConnectTo<EdgeView>(spawnedRootNode.inputPortView);
                 }
             }
         }
@@ -464,12 +458,13 @@ namespace BT.Editor
                 graphNode.SetPosition(new Rect(new Vector2(parentGraphNode.GetPosition().x + childIdx * 400, parentGraphNode.GetPosition().y + 75f), new Vector2(200, 200)));
                 graphNode.nodeInstance = node;
             }
-            if (compositeNode!=null)
+            if (compositeNode != null)
             {
                 for (int idx = 0; idx < compositeNode.childrens.Count; idx++)
                 {
                     BTNode childNode = compositeNode.ChildAtIndex(idx);
                     BehaviorGraphNodeView childGraphNode = SpawnMissingGraphNodesWorker(childNode, graphNode, idx);
+                    graphNode.outputPortView.ConnectTo<EdgeView>(childGraphNode.inputPortView);
                 }
             }
             return graphNode;

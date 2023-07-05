@@ -1,4 +1,5 @@
 ﻿using BT.Runtime;
+using Codice.CM.SEIDInfo;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -89,16 +90,9 @@ namespace BT.Editor
                 foreach (var nodeMenuItem in nodePaths)
                 {
                     var nodePath = nodeMenuItem.path;
-                    if (portView.node is BehaviorGraphNodeRootView && nodeMenuItem.type == typeof(BTEntryNode))
+                    if (portView.node is BehaviorGraphNodeRootView&& nodeMenuItem.type.IsSubclassOf(typeof(BTActionNode)))
                     {
                         continue;
-                    }
-                    else if (portView.node is BehaviorGraphNodeCompositeView && nodeMenuItem.type == typeof(BTEntryNode))
-                    {
-                        continue;
-                    }
-                    else if (portView.node is BehaviorGraphNodeActionView)
-                    {
                     }
                     // Ignore the node if it's not in the create menu
                     if (String.IsNullOrEmpty(nodePath))
@@ -148,7 +142,7 @@ namespace BT.Editor
                 foreach (var nodeMenuItem in nodePaths)
                 {
                     var nodePath = nodeMenuItem.path;
-                    if (portView.node is BehaviorGraphNodeRootView && nodeMenuItem.type == typeof(BTEntryNode))
+                    if (portView.node is BehaviorGraphNodeRootView )
                     {
                         continue;
                     }

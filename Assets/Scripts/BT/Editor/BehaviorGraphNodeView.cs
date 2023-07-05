@@ -42,7 +42,6 @@ namespace BT.Editor
             InitializeView();
             InitializePorts();
             UpdateTitle();
-
             SetNodeColor();
         }
         void InitializeView()
@@ -120,7 +119,11 @@ namespace BT.Editor
         }
         void UpdateTitle()
         {
-            title = nodeInstance.nodeName;
+            title = GetNodeTitile();
+        }
+        public virtual string GetNodeTitile()
+        {
+            return "";
         }
         public void Enable()
         {

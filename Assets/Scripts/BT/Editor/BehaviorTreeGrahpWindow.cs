@@ -1,6 +1,8 @@
 using BT.Runtime;
 using Newtonsoft.Json;
+using System.IO;
 using UnityEditor;
+using UnityEditor.Experimental.GraphView;
 using UnityEditor.PackageManager.UI;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -10,7 +12,7 @@ namespace BT.Editor
     public class BehaviorTreeGrahpWindow : EditorWindow
     {
         UnityEditor.Experimental.GraphView.Blackboard xxxxxxx;
-        
+
         public BTNodeInspector nodeInspector;
         [MenuItem("Window/Open BehaviorTree GraphWindow")]
         public static void Open()
@@ -27,16 +29,19 @@ namespace BT.Editor
         readonly string graphWindowStyle = "GraphProcessorStyles/BaseGraphView";
         public void OnEnable()
         {
+            UnityEngine.Debug.Log($"BehaviorTreeGrahpWindow.OnEnable");
             rootVisualElement.Clear();
             InitializeRootView();
             InitElementView();
 
 
-            LoadGraph();
+            LoadBTGraphView();
 
             nodeInspector = new BTNodeInspector(this);
 
             leftContainer.Add(nodeInspector);
+
+
         }
         public void InitElementView()
         {
@@ -69,9 +74,11 @@ namespace BT.Editor
             //    AssetDatabase.LoadAssetAtPath<Texture2D>($"{GraphCreateAndSaveHelper.NodeGraphProcessorPathPrefix}/Editor/Icon_Dark.png"));
             //rootView.styleSheets.Add(Resources.Load<StyleSheet>(graphWindowStyle));
         }
-        void LoadGraph()
+        void LoadBTGraphView()
         {
+            LoadBehaviorTree();
             InitializeGraph();
+            RestoreBehaviorTree();
         }
         public void InitializeGraph()
         {
@@ -94,14 +101,56 @@ namespace BT.Editor
 
         public void OnSelectedNode(BehaviorGraphNodeView nodeView)
         {
-            if (nodeView != null)
+            if (nodeView != null&& nodeView.nodeInstance!=null)
             {
                 nodeInspector.Show(nodeView.nodeInstance);
             }
         }
         public void OnUnselectedNode(BehaviorGraphNodeView nodeView)
         {
-            nodeInspector.ClearBoard();
+            if (nodeInspector != null) { nodeInspector.ClearBoard(); }
+        }
+        public void LoadBehaviorTree()
+        {
+            //打开资源
+            string path = "";
+            byte[] data = LoadFile(path);
+            if (data != null)
+            {
+                string json = System.Text.Encoding.UTF8.GetString(data);
+                graphView.treeAsset = JsonConvert.DeserializeObject<BehaviorTree>(json);
+            }
+        }
+        public byte[] LoadFile(string path)
+        {
+            if (File.Exists(path))
+            {
+                using (FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Read))
+                {
+                    if (fs.Length != 0)
+                    {
+                        byte[] data = new byte[fs.Length];
+                        fs.Read(data, 0, data.Length);
+                        return data;
+                    }
+                }
+            }
+            return null;
+        }
+        public void RestoreBehaviorTree()
+        {
+            if (graphView.treeAsset == null)
+            {
+                graphView.treeAsset = new BehaviorTree();
+            }
+            CreateDefaultNodesForGraph();
+            graphView.OnCreated();
+        }
+        public void CreateDefaultNodesForGraph()
+        {
+            BTGraphNodeCreator<BehaviorGraphNodeRootView> nodeCreator = new BTGraphNodeCreator<BehaviorGraphNodeRootView>(graphView);
+            BehaviorGraphNodeRootView myNode = nodeCreator.CreateNode();
+            nodeCreator.OnFinalize();
         }
         public void CreateBehaviorTree()
         {
