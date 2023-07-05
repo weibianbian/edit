@@ -76,9 +76,9 @@ namespace BT.Editor
         }
         void LoadBTGraphView()
         {
-            LoadBehaviorTree();
+            byte[] bytes = LoadBehaviorTree();
             InitializeGraph();
-            RestoreBehaviorTree();
+            RestoreBehaviorTree(bytes);
         }
         public void InitializeGraph()
         {
@@ -101,7 +101,7 @@ namespace BT.Editor
 
         public void OnSelectedNode(BehaviorGraphNodeView nodeView)
         {
-            if (nodeView != null&& nodeView.nodeInstance!=null)
+            if (nodeView != null && nodeView.nodeInstance != null)
             {
                 nodeInspector.Show(nodeView.nodeInstance);
             }
@@ -110,16 +110,14 @@ namespace BT.Editor
         {
             if (nodeInspector != null) { nodeInspector.ClearBoard(); }
         }
-        public void LoadBehaviorTree()
+        public byte[] LoadBehaviorTree()
         {
             //打开资源
-            string path = "";
+            string rootPath = $"{Application.dataPath}/treeAssets";
+            string path = $"{rootPath}/001.Json";
             byte[] data = LoadFile(path);
-            if (data != null)
-            {
-                string json = System.Text.Encoding.UTF8.GetString(data);
-                graphView.treeAsset = JsonConvert.DeserializeObject<BehaviorTree>(json);
-            }
+            return data;
+
         }
         public byte[] LoadFile(string path)
         {
@@ -137,11 +135,16 @@ namespace BT.Editor
             }
             return null;
         }
-        public void RestoreBehaviorTree()
+        public void RestoreBehaviorTree(byte[] data)
         {
-            if (graphView.treeAsset == null)
+            if (data == null)
             {
                 graphView.treeAsset = new BehaviorTree();
+            }
+            else
+            {
+                string json = System.Text.Encoding.UTF8.GetString(data);
+                graphView.treeAsset = JsonConvert.DeserializeObject<BehaviorTree>(json);
             }
             CreateDefaultNodesForGraph();
             graphView.OnCreated();

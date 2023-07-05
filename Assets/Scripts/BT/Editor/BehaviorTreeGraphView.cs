@@ -1,14 +1,11 @@
 ﻿using BT.Runtime;
-using Codice.Client.BaseCommands;
 using Newtonsoft.Json;
-using Sirenix.Utilities;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
-using Unity.VisualScripting;
 using UnityEditor;
 using UnityEditor.Experimental.GraphView;
-using UnityEditor.VersionControl;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -386,9 +383,24 @@ namespace BT.Editor
             setting.Formatting = Formatting.Indented;
             setting.TypeNameHandling = TypeNameHandling.None;
             setting.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
-            string str = JsonConvert.SerializeObject(treeAsset, setting);
+            string json = JsonConvert.SerializeObject(treeAsset, setting);
 
-            Debug.Log(str);
+            string rootPath = $"{Application.dataPath}/treeAssets";
+            if (!Directory.Exists(rootPath))
+            {
+                Directory.CreateDirectory(rootPath);
+            }
+            string path = $"{rootPath}/001.Json";
+            using (FileStream fs = new FileStream(path, FileMode.Create, FileAccess.Write))
+            {
+                using (StreamWriter sw = new StreamWriter(fs))
+                {
+                    sw.Write(json);
+                    sw.Flush();
+                }
+            }
+            AssetDatabase.Refresh();
+            Debug.Log(json);
         }
         public BehaviorGraphNodeView CreateNode(Type nodeViewType)
         {
@@ -430,7 +442,7 @@ namespace BT.Editor
                 return null;
             }
             BehaviorGraphNodeView graphNodeView = SpawnMissingGraphNodesWorker(asset.rootNode, parentGraphNode, 0);
-            return null;
+            return graphNodeView;
         }
         public BehaviorGraphNodeView SpawnMissingGraphNodesWorker(BTNode node, BehaviorGraphNodeView parentGraphNode, int childIdx)
         {
