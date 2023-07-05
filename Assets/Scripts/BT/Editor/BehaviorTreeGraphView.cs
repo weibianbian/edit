@@ -431,7 +431,7 @@ namespace BT.Editor
                 BehaviorGraphNodeView spawnedRootNode = SpawnMissingGraphNodes(treeAsset, rootNode);
                 if (spawnedRootNode != null && rootNode != null)
                 {
-                    rootNode.outputPortView.ConnectTo<EdgeView>(spawnedRootNode.inputPortView);
+                    Connect(spawnedRootNode.inputPortView, rootNode.outputPortView);
                 }
             }
         }
@@ -476,7 +476,7 @@ namespace BT.Editor
                 {
                     BTNode childNode = compositeNode.ChildAtIndex(idx);
                     BehaviorGraphNodeView childGraphNode = SpawnMissingGraphNodesWorker(childNode, graphNode, idx);
-                    graphNode.outputPortView.ConnectTo<EdgeView>(childGraphNode.inputPortView);
+                    Connect(childGraphNode.inputPortView, graphNode.outputPortView);
                 }
             }
             return graphNode;
