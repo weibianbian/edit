@@ -467,7 +467,8 @@ namespace BT.Editor
             if (graphNode != null)
             {
                 //设置位置
-                graphNode.SetPosition(new Rect(new Vector2(parentGraphNode.GetPosition().x + childIdx * 400, parentGraphNode.GetPosition().y + 75f), new Vector2(200, 200)));
+                Vector2 pos = new Vector2(parentGraphNode.GetPosition().x + childIdx * 200, parentGraphNode.GetPosition().y + 75f);
+                graphNode.SetPosition(new Rect(pos, new Vector2(200, 200)));
                 graphNode.nodeInstance = node;
             }
             if (compositeNode != null)

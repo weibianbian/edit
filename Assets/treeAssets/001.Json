@@ -1,31 +1,23 @@
 {
   "rootNode": {
-    "NP_SequenceNodeData": {
-      "NodeDes": "序列组合器"
-    },
     "childrens": [
       {
-        "NP_SequenceNodeData": {
-          "NodeDes": "序列组合器"
-        },
-        "childrens": [],
-        "status": 0,
-        "lastResult": 0,
-        "nextUpdateTick": 0.0,
-        "idx": 0,
-        "onVisit": null,
-        "nodeName": "选择节点",
-        "executionIndex": 1,
-        "treeDepth": 1
-      },
-      {
-        "action": null,
         "status": 0,
         "lastResult": 0,
         "nextUpdateTick": 0.0,
         "idx": 0,
         "onVisit": null,
         "nodeName": "移动到",
+        "executionIndex": 1,
+        "treeDepth": 1
+      },
+      {
+        "status": 0,
+        "lastResult": 0,
+        "nextUpdateTick": 0.0,
+        "idx": 0,
+        "onVisit": null,
+        "nodeName": "选择节点",
         "executionIndex": 2,
         "treeDepth": 1
       }
