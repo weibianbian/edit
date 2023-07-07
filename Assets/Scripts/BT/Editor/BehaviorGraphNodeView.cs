@@ -117,7 +117,7 @@ namespace BT.Editor
             }
             Initialize();
         }
-        void UpdateTitle()
+        public void UpdateTitle()
         {
             title = GetNodeTitile();
         }

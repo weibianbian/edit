@@ -8,6 +8,7 @@ using UnityEditor;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UIElements;
+using static UnityEditor.AddressableAssets.Build.BuildPipelineTasks.GenerateLocationListsTask;
 
 namespace BT.Editor
 {
@@ -467,9 +468,14 @@ namespace BT.Editor
             if (graphNode != null)
             {
                 //设置位置
+                graphNode.UpdatePresenterPosition();
                 Vector2 pos = new Vector2(parentGraphNode.GetPosition().x + childIdx * 200, parentGraphNode.GetPosition().y + 75f);
                 graphNode.SetPosition(new Rect(pos, new Vector2(200, 200)));
+                Debug.Log($"graphNode.style.left={graphNode.GetPosition()}  ");
                 graphNode.nodeInstance = node;
+                graphNode.UpdateTitle();
+
+
             }
             if (compositeNode != null)
             {
