@@ -1,7 +1,7 @@
 ﻿namespace BT.Runtime
 {
     [System.Serializable, TreeNodeMenuItem("BT/Composite/ParallelNode")]
-    public class BTParallelCompositieNode : BTCompositieNode
+    public class BTParallelCompositieNode : BTCompositeNode
     {
         public BTParallelCompositieNode()
         {

@@ -329,7 +329,7 @@ namespace BT.Editor
         {
             int executionIndex = 0;
             int treeDepth = 0;
-            treeAsset.rootNode = rootEdNode.nodeInstance as BTCompositieNode;
+            treeAsset.rootNode = rootEdNode.nodeInstance as BTCompositeNode;
             if (treeAsset.rootNode != null)
             {
                 treeAsset.rootNode.InitializeNode(null, executionIndex, treeDepth);
@@ -337,7 +337,7 @@ namespace BT.Editor
             }
             CreateChildren(treeAsset, treeAsset.rootNode, rootEdNode, ref executionIndex, treeDepth + 1);
         }
-        public void CreateChildren(BehaviorTree btAsset, BTCompositieNode rootNode, BehaviorGraphNodeView rootENode, ref int executionIndex, int treeDepth)
+        public void CreateChildren(BehaviorTree btAsset, BTCompositeNode rootNode, BehaviorGraphNodeView rootENode, ref int executionIndex, int treeDepth)
         {
             if (rootENode == null)
             {
@@ -365,10 +365,16 @@ namespace BT.Editor
                 childNode.InitializeNode(rootNode, executionIndex, treeDepth);
                 executionIndex++;
                 childIdx++;
-                rootNode.childrens.Add(childNode);
-                if (childNode is BTCompositieNode)
+                BTCompositeChild compositeChild = new BTCompositeChild();
+                rootNode.childrens.Add(compositeChild);
+                if (childNode is BTCompositeNode)
                 {
-                    CreateChildren(btAsset, childNode as BTCompositieNode, graphNode, ref executionIndex, treeDepth + 1);
+                    compositeChild.childComposite = childNode as BTCompositeNode;
+                    CreateChildren(btAsset, childNode as BTCompositeNode, graphNode, ref executionIndex, treeDepth + 1);
+                }
+                else if (childNode is BTActionNode)
+                {
+                    compositeChild.childAction = childNode as BTActionNode;
                 }
             }
         }
@@ -452,7 +458,7 @@ namespace BT.Editor
                 return null;
             }
             BehaviorGraphNodeView graphNode = null;
-            BTCompositieNode compositeNode = node as BTCompositieNode;
+            BTCompositeNode compositeNode = node as BTCompositeNode;
             if (compositeNode != null)
             {
                 BTGraphNodeCreator<BehaviorGraphNodeCompositeView> nodeBuilder = new BTGraphNodeCreator<BehaviorGraphNodeCompositeView>(this);
@@ -469,20 +475,17 @@ namespace BT.Editor
             {
                 //设置位置
                 graphNode.UpdatePresenterPosition();
-                Vector2 pos = new Vector2(parentGraphNode.GetPosition().x + childIdx * 200, parentGraphNode.GetPosition().y + 75f);
+                Vector2 pos = new Vector2(parentGraphNode.GetPosition().x + childIdx * 100, parentGraphNode.GetPosition().y + 100f);
                 graphNode.SetPosition(new Rect(pos, new Vector2(200, 200)));
-                Debug.Log($"graphNode.style.left={graphNode.GetPosition()}  ");
                 graphNode.nodeInstance = node;
                 graphNode.UpdateTitle();
-
-
             }
             if (compositeNode != null)
             {
                 for (int idx = 0; idx < compositeNode.childrens.Count; idx++)
                 {
-                    BTNode childNode = compositeNode.ChildAtIndex(idx);
-                    BehaviorGraphNodeView childGraphNode = SpawnMissingGraphNodesWorker(childNode, graphNode, idx);
+                    BTCompositeChild childNode = compositeNode.ChildAtIndex(idx);
+                    BehaviorGraphNodeView childGraphNode = SpawnMissingGraphNodesWorker(childNode.childComposite == null ? childNode.childAction : childNode.childComposite, graphNode, idx);
                     Connect(childGraphNode.inputPortView, graphNode.outputPortView);
                 }
             }

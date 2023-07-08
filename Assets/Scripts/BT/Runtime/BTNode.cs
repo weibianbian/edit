@@ -6,7 +6,7 @@ namespace BT.Runtime
     [Serializable]
     public class BTNode : ISerializationCallbackReceiver
     {
-        public BTCompositieNode parentNode;
+        public BTCompositeNode parentNode;
         public ENodeStatus status = ENodeStatus.READY;
         public ENodeStatus lastResult = ENodeStatus.READY;
         public float nextUpdateTick = 0;
@@ -17,7 +17,7 @@ namespace BT.Runtime
 
         public int executionIndex = 0;
         public int treeDepth = 0;
-        public void InitializeNode(BTCompositieNode inParentNode, int inExecutionIndex, int inTreeDepth)
+        public void InitializeNode(BTCompositeNode inParentNode, int inExecutionIndex, int inTreeDepth)
         {
             parentNode = inParentNode;
             executionIndex = inExecutionIndex;

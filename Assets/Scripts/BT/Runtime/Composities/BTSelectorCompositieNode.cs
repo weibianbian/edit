@@ -1,7 +1,7 @@
 ﻿namespace BT.Runtime
 {
     [System.Serializable, TreeNodeMenuItem("BT/Composite/Selector")]
-    public class BTSelectorCompositieNode : BTCompositieNode
+    public class BTSelectorCompositieNode : BTCompositeNode
     {
         public BTSelectorCompositieNode()
         {
@@ -16,7 +16,8 @@
             bool done = false;
             while (idx < ChildCount)
             {
-                BTNode child = ChildAtIndex(idx);
+                BTCompositeChild compositeChild = ChildAtIndex(idx);
+                BTNode child = compositeChild.childComposite != null ? compositeChild.childComposite : compositeChild.childAction;
                 child.Visit();
                 if (child.status == ENodeStatus.RUNNING || child.status == ENodeStatus.SUCCESS)
                 {

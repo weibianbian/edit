@@ -34,6 +34,8 @@ namespace BT.Editor
         public NodePortView inputPortView = null;
         public NodePortView outputPortView = null;
 
+        public Rect position;
+
         readonly string baseNodeStyle = "GraphStyles/BaseNodeView";
 
         public void Initialize()
@@ -67,6 +69,15 @@ namespace BT.Editor
         protected virtual void SetNodeColor()
         {
 
+        }
+        public override Rect GetPosition()
+        {
+            return position;
+        }
+        public override void SetPosition(Rect newPos)
+        {
+            position = newPos;
+            base.SetPosition(newPos);
         }
         public void AddPort(Direction direction, bool allowMultiple, BaseEdgeConnectorListener listener)
         {

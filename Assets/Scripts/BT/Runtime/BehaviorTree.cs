@@ -31,6 +31,6 @@ namespace BT.Runtime
 
     public class BehaviorTree
     {
-        public BTCompositieNode rootNode=null;
+        public BTCompositeNode rootNode=null;
     }
 }

@@ -1,7 +1,7 @@
 ﻿namespace BT.Runtime
 {
     [System.Serializable, TreeNodeMenuItem("BT/Composite/Sequence")]
-    public class BTSequenceCompositieNode : BTCompositieNode
+    public class BTSequenceCompositieNode : BTCompositeNode
     {
         public BTSequenceCompositieNode() {
             nodeName = "序列节点";
@@ -15,7 +15,8 @@
             bool done = false;
             while (idx < ChildCount)
             {
-                BTNode child = ChildAtIndex(idx);
+                BTCompositeChild compositeChild = ChildAtIndex(idx);
+                BTNode child = compositeChild.childComposite != null ? compositeChild.childComposite : compositeChild.childAction;
                 child.Visit();
                 if (child.status == ENodeStatus.RUNNING || child.status == ENodeStatus.FAILED)
                 {

@@ -1,13 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using Unity.VisualScripting;
+﻿using System.Collections.Generic;
 
 namespace BT.Runtime
 {
-    [Serializable]
-    public class BTCompositieNode : BTNode
+    public class BTCompositeChild
     {
-        public List<BTNode> childrens = new List<BTNode>();
+        public BTCompositeNode childComposite;
+        public BTActionNode childAction;
+    }
+    public class BTCompositeNode : BTNode
+    {
+        public List<BTCompositeChild> childrens = new List<BTCompositeChild>();
         public override void Reset()
         {
             base.Reset();
@@ -21,7 +23,7 @@ namespace BT.Runtime
             }
         }
 
-        public BTNode ChildAtIndex(int index)
+        public BTCompositeChild ChildAtIndex(int index)
         {
             if (IsValidIndex(index))
             {

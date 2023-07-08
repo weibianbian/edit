@@ -92,7 +92,7 @@ namespace BT.Editor
             {
                 return typeof(BehaviorGraphNodeActionView);
             }
-            else if (nodeType.IsSubclassOf(typeof(BTCompositieNode)))
+            else if (nodeType.IsSubclassOf(typeof(BTCompositeNode)))
             {
                 return typeof(BehaviorGraphNodeCompositeView);
             }
