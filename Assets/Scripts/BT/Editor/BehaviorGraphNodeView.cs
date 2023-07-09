@@ -120,7 +120,7 @@ namespace BT.Editor
 
             //onPortConnected?.Invoke(port);
         }
-        public void PostPlacedNewNode()
+        public virtual void PostPlacedNewNode()
         {
             if (RuntimeClassType != null && nodeInstance == null)
             {

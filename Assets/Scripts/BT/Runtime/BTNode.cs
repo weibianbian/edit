@@ -17,6 +17,7 @@ namespace BT.Runtime
 
         public int executionIndex = 0;
         public int treeDepth = 0;
+        public BehaviorTree treeAsset;
         public void InitializeNode(BTCompositeNode inParentNode, int inExecutionIndex, int inTreeDepth)
         {
             parentNode = inParentNode;
@@ -71,6 +72,11 @@ namespace BT.Runtime
         public virtual void OnAfterDeserialize()
         {
             Debug.Log("OnAfterDeserialize");
+        }
+
+        public BTBlackboardData GetBlackboardAsset()
+        {
+            return treeAsset.blackboardData;
         }
     }
 }

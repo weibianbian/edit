@@ -24,6 +24,15 @@ namespace BT.Editor
         {
             return "Root";
         }
+        public override void PostPlacedNewNode()
+        {
+            base.PostPlacedNewNode();
+            UpdateBlackboard();
+        }
+        public void UpdateBlackboard()
+        {
+
+        }
     }
 }
 
