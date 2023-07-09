@@ -1,6 +1,6 @@
 ﻿namespace BT.Runtime
 {
-    public class BTWaitAction : BTActionNode
+    public class BTTaskWait : BTTaskNode
     {
         public float time;
     }

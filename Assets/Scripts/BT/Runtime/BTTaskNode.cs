@@ -2,7 +2,7 @@
 
 namespace BT.Runtime
 {
-    public class BTActionNode : BTNode
+    public class BTTaskNode : BTNode
     {
         public Action action;
         protected override void OnVisit()
@@ -12,7 +12,7 @@ namespace BT.Runtime
         }
     }
     [Serializable]
-    public class BTMoveTo : BTActionNode
+    public class BTMoveTo : BTTaskNode
     {
         public BTMoveToActionData data = new BTMoveToActionData();
         protected override void OnVisit()

@@ -5,7 +5,7 @@ namespace BT.Runtime
     public class BTCompositeChild
     {
         public BTCompositeNode childComposite;
-        public BTActionNode childAction;
+        public BTTaskNode childAction;
     }
     public class BTCompositeNode : BTNode
     {

@@ -8,6 +8,7 @@ namespace BT.Editor
 {
     public class BehaviorGraphNodeRootView : BehaviorGraphNodeView
     {
+        public BTBlackboardData blackboardAsset;
         public override Type RuntimeClassType => null;
         protected override void InitializePorts()
         {

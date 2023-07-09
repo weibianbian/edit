@@ -372,9 +372,9 @@ namespace BT.Editor
                     compositeChild.childComposite = childNode as BTCompositeNode;
                     CreateChildren(btAsset, childNode as BTCompositeNode, graphNode, ref executionIndex, treeDepth + 1);
                 }
-                else if (childNode is BTActionNode)
+                else if (childNode is BTTaskNode)
                 {
-                    compositeChild.childAction = childNode as BTActionNode;
+                    compositeChild.childAction = childNode as BTTaskNode;
                 }
             }
         }

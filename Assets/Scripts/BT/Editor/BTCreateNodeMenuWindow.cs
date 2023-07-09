@@ -90,7 +90,7 @@ namespace BT.Editor
                 foreach (var nodeMenuItem in nodePaths)
                 {
                     var nodePath = nodeMenuItem.path;
-                    if (portView.node is BehaviorGraphNodeRootView&& nodeMenuItem.type.IsSubclassOf(typeof(BTActionNode)))
+                    if (portView.node is BehaviorGraphNodeRootView&& nodeMenuItem.type.IsSubclassOf(typeof(BTTaskNode)))
                     {
                         continue;
                     }
@@ -146,11 +146,11 @@ namespace BT.Editor
                     {
                         continue;
                     }
-                    else if (portView.node is BehaviorGraphNodeCompositeView && nodeMenuItem.type.IsSubclassOf(typeof(BTActionNode)))
+                    else if (portView.node is BehaviorGraphNodeCompositeView && nodeMenuItem.type.IsSubclassOf(typeof(BTTaskNode)))
                     {
                         continue;
                     }
-                    else if (portView.node is BehaviorGraphNodeActionView && nodeMenuItem.type.IsSubclassOf(typeof(BTActionNode)))
+                    else if (portView.node is BehaviorGraphNodeActionView && nodeMenuItem.type.IsSubclassOf(typeof(BTTaskNode)))
                     {
                         continue;
                     }

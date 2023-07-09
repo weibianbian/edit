@@ -88,7 +88,7 @@ namespace BT.Editor
         //}
         public static Type GetNodeViewTypeFromType(Type nodeType)
         {
-            if (nodeType.IsSubclassOf(typeof(BTActionNode)))
+            if (nodeType.IsSubclassOf(typeof(BTTaskNode)))
             {
                 return typeof(BehaviorGraphNodeActionView);
             }
