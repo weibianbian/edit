@@ -8,7 +8,6 @@ using UnityEditor;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UIElements;
-using static UnityEditor.AddressableAssets.Build.BuildPipelineTasks.GenerateLocationListsTask;
 
 namespace BT.Editor
 {
@@ -490,6 +489,13 @@ namespace BT.Editor
                 }
             }
             return graphNode;
+        }
+        public void UpdateBlackboardChange()
+        {
+            if (treeAsset==null)
+            {
+                return;
+            }
         }
     }
 }

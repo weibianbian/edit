@@ -24,7 +24,7 @@ namespace BT.Editor
         public void Show(BTNode node)
         {
             currentInspector.Clear();
-            
+
             scrollView = new ScrollView();
             scrollView.verticalScroller.style.width = 4;
             FieldInfo[] fields = TypeUtils.GetAllFields(node.GetType());
@@ -39,11 +39,11 @@ namespace BT.Editor
         {
             currentInspector.Clear();
         }
-        private void CheckFieldInfo(FieldInfo info,object obj)
+        private void CheckFieldInfo(FieldInfo info, object obj)
         {
             if (info.FieldType == typeof(bool))
             {
-                ShowBool(info,obj);
+                ShowBool(info, obj);
                 return;
             }
             if (info.FieldType == typeof(string))
@@ -116,7 +116,7 @@ namespace BT.Editor
             scrollView.Add(line);
             scrollView.Add(GetSpace(0, space));
         }
-        private void ShowBool(FieldInfo info,object obj)
+        private void ShowBool(FieldInfo info, object obj)
         {
             VisualElement line = VisualElementUtils.GetRowContainer();
             Label label = GetTitle((info.Name), 224);

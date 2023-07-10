@@ -31,7 +31,11 @@ namespace BT.Editor
         }
         public void UpdateBlackboard()
         {
-
+            if (owner.treeAsset!=null&&owner.treeAsset.blackboardData != blackboardAsset)
+            {
+                //owner.treeAsset.blackboardData = blackboardAsset;
+                owner.UpdateBlackboardChange();
+            }
         }
     }
 }

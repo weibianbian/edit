@@ -14,6 +14,7 @@ namespace BT.Editor
         UnityEditor.Experimental.GraphView.Blackboard xxxxxxx;
 
         public BTNodeInspector nodeInspector;
+        public BTBBInspector bbInspector;
         [MenuItem("Window/Open BehaviorTree GraphWindow")]
         public static void Open()
         {
@@ -38,10 +39,13 @@ namespace BT.Editor
             LoadBTGraphView();
 
             nodeInspector = new BTNodeInspector(this);
-
             leftContainer.Add(nodeInspector);
 
+            bbInspector = new BTBBInspector(this);
+            leftContainer.Add(bbInspector);
 
+            //blackboard œ‘ æ
+            bbInspector.Show(graphView.treeAsset.blackboardData);
         }
         public void InitElementView()
         {
@@ -79,6 +83,8 @@ namespace BT.Editor
             byte[] bytes = LoadBehaviorTree();
             InitializeGraph();
             RestoreBehaviorTree(bytes);
+            
+            
         }
         public void InitializeGraph()
         {
@@ -146,6 +152,7 @@ namespace BT.Editor
                 string json = System.Text.Encoding.UTF8.GetString(data);
                 graphView.treeAsset = JsonConvert.DeserializeObject<BehaviorTree>(json);
             }
+            graphView.treeAsset.blackboardData.PostInitProperties();
             CreateDefaultNodesForGraph();
             graphView.OnCreated();
         }

@@ -14,25 +14,18 @@ namespace BT.Editor
             //mEditorWindow = aEditorWindow as GraphLogicWindow;
 
             style.flexDirection = FlexDirection.Column;
+            style.maxHeight = 600;
 
             titleLable = new Label();
             titleLable.style.color = c;
-            titleLable.style.fontSize = 25;
+            titleLable.style.fontSize = 22;
             titleLable.style.unityFontStyleAndWeight = FontStyle.Bold;
             titleLable.style.alignContent = Align.Center;
             Add(titleLable);
 
-            Add(GetHorizontalLine(4, c));
+            Add(VisualElementUtils.GetHorizontalLine(4, c));
 
             InitStyle();
-        }
-        public VisualElement GetHorizontalLine(int lineWidth, Color r)
-        {
-            VisualElement line = new VisualElement()
-            {
-                style = { flexGrow = 0, height = 2, borderBottomWidth = lineWidth, borderBottomColor = r }
-            };
-            return line;
         }
         protected void InitStyle()
         {
