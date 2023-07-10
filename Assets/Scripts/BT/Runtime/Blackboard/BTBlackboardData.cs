@@ -15,7 +15,7 @@ namespace BT.Runtime
             UpdatePersistentKeys(this);
         }
 
-        public T UpdatePersistentKey<T>(string keyName)
+        public T UpdatePersistentKey<T>(string keyName) where T : BlackboardKeyType
         {
             T createKeyType = default(T);
             int keyID = InternalGetKeyID(keyName);
@@ -37,8 +37,8 @@ namespace BT.Runtime
         }
         public void UpdatePersistentKeys(BTBlackboardData asset)
         {
-            object selfKeyType = asset.UpdatePersistentKey<object>("SelfActor");
-            object str = asset.UpdatePersistentKey<string>("str");
+            BlackboardKeyTypeObject selfKeyType = asset.UpdatePersistentKey<BlackboardKeyTypeObject>("SelfActor");
+            BlackboardKeyTypeString str = asset.UpdatePersistentKey<BlackboardKeyTypeString>("str");
         }
         public int GetKeyID(string entryName)
         {
