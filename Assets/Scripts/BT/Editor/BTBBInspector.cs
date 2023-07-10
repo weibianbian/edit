@@ -29,11 +29,8 @@ namespace BT.Editor
             titleLable.text = "黑板面板";
 
             currentInspector = new VisualElement();
-            currentInspector.StretchToParentSize();
             Add(currentInspector);
-
-
-            Show(null);
+            //Show(null);
         }
 
         public void Show(BTBlackboardData data)

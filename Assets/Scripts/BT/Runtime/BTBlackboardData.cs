@@ -38,6 +38,7 @@ namespace BT.Runtime
         public void UpdatePersistentKeys(BTBlackboardData asset)
         {
             object selfKeyType = asset.UpdatePersistentKey<object>("SelfActor");
+            object str = asset.UpdatePersistentKey<string>("str");
         }
         public int GetKeyID(string entryName)
         {
