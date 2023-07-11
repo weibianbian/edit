@@ -3,8 +3,18 @@ using System;
 
 namespace BT.Runtime
 {
-    public abstract class BlackboardKeyType
+    public interface IBlackboardKeyType
     {
-        public abstract Type valueType { get; }
+    }
+    public class BlackboardKeyType<T> : IBlackboardKeyType
+    {
+        public T value;
+
+        public T GetValue() => value;
+        public bool SetValue(T val)
+        {
+            value = val;
+            return true;
+        }
     }
 }

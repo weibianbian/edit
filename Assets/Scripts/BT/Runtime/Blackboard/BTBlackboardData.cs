@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace BT.Runtime
@@ -12,10 +13,10 @@ namespace BT.Runtime
 
         public void PostInitProperties()
         {
-            UpdatePersistentKeys(this);
+            UpdatePersistentKeys();
         }
 
-        public T UpdatePersistentKey<T>(string keyName) where T : BlackboardKeyType
+        public T UpdatePersistentKey<T>(string keyName) where T : IBlackboardKeyType
         {
             T createKeyType = default(T);
             int keyID = InternalGetKeyID(keyName);
@@ -35,10 +36,11 @@ namespace BT.Runtime
             }
             return createKeyType;
         }
-        public void UpdatePersistentKeys(BTBlackboardData asset)
+        public void UpdatePersistentKeys()
         {
-            BlackboardKeyTypeObject selfKeyType = asset.UpdatePersistentKey<BlackboardKeyTypeObject>("SelfActor");
-            BlackboardKeyTypeString str = asset.UpdatePersistentKey<BlackboardKeyTypeString>("str");
+            BlackboardKeyTypeObject selfKeyType = UpdatePersistentKey<BlackboardKeyTypeObject>("SelfActor");
+            BlackboardKeyTypeString str =UpdatePersistentKey<BlackboardKeyTypeString>("字符串");
+            BlackboardKeyTypeBool bo =UpdatePersistentKey<BlackboardKeyTypeBool>("布尔值");
         }
         public int GetKeyID(string entryName)
         {
@@ -70,6 +72,10 @@ namespace BT.Runtime
                 }
             }
             return -1;
+        }
+        public List<BlackboardEntry> GetKeys()
+        {
+            return keys;
         }
     }
 }

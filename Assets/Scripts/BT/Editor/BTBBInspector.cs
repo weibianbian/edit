@@ -1,4 +1,5 @@
 ﻿using BT.Runtime;
+using System.Collections.Generic;
 using System.Reflection;
 using UnityEditor;
 using UnityEngine;
@@ -48,26 +49,53 @@ namespace BT.Editor
             currentInspector.Add(scrollView);
             if (data != null)
             {
-
+                List<BlackboardEntry> keys = data.GetKeys();
+                foreach (var key in keys)
+                {
+                    if (key.keyType is BlackboardKeyTypeString)
+                    {
+                        ShowString(key);
+                    }
+                    else if (key.keyType is BlackboardKeyTypeBool)
+                    {
+                        ShowBool(key);
+                    }
+                }
             }
         }
-        private void ShowString(BlackboardEntry entry, string value)
+        private void ShowString(BlackboardEntry entry)
         {
             VisualElement line = VisualElementUtils.GetRowContainer();
             Label label = GetTitle(entry.entryName, 100);
 
             TextField stringField = new TextField();
             stringField.multiline = true;
-            stringField.value = value;
+            stringField.value = (entry.keyType as BlackboardKeyTypeString).GetValue();
             stringField.style.width = itemWidth;
             stringField.RegisterCallback<FocusInEvent>((e) => { Input.imeCompositionMode = IMECompositionMode.On; });
             stringField.RegisterCallback<FocusOutEvent>((e) => { Input.imeCompositionMode = IMECompositionMode.Auto; });
             stringField.RegisterCallback<ChangeEvent<string>>(evt =>
             {
-                
+                (entry.keyType as BlackboardKeyTypeString).SetValue(evt.newValue);
             });
             line.Add(label);
             line.Add(stringField);
+            scrollView.Add(line);
+            scrollView.Add(VisualElementUtils.GetSpace(0, space));
+        }
+        private void ShowBool(BlackboardEntry entry)
+        {
+            VisualElement line = VisualElementUtils.GetRowContainer();
+            Label label = GetTitle(entry.entryName, 224);
+
+            Toggle boolField = new Toggle();
+            boolField.value = (entry.keyType as BlackboardKeyTypeBool).GetValue();
+            boolField.RegisterCallback<ChangeEvent<bool>>(evt =>
+            {
+                (entry.keyType as BlackboardKeyTypeBool).SetValue(evt.newValue);
+            });
+            line.Add(label);
+            line.Add(boolField);
             scrollView.Add(line);
             scrollView.Add(VisualElementUtils.GetSpace(0, space));
         }

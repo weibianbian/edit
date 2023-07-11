@@ -2,14 +2,8 @@
 
 namespace BT.Runtime
 {
-    public class BlackboardKeyTypeObject : BlackboardKeyType
+    public class BlackboardKeyTypeObject : BlackboardKeyType<object>
     {
-        public override Type valueType
-        {
-            get
-            {
-                return typeof(object);
-            }
-        }
+        
     }
 }

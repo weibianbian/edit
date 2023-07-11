@@ -4,6 +4,6 @@
     {
         public string entryName;
         public string entryDescription;
-        public BlackboardKeyType keyType;
+        public IBlackboardKeyType keyType;
     }
 }
