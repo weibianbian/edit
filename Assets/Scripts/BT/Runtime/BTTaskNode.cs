@@ -14,7 +14,6 @@ namespace BT.Runtime
     [Serializable]
     public class BTMoveTo : BTTaskNode
     {
-        public BTMoveToActionData data = new BTMoveToActionData();
         protected override void OnVisit()
         {
             if (status == ENodeStatus.READY)

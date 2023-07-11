@@ -6,7 +6,6 @@ namespace BT.Runtime
     [Serializable]
     public class BTNode : ISerializationCallbackReceiver
     {
-        public BTCompositeNode parentNode;
         public ENodeStatus status = ENodeStatus.READY;
         public ENodeStatus lastResult = ENodeStatus.READY;
         public float nextUpdateTick = 0;
@@ -20,7 +19,6 @@ namespace BT.Runtime
         public BehaviorTree treeAsset;
         public void InitializeNode(BTCompositeNode inParentNode, int inExecutionIndex, int inTreeDepth)
         {
-            parentNode = inParentNode;
             executionIndex = inExecutionIndex;
             treeDepth = inTreeDepth;
         }
@@ -32,14 +30,6 @@ namespace BT.Runtime
         protected virtual void OnVisit()
         {
 
-        }
-        public virtual void DoToParents(Action<BTNode> fn)
-        {
-            if (parentNode != null)
-            {
-                fn(parentNode);
-                parentNode.DoToParents(fn);
-            }
         }
         public virtual void Step()
         {

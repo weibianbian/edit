@@ -1,4 +1,5 @@
-﻿namespace BT.Runtime
+﻿using UnityEngine;
+namespace BT.Runtime
 {
     public class BlackboardEntry
     {

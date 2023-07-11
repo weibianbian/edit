@@ -5,7 +5,7 @@ namespace BT.Runtime
     public class BehaviorTree
     {
         public BTCompositeNode rootNode = null;
-        public BTBlackboardData blackboardData = new BTBlackboardData();
+        public BTBlackboardData blackboardData;
 
         public BehaviorTree()
         {

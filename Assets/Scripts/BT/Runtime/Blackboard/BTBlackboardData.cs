@@ -5,11 +5,10 @@ using UnityEngine;
 
 namespace BT.Runtime
 {
-
     public class BTBlackboardData
     {
-        List<BlackboardEntry> keys = new List<BlackboardEntry>();
-        protected int firstKeyID = 0;
+        public List<BlackboardEntry> keys = new List<BlackboardEntry>();
+        public int firstKeyID = 0;
 
         public void PostInitProperties()
         {
