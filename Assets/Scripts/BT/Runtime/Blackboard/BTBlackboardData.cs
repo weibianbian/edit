@@ -38,8 +38,13 @@ namespace BT.Runtime
         public void UpdatePersistentKeys()
         {
             BlackboardKeyTypeObject selfKeyType = UpdatePersistentKey<BlackboardKeyTypeObject>("SelfActor");
-            BlackboardKeyTypeString str =UpdatePersistentKey<BlackboardKeyTypeString>("字符串");
-            BlackboardKeyTypeBool bo =UpdatePersistentKey<BlackboardKeyTypeBool>("布尔值");
+            BlackboardKeyTypeString str = UpdatePersistentKey<BlackboardKeyTypeString>("字符串");
+            BlackboardKeyTypeBool bo = UpdatePersistentKey<BlackboardKeyTypeBool>("布尔值");
+        }
+        public BlackboardKeyTypeBase GetKeyType(int keyID)
+        {
+            BlackboardEntry keyEntry = GetKey(keyID);
+            return (keyEntry != null && keyEntry.keyType != null) ? keyEntry.keyType : null;
         }
         public int GetKeyID(string entryName)
         {

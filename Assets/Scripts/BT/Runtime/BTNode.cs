@@ -1,4 +1,5 @@
 ﻿using System;
+using UnityEditor.VersionControl;
 using UnityEngine;
 
 namespace BT.Runtime
@@ -67,6 +68,10 @@ namespace BT.Runtime
         public BTBlackboardData GetBlackboardAsset()
         {
             return treeAsset.blackboardData;
+        }
+        public virtual void InitializeFromAsset(BehaviorTree asset)
+        {
+            treeAsset = asset;
         }
     }
 }
