@@ -5,6 +5,6 @@ namespace BT.Runtime
     {
         public string entryName;
         public string entryDescription;
-        public IBlackboardKeyType keyType;
+        public BlackboardKeyTypeBase keyType;
     }
 }

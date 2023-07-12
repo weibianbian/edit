@@ -150,7 +150,11 @@ namespace BT.Editor
             else
             {
                 string json = System.Text.Encoding.UTF8.GetString(data);
-                graphView.treeAsset = JsonConvert.DeserializeObject<BehaviorTree>(json);
+                var setting = new JsonSerializerSettings();
+                setting.Formatting = Formatting.Indented;
+                setting.TypeNameHandling = TypeNameHandling.Auto;
+                setting.ReferenceLoopHandling = ReferenceLoopHandling.Error;
+                graphView.treeAsset = JsonConvert.DeserializeObject<BehaviorTree>(json, setting);
             }
             graphView.treeAsset.blackboardData.PostInitProperties();
             CreateDefaultNodesForGraph();

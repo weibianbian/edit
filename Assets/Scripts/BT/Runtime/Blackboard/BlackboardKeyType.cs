@@ -3,10 +3,14 @@ using System;
 
 namespace BT.Runtime
 {
-    public interface IBlackboardKeyType
+    public interface IBlackboardKeyType<T>
     {
     }
-    public class BlackboardKeyType<T> : IBlackboardKeyType
+    public class BlackboardKeyTypeBase {
+        
+    }
+
+    public abstract class BlackboardKeyType<T> : BlackboardKeyTypeBase,IBlackboardKeyType<T>
     {
         public T value;
 

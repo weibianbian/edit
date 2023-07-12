@@ -387,10 +387,10 @@ namespace BT.Editor
 
             var setting = new JsonSerializerSettings();
             setting.Formatting = Formatting.Indented;
-            setting.TypeNameHandling = TypeNameHandling.None;
+            setting.TypeNameHandling = TypeNameHandling.Auto;
             setting.ReferenceLoopHandling = ReferenceLoopHandling.Error;
             //string json = JsonConvert.ToString(treeAsset, setting);
-            string json = JsonConvert.ToString(treeAsset);
+            string json = JsonConvert.SerializeObject(treeAsset, setting);
 
             string rootPath = $"{Application.dataPath}/treeAssets";
             if (!Directory.Exists(rootPath))

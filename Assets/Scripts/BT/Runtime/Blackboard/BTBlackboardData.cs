@@ -15,7 +15,7 @@ namespace BT.Runtime
             UpdatePersistentKeys();
         }
 
-        public T UpdatePersistentKey<T>(string keyName) where T : IBlackboardKeyType
+        public T UpdatePersistentKey<T>(string keyName) where T : BlackboardKeyTypeBase
         {
             T createKeyType = default(T);
             int keyID = InternalGetKeyID(keyName);
@@ -31,7 +31,7 @@ namespace BT.Runtime
             }
             else
             {
-                keys.RemoveAt(keyID - firstKeyID);
+                //keys.RemoveAt(keyID - firstKeyID);
             }
             return createKeyType;
         }
