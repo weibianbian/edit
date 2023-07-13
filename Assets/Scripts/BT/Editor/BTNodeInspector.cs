@@ -31,7 +31,11 @@ namespace BT.Editor
 
             foreach (var item in fields)
             {
-                CheckFieldInfo(item, node);
+                EditAnywhereAttribute tm = item.GetCustomAttribute<EditAnywhereAttribute>();
+                if (tm != null)
+                {
+                    CheckFieldInfo(item, node);
+                }
             }
             currentInspector.Add(scrollView);
         }
@@ -57,6 +61,11 @@ namespace BT.Editor
                 return;
             }
             if (info.FieldType.IsEnum)
+            {
+                ShowEnum(info, obj);
+                return;
+            }
+            if (info.FieldType.IsClass)
             {
                 ShowEnum(info, obj);
                 return;

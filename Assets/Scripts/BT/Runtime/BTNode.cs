@@ -12,7 +12,7 @@ namespace BT.Runtime
         public float nextUpdateTick = 0;
         public int idx = 0;
         public Action onVisit;
-
+        [EditAnywhere]
         public string nodeName = "";
 
         public int executionIndex = 0;
