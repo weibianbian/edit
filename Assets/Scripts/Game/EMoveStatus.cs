@@ -1,0 +1,16 @@
+﻿namespace RailShootGame
+{
+    public enum EMoveStatus
+    {
+        MOVE_STATUS_DONE,
+        MOVE_STATUS_MOVING,
+        MOVE_STATUS_WAITING,
+        MOVE_STATUS_DEST_NOT_FOUND,
+        MOVE_STATUS_DEST_UNREACHABLE,
+        MOVE_STATUS_BLOCKED_BY_WALL,
+        MOVE_STATUS_BLOCKED_BY_OBJECT,
+        MOVE_STATUS_BLOCKED_BY_ENEMY,
+        MOVE_STATUS_BLOCKED_BY_MONSTER
+    }
+}
+

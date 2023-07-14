@@ -1,4 +1,6 @@
-﻿namespace BT.Runtime
+﻿using RailShootGame;
+
+namespace BT.Runtime
 {
     [System.Serializable, TreeNodeMenuItem("BT/Task/TaskRotateToFaceBBEntry")]
     public class BTTaskRotateToFaceBBEntry : BTTaskBlackboardBase
