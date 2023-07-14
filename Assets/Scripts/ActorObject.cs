@@ -18,15 +18,15 @@ public class ActorObject : MonoBehaviour
         actor.Init();
         actor.move.agent = gameObject.GetComponent<NavMeshAgent>();
         actor.move.agent.enabled = true;
-        StartCoroutine(CoroutineFunc());
-    }
-    public IEnumerator CoroutineFunc()
-    {
         actor.Spawn();
-        StartCoroutine(CoroutineFunc());
-        yield return new WaitForSeconds(2);
-        actor.move.MoveToPosition(new Vector3(100,0,100));
     }
+    //public IEnumerator CoroutineFunc()
+    //{
+       
+    //    StartCoroutine(CoroutineFunc());
+    //    yield return new WaitForSeconds(2);
+    //    actor.move.MoveToPosition(new Vector3(100,0,100));
+    //}
     public void Update()
     {
         actor?.Update();
