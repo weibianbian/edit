@@ -11,10 +11,16 @@ namespace RailShootGame
 
         public MoveState move;
 
+        public MovementCompt(Actor owner)
+        {
+            this.owner = owner;
+        }
+
         public void Init()
         {
             move = new MoveState();
         }
+        
 
         public void Update()
         {
@@ -126,7 +132,7 @@ namespace RailShootGame
         public bool ReachedPos(Vector3 pos, EMoveCommand moveCommand)
         {
             MyBounds bnds = new MyBounds(new Vector3(-16f / 1000, float.MinValue, -8f / 1000), new Vector3(16 / 1000, float.MaxValue, 64 / 1000));
-            //bnds.TranslateSelf(gameObject.transform.position);
+            bnds.TranslateSelf(owner.GetOrigin());
             if (bnds.ContainsPoint(pos))
             {
                 return true;

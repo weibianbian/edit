@@ -4,7 +4,7 @@ public class BTManager : MonoBehaviour
 {
     //public BehaviorTreeGraph btGraph;
     //public EntryNode entry;
-    public AIController aiController;
+    public ActorObject aiController;
     //private ENodeStatus lastResult = ENodeStatus.READY;
     //// Start is called before the first frame update
     //void Start()
