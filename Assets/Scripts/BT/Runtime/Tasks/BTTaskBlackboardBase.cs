@@ -9,6 +9,7 @@ namespace BT.Runtime
         public BTTaskBlackboardBase()
         {
             nodeName = "BlackboardBase";
+            blackboardKey=new BlackboardKeySelector();
         }
         public override void InitializeFromAsset(BehaviorTree asset)
         {
@@ -19,5 +20,6 @@ namespace BT.Runtime
                 blackboardKey.ResolveSelectedKey(bbAsset);
             }
         }
+       
     }
 }

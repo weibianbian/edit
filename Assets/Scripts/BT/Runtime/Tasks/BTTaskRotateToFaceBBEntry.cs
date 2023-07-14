@@ -6,6 +6,8 @@
         public BTTaskRotateToFaceBBEntry()
         {
             nodeName = "Rotate to face BB entry";
+            blackboardKey.AddObjectFilter(this, "", typeof(Actor));
+            blackboardKey.AddStringFilter(this, "");
         }
     }
 }

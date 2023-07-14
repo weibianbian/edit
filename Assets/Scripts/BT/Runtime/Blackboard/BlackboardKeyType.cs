@@ -6,11 +6,15 @@ namespace BT.Runtime
     public interface IBlackboardKeyType<T>
     {
     }
-    public class BlackboardKeyTypeBase {
-        
+    public class BlackboardKeyTypeBase
+    {
+        public bool IsAllowedByFilter(BlackboardKeyTypeBase filterObj)
+        {
+            return filterObj.GetType() == this.GetType();
+        }
     }
 
-    public abstract class BlackboardKeyType<T> : BlackboardKeyTypeBase,IBlackboardKeyType<T>
+    public abstract class BlackboardKeyType<T> : BlackboardKeyTypeBase, IBlackboardKeyType<T>
     {
         public T value;
 

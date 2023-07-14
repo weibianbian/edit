@@ -84,27 +84,27 @@ public static class Vector3Extern
         return 0;
     }
 }
-public class Actor
-{
-    public EStatus state;
-    public Vector3 origin;
-    public float ideal_yaw;
-    bool TurnToward(Vector3 pos)
-    {
-        Vector3 dir;
-        Vector3 local_dir;
-        float lengthSqr;
+//public class Actor
+//{
+//    public EStatus state;
+//    public Vector3 origin;
+//    public float ideal_yaw;
+//    bool TurnToward(Vector3 pos)
+//    {
+//        Vector3 dir;
+//        Vector3 local_dir;
+//        float lengthSqr;
 
-        dir = pos - origin;
-        local_dir = Vector3.ProjectOnPlane(dir, new Vector3(0, 1, 0));
-        lengthSqr = local_dir.sqrMagnitude;
-        if (lengthSqr > Mathf.Pow(2.0f, 2) || (lengthSqr > Mathf.Pow(0.1f, 2)))
-        {
-            //ideal_yaw = AngleNormalize180(local_dir.ToYaw());
-        }
+//        dir = pos - origin;
+//        local_dir = Vector3.ProjectOnPlane(dir, new Vector3(0, 1, 0));
+//        lengthSqr = local_dir.sqrMagnitude;
+//        if (lengthSqr > Mathf.Pow(2.0f, 2) || (lengthSqr > Mathf.Pow(0.1f, 2)))
+//        {
+//            //ideal_yaw = AngleNormalize180(local_dir.ToYaw());
+//        }
 
-        //bool result = FacingIdeal();
-        //return result;
-        return true;
-    }
-}
+//        //bool result = FacingIdeal();
+//        //return result;
+//        return true;
+//    }
+//}

@@ -1,5 +1,6 @@
 ﻿using BT.Runtime;
 using System;
+using System.Collections.Generic;
 using System.Reflection;
 using UnityEditor;
 using UnityEditor.UIElements;
@@ -67,9 +68,25 @@ namespace BT.Editor
             }
             if (info.FieldType.IsClass)
             {
-                ShowEnum(info, obj);
+                ShowClass(info, obj);
                 return;
             }
+        }
+        private void ShowClass(FieldInfo info, object obj)
+        {
+            VisualElement line = VisualElementUtils.GetRowContainer();
+            Label label = GetTitle((info.Name), 130);
+            List<string> list = new List<string>
+            {
+               "xxxxx","haha",
+            };
+            DropdownField dropdownField = new DropdownField(list,0); ;
+
+            line.Add(label);
+            line.Add(dropdownField);
+
+            scrollView.Add(line);
+            scrollView.Add(VisualElementUtils.GetSpace(0, space));
         }
         private void ShowEnum(FieldInfo info, object obj)
         {

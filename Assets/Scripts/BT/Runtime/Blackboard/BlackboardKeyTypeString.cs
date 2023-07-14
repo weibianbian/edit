@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace BT.Runtime
+﻿namespace BT.Runtime
 {
     public class BlackboardKeyTypeString : BlackboardKeyType<string>
     {
