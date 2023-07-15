@@ -7,7 +7,7 @@ namespace HFSMRuntime
     {
         bool Test(Game g, Actor e);
     }
-    class RandomTimerCondition : ICondition
+    public class RandomTimerCondition : ICondition
     {
         int timer;
         int seconds;
@@ -27,6 +27,19 @@ namespace HFSMRuntime
             {
                 timer = random.Next(seconds - 400, seconds);
                 return true;
+            }
+            return false;
+        }
+    }
+    public class SoundSensorCondition : ICondition
+    {
+        public bool Test(Game g, Actor e)
+        {
+            SoundSensor soundSensor = e.sensor.GetSensor(Sensor.ESensorType.Sound) as SoundSensor;
+            if (soundSensor != null)
+            {
+              return  soundSensor.gunSound;
+
             }
             return false;
         }

@@ -1,17 +1,45 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.AI;
 
 namespace RailShootGame
 {
-    public class MovementCompt
+    public class ActorCompt
     {
         public Actor owner;
+
+        public ActorCompt(Actor owner)
+        {
+            this.owner = owner;
+        }
+    }
+    public class SensorCompt: ActorCompt
+    {
+        public Dictionary<Sensor.ESensorType, Sensor> sensors = new Dictionary<Sensor.ESensorType, Sensor>();
+
+        public SensorCompt(Actor owner) : base(owner)
+        {
+        }
+
+        public Sensor GetSensor(Sensor.ESensorType sensorType)
+        {
+            return sensors[sensorType];
+        }
+        public void AddSensor(Sensor sensor)
+        {
+            sensors[sensor.sensorType] = sensor;
+        }
+
+    }
+    public class MovementCompt: ActorCompt
+    {
+        
         public NavMeshAgent agent;
         public Vector3 targetPos;
 
         public MoveState move;
 
-        public MovementCompt(Actor owner)
+        public MovementCompt(Actor owner) : base(owner)
         {
             this.owner = owner;
         }
