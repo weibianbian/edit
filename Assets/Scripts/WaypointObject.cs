@@ -1,18 +1,14 @@
 ﻿using Sirenix.OdinInspector;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering;
 
-public class GameConst
-{
-    public const int ReturnToParent = -2;
-    public const int NotInitialized = -1;
-}
-public class WaypointGraph:SerializedMonoBehaviour
+public class WaypointObject : MonoBehaviour
 {
     private Color color = new Color(1, 0, 0);
     public float radius = 0.25f;
 
-   
+
     public void Start()
     {
     }
@@ -24,4 +20,8 @@ public class WaypointGraph:SerializedMonoBehaviour
         Gizmos.color = color;
         Gizmos.DrawSphere(transform.position, radius);
     }
+}
+public class WaypointGroup : MonoBehaviour
+{
+    public List<WaypointObject> waypoints=new List<WaypointObject>();
 }
