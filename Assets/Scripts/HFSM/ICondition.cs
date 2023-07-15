@@ -1,10 +1,11 @@
-﻿using System;
+﻿using RailShootGame;
+using System;
 
-namespace HFSM
+namespace HFSMRuntime
 {
     public interface ICondition
     {
-        bool Test(Game g, Entity e);
+        bool Test(Game g, Actor e);
     }
     class RandomTimerCondition : ICondition
     {
@@ -19,7 +20,7 @@ namespace HFSM
             timer = random.Next(seconds - 400, seconds);
         }
 
-        public bool Test(Game g, Entity e)
+        public bool Test(Game g, Actor e)
         {
             --timer;
             if (timer == 0)

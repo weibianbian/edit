@@ -1,8 +1,10 @@
-﻿namespace HFSM
+﻿using RailShootGame;
+
+namespace HFSMRuntime
 {
     public interface IAction
     {
-        void Execute(Game game, Entity entity);
+        void Execute(Game game, Actor entity);
     }
 }
 

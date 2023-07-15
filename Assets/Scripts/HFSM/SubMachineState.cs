@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using RailShootGame;
+using System.Collections.Generic;
 
-namespace HFSM
+namespace HFSMRuntime
 {
     public class SubMachineState : HierarchicalStateMachine
     {
@@ -16,7 +16,7 @@ namespace HFSM
         {
             return state.GetAction();
         }
-        public override UpdateResult Update(Game g, Entity e)
+        public override UpdateResult Update(Game g, Actor e)
         {
             return base.Update(g, e);
         }

@@ -1,12 +1,11 @@
-﻿using HFSM;
+﻿using HFSMRuntime;
+using RailShootGame;
 using System.Collections.Generic;
-public class Game { }
-public class Entity { }
-namespace HFSM
+namespace HFSMRuntime
 {
     public interface ITransition
     {
-        bool IsTriggered(Game g, Entity e);
+        bool IsTriggered(Game g, Actor e);
         State GetTargetState();
         List<IAction> GetActions();
         int GetLevel();
@@ -26,7 +25,7 @@ namespace HFSM
             actions = new List<IAction>();
             this.level = level;
         }
-        public bool IsTriggered(Game g, Entity e)
+        public bool IsTriggered(Game g, Actor e)
         {
             return condition.Test(g,e);
         }

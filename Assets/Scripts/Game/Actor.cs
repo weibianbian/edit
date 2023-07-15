@@ -1,3 +1,4 @@
+using HFSMRuntime;
 using Sirenix.OdinInspector.Editor;
 using UnityEngine;
 
@@ -8,11 +9,16 @@ namespace RailShootGame
         public ActorObject actorObject;
         public MovementCompt move;
         public Vector3 position;
+        public Game game;
 
-        public void Init()
+
+        public HierarchicalStateMachine hsm;
+        public void Init(Game game)
         {
             move = new MovementCompt(this);
             move.Init();
+
+            hsm = new HierarchicalStateMachine(game);
         }
         public void Spawn()
         {
@@ -25,6 +31,9 @@ namespace RailShootGame
         public void Update()
         {
             move?.Update();
+        }
+        public void InitHFSM()
+        {
         }
     }
 }

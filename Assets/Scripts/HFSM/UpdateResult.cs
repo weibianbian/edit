@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace HFSM
+namespace HFSMRuntime
 {
     public struct UpdateResult
     {

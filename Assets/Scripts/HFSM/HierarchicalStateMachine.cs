@@ -1,13 +1,15 @@
-﻿using System.Collections.Generic;
-
-namespace HFSM
+﻿using RailShootGame;
+using System.Collections.Generic;
+using System.Diagnostics;
+using UnityEngine;
+namespace HFSMRuntime
 {
     public class HierarchicalStateMachine : State
     {
-        List<State> states = new List<State>();
-        State initialState;
-        protected State currentState;
-        Game game;
+        public List<State> states = new List<State>();
+        public State initialState;
+        public State currentState;
+        public Game game;
         public override List<State> GetStates()
         {
             if (currentState != null)
@@ -47,7 +49,7 @@ namespace HFSM
             this.states.Add(initialState);
             initialState.parent = this;
         }
-        public override UpdateResult Update(Game g, Entity e)
+        public override UpdateResult Update(Game g, Actor e)
         {
             UpdateResult result;
             if (currentState == null)
@@ -56,6 +58,7 @@ namespace HFSM
                 result = new UpdateResult() { actions = currentState.GetEntryAction(), transition = null, level = 0 };
                 return result;
             }
+            UnityEngine.Debug.Log(currentState.name);
             Transition triggeredTransition = null;
             for (int i = 0; i < currentState.GetTransitions().Count; i++)
             {

@@ -1,12 +1,13 @@
-﻿using System;
+﻿using RailShootGame;
+using System;
 using System.Collections.Generic;
 
-namespace HFSM
+namespace HFSMRuntime
 {
     public class State : HFSMBase
     {
         public List<IAction> actions, entryActions, exitActions;
-        List<Transition> transitions;
+        public List<Transition> transitions;
         public string name;
         public State()
         {
@@ -36,7 +37,7 @@ namespace HFSM
             actions.Add(action1);
             actions.Add(action2);
         }
-        public override UpdateResult Update(Game g, Entity e)
+        public override UpdateResult Update(Game g, Actor e)
         {
             return new UpdateResult() { actions = GetAction(), transition = null, level = 0 };
         }

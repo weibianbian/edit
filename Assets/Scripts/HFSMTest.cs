@@ -1,4 +1,6 @@
-using HFSM;
+using FSMRuntime;
+using HFSMRuntime;
+using RailShootGame;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -6,31 +8,32 @@ using UnityEngine;
 
 public class HFSMTest : MonoBehaviour
 {
-    Game game;
-    Entity entity;
-    FiniteStateMachine fsm;
-    TimeSpan initialTime;
+    public Game game;
+    public Actor entity;
+    public HierarchicalStateMachine hfsm;
+    public TimeSpan initialTime;
     void Start()
     {
-        State l = new State("L", null);
+        State l = new State(EStatus.Patrol.ToString(), null);
 
-        State m = new State("M", null);
+        State m = new State(EStatus.Combat.ToString(), null);
         State n = new State("N", null);
 
         l.AddTransition(new Transition(new RandomTimerCondition(initialTime, 600), m, 0));
-
-        fsm = new FiniteStateMachine(l, m, n);
         game = new Game();
-        entity = new Entity();
+        entity = new Actor();
+        hfsm = new HierarchicalStateMachine(game, l, m, n);
     }
 
-    // Update is called once per frame
     void Update()
     {
-        List<IAction> actions = fsm.UpdateFSM(game, entity);
-        foreach (IAction action in actions)
+        UpdateResult ret = hfsm.Update(game, entity);
+        foreach (IAction action in ret.actions)
         {
-            action.Execute(game,entity);
+            if (action!=null)
+            {
+                action.Execute(game, entity);
+            }
         }
     }
 }

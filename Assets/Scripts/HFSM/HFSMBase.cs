@@ -1,6 +1,7 @@
+using RailShootGame;
 using System.Collections.Generic;
 
-namespace HFSM
+namespace HFSMRuntime
 {
     public class HFSMBase
     {
@@ -13,7 +14,7 @@ namespace HFSM
         {
             return new List<IAction>(0);
         }
-        public virtual UpdateResult Update(Game g, Entity e)
+        public virtual UpdateResult Update(Game g, Actor e)
         {
             UpdateResult result = new UpdateResult();
             result.actions = GetActions();

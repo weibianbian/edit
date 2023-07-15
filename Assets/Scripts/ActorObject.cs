@@ -7,6 +7,7 @@ using UnityEngine.AI;
 public class ActorObject : MonoBehaviour
 {
     public Actor actor;
+    public Game game;
     public void Start()
     {
         AttachLogic();
@@ -15,7 +16,7 @@ public class ActorObject : MonoBehaviour
     {
         actor = new Actor();
         actor.actorObject = this;
-        actor.Init();
+        actor.Init(game);
         actor.move.agent = gameObject.GetComponent<NavMeshAgent>();
         actor.move.agent.enabled = true;
         actor.Spawn();

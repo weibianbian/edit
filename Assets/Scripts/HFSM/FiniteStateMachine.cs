@@ -1,7 +1,8 @@
-﻿using System.Collections.Generic;
-using System.Diagnostics;
+﻿using HFSMRuntime;
+using RailShootGame;
+using System.Collections.Generic;
 
-namespace HFSM
+namespace FSMRuntime
 {
     public class FiniteStateMachine
     {
@@ -26,7 +27,7 @@ namespace HFSM
         {
             return currentState.name;
         }
-        public List<IAction> UpdateFSM(Game g, Entity e)
+        public List<IAction> UpdateFSM(Game g, Actor e)
         {
             Transition triggeredTransition = null;
             foreach (Transition t in currentState.GetTransitions())
