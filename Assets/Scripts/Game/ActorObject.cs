@@ -8,6 +8,7 @@ public class ActorObject : MonoBehaviour
 {
     public Actor actor;
     public Game game;
+    public WaypointGroup waypointGroup;
     public void Start()
     {
         AttachLogic();
