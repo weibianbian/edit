@@ -15,10 +15,28 @@ namespace RailShootGame
         }
         public void Update()
         {
-            if (Input.GetMouseButton(0))
+            Vector3 dir = Vector3.zero;
+            //if (Input.GetMouseButton(0))
+            //{
+            //    dir+=Vector3 
+            //}
+            if (Input.GetKey(KeyCode.W))
             {
-                Move(new Vector3(1, 0, 1).normalized * speed * Time.deltaTime);
+                dir += Vector3.forward;
             }
+            if (Input.GetKey(KeyCode.D))
+            {
+                dir += Vector3.right;
+            }
+            if (Input.GetKey(KeyCode.S))
+            {
+                dir += Vector3.back;
+            }
+            if (Input.GetKey(KeyCode.A))
+            {
+                dir += Vector3.left;
+            }
+            Move(dir.normalized * speed * Time.deltaTime);
         }
         public void Move(Vector3 velocity)
         {
