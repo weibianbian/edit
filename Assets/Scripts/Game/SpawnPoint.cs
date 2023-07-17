@@ -2,7 +2,7 @@
 
 namespace RailShootGame
 {
-    public class EnemySpawner : MonoBehaviour
+    public class SpawnPoint : MonoBehaviour
     {
 
     }

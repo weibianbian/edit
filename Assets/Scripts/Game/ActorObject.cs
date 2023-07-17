@@ -24,7 +24,7 @@ public class ActorObject : MonoBehaviour
     }
     //public IEnumerator CoroutineFunc()
     //{
-       
+
     //    StartCoroutine(CoroutineFunc());
     //    yield return new WaitForSeconds(2);
     //    actor.move.MoveToPosition(new Vector3(100,0,100));
