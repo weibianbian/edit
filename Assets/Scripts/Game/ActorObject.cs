@@ -11,16 +11,17 @@ public class ActorObject : MonoBehaviour
     public WaypointGroup waypointGroup;
     public void Start()
     {
-        AttachLogic();
+
     }
-    public void AttachLogic()
+    public Actor AttachLogic()
     {
         actor = new Actor();
         actor.actorObject = this;
         actor.Init(game);
         actor.move.agent = gameObject.GetComponent<NavMeshAgent>();
         actor.move.agent.enabled = true;
-        actor.Spawn();
+
+        return actor;
     }
     //public IEnumerator CoroutineFunc()
     //{

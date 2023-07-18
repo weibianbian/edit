@@ -3,6 +3,14 @@ using UnityEngine;
 
 namespace RailShootGame
 {
+    public interface IActorLogic {
+
+        void UpdateLogic(float delta);
+    }
+    public interface IActorComponent
+    {
+        void UpdateLogic(float delta);
+    }
     public class Actor
     {
         public ActorObject actorObject;
@@ -32,6 +40,13 @@ namespace RailShootGame
         public Vector3 GetOrigin()
         {
             return actorObject.gameObject.transform.position;
+        }
+        public GameObject gameObject
+        {
+            get
+            {
+                return actorObject ? actorObject.gameObject : null;
+            }
         }
         public void Update()
         {

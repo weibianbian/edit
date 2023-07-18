@@ -36,7 +36,10 @@ namespace RailShootGame
             {
                 dir += Vector3.left;
             }
-            Move(dir.normalized * speed * Time.deltaTime);
+            if (dir!=Vector3.zero)
+            {
+                Move(dir.normalized * speed * Time.deltaTime);
+            }
         }
         public void Move(Vector3 velocity)
         {
