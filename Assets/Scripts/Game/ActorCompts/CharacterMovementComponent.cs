@@ -36,11 +36,11 @@ namespace RailShootGame
         }
         public override void TickComponent()
         {
-
+            ControlledCharacterMove(Vector3.zero,1);
         }
         public void ControlledCharacterMove(Vector3 InputVector, float DeltaSeconds)
         {
-            CharacterOwner.CheckJumpInput();
+            CharacterOwner.CheckJumpInput(DeltaSeconds);
             PerformMovement(DeltaSeconds);
         }
         public void PerformMovement(float DeltaSeconds)

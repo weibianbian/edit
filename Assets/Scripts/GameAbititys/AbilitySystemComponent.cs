@@ -1,22 +1,32 @@
+using RailShootGame;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace GameplayAbilitySystem
 {
-    public class AbilitySystemComponent : MonoBehaviour
+    public class AbilitySystemComponent : ActorCompt
     {
-        // Start is called before the first frame update
-        void Start()
+        public GameplayAbilitySpecContainer ActivatableAbilities;
+        public AbilitySystemComponent(Actor owner) : base(owner)
+        {
+
+        }
+        public void GiveAbility(GameplayAbilitySpec AbilitySpec)
+        {
+            ActivatableAbilities.items.Add(AbilitySpec);
+            //ÐèÒª¸´ÖÆ
+            OnGiveAbility(AbilitySpec);
+        }
+        public void OnGiveAbility(GameplayAbilitySpec Spec)
+        {
+
+        }
+        public override void TickComponent()
         {
 
         }
 
-        // Update is called once per frame
-        void Update()
-        {
-
-        }
     }
 }
 

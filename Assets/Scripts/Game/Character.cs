@@ -46,7 +46,7 @@
                         {
                             JumpCurrentCount++;
                             JumpForceTimeRemaining = GetJumpMaxHoldTime();
-                            OnJumped();
+                            //OnJumped();
                         }
                     }
                     bWasJumping = bDidJump;
