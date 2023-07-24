@@ -19,7 +19,7 @@ namespace RailShootGame
             hsm = new HierarchicalStateMachine(owner.game, l, m);
         }
 
-        public override void Update()
+        public override void TickComponent()
         {
             hsm.Update(owner.game, owner);
         }

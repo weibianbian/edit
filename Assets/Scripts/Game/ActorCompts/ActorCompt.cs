@@ -8,7 +8,7 @@
         {
             this.owner = owner;
         }
-        public virtual void Update()
+        public virtual void TickComponent()
         {
 
         }

@@ -22,7 +22,7 @@ namespace RailShootGame
         }
 
 
-        public override void Update()
+        public override void TickComponent()
         {
             switch (move.moveType)
             {

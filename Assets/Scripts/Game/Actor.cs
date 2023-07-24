@@ -57,8 +57,8 @@ namespace RailShootGame
         }
         public void Update()
         {
-            move?.Update();
-            hsm?.Update();
+            move?.TickComponent();
+            hsm?.TickComponent();
             if (Input.GetKeyDown(KeyCode.J))
             {
                 (sensor.GetSensor(Sensor.ESensorType.Sound) as SoundSensor).gunSound = true;
