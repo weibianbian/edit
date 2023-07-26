@@ -34,7 +34,21 @@ namespace GameplayAbilitySystem
         }
         public virtual bool CommitAbility()
         {
+            CommitExecute();
             return false;
+        }
+        public void CommitExecute()
+        {
+            ApplyCooldown();
+            ApplyCost();
+        }
+        public void ApplyCooldown()
+        {
+
+        }
+        public void ApplyCost()
+        {
+
         }
     }
 }
