@@ -1,9 +1,11 @@
-﻿namespace GameplayAbilitySystem
+﻿using RailShootGame;
+
+namespace GameplayAbilitySystem
 {
     public class AbilitySystemTestAttributeSe : AttributeSet
     {
-        public float Health, MaxHealth = 100f;
-        public float Mana, MaxMana = 100f;
+        public GameplayAttributeData Health, MaxHealth = null;
+        public GameplayAttributeData Mana, MaxMana = null;
     }
     public class AttributeSet
     {

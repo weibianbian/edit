@@ -1,5 +1,14 @@
-﻿namespace RailShootGame
+﻿using GameplayAbilitySystem;
+using UnityEditor.AnimatedValues;
+
+namespace RailShootGame
 {
+    public class GameplayAttributeData
+    {
+        public float BaseAnimValue;
+        public float currentValue;
+         
+    }
 
     public class Character : Actor
     {
@@ -10,6 +19,12 @@
         private float JumpForceTimeRemaining = 0;
 
         public CharacterMovementComponent CharacterMovement;
+        public AbilitySystemComponent asc;
+
+        public void Input()
+        {
+            asc.GiveAbility(new GameplayAbilitySpec());
+        }
         public void Jump()
         {
             bPressedJump = true;
