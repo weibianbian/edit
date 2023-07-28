@@ -3,13 +3,14 @@
     public class GameplayAbilitySpec
     {
         public int id;
-        public GameplayAbility ability;
+        public GameplayAbility Ability;
         public int level;
         public bool InputPressed = false;
+        public GameplayAbilitySpecHandle Handle;
 
         public bool IsActive()
         {
-            return ability != null;
+            return Ability != null;
         }
     }
 }

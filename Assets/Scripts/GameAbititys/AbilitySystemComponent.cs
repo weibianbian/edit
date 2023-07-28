@@ -1,10 +1,43 @@
 using RailShootGame;
+using Sirenix.Utilities;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace GameplayAbilitySystem
 {
+    //AbilitySystemComponent
+    //              ---TryActiveAbility
+    //GameplayAbility
+    //              ---CanActiveAbility
+    //GameplayAbility
+    //              ---CallActiveAbility
+    //GameplayAbility
+    //              ---K2_ActiveAbility
+    //GameplayAbility
+    //              ---CommitAbility
+    //执行蓝图AbilityTask
+    //              ---PlayMontageTask-------Wati-------GameplayAbility(EndAbility)
+    //执行事件（动画轴上的事件）
+    //              ---SendGameplayEventToActor
+    //GameplayAbility
+    //              ---ApplyGameplayEffectToTarget
+    public struct GameplayAbilitySpecHandle
+    {
+
+        int Handle;
+        public static bool operator ==(GameplayAbilitySpecHandle a, GameplayAbilitySpecHandle b)
+        {
+            return a.Handle == b.Handle;
+        }
+        public static bool operator !=(GameplayAbilitySpecHandle a, GameplayAbilitySpecHandle b)
+        {
+            return a.Handle != b.Handle;
+        }
+
+    }
+
     public class AbilitySystemComponent : ActorCompt
     {
         public GameplayAbilitySpecContainer ActivatableAbilities;
@@ -12,6 +45,32 @@ namespace GameplayAbilitySystem
         public AbilitySystemComponent(Actor owner) : base(owner)
         {
 
+        }
+        public bool TryActiveAbility(GameplayAbilitySpecHandle AbilityToActivate)
+        {
+            GameplayAbilitySpec Spec = FindAbilitySpecFromHandle(AbilityToActivate);
+            if (Spec == null)
+            {
+                Debug.LogError("TryActivateAbility called with invalid Handle");
+                return false;
+            }
+            GameplayAbility Ability = Spec.Ability;
+            if (Ability == null)
+            {
+                Debug.LogError("TryActivateAbility called with invalid Handle");
+                return false;
+            }
+        }
+        public GameplayAbilitySpec FindAbilitySpecFromHandle(GameplayAbilitySpecHandle Handle)
+        {
+            for (int i = 0; i < ActivatableAbilities.items.Count; i++)
+            {
+                if (ActivatableAbilities.items[i].Handle == Handle)
+                {
+                    return ActivatableAbilities.items[i];
+                }
+            }
+            return null;
         }
         public void GiveAbility(GameplayAbilitySpec AbilitySpec)
         {
