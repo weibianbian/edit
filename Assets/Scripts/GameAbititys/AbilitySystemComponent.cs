@@ -8,13 +8,13 @@ using UnityEngine;
 namespace GameplayAbilitySystem
 {
     //AbilitySystemComponent
-    //              ---TryActiveAbility
+    //              ---TryActivateAbility
     //GameplayAbility
-    //              ---CanActiveAbility
+    //              ---CanActivateAbility
     //GameplayAbility
-    //              ---CallActiveAbility
+    //              ---CallActivateAbility
     //GameplayAbility
-    //              ---K2_ActiveAbility
+    //              ---K2_ActivateAbility
     //GameplayAbility
     //              ---CommitAbility
     //Ö´ÐÐÀ¶Í¼AbilityTask
@@ -60,6 +60,7 @@ namespace GameplayAbilitySystem
                 Debug.LogError("TryActivateAbility called with invalid Handle");
                 return false;
             }
+            return true;
         }
         public GameplayAbilitySpec FindAbilitySpecFromHandle(GameplayAbilitySpecHandle Handle)
         {

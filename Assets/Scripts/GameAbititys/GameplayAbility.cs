@@ -20,19 +20,30 @@ namespace GameplayAbilitySystem
         //		CancelAbility()			- Interrupts the ability (from an outside source).
         //
         //		EndAbility()			- The ability has ended. This is intended to be called by the ability to end itself.
-        public virtual bool CanActivateAbility()
+        public virtual bool CanActivateAbility(GameplayAbilitySpecHandle Handle)
         {
             return false;
         }
-        public virtual bool ActivateAbility(Character owner)
+        public void CallActivateAbility(GameplayAbilitySpecHandle Handle)
         {
-            return false;
+            PreActivate(Handle);
+            ActivateAbility(Handle,null);
         }
-        public virtual void CancelAbility()
+        public void PreActivate(GameplayAbilitySpecHandle Handle)
+        {
+        }
+        public virtual void ActivateAbility(GameplayAbilitySpecHandle Handle, Character owner)
+        {
+            if (CommitAbility(Handle))
+            {
+
+            }
+        }
+        public virtual void CancelAbility(GameplayAbilitySpecHandle Handle)
         {
 
         }
-        public virtual bool CommitAbility()
+        public virtual bool CommitAbility(GameplayAbilitySpecHandle Handle)
         {
             CommitExecute();
             return false;

@@ -4,10 +4,9 @@ namespace GameplayAbilitySystem
 {
     public class GameplayAbilityJump : GameplayAbility
     {
-        public override bool ActivateAbility(Character character)
+        public override void ActivateAbility(GameplayAbilitySpecHandle Handle, Character owner)
         {
-            character.Jump();
-            return false;
+            owner.Jump();
         }
     }
 }
