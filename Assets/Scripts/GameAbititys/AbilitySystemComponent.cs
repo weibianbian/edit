@@ -27,6 +27,22 @@ namespace GameplayAbilitySystem
     {
 
         int Handle;
+
+        public override bool Equals(object obj)
+        {
+            return base.Equals(obj);
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
+
+        public override string ToString()
+        {
+            return base.ToString();
+        }
+
         public static bool operator ==(GameplayAbilitySpecHandle a, GameplayAbilitySpecHandle b)
         {
             return a.Handle == b.Handle;
@@ -37,10 +53,15 @@ namespace GameplayAbilitySystem
         }
 
     }
+    public struct GameplayAttribute
+    {
+
+    }
 
     public class AbilitySystemComponent : ActorCompt
     {
         public GameplayAbilitySpecContainer ActivatableAbilities;
+        public ActiveGameplayEffectsContainer ActiveGameplayEffects;
         public List<AttributeSet> SpawnedAttributes;
         public AbilitySystemComponent(Actor owner) : base(owner)
         {
@@ -111,7 +132,45 @@ namespace GameplayAbilitySystem
         {
 
         }
+        public OnGameplayAttributeValueChange GetGameplayAttributeValueChangeDelegate(GameplayAttribute Attribute)
+        {
+            return ActiveGameplayEffects.GetGameplayAttributeValueChangeDelegate(Attribute);
+        }
+        public ActiveGameplayEffectHandle ApplyGameplayEffectToTarget(GameplayEffect InGameplayEffect, AbilitySystemComponent InTarget, float InLevel)
+        {
+            return new ActiveGameplayEffectHandle();
+        }
+        public ActiveGameplayEffectHandle ApplyGameplayEffectSpecToTarget(GameplayEffectSpec Spec, AbilitySystemComponent InTarget)
+        {
+            ActiveGameplayEffectHandle ReturnHandle = new ActiveGameplayEffectHandle();
+            if (InTarget != null)
+            {
+                ReturnHandle = InTarget.ApplyGameplayEffectSpecToSelf(Spec);
+            }
+            return ReturnHandle;
+        }
+        public ActiveGameplayEffectHandle ApplyGameplayEffectSpecToSelf(GameplayEffectSpec Spec)
+        {
+            ActiveGameplayEffectHandle ReturnHandle = new ActiveGameplayEffectHandle();
+            ActiveGameplayEffect AppliedEffect = new ActiveGameplayEffect();
+            if (Spec.Def.DurationPolicy != EGameplayEffectDurationType.Instant)
+            {
+                AppliedEffect = ActiveGameplayEffects.ApplyGameplayEffectSpec(Spec);
+                return new ActiveGameplayEffectHandle();
 
+            }
+
+            for (int i = 0; i < Spec.Def.Modifiers.Count; i++)
+            {
+
+            }
+
+            if (Spec.Def.DurationPolicy == EGameplayEffectDurationType.Instant)
+            {
+
+            }
+            return ReturnHandle;
+        }
     }
 }
 

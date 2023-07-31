@@ -1,4 +1,6 @@
-﻿namespace GameplayAbilitySystem
+﻿using System.Collections.Generic;
+
+namespace GameplayAbilitySystem
 {
     public enum EGameplayEffectDurationType
     {
@@ -12,11 +14,18 @@
     public class GameplayEffect
     {
         public EGameplayEffectDurationType DurationPolicy;
+        public List<GameplayModifierInfo> Modifiers=new List<GameplayModifierInfo>();
+        public float Period;
+        public float Duration;
 
         public GameplayEffect()
         {
             DurationPolicy= EGameplayEffectDurationType.Instant;
         }
+    }
+    public class GameplayEffectSpec
+    {
+        public GameplayEffect Def;
     }
 }
 

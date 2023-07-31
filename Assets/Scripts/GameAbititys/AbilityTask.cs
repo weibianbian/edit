@@ -16,15 +16,15 @@ namespace GameplayAbilitySystem
             if (OtherActor != null)
             {
                 // Construct TargetData
-                FGameplayAbilityTargetData_SingleTargetHit* TargetData = new FGameplayAbilityTargetData_SingleTargetHit(Hit);
+                //FGameplayAbilityTargetData_SingleTargetHit* TargetData = new FGameplayAbilityTargetData_SingleTargetHit(Hit);
 
-                // Give it a handle and return
-                FGameplayAbilityTargetDataHandle Handle;
-                Handle.Data.Add(TSharedPtr<FGameplayAbilityTargetData>(TargetData));
-                if (ShouldBroadcastAbilityTaskDelegates())
-                {
-                    OnOverlap.Broadcast(Handle);
-                }
+                //// Give it a handle and return
+                //FGameplayAbilityTargetDataHandle Handle;
+                //Handle.Data.Add(TSharedPtr<FGameplayAbilityTargetData>(TargetData));
+                //if (ShouldBroadcastAbilityTaskDelegates())
+                //{
+                //    OnOverlap.Broadcast(Handle);
+                //}
 
                 // We are done. Kill us so we don't keep getting broadcast messages
                 EndTask();
