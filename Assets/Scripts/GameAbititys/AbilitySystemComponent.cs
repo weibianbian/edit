@@ -92,7 +92,7 @@ namespace GameplayAbilitySystem
                     return ActivatableAbilities.items[i];
                 }
             }
-            return null;
+            return GameplayAbilitySpec.Default;
         }
         public void GiveAbility(GameplayAbilitySpec AbilitySpec)
         {
@@ -151,6 +151,8 @@ namespace GameplayAbilitySystem
         }
         public ActiveGameplayEffectHandle ApplyGameplayEffectSpecToSelf(GameplayEffectSpec Spec)
         {
+            //ActiveGameplayEffectsContainer.ApplyGameplayEffectSpec
+                //
             ActiveGameplayEffectHandle ReturnHandle = new ActiveGameplayEffectHandle();
             ActiveGameplayEffect AppliedEffect = new ActiveGameplayEffect();
             if (Spec.Def.DurationPolicy != EGameplayEffectDurationType.Instant)

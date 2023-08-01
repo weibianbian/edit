@@ -10,6 +10,14 @@ namespace GameplayAbilitySystem
 
         public ActiveGameplayEffect ApplyGameplayEffectSpec(GameplayEffectSpec Spec)
         {
+            ActiveGameplayEffect AppliedActiveGE = null;
+            ActiveGameplayEffectHandle NewHandle = ActiveGameplayEffectHandle.GenerateNewHandle(owner);
+
+            AppliedActiveGE = new ActiveGameplayEffect()
+            {
+                Handle = NewHandle,
+                Spec = Spec,
+            };
             return new ActiveGameplayEffect();
         }
         public OnGameplayAttributeValueChange GetGameplayAttributeValueChangeDelegate(GameplayAttribute Attribute)

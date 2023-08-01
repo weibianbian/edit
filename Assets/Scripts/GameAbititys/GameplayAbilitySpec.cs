@@ -5,8 +5,9 @@
         public int id;
         public GameplayAbility Ability;
         public int level;
-        public bool InputPressed = false;
+        public bool InputPressed;
         public GameplayAbilitySpecHandle Handle;
+        public static GameplayAbilitySpec Default=new GameplayAbilitySpec();
 
         public bool IsActive()
         {

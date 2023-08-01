@@ -14,18 +14,21 @@ namespace GameplayAbilitySystem
     public class GameplayEffect
     {
         public EGameplayEffectDurationType DurationPolicy;
-        public List<GameplayModifierInfo> Modifiers=new List<GameplayModifierInfo>();
+        public List<GameplayModifierInfo> Modifiers = new List<GameplayModifierInfo>();
+        public List<GameplayCue> GameplayCues=new List<GameplayCue>();
         public float Period;
         public float Duration;
 
         public GameplayEffect()
         {
-            DurationPolicy= EGameplayEffectDurationType.Instant;
+            DurationPolicy = EGameplayEffectDurationType.Instant;
         }
     }
     public class GameplayEffectSpec
     {
         public GameplayEffect Def;
     }
+    public class GameplayCue { }
+
 }
 
