@@ -1,4 +1,5 @@
 ﻿using GameplayAbilitySystem;
+using RailShootGame;
 using System.Collections.Generic;
 
 namespace GameplayAbilitySystem
@@ -21,8 +22,13 @@ namespace GameplayAbilitySystem
     {
         public GameplayEffectSpec Spec;
         public ActiveGameplayEffectHandle Handle;
+        public TimerHandle DurationHandle;
+        public bool IsPendingRemove;
 
-        
+        public float GetDuration()
+        {
+            return Spec.GetDuration();
+        }
+
     }
 }
-

@@ -173,6 +173,10 @@ namespace GameplayAbilitySystem
             }
             return ReturnHandle;
         }
+        public void CheckDurationExpired(ActiveGameplayEffectHandle Handle)
+        {
+            ActiveGameplayEffects.CheckDuration(Handle);
+        }
     }
 }
 

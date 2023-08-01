@@ -1,11 +1,16 @@
-﻿using System.Collections.Generic;
+﻿using RailShootGame;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using UnityEditor.PackageManager;
+using static UnityEngine.UI.GridLayoutGroup;
 
 namespace GameplayAbilitySystem
 {
     public class ActiveGameplayEffectsContainer
     {
         AbilitySystemComponent owner;
-        public List<GameplayAbilitySpec> GameplayEffects_Internal;
+        public List<ActiveGameplayEffect> GameplayEffects_Internal;
         public Dictionary<GameplayAttribute, OnGameplayAttributeValueChange> AttributeValueChangeDelegates;
 
         public ActiveGameplayEffect ApplyGameplayEffectSpec(GameplayEffectSpec Spec)
@@ -18,6 +23,23 @@ namespace GameplayAbilitySystem
                 Handle = NewHandle,
                 Spec = Spec,
             };
+            bool bSetDuration = true;
+            GameplayEffectSpec AppliedEffectSpec = AppliedActiveGE.Spec;
+            float DurationBaseValue = AppliedEffectSpec.GetDuration();
+            if (DurationBaseValue > 0)
+            {
+                float FinalDuration = AppliedEffectSpec.CalculateModifiedDuration();
+                if (FinalDuration <= 0.0f)
+                {
+                    FinalDuration = 0.1f;
+                }
+                //AppliedEffectSpec.SetDuration(FinalDuration, true);
+                if (owner != null && bSetDuration)
+                {
+                    TimerManager TimerManager = new TimerManager();
+                    TimerManager.SetTimer(ref AppliedActiveGE.DurationHandle, Delegate, FinalDuration, false);
+                }
+            }
             return new ActiveGameplayEffect();
         }
         public OnGameplayAttributeValueChange GetGameplayAttributeValueChangeDelegate(GameplayAttribute Attribute)
@@ -28,6 +50,23 @@ namespace GameplayAbilitySystem
                 AttributeValueChangeDelegates.Add(Attribute, value);
             }
             return value;
+        }
+        public void CheckDuration(ActiveGameplayEffectHandle Handle)
+        {
+            for (int ActiveGEIdx = 0; ActiveGEIdx < GameplayEffects_Internal.Count; ++ActiveGEIdx)
+            {
+                ActiveGameplayEffect Effect = GameplayEffects_Internal[ActiveGEIdx];
+                if (Effect.Handle == Handle)
+                {
+                    if (Effect.IsPendingRemove)
+                    {
+                        break;
+                    }
+                }
+                TimerManager TimerManager = null;
+                float Duration = Effect.GetDuration();
+                //float CurrentTime = GetWorldTime();
+            }
         }
     }
 

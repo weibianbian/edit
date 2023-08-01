@@ -27,6 +27,16 @@ namespace GameplayAbilitySystem
     public class GameplayEffectSpec
     {
         public GameplayEffect Def;
+        public float Duration;
+
+        public float GetDuration()
+        {
+            return Duration;
+        }
+        public float CalculateModifiedDuration()
+        {
+            return 0;
+        }
     }
     public class GameplayCue { }
 
