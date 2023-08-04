@@ -1,12 +1,9 @@
 ﻿using RailShootGame;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using UnityEditor.PackageManager;
-using static UnityEngine.UI.GridLayoutGroup;
 
 namespace GameplayAbilitySystem
 {
+    
     public class ActiveGameplayEffectsContainer
     {
         AbilitySystemComponent owner;
@@ -37,7 +34,7 @@ namespace GameplayAbilitySystem
                 if (owner != null && bSetDuration)
                 {
                     TimerManager TimerManager = new TimerManager();
-                    TimerManager.SetTimer(ref AppliedActiveGE.DurationHandle, Delegate, FinalDuration, false);
+                    //TimerManager.SetTimer(ref AppliedActiveGE.DurationHandle, Delegate, FinalDuration, false);
                 }
             }
             return new ActiveGameplayEffect();

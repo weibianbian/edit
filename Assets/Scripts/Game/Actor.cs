@@ -1,12 +1,9 @@
-using HFSMRuntime;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 namespace RailShootGame
 {
-    public delegate void TimerDelegate();
     public enum ETimerStatus
     {
         Pending,
@@ -45,6 +42,13 @@ namespace RailShootGame
         public static bool operator ==(TimerHandle a, TimerHandle b)
         {
             return a.Handle == b.Handle;
+        }
+    }
+    public class TimerDelegate
+    {
+        public void Execute()
+        {
+
         }
     }
     public class TimerData
@@ -93,7 +97,7 @@ namespace RailShootGame
                     int CallCount = Top.bLoop ? (int)(((InternalTime - Top.ExpireTime) / Top.Rate) + 1) : 1;
                     for (int CallIdx = 0; CallIdx < CallCount; ++CallIdx)
                     {
-                        Top.TimerDelegate?.Invoke();
+                        Top.TimerDelegate?.Execute();
                         Top = FindTimer(CurrentlyExecutingTimer);
                         if (Top == null || Top.Status != ETimerStatus.Executing)
                         {

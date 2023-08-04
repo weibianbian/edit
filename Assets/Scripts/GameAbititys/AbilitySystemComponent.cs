@@ -177,6 +177,12 @@ namespace GameplayAbilitySystem
         {
             ActiveGameplayEffects.CheckDuration(Handle);
         }
+        public GameplayEffectSpecHandle MakeOutgoingSpec(GameplayEffect InGameplayEffect,float Level, GameplayEffectContextHandle Context)
+        {
+            GameplayEffectSpec NewSpec = new GameplayEffectSpec(InGameplayEffect, Context, Level);
+            //传递给投掷物，投掷物击中到目标后被应用
+            return new GameplayEffectSpecHandle(NewSpec);
+        }
     }
 }
 
