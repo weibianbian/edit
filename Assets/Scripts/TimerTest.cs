@@ -1,6 +1,9 @@
+using RailShootGame;
 using System;
 using System.Reflection;
+using UnityEditor;
 using UnityEngine;
+using static UnityEngine.UI.GridLayoutGroup;
 
 public class TimerTest : MonoBehaviour
 {
@@ -12,6 +15,7 @@ public class TimerTest : MonoBehaviour
         TestClass testClass=new TestClass();
         testClass.Init(timerManagerTmp);
 
+
         timerManagerTmp.Tick();
 
     }
@@ -22,6 +26,22 @@ public class TimerTest : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+    }
+    public class TimerCallBackAction<T>
+    {
+        Action<T> action;
+        T arg;
+        public static TimerCallBackAction<T> Create(Action<T> act,T InArg)
+        {
+            TimerCallBackAction<T> ret = new TimerCallBackAction<T>() { action = act,
+                arg = InArg,
+            };
+            return ret;
+        }
+        public void Execute()
+        {
+            action?.Invoke(arg);
+        }
     }
 
     public class TimerCallBack
@@ -39,6 +59,7 @@ public class TimerTest : MonoBehaviour
             };
             return ret;
         }
+
         public void Execute()
         {
             Type t = owner.GetType();
@@ -62,6 +83,15 @@ public class TimerTest : MonoBehaviour
             TimerTmp timer = timerMgr.SetTimer();
             int xixi = 1;
             timer.callBack = TimerCallBack.Create(real, "CallBack", xixi);
+
+            TimerDelegate<RealInstance, int>.Create((@real,xxx) =>
+            {
+                @real.CallBack(xxx);
+            }, real, xixi);
+            //timer.callBackAction= TimerCallBackAction<RealInstance>.Create((@real) =>
+            //{
+            //    @real.CallBack(xixi);
+            //},real);
         }
     }
     public class TimerManagerTmp
@@ -71,6 +101,7 @@ public class TimerTest : MonoBehaviour
         {
             //时间到 执行回调
             timer.callBack.Execute();
+            //timer.callBackAction.Execute();
         }
         public TimerTmp SetTimer()
         {
@@ -81,5 +112,6 @@ public class TimerTest : MonoBehaviour
     public class TimerTmp
     {
         public TimerCallBack callBack;
+        //public TimerCallBackAction callBackAction;
     }
 }

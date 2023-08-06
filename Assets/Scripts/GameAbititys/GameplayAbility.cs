@@ -61,6 +61,10 @@ namespace GameplayAbilitySystem
         {
 
         }
+        public GameplayEffectSpecHandle MakeOutgoingGameplayEffectSpec()
+        {
+            GameplayEffectSpecHandle NewHandle =
+        }
     }
 }
 

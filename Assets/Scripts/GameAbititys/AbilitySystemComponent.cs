@@ -177,6 +177,7 @@ namespace GameplayAbilitySystem
         {
             ActiveGameplayEffects.CheckDuration(Handle);
         }
+        
         public GameplayEffectSpecHandle MakeOutgoingSpec(GameplayEffect InGameplayEffect,float Level, GameplayEffectContextHandle Context)
         {
             GameplayEffectSpec NewSpec = new GameplayEffectSpec(InGameplayEffect, Context, Level);

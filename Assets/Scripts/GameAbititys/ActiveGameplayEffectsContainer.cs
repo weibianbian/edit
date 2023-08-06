@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace GameplayAbilitySystem
 {
-    
+
     public class ActiveGameplayEffectsContainer
     {
         AbilitySystemComponent owner;
@@ -34,7 +34,10 @@ namespace GameplayAbilitySystem
                 if (owner != null && bSetDuration)
                 {
                     TimerManager TimerManager = new TimerManager();
-                    //TimerManager.SetTimer(ref AppliedActiveGE.DurationHandle, Delegate, FinalDuration, false);
+                    TimerManager.SetTimer(ref AppliedActiveGE.DurationHandle, TimerDelegate<AbilitySystemComponent, ActiveGameplayEffectHandle>.Create((@owner, @handle) =>
+                    {
+                        @owner.CheckDurationExpired(@handle);
+                    }, owner, AppliedActiveGE.Handle), FinalDuration, false);
                 }
             }
             return new ActiveGameplayEffect();
