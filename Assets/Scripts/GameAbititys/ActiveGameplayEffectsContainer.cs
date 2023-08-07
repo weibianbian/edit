@@ -9,8 +9,9 @@ namespace GameplayAbilitySystem
         AbilitySystemComponent owner;
         public List<ActiveGameplayEffect> GameplayEffects_Internal;
         public Dictionary<GameplayAttribute, OnGameplayAttributeValueChange> AttributeValueChangeDelegates;
+        public List<GameplayEffect> ApplicationImmunityQueryEffects;
 
-        public ActiveGameplayEffect ApplyGameplayEffectSpec(GameplayEffectSpec Spec)
+        public ActiveGameplayEffect ApplyGameplayEffectSpec(GameplayEffectSpec Spec, ref bool bFoundExistingStackableGE)
         {
             ActiveGameplayEffect AppliedActiveGE = null;
             ActiveGameplayEffectHandle NewHandle = ActiveGameplayEffectHandle.GenerateNewHandle(owner);
@@ -67,6 +68,15 @@ namespace GameplayAbilitySystem
                 float Duration = Effect.GetDuration();
                 //float CurrentTime = GetWorldTime();
             }
+        }
+        public bool HasApplicationImmunityToSpec(GameplayEffectSpec SpecToApply, ActiveGameplayEffect OutGEThatProvidedImmunity)
+        {
+            for (int i = 0; i < ApplicationImmunityQueryEffects.Count; i++)
+            {
+                GameplayEffect EffectDef = ApplicationImmunityQueryEffects[i];
+
+            }
+            return true;
         }
     }
 

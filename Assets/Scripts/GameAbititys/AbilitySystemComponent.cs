@@ -63,9 +63,32 @@ namespace GameplayAbilitySystem
         public GameplayAbilitySpecContainer ActivatableAbilities;
         public ActiveGameplayEffectsContainer ActiveGameplayEffects;
         public List<AttributeSet> SpawnedAttributes;
+        public GameplayAbilityActorInfo AbilityActorInfo;
         public AbilitySystemComponent(Actor owner) : base(owner)
         {
 
+        }
+        public void InitStats(AttributeSet Attributes)
+        {
+            AddSpawnedAttribute(Attributes);
+        }
+        public void AddSpawnedAttribute(AttributeSet Attribute)
+        {
+            if (!SpawnedAttributes.Contains(Attribute))
+            {
+                SpawnedAttributes.Add(Attribute);
+            }
+        }
+        public T GetSet<T>() where T : AttributeSet
+        {
+            for (int i = 0; i < SpawnedAttributes.Count; i++)
+            {
+                if (SpawnedAttributes[i] is T)
+                {
+                    return SpawnedAttributes[i] as T;
+                }
+            }
+            return null;
         }
         public bool TryActiveAbility(GameplayAbilitySpecHandle AbilityToActivate)
         {
@@ -138,7 +161,10 @@ namespace GameplayAbilitySystem
         }
         public ActiveGameplayEffectHandle ApplyGameplayEffectToTarget(GameplayEffect InGameplayEffect, AbilitySystemComponent InTarget, float InLevel)
         {
-            return new ActiveGameplayEffectHandle();
+            GameplayEffectContextHandle Context = MakeEffectContext();
+            GameplayEffectSpec Spec = new GameplayEffectSpec(InGameplayEffect, Context, InLevel);
+            ActiveGameplayEffectHandle ret = ApplyGameplayEffectSpecToTarget(Spec, InTarget);
+            return ret;
         }
         public ActiveGameplayEffectHandle ApplyGameplayEffectSpecToTarget(GameplayEffectSpec Spec, AbilitySystemComponent InTarget)
         {
@@ -152,37 +178,73 @@ namespace GameplayAbilitySystem
         public ActiveGameplayEffectHandle ApplyGameplayEffectSpecToSelf(GameplayEffectSpec Spec)
         {
             //ActiveGameplayEffectsContainer.ApplyGameplayEffectSpec
-                //
+            //
+            ActiveGameplayEffect ImmunityGE = null;
+            if (ActiveGameplayEffects)
+            {
+
+            }
+
+
+            ActiveGameplayEffectHandle MyHandle;
             ActiveGameplayEffectHandle ReturnHandle = new ActiveGameplayEffectHandle();
             ActiveGameplayEffect AppliedEffect = new ActiveGameplayEffect();
+            GameplayEffectSpec StackSpec = null;
+            GameplayEffectSpec OurCopyOfSpec = null;
+            bool bFoundExistingStackableGE = false;
+            bool bTreatAsInfiniteDuration = false;
             if (Spec.Def.DurationPolicy != EGameplayEffectDurationType.Instant)
             {
-                AppliedEffect = ActiveGameplayEffects.ApplyGameplayEffectSpec(Spec);
-                return new ActiveGameplayEffectHandle();
-
+                AppliedEffect = ActiveGameplayEffects.ApplyGameplayEffectSpec(Spec, ref bFoundExistingStackableGE);
+                if (AppliedEffect == null)
+                {
+                    return new ActiveGameplayEffectHandle();
+                }
+                MyHandle = AppliedEffect.Handle;
+                OurCopyOfSpec = AppliedEffect.Spec;
+            }
+            if (OurCopyOfSpec == null)
+            {
+                StackSpec = Spec;
+                OurCopyOfSpec = StackSpec;
             }
 
             for (int i = 0; i < Spec.Def.Modifiers.Count; i++)
             {
 
             }
-
-            if (Spec.Def.DurationPolicy == EGameplayEffectDurationType.Instant)
+            if (bTreatAsInfiniteDuration)
             {
 
             }
+            else if (Spec.Def.DurationPolicy == EGameplayEffectDurationType.Instant)
+            {
+
+            }
+
             return ReturnHandle;
         }
         public void CheckDurationExpired(ActiveGameplayEffectHandle Handle)
         {
             ActiveGameplayEffects.CheckDuration(Handle);
         }
-        
-        public GameplayEffectSpecHandle MakeOutgoingSpec(GameplayEffect InGameplayEffect,float Level, GameplayEffectContextHandle Context)
+        public GameplayEffectContextHandle MakeEffectContext()
+        {
+            GameplayEffectContextHandle Context = new GameplayEffectContextHandle(new GameplayEffectContext());
+
+            Context.AddInstigator(AbilityActorInfo.OwnerActor, AbilityActorInfo.AvatarActor);
+            return Context;
+
+        }
+        public GameplayEffectSpecHandle MakeOutgoingSpec(GameplayEffect InGameplayEffect, float Level, GameplayEffectContextHandle Context)
         {
             GameplayEffectSpec NewSpec = new GameplayEffectSpec(InGameplayEffect, Context, Level);
             //传递给投掷物，投掷物击中到目标后被应用
             return new GameplayEffectSpecHandle(NewSpec);
+        }
+        public bool InternalTryActivateAbility(GameplayAbilitySpecHandle Handle)
+        {
+            return true;
         }
     }
 }

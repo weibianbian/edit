@@ -1,0 +1,32 @@
+using GameplayAbilitySystem;
+using RailShootGame;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class GameplayEffectsTestSuite : MonoBehaviour
+{
+    public AbilitySystemTestActor SourceActor;
+    public AbilitySystemTestActor DestActor;
+    public AbilitySystemComponent SourceComponent;
+    public AbilitySystemComponent DestComponent;
+    // Start is called before the first frame update
+    void Start()
+    {
+
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        
+    }
+    public void Test_InstantDamage()
+    {
+        float DamageValue = 5.0f;
+        float StartingHealth = DestComponent.GetSet<AbilitySystemTestAttributeSet>().Health;
+        GameplayEffect BaseDmgEffect = new GameplayEffect();
+        BaseDmgEffect.DurationPolicy = EGameplayEffectDurationType.Instant;
+        SourceComponent.ApplyGameplayEffectToTarget(BaseDmgEffect, DestComponent,1);
+    }
+}

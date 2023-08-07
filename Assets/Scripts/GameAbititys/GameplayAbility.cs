@@ -1,7 +1,19 @@
 ﻿using RailShootGame;
+using UnityEditor.PackageManager;
 
 namespace GameplayAbilitySystem
 {
+    public class CooldownGameplayEffect : GameplayEffect
+    {
+
+    }
+    public class GameplayAbilityActorInfo
+    {
+        public Actor OwnerActor;
+        public Actor AvatarActor;
+        public AbilitySystemComponent AbilitySystemComponent;
+
+    }
     public class GameplayAbility
     {
         //	The important functions:
@@ -20,6 +32,7 @@ namespace GameplayAbilitySystem
         //		CancelAbility()			- Interrupts the ability (from an outside source).
         //
         //		EndAbility()			- The ability has ended. This is intended to be called by the ability to end itself.
+        public CooldownGameplayEffect CooldownGameplayEffect { get; set; }
         public virtual bool CanActivateAbility(GameplayAbilitySpecHandle Handle)
         {
             return false;
@@ -27,14 +40,14 @@ namespace GameplayAbilitySystem
         public void CallActivateAbility(GameplayAbilitySpecHandle Handle)
         {
             PreActivate(Handle);
-            ActivateAbility(Handle,null);
+            ActivateAbility(Handle, null);
         }
         public void PreActivate(GameplayAbilitySpecHandle Handle)
         {
         }
-        public virtual void ActivateAbility(GameplayAbilitySpecHandle Handle, Character owner)
+        public virtual void ActivateAbility(GameplayAbilitySpecHandle Handle, GameplayAbilityActorInfo ActorInfo, Character owner)
         {
-            if (CommitAbility(Handle))
+            if (CommitAbility(Handle, ActorInfo))
             {
 
             }
@@ -43,27 +56,49 @@ namespace GameplayAbilitySystem
         {
 
         }
-        public virtual bool CommitAbility(GameplayAbilitySpecHandle Handle)
+        public virtual bool CommitAbility(GameplayAbilitySpecHandle Handle, GameplayAbilityActorInfo ActorInfo)
         {
-            CommitExecute();
+            CommitExecute(Handle, ActorInfo);
             return false;
         }
-        public void CommitExecute()
+        public void CommitExecute(GameplayAbilitySpecHandle Handle, GameplayAbilityActorInfo ActorInfo)
         {
-            ApplyCooldown();
+            ApplyCooldown(Handle, ActorInfo);
             ApplyCost();
         }
-        public void ApplyCooldown()
+        public bool CommitAbilityCooldown(GameplayAbilitySpecHandle Handle, GameplayAbilityActorInfo ActorInfo)
         {
-
+            ApplyCooldown(Handle, ActorInfo);
+            return true;
+        }
+        public void ApplyCooldown(GameplayAbilitySpecHandle Handle, GameplayAbilityActorInfo ActorInfo)
+        {
+            GameplayEffect CooldownGE = GetCooldownGameplayEffect();
+            if (CooldownGE != null)
+            {
+                ApplyGameplayEffectToOwner(Handle, ActorInfo, CooldownGE, GetAbilityLevel(Handle, ActorInfo));
+            }
         }
         public void ApplyCost()
         {
 
         }
-        public GameplayEffectSpecHandle MakeOutgoingGameplayEffectSpec()
+        public CooldownGameplayEffect GetCooldownGameplayEffect()
         {
-            GameplayEffectSpecHandle NewHandle =
+            return CooldownGameplayEffect;
+        }
+        public void ApplyGameplayEffectToOwner(GameplayAbilitySpecHandle Handle, GameplayAbilityActorInfo ActorInfo, GameplayEffect InGamepayEffect, float GameplayEffectLevel)
+        {
+            if (InGamepayEffect != null)
+            {
+                GameplayEffectSpecHandle SpecHandle = MakeOutgoingGameplayEffectSpec(Handle, ActorInfo, InGamepayEffect, GameplayEffectLevel);
+            }
+        }
+        public GameplayEffectSpecHandle MakeOutgoingGameplayEffectSpec(GameplayAbilitySpecHandle Handle, GameplayAbilityActorInfo ActorInfo, GameplayEffect InGamepayEffect, float GameplayEffectLevel)
+        {
+            AbilitySystemComponent AbilitySystemComponent= ActorInfo.AbilitySystemComponent;
+            GameplayEffectSpecHandle NewHandle = AbilitySystemComponent.MakeOutgoingSpec(null, GameplayEffectLevel, null);
+            return null;
         }
     }
 }

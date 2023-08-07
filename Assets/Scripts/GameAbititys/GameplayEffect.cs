@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using RailShootGame;
+using System.Collections.Generic;
 using System.Xml.Xsl;
 using UnityEditor;
 
@@ -70,7 +71,13 @@ namespace GameplayAbilitySystem
     }
     public class GameplayEffectContext
     {
-
+        public Actor Instigator;
+        public Actor EffectCauser;
+        public void AddInstigator(Actor InInstigator, Actor InEffectCauser)
+        {
+            Instigator = InInstigator;
+            EffectCauser = InEffectCauser;
+        }
     }
     public class GameplayEffectContextHandle
     {
@@ -79,8 +86,11 @@ namespace GameplayAbilitySystem
         {
             Data = InData;
         }
+        public void AddInstigator(Actor InInstigator, Actor InEffectCauser)
+        {
+            Data.AddInstigator(InInstigator, InEffectCauser);
+        }
     }
     public class GameplayCue { }
-
 }
 
