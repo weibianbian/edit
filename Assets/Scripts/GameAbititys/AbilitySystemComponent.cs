@@ -180,20 +180,21 @@ namespace GameplayAbilitySystem
             //ActiveGameplayEffectsContainer.ApplyGameplayEffectSpec
             //
             ActiveGameplayEffect ImmunityGE = null;
-            if (ActiveGameplayEffects)
+            if (ActiveGameplayEffects.HasApplicationImmunityToSpec(Spec, ImmunityGE))
             {
-
+                return new ActiveGameplayEffectHandle();
             }
 
 
             ActiveGameplayEffectHandle MyHandle;
             ActiveGameplayEffectHandle ReturnHandle = new ActiveGameplayEffectHandle();
             ActiveGameplayEffect AppliedEffect = new ActiveGameplayEffect();
+            bool bFoundExistingStackableGE = false;
+            bool bTreatAsInfiniteDuration = Spec.Def.DurationPolicy == EGameplayEffectDurationType.Instant;
+            bool bInvokeGameplayCueApplied = Spec.Def.DurationPolicy != EGameplayEffectDurationType.Instant;
             GameplayEffectSpec StackSpec = null;
             GameplayEffectSpec OurCopyOfSpec = null;
-            bool bFoundExistingStackableGE = false;
-            bool bTreatAsInfiniteDuration = false;
-            if (Spec.Def.DurationPolicy != EGameplayEffectDurationType.Instant)
+            if (Spec.Def.DurationPolicy != EGameplayEffectDurationType.Instant|| bTreatAsInfiniteDuration)
             {
                 AppliedEffect = ActiveGameplayEffects.ApplyGameplayEffectSpec(Spec, ref bFoundExistingStackableGE);
                 if (AppliedEffect == null)

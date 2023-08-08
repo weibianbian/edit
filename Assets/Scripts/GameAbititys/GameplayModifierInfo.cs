@@ -1,6 +1,6 @@
 ﻿namespace GameplayAbilitySystem
 {
-    public struct GameplayModifierInfo
+    public class GameplayModifierInfo
     {
         public EGameplayModOp ModifierOp;
     }

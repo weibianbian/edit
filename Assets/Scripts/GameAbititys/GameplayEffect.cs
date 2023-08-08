@@ -17,10 +17,14 @@ namespace GameplayAbilitySystem
     public class GameplayEffect
     {
         public EGameplayEffectDurationType DurationPolicy;
+        public EGameplayEffectStackingType StackingType;
         public List<GameplayModifierInfo> Modifiers = new List<GameplayModifierInfo>();
         public List<GameplayCue> GameplayCues = new List<GameplayCue>();
         public float Period;
         public float Duration;
+        public int StackLimitCount;
+        public bool bDenyOverflowApplication = false;
+        public bool bClearStackOnOverflow = false;
 
         public GameplayEffect()
         {
@@ -33,6 +37,7 @@ namespace GameplayAbilitySystem
         public float Duration;
         public float Level;
         private GameplayEffectContextHandle EffectContext;
+        public int StackCount;
         public GameplayEffectSpec(GameplayEffect InDef, GameplayEffectContextHandle InEffectContext, float InLevel)
         {
             Initialize(InDef, InEffectContext, InLevel);
@@ -48,6 +53,10 @@ namespace GameplayAbilitySystem
         {
             EffectContext = NewEffectContext;
         }
+        public GameplayEffectContextHandle GetContext()
+        {
+            return EffectContext;
+        }
         public void SetLevel(float InLevel)
         {
             Level = InLevel;
@@ -60,6 +69,7 @@ namespace GameplayAbilitySystem
         {
             return 0;
         }
+
     }
     public class GameplayEffectSpecHandle
     {
@@ -73,10 +83,15 @@ namespace GameplayAbilitySystem
     {
         public Actor Instigator;
         public Actor EffectCauser;
+        public AbilitySystemComponent InstigatorAbilitySystemComponent;
         public void AddInstigator(Actor InInstigator, Actor InEffectCauser)
         {
             Instigator = InInstigator;
             EffectCauser = InEffectCauser;
+        }
+        public AbilitySystemComponent GetInstigatorAbilitySystemComponent()
+        {
+            return InstigatorAbilitySystemComponent;
         }
     }
     public class GameplayEffectContextHandle
@@ -89,6 +104,10 @@ namespace GameplayAbilitySystem
         public void AddInstigator(Actor InInstigator, Actor InEffectCauser)
         {
             Data.AddInstigator(InInstigator, InEffectCauser);
+        }
+        public AbilitySystemComponent GetInstigatorAbilitySystemComponent()
+        {
+            return Data.GetInstigatorAbilitySystemComponent();
         }
     }
     public class GameplayCue { }

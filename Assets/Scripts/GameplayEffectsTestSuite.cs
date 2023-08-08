@@ -19,7 +19,7 @@ public class GameplayEffectsTestSuite : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+
     }
     public void Test_InstantDamage()
     {
@@ -27,6 +27,12 @@ public class GameplayEffectsTestSuite : MonoBehaviour
         float StartingHealth = DestComponent.GetSet<AbilitySystemTestAttributeSet>().Health;
         GameplayEffect BaseDmgEffect = new GameplayEffect();
         BaseDmgEffect.DurationPolicy = EGameplayEffectDurationType.Instant;
-        SourceComponent.ApplyGameplayEffectToTarget(BaseDmgEffect, DestComponent,1);
+        SourceComponent.ApplyGameplayEffectToTarget(BaseDmgEffect, DestComponent, 1);
+    }
+    public void AddModifier(GameplayEffect Effect, EGameplayModOp Op)
+    {
+        GameplayModifierInfo Info = new GameplayModifierInfo();
+        Effect.Modifiers.Add(Info);
+        Info.ModifierOp = Op;
     }
 }
