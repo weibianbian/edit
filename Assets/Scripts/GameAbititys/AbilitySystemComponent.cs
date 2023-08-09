@@ -1,8 +1,7 @@
 using RailShootGame;
-using Sirenix.Utilities;
 using System;
-using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace GameplayAbilitySystem
@@ -62,8 +61,10 @@ namespace GameplayAbilitySystem
     {
         public GameplayAbilitySpecContainer ActivatableAbilities;
         public ActiveGameplayEffectsContainer ActiveGameplayEffects;
+        public GameplayTagCountContainer GameplayTagCountContainer;
         public List<AttributeSet> SpawnedAttributes;
         public GameplayAbilityActorInfo AbilityActorInfo;
+
         public AbilitySystemComponent(Actor owner) : base(owner)
         {
 
@@ -194,7 +195,7 @@ namespace GameplayAbilitySystem
             bool bInvokeGameplayCueApplied = Spec.Def.DurationPolicy != EGameplayEffectDurationType.Instant;
             GameplayEffectSpec StackSpec = null;
             GameplayEffectSpec OurCopyOfSpec = null;
-            if (Spec.Def.DurationPolicy != EGameplayEffectDurationType.Instant|| bTreatAsInfiniteDuration)
+            if (Spec.Def.DurationPolicy != EGameplayEffectDurationType.Instant || bTreatAsInfiniteDuration)
             {
                 AppliedEffect = ActiveGameplayEffects.ApplyGameplayEffectSpec(Spec, ref bFoundExistingStackableGE);
                 if (AppliedEffect == null)
@@ -246,6 +247,14 @@ namespace GameplayAbilitySystem
         public bool InternalTryActivateAbility(GameplayAbilitySpecHandle Handle)
         {
             return true;
+        }
+        public Action<GameplayTag, int> RegisterGameplayTagEvent(GameplayTag Tag, EGameplayTagEventType EventType)
+        {
+            return GameplayTagCountContainer.RegisterGameplayTagEvent(Tag, EventType);
+        }
+        public void UnregisterGameplayTagEvent(GameplayTag Tag, EGameplayTagEventType EventType)
+        {
+            Action<GameplayTag, int> ret = GameplayTagCountContainer.RegisterGameplayTagEvent(Tag, EventType);
         }
     }
 }

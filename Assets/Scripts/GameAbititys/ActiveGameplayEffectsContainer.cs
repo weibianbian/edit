@@ -1,11 +1,11 @@
 ﻿using RailShootGame;
+using Sirenix.Utilities.Editor;
 using System;
 using System.Collections.Generic;
 using static UnityEngine.UI.GridLayoutGroup;
 
 namespace GameplayAbilitySystem
 {
-
     public class ActiveGameplayEffectsContainer : List<ActiveGameplayEffect>
     {
         AbilitySystemComponent Owner;
@@ -58,7 +58,7 @@ namespace GameplayAbilitySystem
                 {
                     float FinalDuration = AppliedEffectSpec.CalculateModifiedDuration();
                     if (FinalDuration <= 0.0f)
-                    { 
+                    {
                         FinalDuration = 0.1f;
                     }
                     //AppliedEffectSpec.SetDuration(FinalDuration, true);
@@ -73,7 +73,7 @@ namespace GameplayAbilitySystem
                 }
                 return new ActiveGameplayEffect();
             }
-          
+
         }
         public OnGameplayAttributeValueChange GetGameplayAttributeValueChangeDelegate(GameplayAttribute Attribute)
         {
