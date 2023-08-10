@@ -1,6 +1,6 @@
 ﻿namespace GameplayAbilitySystem
 {
-    public enum GameplayCueEvent
+    public enum EGameplayCueEvent
     {
         /** 当具有持续时间的GameplayCue第一次被激活时调用，只有当客户端目睹激活时才会调用 */
         OnActive,

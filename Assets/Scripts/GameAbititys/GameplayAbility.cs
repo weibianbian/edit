@@ -40,7 +40,7 @@ namespace GameplayAbilitySystem
         public void CallActivateAbility(GameplayAbilitySpecHandle Handle)
         {
             PreActivate(Handle);
-            ActivateAbility(Handle, null);
+            //ActivateAbility(Handle, null);
         }
         public void PreActivate(GameplayAbilitySpecHandle Handle)
         {
@@ -76,7 +76,7 @@ namespace GameplayAbilitySystem
             GameplayEffect CooldownGE = GetCooldownGameplayEffect();
             if (CooldownGE != null)
             {
-                ApplyGameplayEffectToOwner(Handle, ActorInfo, CooldownGE, GetAbilityLevel(Handle, ActorInfo));
+                //ApplyGameplayEffectToOwner(Handle, ActorInfo, CooldownGE, GetAbilityLevel(Handle, ActorInfo));
             }
         }
         public void ApplyCost()

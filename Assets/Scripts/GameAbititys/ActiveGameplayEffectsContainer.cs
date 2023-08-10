@@ -73,7 +73,7 @@ namespace GameplayAbilitySystem
                 }
                 return new ActiveGameplayEffect();
             }
-
+            return null;
         }
         public OnGameplayAttributeValueChange GetGameplayAttributeValueChangeDelegate(GameplayAttribute Attribute)
         {
