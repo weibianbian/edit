@@ -1,7 +1,10 @@
 ﻿using RailShootGame;
+using static UnityEngine.UI.GridLayoutGroup;
+using System.Numerics;
 
 namespace GameplayAbilitySystem
 {
+
     public class GameplayCueNotifyActor : Actor
     {
         // 处理玩法提示事件
@@ -31,6 +34,43 @@ namespace GameplayAbilitySystem
         }
         // 该通知实例被激活的对应标签
         GameplayTag GameplayCueTag;
+    }
+    public class FGameplayCueNotify_BurstEffects
+    {
+        public FGameplayCueNotify_DecalInfo BurstDecal;
+
+        public void ExecuteEffects()
+        {
+            BurstDecal.SpawnDecal();
+        }
+    }
+    public class FGameplayCueNotify_SpawnResult
+    {
+        
+    }
+    public class FGameplayCueNotify_DecalInfo
+    {
+        public bool SpawnDecal()
+        {
+            DecalComponent SpawnedDecalComponent = null;
+            return false;
+        }
+        public DecalComponent SpawnDecalAtLocation()
+        {
+            return null;
+        }
+        private DecalComponent CreateDecalComponent(Actor Actor, float LifeSpan)
+        {
+            DecalComponent DecalComp = new DecalComponent(Actor);
+
+            if (LifeSpan > 0.0f)
+            {
+                DecalComp.SetLifeSpan(LifeSpan);
+            }
+            return DecalComp;
+        }
+
+
     }
 }
 
