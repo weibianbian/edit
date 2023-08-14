@@ -17,6 +17,11 @@ namespace RailShootGame
         {
             AbilitySystemComponent.InitStats(new AbilitySystemTestAttributeSet());
         }
+
+        public void HandleGameplayCue(Actor TargetActor, GameplayTag GameplayCueTag, EGameplayCueEvent EventType, GameplayCueParameters Parameters)
+        {
+
+        }
     }
 }
 
