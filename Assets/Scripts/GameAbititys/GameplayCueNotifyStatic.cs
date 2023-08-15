@@ -1,13 +1,46 @@
 ﻿using RailShootGame;
+using static UnityEngine.GraphicsBuffer;
+using System.Security.Cryptography;
 
 namespace GameplayAbilitySystem
 {
+    public class GameplayCueNotifyBurst : GameplayCueNotifyStatic
+    {
+        protected FGameplayCueNotify_BurstEffects BurstEffects=new FGameplayCueNotify_BurstEffects();
+        public override void HandleGameplayCue(Actor TargetActor, EGameplayCueEvent EventType, GameplayCueParameters Parameters)
+        {
+            BurstEffects.ExecuteEffects();
+        }
+
+    }
     public class GameplayCueNotifyStatic
     {
-        // 处理玩法提示事件
-        public virtual void HandleGameplayCue()
+        public bool IsOverride = false;
+        public virtual bool HandlesEvent(EGameplayCueEvent EventType)
         {
+            return true;
+        }
+        // 处理玩法提示事件
+        public virtual void HandleGameplayCue(Actor TargetActor, EGameplayCueEvent EventType, GameplayCueParameters Parameters)
+        {
+            switch (EventType)
+            {
+                case EGameplayCueEvent.OnActive:
+                    OnActive();
+                    break;
 
+                case EGameplayCueEvent.WhileActive:
+                    WhileActive();
+                    break;
+
+                case EGameplayCueEvent.Executed:
+                    OnExecute();
+                    break;
+
+                case EGameplayCueEvent.Removed:
+                    OnRemove();
+                    break;
+            };
         }
         // 当一个玩法提示执行时被调用，这用于即时效果或周期性tick
         public void OnExecute()
