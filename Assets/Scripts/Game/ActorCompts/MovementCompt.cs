@@ -3,7 +3,7 @@ using UnityEngine.AI;
 
 namespace RailShootGame
 {
-    public class MovementCompt : ActorCompt
+    public class MovementCompt : ActorComponent
     {
 
         public NavMeshAgent agent;

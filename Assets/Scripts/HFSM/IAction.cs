@@ -4,7 +4,7 @@ namespace HFSMRuntime
 {
     public interface IAction
     {
-        void Execute(Game game, Actor entity);
+        void Execute(UWorld game, Actor entity);
     }
 }
 

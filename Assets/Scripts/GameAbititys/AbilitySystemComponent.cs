@@ -57,7 +57,7 @@ namespace GameplayAbilitySystem
 
     }
 
-    public class AbilitySystemComponent : ActorCompt
+    public class AbilitySystemComponent : ActorComponent
     {
         public GameplayAbilitySpecContainer ActivatableAbilities;
         public ActiveGameplayEffectsContainer ActiveGameplayEffects;

@@ -14,7 +14,7 @@ namespace HFSMRuntime
         {
             return new List<IAction>(0);
         }
-        public virtual UpdateResult Update(Game g, Actor e)
+        public virtual UpdateResult Update(UWorld g, Actor e)
         {
             UpdateResult result = new UpdateResult();
             result.actions = GetActions();

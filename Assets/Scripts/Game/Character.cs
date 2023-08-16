@@ -7,10 +7,10 @@ namespace RailShootGame
     {
         public float BaseAnimValue;
         public float currentValue;
-         
+
     }
 
-    public class Character : Actor
+    public class Character : Pawn
     {
         public bool bPressedJump = false;
         public float JumpKeyHoldTime = 0;

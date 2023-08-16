@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using UnityEngine;
 public class HFSMTest : MonoBehaviour
 {
-    public Game game;
+    public UWorld game;
     public Actor entity;
     public HierarchicalStateMachine hfsm;
     public TimeSpan initialTime;
@@ -19,7 +19,7 @@ public class HFSMTest : MonoBehaviour
         State m = new State(EStatus.Combat.ToString(), null);
 
         l.AddTransition(new Transition(new SoundSensorCondition(), m, 0));
-        game = new Game();
+        game = new UWorld();
         entity = new Actor();
         hfsm = new HierarchicalStateMachine(game, l, m);
     }

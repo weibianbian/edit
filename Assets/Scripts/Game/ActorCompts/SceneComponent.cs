@@ -1,6 +1,6 @@
 ﻿namespace RailShootGame
 {
-    public class SceneComponent : ActorCompt
+    public class SceneComponent : ActorComponent
     {
         public SceneComponent(Actor owner) : base(owner)
         {

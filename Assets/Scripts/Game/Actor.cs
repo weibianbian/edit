@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace RailShootGame
@@ -11,19 +12,35 @@ namespace RailShootGame
     {
         void UpdateLogic(float delta);
     }
+    public class Pawn : Actor
+    {
+
+    }
+
     //Spawn -----  Init  ----Activate
-    public class Actor
+    public class Actor : ReferencePoolObject
     {
         public ActorObject actorObject;
         public MovementCompt move;
         public SensorCompt sensor;
         public HierarchicalStateMachineCompt hsm;
         public Vector3 position;
-        public Game game;
+        public ULevel Outer;
 
+        private HashSet<ActorComponent> OwnedComponents;
 
+        public HashSet<ActorComponent> GetInstanceComponents()
+        {
+            return OwnedComponents;
+        }
+        public void AddOwnedComponent(ActorComponent Component)
+        {
+            if (OwnedComponents.Add(Component))
+            {
 
-        public void Init(Game game)
+            };
+        }
+        public void Init(UWorld game)
         {
             move = new MovementCompt(this);
             move.Init();
@@ -38,6 +55,10 @@ namespace RailShootGame
         public void Spawn()
         {
             move.StopMove(EMoveStatus.MOVE_STATUS_DONE);
+        }
+        public void PostSpawnInitialize()
+        {
+            UWorld World=GetWorld(); 
         }
         //通知脚本怪物已被触发器或手电筒激活
         public void Activate()
@@ -66,6 +87,10 @@ namespace RailShootGame
         }
         public void InitHFSM()
         {
+        }
+        public UWorld GetWorld()
+        {
+            return Outer.OwningWorld;
         }
     }
 }

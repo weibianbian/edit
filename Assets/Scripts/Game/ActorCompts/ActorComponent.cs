@@ -1,10 +1,10 @@
 ﻿namespace RailShootGame
 {
-    public abstract class ActorCompt
+    public abstract class ActorComponent
     {
         public Actor owner;
 
-        public ActorCompt(Actor owner)
+        public ActorComponent(Actor owner)
         {
             this.owner = owner;
         }

@@ -1,4 +1,7 @@
-﻿namespace GameplayAbilitySystem
+﻿using RailShootGame;
+using UnityEngine;
+
+namespace GameplayAbilitySystem
 {
     public class GameplayCueNotifyHitImpact : GameplayCueNotifyStatic
     {
@@ -6,13 +9,13 @@
         {
             return EventType == EGameplayCueEvent.Executed;
         }
-        public override void HandleGameplayCue(EGameplayCueEvent EventType)
+        public override void HandleGameplayCue(Actor TargetActor, EGameplayCueEvent EventType, GameplayCueParameters Parameters)
         {
+            Debug.Log("GameplayCueNotifyHitImpact.HandleGameplayCue");
             if (EventType != EGameplayCueEvent.Executed)
             {
                 return;
             }
-
         }
     }
 }

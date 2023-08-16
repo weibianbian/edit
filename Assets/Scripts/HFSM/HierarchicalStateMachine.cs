@@ -9,7 +9,7 @@ namespace HFSMRuntime
         public List<State> states = new List<State>();
         public State initialState;
         public State currentState;
-        public Game game;
+        public UWorld game;
         public override List<State> GetStates()
         {
             if (currentState != null)
@@ -21,13 +21,13 @@ namespace HFSMRuntime
                 return new List<State>();
             }
         }
-        public HierarchicalStateMachine(Game g)
+        public HierarchicalStateMachine(UWorld g)
             : base()
         {
             this.game = g;
         }
 
-        public HierarchicalStateMachine(Game g, State initialState, params State[] states)
+        public HierarchicalStateMachine(UWorld g, State initialState, params State[] states)
             : this(g)
         {
             this.initialState = initialState;
@@ -41,7 +41,7 @@ namespace HFSMRuntime
             }
         }
 
-        public HierarchicalStateMachine(Game g, State initialState)
+        public HierarchicalStateMachine(UWorld g, State initialState)
             : this(g)
         {
             this.initialState = initialState;
@@ -49,7 +49,7 @@ namespace HFSMRuntime
             this.states.Add(initialState);
             initialState.parent = this;
         }
-        public override UpdateResult Update(Game g, Actor e)
+        public override UpdateResult Update(UWorld g, Actor e)
         {
             UpdateResult result;
             if (currentState == null)

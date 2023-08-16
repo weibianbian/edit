@@ -2,7 +2,7 @@
 
 namespace RailShootGame
 {
-    public class SensorCompt: ActorCompt
+    public class SensorCompt: ActorComponent
     {
         public Dictionary<Sensor.ESensorType, Sensor> sensors = new Dictionary<Sensor.ESensorType, Sensor>();
 

@@ -7,7 +7,7 @@ using UnityEngine.AI;
 public class ActorObject : MonoBehaviour
 {
     public Actor actor;
-    public Game game;
+    public UWorld game;
     public WaypointGroup waypointGroup;
     public void Start()
     {

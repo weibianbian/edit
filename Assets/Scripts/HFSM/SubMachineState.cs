@@ -8,7 +8,7 @@ namespace HFSMRuntime
         protected State state=new State();
         public HierarchicalStateMachine hfsm;
 
-        public SubMachineState(Game g) : base(g)
+        public SubMachineState(UWorld g) : base(g)
         {
         }
 
@@ -16,7 +16,7 @@ namespace HFSMRuntime
         {
             return state.GetAction();
         }
-        public override UpdateResult Update(Game g, Actor e)
+        public override UpdateResult Update(UWorld g, Actor e)
         {
             return base.Update(g, e);
         }

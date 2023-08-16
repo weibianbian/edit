@@ -6,6 +6,7 @@ using UnityEngine;
 
 public class GameplayEffectsTestSuite : MonoBehaviour
 {
+    public UWorld World;
     public AbilitySystemTestActor SourceActor;
     public AbilitySystemTestActor DestActor;
     public AbilitySystemComponent SourceComponent;
@@ -13,7 +14,12 @@ public class GameplayEffectsTestSuite : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        SourceActor = World.SpawnActor<AbilitySystemTestActor>();
+        SourceComponent = SourceActor.GetAbilitySystemComponent();
 
+        DestActor = World.SpawnActor<AbilitySystemTestActor>();
+        DestComponent = DestActor.GetAbilitySystemComponent();
+        Test_InstantDamage();
     }
 
     // Update is called once per frame

@@ -2,7 +2,7 @@
 
 namespace RailShootGame
 {
-    public class HierarchicalStateMachineCompt : ActorCompt
+    public class HierarchicalStateMachineCompt : ActorComponent
     {
         public HierarchicalStateMachine hsm;
         public HierarchicalStateMachineCompt(Actor owner) : base(owner)
