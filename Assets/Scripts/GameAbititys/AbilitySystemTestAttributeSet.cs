@@ -4,8 +4,22 @@ namespace GameplayAbilitySystem
 {
     public class AbilitySystemTestAttributeSet : AttributeSet
     {
-        public float Health, MaxHealth = 0;
-        public float Mana, MaxMana = 0;
+        public float MaxHealth;
+        public float Health;
+        public float Mana;
+        public float MaxMana;
+        public float Damage;
+        public float SpellDamage;
+        public float PhysicalDamage;
+        public float CritChance;
+        public float CritMultiplier;
+        public float ArmorDamageReduction;
+        public float DodgeChance;
+        public float LifeSteal;
+        public float Strength;
+        public float StackingAttribute1;
+        public float StackingAttribute2;
+        public float NoStackAttribute;
     }
 }
 

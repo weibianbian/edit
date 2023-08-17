@@ -1,4 +1,6 @@
-﻿namespace RailShootGame
+﻿using System.Collections.Generic;
+
+namespace RailShootGame
 {
     public abstract class ReferencePoolObject
     {

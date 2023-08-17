@@ -1,3 +1,4 @@
+using GameplayAbilitySystem;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -42,13 +43,13 @@ namespace RailShootGame
         }
         public void Init(UWorld game)
         {
-            move = new MovementCompt(this);
+            move = new MovementCompt();
             move.Init();
 
-            sensor = new SensorCompt(this);
+            sensor = new SensorCompt();
             sensor.AddSensor(new SoundSensor());
 
-            hsm = new HierarchicalStateMachineCompt(this);
+            hsm = new HierarchicalStateMachineCompt();
             hsm.Init();
         }
         //创建的时候，需要填充配置信息
@@ -56,9 +57,33 @@ namespace RailShootGame
         {
             move.StopMove(EMoveStatus.MOVE_STATUS_DONE);
         }
+
         public void PostSpawnInitialize()
         {
-            UWorld World=GetWorld(); 
+            //这里的一般流程如下
+            // - Actor设置基础。
+            // - Actor获取PreInitializeComponents()
+            // - Actor构建自身，然后将其组件完全组装起来
+            // - Actor组件获取OnComponentCreated
+            // - Actor组件获取InitializeComponent
+            // -当一切都设置好后，Actor会获得PostInitializeComponents()方法
+            //
+
+            //延迟生成和非延迟生成的序列应该是相同的
+            UWorld World =GetWorld();
+            ExecuteConstruction();
+            PostActorConstruction();
+        }
+        public void ExecuteConstruction()
+        {
+
+        }
+        public void PostActorConstruction()
+        {
+            PostInitializeComponents();
+        }
+        public virtual void PostInitializeComponents()
+        {
         }
         //通知脚本怪物已被触发器或手电筒激活
         public void Activate()

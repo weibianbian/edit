@@ -11,10 +11,6 @@ namespace RailShootGame
 
         public MoveState move;
 
-        public MovementCompt(Actor owner) : base(owner)
-        {
-            this.owner = owner;
-        }
 
         public void Init()
         {
@@ -46,7 +42,7 @@ namespace RailShootGame
 
         public void AnimMove()
         {
-            if (GetMovePos(owner.GetOrigin()))
+            if (GetMovePos(Outer.GetOrigin()))
             {
 
 
@@ -125,14 +121,14 @@ namespace RailShootGame
             agent.enabled = false;
             move.moveCommand = EMoveCommand.MOVE_NONE;
             move.moveStatus = status;
-            move.moveDest = owner.GetOrigin();
+            move.moveDest = Outer.GetOrigin();
             move.moveDir = Vector3.zero;
         }
 
         public bool ReachedPos(Vector3 pos, EMoveCommand moveCommand)
         {
             MyBounds bnds = new MyBounds(new Vector3(-16f / 1000, float.MinValue, -8f / 1000), new Vector3(16 / 1000, float.MaxValue, 64 / 1000));
-            bnds.TranslateSelf(owner.GetOrigin());
+            bnds.TranslateSelf(Outer.GetOrigin());
             if (bnds.ContainsPoint(pos))
             {
                 return true;

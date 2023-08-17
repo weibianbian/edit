@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using static UnityEditor.FilePathAttribute;
 
 namespace RailShootGame
 {
@@ -13,9 +14,14 @@ namespace RailShootGame
     public class UWorld
     {
         public ULevel CurrentLevel;
+        public void AddToWorld(ULevel Level)
+        {
+            Level.OwningWorld = this;
+        }
         public T SpawnActor<T>() where T : Actor
         {
-            return null;
+            Actor Actor = SpawnActor(typeof(T), Vector3.zero, Quaternion.identity);
+            return Actor as T;
         }
         public Actor SpawnActor(Type type, Vector3 Location, Quaternion Rotation)
         {
@@ -23,7 +29,7 @@ namespace RailShootGame
             Guid ActorGuid = Guid.NewGuid();
 
             Actor Actor = ReferencePool.Acquire(type) as Actor;
-
+            Actor.Outer = LevelToSpawnIn;
             LevelToSpawnIn.Actors.Add(Actor);
 
             Actor.PostSpawnInitialize();

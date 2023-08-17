@@ -14,11 +14,27 @@ public class GameplayEffectsTestSuite : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        World = new UWorld();
+        ULevel level = new ULevel();
+        World.AddToWorld(level);
+        World.CurrentLevel = level;
+
+        float StartingHealth = 100.0f;
+        float StartingMana = 200.0f;
+
         SourceActor = World.SpawnActor<AbilitySystemTestActor>();
         SourceComponent = SourceActor.GetAbilitySystemComponent();
+        SourceComponent.GetSet<AbilitySystemTestAttributeSet>().Health = StartingHealth;
+        SourceComponent.GetSet<AbilitySystemTestAttributeSet>().MaxHealth = StartingHealth;
+        SourceComponent.GetSet<AbilitySystemTestAttributeSet>().Mana = StartingMana;
+        SourceComponent.GetSet<AbilitySystemTestAttributeSet>().MaxMana = StartingMana;
 
         DestActor = World.SpawnActor<AbilitySystemTestActor>();
         DestComponent = DestActor.GetAbilitySystemComponent();
+        DestComponent.GetSet<AbilitySystemTestAttributeSet>().Health = StartingHealth;
+        DestComponent.GetSet<AbilitySystemTestAttributeSet>().MaxHealth = StartingHealth;
+        DestComponent.GetSet<AbilitySystemTestAttributeSet>().Mana = StartingMana;
+        DestComponent.GetSet<AbilitySystemTestAttributeSet>().MaxMana = StartingMana;
         Test_InstantDamage();
     }
 

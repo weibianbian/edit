@@ -1,6 +1,8 @@
-﻿namespace GameplayAbilitySystem
+﻿using RailShootGame;
+
+namespace GameplayAbilitySystem
 {
-    public class AttributeSet
+    public class AttributeSet : ReferencePoolObject
     {
         public virtual bool PreGameplayEffectExecute()
         {

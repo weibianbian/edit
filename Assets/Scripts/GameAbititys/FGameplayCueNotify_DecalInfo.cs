@@ -17,7 +17,7 @@ namespace GameplayAbilitySystem
         }
         private DecalComponent CreateDecalComponent(Actor Actor, float LifeSpan)
         {
-            DecalComponent DecalComp = new DecalComponent(Actor);
+            DecalComponent DecalComp = new DecalComponent();
 
             if (LifeSpan > 0.0f)
             {

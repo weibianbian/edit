@@ -8,10 +8,6 @@ namespace RailShootGame
         protected Character CharacterOwner;
         public float JumpZVelocity;
 
-        public CharacterMovementComponent(Actor owner) : base(owner)
-        {
-        }
-
         public bool IsFalling()
         {
             return MovementMode == EMovementMode.MOVE_Falling;

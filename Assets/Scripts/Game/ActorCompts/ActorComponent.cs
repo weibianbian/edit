@@ -1,16 +1,23 @@
 ﻿namespace RailShootGame
 {
-    public abstract class ActorComponent
+    public abstract class ActorComponent : ReferencePoolObject
     {
-        public Actor owner;
+        protected Actor Outer;
 
-        public ActorComponent(Actor owner)
+        public ActorComponent()
         {
-            this.owner = owner;
         }
         public virtual void TickComponent()
         {
 
+        }
+        public void SetOwner(Actor InOuter)
+        {
+            Outer = InOuter;
+        }
+        public Actor GetOwner()
+        {
+            return Outer;
         }
     }
 }

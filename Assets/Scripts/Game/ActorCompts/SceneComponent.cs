@@ -2,9 +2,6 @@
 {
     public class SceneComponent : ActorComponent
     {
-        public SceneComponent(Actor owner) : base(owner)
-        {
-        }
         protected void DestroyComponent()
         {
 
@@ -12,10 +9,6 @@
     }
     public class DecalComponent : SceneComponent
     {
-        public DecalComponent(Actor owner) : base(owner)
-        {
-        }
-
         public void SetLifeSpan(float LifeSpan)
         {
             if (LifeSpan > 0)

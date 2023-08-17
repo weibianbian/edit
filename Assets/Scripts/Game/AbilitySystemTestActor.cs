@@ -11,11 +11,12 @@ namespace RailShootGame
         }
         public AbilitySystemTestActor()
         {
-            AbilitySystemComponent = new AbilitySystemComponent(this);
+            AbilitySystemComponent = ReferencePool.Acquire<AbilitySystemComponent>();
+            AbilitySystemComponent.SetOwner(this);
         }
-        public void PostInitializeComponents()
+        public override void PostInitializeComponents()
         {
-            AbilitySystemComponent.InitStats(new AbilitySystemTestAttributeSet());
+            AbilitySystemComponent.InitStats(typeof(AbilitySystemTestAttributeSet));
         }
 
         public void HandleGameplayCue(Actor TargetActor, GameplayTag GameplayCueTag, EGameplayCueEvent EventType, GameplayCueParameters Parameters)

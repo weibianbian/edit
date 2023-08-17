@@ -1,6 +1,7 @@
 using RailShootGame;
 using System;
 using System.Collections.Generic;
+using System.Xml.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -65,13 +66,14 @@ namespace GameplayAbilitySystem
         public List<AttributeSet> SpawnedAttributes;
         public GameplayAbilityActorInfo AbilityActorInfo;
 
-        public AbilitySystemComponent(Actor owner) : base(owner)
+        public AbilitySystemComponent()
         {
-
+            SpawnedAttributes=new List<AttributeSet>();
         }
-        public void InitStats(AttributeSet Attributes)
+        public AttributeSet InitStats(Type Attributes)
         {
-            AddSpawnedAttribute(Attributes);
+            AttributeSet AttributeObj = GetOrCreateAttributeSubobject(Attributes);
+            return AttributeObj;
         }
         public void AddSpawnedAttribute(AttributeSet Attribute)
         {
@@ -80,6 +82,34 @@ namespace GameplayAbilitySystem
                 SpawnedAttributes.Add(Attribute);
             }
         }
+        public AttributeSet GetOrCreateAttributeSubobject(Type AttributeClass)
+        {
+            Actor OwningActor = GetOwner();
+            AttributeSet MyAttributes = null;
+            if (OwningActor != null && AttributeClass != null)
+            {
+                MyAttributes = GetAttributeSubobject(AttributeClass);
+                if (MyAttributes == null)
+                {
+                    AttributeSet Attributes = ReferencePool.Acquire(AttributeClass) as AttributeSet;
+                    AddSpawnedAttribute(Attributes);
+                    MyAttributes=Attributes;
+                }
+            }
+            return MyAttributes;
+        }
+        public AttributeSet GetAttributeSubobject(Type AttributeClass)
+        {
+            for (int i = 0; i < SpawnedAttributes.Count; i++)
+            {
+                if (SpawnedAttributes[i].GetType() == AttributeClass)
+                {
+                    return SpawnedAttributes[i];
+                }
+            }
+            return null;
+        }
+
         public T GetSet<T>() where T : AttributeSet
         {
             for (int i = 0; i < SpawnedAttributes.Count; i++)
