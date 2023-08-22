@@ -6,11 +6,22 @@ namespace GameplayAbilitySystem
 {
     public static class GlobalActiveGameplayEffectHandles
     {
-        public static Dictionary<ActiveGameplayEffectHandle, AbilitySystemComponent> Map;
+        public static Dictionary<ActiveGameplayEffectHandle, AbilitySystemComponent> Map = new Dictionary<ActiveGameplayEffectHandle, AbilitySystemComponent>();
     }
     public class ActiveGameplayEffectHandle
     {
         public int Handle;
+        private bool bPassedFiltersAndWasExecuted;
+        public ActiveGameplayEffectHandle(int InHandle)
+        {
+            Handle = InHandle;
+            bPassedFiltersAndWasExecuted = true;
+        }
+        public ActiveGameplayEffectHandle()
+        {
+            Handle = -1;
+            bPassedFiltersAndWasExecuted = false;
+        }
         public static ActiveGameplayEffectHandle GenerateNewHandle(AbilitySystemComponent OwningComponent)
         {
             ActiveGameplayEffectHandle NewHandle = new ActiveGameplayEffectHandle();

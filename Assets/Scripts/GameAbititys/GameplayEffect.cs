@@ -18,6 +18,8 @@ namespace GameplayAbilitySystem
         public EGameplayEffectStackingType StackingType;
         public List<GameplayModifierInfo> Modifiers = new List<GameplayModifierInfo>();
         public List<GameplayCue> GameplayCues = new List<GameplayCue>();
+        public FInheritedTagContainer RemoveGameplayEffectsWithTags = new FInheritedTagContainer();
+
         public float Period;
         public float Duration;
         public int StackLimitCount;
@@ -29,6 +31,10 @@ namespace GameplayAbilitySystem
             DurationPolicy = EGameplayEffectDurationType.Instant;
         }
     }
+    public class FModifierSpec
+    {
+
+    }
     public class GameplayEffectSpec
     {
         public GameplayEffect Def;
@@ -36,9 +42,15 @@ namespace GameplayAbilitySystem
         public float Level;
         private GameplayEffectContextHandle EffectContext;
         public int StackCount;
+        public List<GameplayEffectSpecHandle> TargetEffectSpecs = new List<GameplayEffectSpecHandle>();
+        public List<FModifierSpec> Modifiers = new List<FModifierSpec>();
         public GameplayEffectSpec(GameplayEffect InDef, GameplayEffectContextHandle InEffectContext, float InLevel)
         {
             Initialize(InDef, InEffectContext, InLevel);
+        }
+        public GameplayEffectSpec(GameplayEffectSpec Other)
+        {
+
         }
         public void Initialize(GameplayEffect InDef, GameplayEffectContextHandle InEffectContext, float InLevel)
         {
@@ -66,6 +78,18 @@ namespace GameplayAbilitySystem
         public float CalculateModifiedDuration()
         {
             return 0;
+        }
+        public void CalculateModifierMagnitudes()
+        {
+            for (int ModIdx = 0; ModIdx < Modifiers.Count; ModIdx++)
+            {
+                GameplayModifierInfo ModDef = Def.Modifiers[ModIdx];
+                FModifierSpec ModSpec = Modifiers[ModIdx];
+                if (ModDef.ModifierMagnitude.AttemptCalculateMagnitude())
+                {
+
+                }
+            }
         }
 
     }

@@ -68,7 +68,9 @@ namespace GameplayAbilitySystem
 
         public AbilitySystemComponent()
         {
-            SpawnedAttributes=new List<AttributeSet>();
+            SpawnedAttributes = new List<AttributeSet>();
+            AbilityActorInfo = ReferencePool.Acquire<GameplayAbilityActorInfo>();
+            ActiveGameplayEffects = new ActiveGameplayEffectsContainer();
         }
         public AttributeSet InitStats(Type Attributes)
         {
@@ -93,7 +95,7 @@ namespace GameplayAbilitySystem
                 {
                     AttributeSet Attributes = ReferencePool.Acquire(AttributeClass) as AttributeSet;
                     AddSpawnedAttribute(Attributes);
-                    MyAttributes=Attributes;
+                    MyAttributes = Attributes;
                 }
             }
             return MyAttributes;
@@ -209,19 +211,21 @@ namespace GameplayAbilitySystem
         public ActiveGameplayEffectHandle ApplyGameplayEffectSpecToSelf(GameplayEffectSpec Spec)
         {
             //ActiveGameplayEffectsContainer.ApplyGameplayEffectSpec
-            //
+            //我们是否对此免疫
             ActiveGameplayEffect ImmunityGE = null;
             if (ActiveGameplayEffects.HasApplicationImmunityToSpec(Spec, ImmunityGE))
             {
                 return new ActiveGameplayEffectHandle();
             }
 
-
-            ActiveGameplayEffectHandle MyHandle;
-            ActiveGameplayEffectHandle ReturnHandle = new ActiveGameplayEffectHandle();
-            ActiveGameplayEffect AppliedEffect = new ActiveGameplayEffect();
-            bool bFoundExistingStackableGE = false;
+            //确保我们在正确的位置创建规范的副本
+            //我们在这里用INDEX_NONE初始化FActiveGameplayEffectHandle来处理即时GE的情况
+            //像这样初始化它会将FActiveGameplayEffectHandle上的bPassedFiltersAndWasExecuted设置为true，这样我们就可以知道我们应用了GE
+            ActiveGameplayEffectHandle MyHandle = new ActiveGameplayEffectHandle(-1);
             bool bTreatAsInfiniteDuration = Spec.Def.DurationPolicy == EGameplayEffectDurationType.Instant;
+            bool bFoundExistingStackableGE = false;
+
+            ActiveGameplayEffect AppliedEffect = new ActiveGameplayEffect();
             bool bInvokeGameplayCueApplied = Spec.Def.DurationPolicy != EGameplayEffectDurationType.Instant;
             GameplayEffectSpec StackSpec = null;
             GameplayEffectSpec OurCopyOfSpec = null;
@@ -251,10 +255,31 @@ namespace GameplayAbilitySystem
             }
             else if (Spec.Def.DurationPolicy == EGameplayEffectDurationType.Instant)
             {
+                //if (OurCopyOfSpec.Def.RemoveGameplayEffectsWithTags)
+                //{
 
+                //}
+                ExecuteGameplayEffect(OurCopyOfSpec);
+            }
+            //
+            //ActiveGameplayEffects.AttemptRemoveActiveEffectsOnEffectApplication(OurCopyOfSpec, MyHandle);
+            //
+            for (int i = 0; i < Spec.TargetEffectSpecs.Count; i++)
+            {
+                ApplyGameplayEffectSpecToSelf(Spec.TargetEffectSpecs[i].Data);
+            }
+            AbilitySystemComponent InstigatorASC = Spec.GetContext().GetInstigatorAbilitySystemComponent();
+            OnGameplayEffectAppliedToSelf(this, OurCopyOfSpec, MyHandle);
+            if (InstigatorASC != null)
+            {
+                InstigatorASC.OnGameplayEffectAppliedToTarget(this, OurCopyOfSpec, MyHandle);
             }
 
-            return ReturnHandle;
+            return MyHandle;
+        }
+        public void ExecuteGameplayEffect(GameplayEffectSpec Spec)
+        {
+            ActiveGameplayEffects.ExecuteActiveEffectsFrom(Spec);
         }
         public void CheckDurationExpired(ActiveGameplayEffectHandle Handle)
         {
@@ -285,6 +310,14 @@ namespace GameplayAbilitySystem
         public void UnregisterGameplayTagEvent(GameplayTag Tag, EGameplayTagEventType EventType)
         {
             Action<GameplayTag, int> ret = GameplayTagCountContainer.RegisterGameplayTagEvent(Tag, EventType);
+        }
+        public void OnGameplayEffectAppliedToTarget(AbilitySystemComponent Target, GameplayEffectSpec SpecApplied, ActiveGameplayEffectHandle ActiveHandle)
+        {
+
+        }
+        public void OnGameplayEffectAppliedToSelf(AbilitySystemComponent Source, GameplayEffectSpec SpecApplied, ActiveGameplayEffectHandle ActiveHandle)
+        {
+
         }
     }
 }

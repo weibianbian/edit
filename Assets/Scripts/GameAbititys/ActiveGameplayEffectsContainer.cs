@@ -1,17 +1,52 @@
 ﻿using RailShootGame;
-using Sirenix.Utilities.Editor;
 using System;
 using System.Collections.Generic;
-using static UnityEngine.UI.GridLayoutGroup;
 
 namespace GameplayAbilitySystem
 {
+    public class FInheritedTagContainer
+    {
+        public GameplayTagContainer CombinedTags;
+        public GameplayTagContainer Added;
+        public GameplayTagContainer Removed;
+    }
+    public class FGameplayTagQuery
+    {
+
+
+    }
+
+    public class FGameplayEffectQuery
+    {
+        public FGameplayTagQuery OwningTagQuery;
+        public FGameplayTagQuery EffectTagQuery;
+        public FGameplayTagQuery SourceTagQuery;
+        public bool Matches(GameplayEffectSpec Spec)
+        {
+            if (Spec == null)
+            {
+                return false;
+            }
+            return true;
+        }
+
+    }
+
     public class ActiveGameplayEffectsContainer : List<ActiveGameplayEffect>
     {
         AbilitySystemComponent Owner;
         public Dictionary<GameplayAttribute, OnGameplayAttributeValueChange> AttributeValueChangeDelegates;
         public List<GameplayEffect> ApplicationImmunityQueryEffects;
+        public ActiveGameplayEffectsContainer()
+        {
+            ApplicationImmunityQueryEffects = new List<GameplayEffect>();
+        }
+        public void ExecuteActiveEffectsFrom(GameplayEffectSpec Spec)
+        {
+            GameplayEffectSpec SpecToUse = Spec;
 
+            SpecToUse
+        }
         public ActiveGameplayEffect ApplyGameplayEffectSpec(GameplayEffectSpec Spec, ref bool bFoundExistingStackableGE)
         {
             bFoundExistingStackableGE = false;
@@ -106,9 +141,8 @@ namespace GameplayAbilitySystem
             for (int i = 0; i < ApplicationImmunityQueryEffects.Count; i++)
             {
                 GameplayEffect EffectDef = ApplicationImmunityQueryEffects[i];
-
             }
-            return true;
+            return false;
         }
         public ActiveGameplayEffect FindStackableActiveGameplayEffect(GameplayEffectSpec Spec)
         {
@@ -141,6 +175,18 @@ namespace GameplayAbilitySystem
                 //Owner.RemoveActiveGameplayEffect(ActiveStackableGE.Handle);
             }
             return bAllowOverflowApplication;
+        }
+        public void AttemptRemoveActiveEffectsOnEffectApplication(GameplayEffectSpec InSpec, ActiveGameplayEffectHandle InHandle)
+        {
+            if (InSpec.Def != null)
+            {
+                FGameplayEffectQuery ClearQuery = new FGameplayEffectQuery();
+                for (int i = 0; i < InSpec.Def.RemoveGameplayEffectsWithTags.CombinedTags.Count(); i++)
+                {
+
+                }
+
+            }
         }
     }
 

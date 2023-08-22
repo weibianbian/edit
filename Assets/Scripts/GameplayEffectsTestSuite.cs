@@ -1,4 +1,5 @@
 using GameplayAbilitySystem;
+using JetBrains.Annotations;
 using RailShootGame;
 using System.Collections;
 using System.Collections.Generic;
@@ -48,13 +49,18 @@ public class GameplayEffectsTestSuite : MonoBehaviour
         float DamageValue = 5.0f;
         float StartingHealth = DestComponent.GetSet<AbilitySystemTestAttributeSet>().Health;
         GameplayEffect BaseDmgEffect = new GameplayEffect();
+        AddModifier(BaseDmgEffect, EGameplayModOp.Additive, -DamageValue);
         BaseDmgEffect.DurationPolicy = EGameplayEffectDurationType.Instant;
         SourceComponent.ApplyGameplayEffectToTarget(BaseDmgEffect, DestComponent, 1);
+
+        Debug.Log($"Health Reduced   {DestComponent.GetSet<AbilitySystemTestAttributeSet>().Health}={StartingHealth- DamageValue}"); 
     }
-    public void AddModifier(GameplayEffect Effect, EGameplayModOp Op)
+    public void AddModifier(GameplayEffect Effect, EGameplayModOp Op, float Magnitude)
     {
         GameplayModifierInfo Info = new GameplayModifierInfo();
         Effect.Modifiers.Add(Info);
         Info.ModifierOp = Op;
+        Info.ModifierMagnitude = Magnitude;
+
     }
 }
