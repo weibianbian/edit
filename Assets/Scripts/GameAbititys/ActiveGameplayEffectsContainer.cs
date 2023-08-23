@@ -48,6 +48,7 @@ namespace GameplayAbilitySystem
             GameplayEffectSpec SpecToUse = Spec;
 
             SpecToUse.CalculateModifierMagnitudes();
+            //这将修改属性的基值
             bool ModifierSuccessfullyExecuted = false;
 
             for (int ModIdx = 0; ModIdx < SpecToUse.Modifiers.Count(); ++ModIdx)
@@ -61,6 +62,8 @@ namespace GameplayAbilitySystem
                 };
                 ModifierSuccessfullyExecuted |= InternalExecuteMod(SpecToUse, EvalData);
             }
+            //调用GameplayCue事件
+
         }
         public bool InternalExecuteMod(GameplayEffectSpec Spec, FGameplayModifierEvaluatedData ModEvalData)
         {
