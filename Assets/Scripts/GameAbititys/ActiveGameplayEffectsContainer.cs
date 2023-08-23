@@ -63,6 +63,20 @@ namespace GameplayAbilitySystem
                 ModifierSuccessfullyExecuted |= InternalExecuteMod(SpecToUse, EvalData);
             }
             //调用GameplayCue事件
+            bool bHasModifiers = SpecToUse.Modifiers.Count > 0;
+            bool bHasExecutions = false;
+            bool bHasModifiersOrExecutions = bHasModifiers || bHasExecutions;
+            bool InvokeGameplayCueExecute = false;
+            //InvokeGameplayCueExecute=(!bHasModifiersOrExecutions) || !Spec.Def.bRequireModifierSuccessToTriggerCues;
+
+            if (bHasModifiersOrExecutions && ModifierSuccessfullyExecuted)
+            {
+                InvokeGameplayCueExecute = true;
+            }
+            if (InvokeGameplayCueExecute && SpecToUse.Def.GameplayCues.Count > 0)
+            {
+
+            }
 
         }
         public bool InternalExecuteMod(GameplayEffectSpec Spec, FGameplayModifierEvaluatedData ModEvalData)
