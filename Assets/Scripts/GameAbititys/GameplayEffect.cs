@@ -1,4 +1,5 @@
 ﻿using RailShootGame;
+using System;
 using System.Collections.Generic;
 
 namespace GameplayAbilitySystem
@@ -33,7 +34,17 @@ namespace GameplayAbilitySystem
     }
     public class FModifierSpec
     {
-
+        public float EvaluatedMagnitude;
+    }
+    public enum EGameplayEffectMagnitudeCalculation
+    {
+        ScalableFloat,
+        /** Perform a calculation based upon an attribute. */
+        AttributeBased,
+        /** Perform a custom calculation, capable of capturing and acting on multiple attributes, in either BP or native. */
+        CustomCalculationClass,
+        /** This magnitude will be set explicitly by the code/blueprint that creates the spec. */
+        SetByCaller,
     }
     public class GameplayEffectSpec
     {
@@ -67,9 +78,17 @@ namespace GameplayAbilitySystem
         {
             return EffectContext;
         }
+        public float GetModifierMagnitude(int ModifierIdx, bool bFactorInStackCount)
+        {
+            return 0;
+        }
         public void SetLevel(float InLevel)
         {
             Level = InLevel;
+        }
+        public float GetLevel()
+        {
+            return Level;
         }
         public float GetDuration()
         {
@@ -85,9 +104,9 @@ namespace GameplayAbilitySystem
             {
                 GameplayModifierInfo ModDef = Def.Modifiers[ModIdx];
                 FModifierSpec ModSpec = Modifiers[ModIdx];
-                if (ModDef.ModifierMagnitude.AttemptCalculateMagnitude())
+                if (!ModDef.ModifierMagnitude.AttemptCalculateMagnitude(this, ref ModSpec.EvaluatedMagnitude))
                 {
-
+                    ModSpec.EvaluatedMagnitude = 0.0f;
                 }
             }
         }

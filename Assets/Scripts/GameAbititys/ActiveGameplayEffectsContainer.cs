@@ -1,6 +1,7 @@
 ﻿using RailShootGame;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace GameplayAbilitySystem
 {
@@ -41,11 +42,30 @@ namespace GameplayAbilitySystem
         {
             ApplicationImmunityQueryEffects = new List<GameplayEffect>();
         }
+        //这是在属性和ActiveGameplayEffects上执行GameplayEffect的主函数
         public void ExecuteActiveEffectsFrom(GameplayEffectSpec Spec)
         {
             GameplayEffectSpec SpecToUse = Spec;
 
-            SpecToUse
+            SpecToUse.CalculateModifierMagnitudes();
+            bool ModifierSuccessfullyExecuted = false;
+
+            for (int ModIdx = 0; ModIdx < SpecToUse.Modifiers.Count(); ++ModIdx)
+            {
+                GameplayModifierInfo ModDef = SpecToUse.Def.Modifiers[ModIdx];
+                FGameplayModifierEvaluatedData EvalData = new FGameplayModifierEvaluatedData()
+                {
+                    Attribute = ModDef.Attribute,
+                    ModifierOp = ModDef.ModifierOp,
+                    Magnitude = SpecToUse.GetModifierMagnitude(ModIdx, true),
+                };
+                ModifierSuccessfullyExecuted |= InternalExecuteMod(SpecToUse, EvalData);
+            }
+        }
+        public bool InternalExecuteMod(GameplayEffectSpec Spec, FGameplayModifierEvaluatedData ModEvalData)
+        {
+            bool bExecuted = false;
+            return bExecuted;
         }
         public ActiveGameplayEffect ApplyGameplayEffectSpec(GameplayEffectSpec Spec, ref bool bFoundExistingStackableGE)
         {

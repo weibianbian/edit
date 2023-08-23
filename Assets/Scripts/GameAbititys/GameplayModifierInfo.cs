@@ -1,19 +1,80 @@
 ﻿namespace GameplayAbilitySystem
 {
+    public class FScalableFloat
+    {
+        public float Value;
+        public FScalableFloat(float InInitialValue)
+        {
+            Value = InInitialValue;
+        }
+        public float GetValueAtLevel(float Level)
+        {
+            float OutFloat = 0;
+            EvaluateCurveAtLevel(ref OutFloat);
+            return OutFloat;
+        }
+        public bool EvaluateCurveAtLevel(ref float OutValue)
+        {
+            OutValue = Value;
+            return true;
+        }
+    }
+    public class FGameplayModifierEvaluatedData
+    {
+        public GameplayAttribute Attribute;
+        public EGameplayModOp ModifierOp;
+        public float Magnitude;
+    }
     public class GameplayModifierInfo
     {
+        public GameplayAttribute Attribute;
         public EGameplayModOp ModifierOp;
-        public FGameplayEffectModifierMagnitude ModifierMagnitude=new FGameplayEffectModifierMagnitude();
+        public FGameplayEffectModifierMagnitude ModifierMagnitude;
     }
     public class FGameplayEffectModifierMagnitude
     {
-        public bool AttemptCalculateMagnitude(GameplayEffectSpec InRelevantSpec)
+        public static implicit operator FGameplayEffectModifierMagnitude(FScalableFloat InScalableFloatMagnitude)
         {
-            return false;
+            return new FGameplayEffectModifierMagnitude(InScalableFloatMagnitude);
+        }
+        EGameplayEffectMagnitudeCalculation MagnitudeCalculationType;
+        FScalableFloat ScalableFloatMagnitude;
+        public FGameplayEffectModifierMagnitude(FScalableFloat InScalableFloatMagnitude)
+        {
+            ScalableFloatMagnitude = InScalableFloatMagnitude;
+            MagnitudeCalculationType = EGameplayEffectMagnitudeCalculation.ScalableFloat;
+        }
+        public bool AttemptCalculateMagnitude(GameplayEffectSpec InRelevantSpec, ref float OutCalculatedMagnitude)
+        {
+            bool bCanCalc = CanCalculateMagnitude(InRelevantSpec);
+            if (bCanCalc)
+            {
+                switch (MagnitudeCalculationType)
+                {
+                    case EGameplayEffectMagnitudeCalculation.ScalableFloat:
+                        OutCalculatedMagnitude = ScalableFloatMagnitude.GetValueAtLevel(InRelevantSpec.GetLevel());
+                        break;
+                    case EGameplayEffectMagnitudeCalculation.AttributeBased:
+                        break;
+                    case EGameplayEffectMagnitudeCalculation.CustomCalculationClass:
+                        break;
+                    case EGameplayEffectMagnitudeCalculation.SetByCaller:
+                        break;
+                    default:
+                        break;
+                }
+            }
+            else
+            {
+                OutCalculatedMagnitude = 0.0f;
+            }
+
+            return bCanCalc;
         }
         public bool CanCalculateMagnitude(GameplayEffectSpec InRelevantSpec)
         {
 
+            return false;
         }
     }
 }

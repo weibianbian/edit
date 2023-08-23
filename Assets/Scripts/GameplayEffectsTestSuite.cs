@@ -1,10 +1,27 @@
 using GameplayAbilitySystem;
 using JetBrains.Annotations;
 using RailShootGame;
+using Sirenix.Utilities;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+public struct TestA
+{
+    public TestB b;
+    public TestA(TestB Inb)
+    {
+        b = Inb;
+    }
+    public static implicit operator TestA(TestB data)
+    {
+        return new TestA(data);
+    }
+}
+public struct TestB
+{
 
+}
 public class GameplayEffectsTestSuite : MonoBehaviour
 {
     public UWorld World;
@@ -15,6 +32,8 @@ public class GameplayEffectsTestSuite : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        TestB testB = new TestB();
+        TestA testA = testB;
         World = new UWorld();
         ULevel level = new ULevel();
         World.AddToWorld(level);
@@ -49,13 +68,13 @@ public class GameplayEffectsTestSuite : MonoBehaviour
         float DamageValue = 5.0f;
         float StartingHealth = DestComponent.GetSet<AbilitySystemTestAttributeSet>().Health;
         GameplayEffect BaseDmgEffect = new GameplayEffect();
-        AddModifier(BaseDmgEffect, EGameplayModOp.Additive, -DamageValue);
+        AddModifier(BaseDmgEffect, EGameplayModOp.Additive, new FScalableFloat(-DamageValue));
         BaseDmgEffect.DurationPolicy = EGameplayEffectDurationType.Instant;
         SourceComponent.ApplyGameplayEffectToTarget(BaseDmgEffect, DestComponent, 1);
 
-        Debug.Log($"Health Reduced   {DestComponent.GetSet<AbilitySystemTestAttributeSet>().Health}={StartingHealth- DamageValue}"); 
+        Debug.Log($"Health Reduced   {DestComponent.GetSet<AbilitySystemTestAttributeSet>().Health}={StartingHealth - DamageValue}");
     }
-    public void AddModifier(GameplayEffect Effect, EGameplayModOp Op, float Magnitude)
+    public void AddModifier(GameplayEffect Effect, EGameplayModOp Op, FScalableFloat Magnitude)
     {
         GameplayModifierInfo Info = new GameplayModifierInfo();
         Effect.Modifiers.Add(Info);
