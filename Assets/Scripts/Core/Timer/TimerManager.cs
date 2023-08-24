@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace RailShootGame
+namespace Core.Timer
 {
     public class TimerManager
     {

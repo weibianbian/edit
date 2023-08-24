@@ -1,6 +1,9 @@
 ﻿namespace Core
 {
-    public interface IModuleInterface { }
+    public interface IModuleInterface
+    {
+        void StartupModule();
+    }
 
 }
 

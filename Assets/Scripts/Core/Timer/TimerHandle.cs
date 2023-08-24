@@ -1,4 +1,4 @@
-﻿namespace RailShootGame
+﻿namespace Core.Timer
 {
     public struct TimerHandle
     {

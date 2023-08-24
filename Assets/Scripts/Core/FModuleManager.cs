@@ -1,6 +1,7 @@
-using System.Collections;
+using Sirenix.Utilities;
+using System;
 using System.Collections.Generic;
-using UnityEngine;
+using System.Reflection;
 
 namespace Core
 {
@@ -14,11 +15,6 @@ namespace Core
             return Singleton;
         }
         public Dictionary<string, IModuleInterface> Modules = new Dictionary<string, IModuleInterface>();
-
-        public void Init()
-        {
-
-        }
 
         public static T LoadModuleChecked<T>(string InModuleName) where T : class, IModuleInterface
         {
@@ -38,7 +34,8 @@ namespace Core
                 return LoadedModule;
             }
             AddModule(InModuleName);
-
+            LoadedModule = FindModule(InModuleName);
+            LoadedModule.StartupModule();
             return LoadedModule;
         }
         public IModuleInterface FindModule(string InModuleName)
@@ -51,7 +48,33 @@ namespace Core
         }
         public void AddModule(string InModuleName)
         {
-
+            Assembly[] Assemblies = AppDomain.CurrentDomain.GetAssemblies();
+            Type moduleType = null;
+            foreach (var assembly in Assemblies)
+            {
+                foreach (var type in assembly.GetTypes())
+                {
+                    if (!type.IsAbstract || !type.IsSealed)
+                    {
+                        continue;
+                    }
+                    var att = type.GetCustomAttribute<ModuleNameAttribute>(true);
+                    if (att != null && att.ModuleName == InModuleName && type.IsSubclassOf(typeof(IModuleInterface)))
+                    {
+                        moduleType = type;
+                        break;
+                    }
+                }
+                if (moduleType != null)
+                {
+                    break;
+                }
+            }
+            if (moduleType != null)
+            {
+                IModuleInterface module = Activator.CreateInstance(moduleType) as IModuleInterface;
+                Modules.Add(InModuleName, module);
+            }
         }
     }
 }

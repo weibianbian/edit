@@ -1,7 +1,6 @@
 ﻿using System;
-using UnityEngine.UIElements;
 
-namespace RailShootGame
+namespace Core.Timer
 {
     public class TimerDelegate<T1> : ITimerDelegate
     {

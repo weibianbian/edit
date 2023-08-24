@@ -1,10 +1,5 @@
 using GameplayAbilitySystem;
-using JetBrains.Annotations;
 using RailShootGame;
-using Sirenix.Utilities;
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 public struct TestA
 {

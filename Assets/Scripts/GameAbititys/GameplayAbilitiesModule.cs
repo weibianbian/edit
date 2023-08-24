@@ -2,6 +2,7 @@
 
 namespace GameplayAbilitySystem
 {
+    [ModuleNameAttribute("GameplayAbilities")]
     public class GameplayAbilitiesModule : IModuleInterface
     {
         UAbilitySystemGlobals AbilitySystemGlobals;
