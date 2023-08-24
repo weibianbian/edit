@@ -3,6 +3,7 @@
     public interface IModuleInterface
     {
         void StartupModule();
+        void ShutdownModule();
     }
 
 }

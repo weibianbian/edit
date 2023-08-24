@@ -76,7 +76,7 @@ namespace GameplayAbilitySystem
             }
             if (InvokeGameplayCueExecute && SpecToUse.Def.GameplayCues.Count > 0)
             {
-
+                UAbilitySystemGlobals.Get().GetGameplayCueManager().InvokeGameplayCueExecuted_FromSpec(Owner, SpecToUse);
             }
 
         }

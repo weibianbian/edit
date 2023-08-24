@@ -20,6 +20,16 @@ namespace GameplayAbilitySystem
             }
             return AbilitySystemGlobals;
         }
+
+        public void ShutdownModule()
+        {
+            AbilitySystemGlobals = null;
+        }
+
+        public void StartupModule()
+        {
+            AbilitySystemGlobals = null;
+        }
     }
 }
 
