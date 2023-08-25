@@ -75,6 +75,5 @@ public class GameplayEffectsTestSuite : MonoBehaviour
         Effect.Modifiers.Add(Info);
         Info.ModifierOp = Op;
         Info.ModifierMagnitude = Magnitude;
-
     }
 }

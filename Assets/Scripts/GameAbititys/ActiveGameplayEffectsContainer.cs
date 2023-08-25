@@ -83,6 +83,8 @@ namespace GameplayAbilitySystem
         public bool InternalExecuteMod(GameplayEffectSpec Spec, FGameplayModifierEvaluatedData ModEvalData)
         {
             bool bExecuted = false;
+            AttributeSet AttributeSet = null;
+            ModEvalData.Attribute
             return bExecuted;
         }
         public ActiveGameplayEffect ApplyGameplayEffectSpec(GameplayEffectSpec Spec, ref bool bFoundExistingStackableGE)

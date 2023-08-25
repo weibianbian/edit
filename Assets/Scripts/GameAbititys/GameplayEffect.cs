@@ -1,4 +1,5 @@
 ﻿using RailShootGame;
+using Sirenix.Utilities;
 using System;
 using System.Collections.Generic;
 
@@ -35,6 +36,7 @@ namespace GameplayAbilitySystem
     public class FModifierSpec
     {
         public float EvaluatedMagnitude;
+        public float GetEvaluatedMagnitude() { return EvaluatedMagnitude; }
     }
     public enum EGameplayEffectMagnitudeCalculation
     {
@@ -55,8 +57,10 @@ namespace GameplayAbilitySystem
         public int StackCount;
         public List<GameplayEffectSpecHandle> TargetEffectSpecs = new List<GameplayEffectSpecHandle>();
         public List<FModifierSpec> Modifiers = new List<FModifierSpec>();
+        public FGameplayEffectAttributeCaptureSpecContainer CapturedRelevantAttributes;
         public GameplayEffectSpec(GameplayEffect InDef, GameplayEffectContextHandle InEffectContext, float InLevel)
         {
+            CapturedRelevantAttributes = new FGameplayEffectAttributeCaptureSpecContainer();
             Initialize(InDef, InEffectContext, InLevel);
         }
         public GameplayEffectSpec(GameplayEffectSpec Other)
@@ -69,6 +73,10 @@ namespace GameplayAbilitySystem
             Level = InLevel;
             SetContext(InEffectContext);
             SetLevel(InLevel);
+            for (int i = 0; i < InDef.Modifiers.Count; i++)
+            {
+                Modifiers.Add(new FModifierSpec());
+            }
         }
         public void SetContext(GameplayEffectContextHandle NewEffectContext)
         {
@@ -110,7 +118,18 @@ namespace GameplayAbilitySystem
                 }
             }
         }
-
+        public bool HasValidCapturedAttributes(List<FGameplayEffectAttributeCaptureDefinition> InCaptureDefsToCheck)
+        {
+            return CapturedRelevantAttributes.HasValidCapturedAttributes(InCaptureDefsToCheck);
+        }
+    }
+    public class FGameplayEffectAttributeCaptureSpecContainer
+    {
+        public bool HasValidCapturedAttributes(List<FGameplayEffectAttributeCaptureDefinition> InCaptureDefsToCheck)
+        {
+            bool bHasValid = true;
+            return bHasValid;
+        }
     }
     public class GameplayEffectSpecHandle
     {

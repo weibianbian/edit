@@ -1,4 +1,5 @@
 ﻿using RailShootGame;
+using System.Collections.Generic;
 
 namespace GameplayAbilitySystem
 {
@@ -6,11 +7,42 @@ namespace GameplayAbilitySystem
     {
 
     }
+    public class FGameplayCuePendingExecute
+    {
+
+    }
     public class GameplayCueManager
     {
+        public List<FGameplayCuePendingExecute> PendingExecuteCues = new List<FGameplayCuePendingExecute>();
         public virtual void InvokeGameplayCueExecuted_FromSpec(AbilitySystemComponent OwningComponent, GameplayEffectSpec Spec)
         {
+            if (Spec.Def.GameplayCues.Count == 0)
+            {
+                return;
+            }
+            FGameplayCuePendingExecute PendingCue = new FGameplayCuePendingExecute();
 
+        }
+        public void AddPendingCueExecuteInternal(FGameplayCuePendingExecute PendingCue)
+        {
+            if (ProcessPendingCueExecute(PendingCue))
+            {
+                PendingExecuteCues.Add(PendingCue); 
+            }
+            FlushPendingCues();
+        }
+        public virtual void FlushPendingCues()
+        {
+            List<FGameplayCuePendingExecute> LocalPendingExecuteCues = PendingExecuteCues;
+            for (int i = 0; i < LocalPendingExecuteCues.Count; i++)
+            {
+                FGameplayCuePendingExecute PendingCue = LocalPendingExecuteCues[i];
+
+            }
+        }
+        public virtual bool ProcessPendingCueExecute(FGameplayCuePendingExecute PendingCue)
+        {
+            return true;
         }
         public virtual void HandleGameplayCues(Actor TargetActor, GameplayTagContainer GameplayCueTags, EGameplayCueEvent EventType, GameplayCueParameters Parameters)
         {

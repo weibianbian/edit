@@ -54,7 +54,7 @@ namespace GameplayAbilitySystem
         }
 
     }
-    public struct GameplayAttribute
+    public class GameplayAttribute
     {
 
     }
@@ -223,14 +223,13 @@ namespace GameplayAbilitySystem
             //我们在这里用INDEX_NONE初始化FActiveGameplayEffectHandle来处理即时GE的情况
             //像这样初始化它会将FActiveGameplayEffectHandle上的bPassedFiltersAndWasExecuted设置为true，这样我们就可以知道我们应用了GE
             ActiveGameplayEffectHandle MyHandle = new ActiveGameplayEffectHandle(-1);
-            bool bTreatAsInfiniteDuration = Spec.Def.DurationPolicy == EGameplayEffectDurationType.Instant;
             bool bFoundExistingStackableGE = false;
 
             ActiveGameplayEffect AppliedEffect = new ActiveGameplayEffect();
             bool bInvokeGameplayCueApplied = Spec.Def.DurationPolicy != EGameplayEffectDurationType.Instant;
             GameplayEffectSpec StackSpec = null;
             GameplayEffectSpec OurCopyOfSpec = null;
-            if (Spec.Def.DurationPolicy != EGameplayEffectDurationType.Instant || bTreatAsInfiniteDuration)
+            if (Spec.Def.DurationPolicy != EGameplayEffectDurationType.Instant)
             {
                 AppliedEffect = ActiveGameplayEffects.ApplyGameplayEffectSpec(Spec, ref bFoundExistingStackableGE);
                 if (AppliedEffect == null)
@@ -250,11 +249,7 @@ namespace GameplayAbilitySystem
             {
 
             }
-            if (bTreatAsInfiniteDuration)
-            {
-
-            }
-            else if (Spec.Def.DurationPolicy == EGameplayEffectDurationType.Instant)
+            if (Spec.Def.DurationPolicy == EGameplayEffectDurationType.Instant)
             {
                 //if (OurCopyOfSpec.Def.RemoveGameplayEffectsWithTags)
                 //{
