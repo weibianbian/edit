@@ -56,7 +56,14 @@ namespace GameplayAbilitySystem
     }
     public class GameplayAttribute
     {
+        public Type AttributeOwner;
+        public string Attribute;
 
+        public void SetUProperty(string NewProperty, Type InAttributeOwner)
+        {
+            Attribute = NewProperty;
+            AttributeOwner = InAttributeOwner;
+        }
     }
 
     public class AbilitySystemComponent : ActorComponent

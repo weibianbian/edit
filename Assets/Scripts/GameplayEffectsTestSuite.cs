@@ -1,5 +1,6 @@
 using GameplayAbilitySystem;
 using RailShootGame;
+using System;
 using UnityEngine;
 public struct TestA
 {
@@ -63,17 +64,18 @@ public class GameplayEffectsTestSuite : MonoBehaviour
         float DamageValue = 5.0f;
         float StartingHealth = DestComponent.GetSet<AbilitySystemTestAttributeSet>().Health;
         GameplayEffect BaseDmgEffect = new GameplayEffect();
-        AddModifier(BaseDmgEffect, EGameplayModOp.Additive, new FScalableFloat(-DamageValue));
+        AddModifier(BaseDmgEffect, "Health", typeof(AbilitySystemTestAttributeSet), EGameplayModOp.Additive, new FScalableFloat(-DamageValue));
         BaseDmgEffect.DurationPolicy = EGameplayEffectDurationType.Instant;
         SourceComponent.ApplyGameplayEffectToTarget(BaseDmgEffect, DestComponent, 1);
 
         Debug.Log($"Health Reduced   {DestComponent.GetSet<AbilitySystemTestAttributeSet>().Health}={StartingHealth - DamageValue}");
     }
-    public void AddModifier(GameplayEffect Effect, EGameplayModOp Op, FScalableFloat Magnitude)
+    public void AddModifier(GameplayEffect Effect, string Property, Type PropOwner, EGameplayModOp Op, FScalableFloat Magnitude)
     {
         GameplayModifierInfo Info = new GameplayModifierInfo();
         Effect.Modifiers.Add(Info);
         Info.ModifierOp = Op;
         Info.ModifierMagnitude = Magnitude;
+        Info.Attribute.SetUProperty(Property, PropOwner);
     }
 }

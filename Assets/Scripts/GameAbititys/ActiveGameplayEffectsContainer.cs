@@ -84,7 +84,15 @@ namespace GameplayAbilitySystem
         {
             bool bExecuted = false;
             AttributeSet AttributeSet = null;
-            ModEvalData.Attribute
+            Type AttributeSetClass = ModEvalData.Attribute.AttributeOwner;
+            if (AttributeSetClass != null && AttributeSetClass.IsSubclassOf(typeof(AttributeSet)))
+            {
+                AttributeSet = Owner.GetAttributeSubobject(AttributeSetClass);
+            }
+            if (AttributeSet != null)
+            {
+
+            }
             return bExecuted;
         }
         public ActiveGameplayEffect ApplyGameplayEffectSpec(GameplayEffectSpec Spec, ref bool bFoundExistingStackableGE)
