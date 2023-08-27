@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using UnityEngine.UIElements;
 
 namespace GameplayAbilitySystem
 {
@@ -32,6 +33,10 @@ namespace GameplayAbilitySystem
         public GameplayAttribute Attribute;
         public EGameplayModOp ModifierOp;
         public FGameplayEffectModifierMagnitude ModifierMagnitude;
+        public GameplayModifierInfo()
+        {
+            Attribute=new GameplayAttribute();
+        }
     }
     public enum EGameplayEffectAttributeCaptureSource
     {

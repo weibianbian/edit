@@ -80,6 +80,10 @@ namespace GameplayAbilitySystem
             AbilityActorInfo = ReferencePool.Acquire<GameplayAbilityActorInfo>();
             ActiveGameplayEffects = new ActiveGameplayEffectsContainer();
         }
+        public void OnRegister()
+        {
+            ActiveGameplayEffects.RegisterWithOwner(this);
+        }
         public AttributeSet InitStats(Type Attributes)
         {
             AttributeSet AttributeObj = GetOrCreateAttributeSubobject(Attributes);

@@ -43,6 +43,10 @@ namespace GameplayAbilitySystem
         {
             ApplicationImmunityQueryEffects = new List<GameplayEffect>();
         }
+        public void RegisterWithOwner(AbilitySystemComponent InOwner)
+        {
+            Owner=InOwner;
+        }
         //这是在属性和ActiveGameplayEffects上执行GameplayEffect的主函数
         public void ExecuteActiveEffectsFrom(GameplayEffectSpec Spec)
         {
