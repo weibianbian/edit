@@ -40,17 +40,17 @@ public class GameplayEffectsTestSuite : MonoBehaviour
 
         SourceActor = World.SpawnActor<AbilitySystemTestActor>();
         SourceComponent = SourceActor.GetAbilitySystemComponent();
-        SourceComponent.GetSet<AbilitySystemTestAttributeSet>().Health = StartingHealth;
-        SourceComponent.GetSet<AbilitySystemTestAttributeSet>().MaxHealth = StartingHealth;
-        SourceComponent.GetSet<AbilitySystemTestAttributeSet>().Mana = StartingMana;
-        SourceComponent.GetSet<AbilitySystemTestAttributeSet>().MaxMana = StartingMana;
+        SourceComponent.GetSet<AbilitySystemTestAttributeSet>().Health = new GameplayAttributeData(StartingHealth);
+        SourceComponent.GetSet<AbilitySystemTestAttributeSet>().MaxHealth = new GameplayAttributeData(StartingHealth);
+        SourceComponent.GetSet<AbilitySystemTestAttributeSet>().Mana = new GameplayAttributeData(StartingMana);
+        SourceComponent.GetSet<AbilitySystemTestAttributeSet>().MaxMana = new GameplayAttributeData(StartingMana);
 
         DestActor = World.SpawnActor<AbilitySystemTestActor>();
         DestComponent = DestActor.GetAbilitySystemComponent();
-        DestComponent.GetSet<AbilitySystemTestAttributeSet>().Health = StartingHealth;
-        DestComponent.GetSet<AbilitySystemTestAttributeSet>().MaxHealth = StartingHealth;
-        DestComponent.GetSet<AbilitySystemTestAttributeSet>().Mana = StartingMana;
-        DestComponent.GetSet<AbilitySystemTestAttributeSet>().MaxMana = StartingMana;
+        DestComponent.GetSet<AbilitySystemTestAttributeSet>().Health = new GameplayAttributeData(StartingHealth);
+        DestComponent.GetSet<AbilitySystemTestAttributeSet>().MaxHealth = new GameplayAttributeData(StartingHealth);
+        DestComponent.GetSet<AbilitySystemTestAttributeSet>().Mana = new GameplayAttributeData(StartingMana);
+        DestComponent.GetSet<AbilitySystemTestAttributeSet>().MaxMana = new GameplayAttributeData(StartingMana);
         Test_InstantDamage();
     }
 
@@ -62,7 +62,7 @@ public class GameplayEffectsTestSuite : MonoBehaviour
     public void Test_InstantDamage()
     {
         float DamageValue = 5.0f;
-        float StartingHealth = DestComponent.GetSet<AbilitySystemTestAttributeSet>().Health;
+        float StartingHealth = DestComponent.GetSet<AbilitySystemTestAttributeSet>().Health.CurrentValue;
         GameplayEffect BaseDmgEffect = new GameplayEffect();
         AddModifier(BaseDmgEffect, "Health", typeof(AbilitySystemTestAttributeSet), EGameplayModOp.Additive, new FScalableFloat(-DamageValue));
         BaseDmgEffect.DurationPolicy = EGameplayEffectDurationType.Instant;

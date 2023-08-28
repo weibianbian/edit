@@ -326,6 +326,10 @@ namespace GameplayAbilitySystem
         {
 
         }
+        public float GetNumericAttribute(GameplayAttribute Attribute)
+        {
+            return 0;
+        }
     }
 }
 

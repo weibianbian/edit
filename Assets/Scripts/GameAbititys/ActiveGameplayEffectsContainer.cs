@@ -1,8 +1,8 @@
-﻿using RailShootGame;
+﻿using Core.Timer;
+using RailShootGame;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Core.Timer;
 
 namespace GameplayAbilitySystem
 {
@@ -33,19 +33,73 @@ namespace GameplayAbilitySystem
         }
 
     }
+    public class FGameplayEffectModCallbackData
+    {
+        public GameplayEffectSpec EffectSpec;
+        public FGameplayModifierEvaluatedData EvaluatedData;
+        public AbilitySystemComponent Target;
 
+        public FGameplayEffectModCallbackData(GameplayEffectSpec InEffectSpec, FGameplayModifierEvaluatedData InEvaluatedData, AbilitySystemComponent InTarget)
+        {
+            EffectSpec = InEffectSpec;
+            EvaluatedData = InEvaluatedData;
+            Target = InTarget;
+        }
+    }
+    public class FAggregator
+    {
+        public float BaseValue = 0;
+        public float GetBaseValue()
+        {
+            return BaseValue;
+        }
+        public void SetBaseValue(float NewBaseValue)
+        {
+            BaseValue = NewBaseValue;
+        }
+        public static float StaticExecModOnBaseValue(float BaseValue, EGameplayModOp ModifierOp, float EvaluatedMagnitude)
+        {
+            switch (ModifierOp)
+            {
+                case EGameplayModOp.Override:
+                    {
+                        BaseValue = EvaluatedMagnitude;
+                        break;
+                    }
+                case EGameplayModOp.Additive:
+                    {
+                        BaseValue += EvaluatedMagnitude;
+                        break;
+                    }
+                case EGameplayModOp.Multiplicitive:
+                    {
+                        BaseValue *= EvaluatedMagnitude;
+                        break;
+                    }
+                case EGameplayModOp.Division:
+                    {
+                        BaseValue /= EvaluatedMagnitude;
+                        break;
+                    }
+            }
+
+            return BaseValue;
+        }
+    }
     public class ActiveGameplayEffectsContainer : List<ActiveGameplayEffect>
     {
         AbilitySystemComponent Owner;
         public Dictionary<GameplayAttribute, OnGameplayAttributeValueChange> AttributeValueChangeDelegates;
+        public Dictionary<GameplayAttribute, FAggregator> AttributeAggregatorMap;
         public List<GameplayEffect> ApplicationImmunityQueryEffects;
         public ActiveGameplayEffectsContainer()
         {
             ApplicationImmunityQueryEffects = new List<GameplayEffect>();
+            AttributeAggregatorMap = new Dictionary<GameplayAttribute, FAggregator>();
         }
         public void RegisterWithOwner(AbilitySystemComponent InOwner)
         {
-            Owner=InOwner;
+            Owner = InOwner;
         }
         //这是在属性和ActiveGameplayEffects上执行GameplayEffect的主函数
         public void ExecuteActiveEffectsFrom(GameplayEffectSpec Spec)
@@ -95,9 +149,76 @@ namespace GameplayAbilitySystem
             }
             if (AttributeSet != null)
             {
+                FGameplayEffectModCallbackData ExecuteData = new FGameplayEffectModCallbackData(Spec, ModEvalData, Owner);
+                if (AttributeSet.PreGameplayEffectExecute(ExecuteData))
+                {
+                    ApplyModToAttribute(ModEvalData.Attribute, ModEvalData.ModifierOp, ModEvalData.Magnitude, ExecuteData);
 
+                }
             }
             return bExecuted;
+        }
+        public void ApplyModToAttribute(GameplayAttribute Attribute, EGameplayModOp ModifierOp, float ModifierMagnitude, FGameplayEffectModCallbackData ModData)
+        {
+            float CurrentBase = GetAttributeBaseValue(Attribute);
+            float NewBase = FAggregator.StaticExecModOnBaseValue(CurrentBase, ModifierOp, ModifierMagnitude);
+            SetAttributeBaseValue(Attribute, NewBase);
+        }
+        public float GetAttributeBaseValue(GameplayAttribute Attribute)
+        {
+            float BaseValue = 0.0f;
+
+            if (Owner != null)
+            {
+                AttributeSet AttributeSet = null;
+                Type AttributeSetClass = Attribute.AttributeOwner;
+                if (AttributeSetClass != null && AttributeSetClass.IsSubclassOf(typeof(AttributeSet)))
+                {
+                    AttributeSet = Owner.GetAttributeSubobject(AttributeSetClass);
+                }
+                if (AttributeSet == null)
+                {
+                    return BaseValue;
+                }
+            }
+            return 0;
+        }
+        public void SetAttributeBaseValue(GameplayAttribute Attribute, float NewBaseValue)
+        {
+            AttributeSet Set = null;
+            Type AttributeSetClass = Attribute.AttributeOwner;
+            if (AttributeSetClass != null && AttributeSetClass.IsSubclassOf(typeof(AttributeSet)))
+            {
+                Set = Owner.GetAttributeSubobject(AttributeSetClass);
+            }
+            if (Set == null)
+            {
+                return;
+            }
+            float OldBaseValue = 0.0f;
+            bool bBaseValueSet = false;
+            Set.PreAttributeBaseChange(Attribute, NewBaseValue);
+
+            if (AttributeAggregatorMap.TryGetValue(Attribute, out FAggregator Aggregator))
+            {
+                OldBaseValue = Aggregator.GetBaseValue();
+                Aggregator.SetBaseValue(NewBaseValue);
+                bBaseValueSet = true;
+            }
+            else
+            {
+                OldBaseValue = Owner.GetNumericAttribute(Attribute);
+                InternalUpdateNumericalAttribute(Attribute, NewBaseValue, null);
+                bBaseValueSet = true;
+            }
+            if (bBaseValueSet)
+            {
+                Set.PostAttributeBaseChange(Attribute, OldBaseValue, NewBaseValue);
+            }
+        }
+        public void InternalUpdateNumericalAttribute(GameplayAttribute Attribute, float NewValue, FGameplayEffectModCallbackData ModData, bool bFromRecursiveCall = false)
+        {
+
         }
         public ActiveGameplayEffect ApplyGameplayEffectSpec(GameplayEffectSpec Spec, ref bool bFoundExistingStackableGE)
         {

@@ -3,11 +3,16 @@ using UnityEditor.AnimatedValues;
 
 namespace RailShootGame
 {
-    public class GameplayAttributeData
+    public struct GameplayAttributeData
     {
-        public float BaseAnimValue;
-        public float currentValue;
+        public float BaseValue;
+        public float CurrentValue;
 
+        public GameplayAttributeData(float DefaultValue)
+        {
+            BaseValue = DefaultValue;
+            CurrentValue = DefaultValue;
+        }
     }
 
     public class Character : Pawn
