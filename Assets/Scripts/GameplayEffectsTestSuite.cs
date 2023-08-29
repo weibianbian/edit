@@ -51,7 +51,8 @@ public class GameplayEffectsTestSuite : MonoBehaviour
         DestComponent.GetSet<AbilitySystemTestAttributeSet>().MaxHealth = new GameplayAttributeData(StartingHealth);
         DestComponent.GetSet<AbilitySystemTestAttributeSet>().Mana = new GameplayAttributeData(StartingMana);
         DestComponent.GetSet<AbilitySystemTestAttributeSet>().MaxMana = new GameplayAttributeData(StartingMana);
-        Test_InstantDamage();
+        //Test_InstantDamage();
+        Test_InstantDamageRemap();
     }
 
     // Update is called once per frame
@@ -69,6 +70,34 @@ public class GameplayEffectsTestSuite : MonoBehaviour
         SourceComponent.ApplyGameplayEffectToTarget(BaseDmgEffect, DestComponent, 1);
 
         Debug.Log($"Health Reduced   {DestComponent.GetSet<AbilitySystemTestAttributeSet>().Health.CurrentValue}={StartingHealth - DamageValue}");
+    }
+    public void Test_InstantDamageRemap()
+    {
+        float DamageValue = 5.0f;
+        float StartingHealth = DestComponent.GetSet<AbilitySystemTestAttributeSet>().Health.CurrentValue;
+        GameplayEffect BaseDmgEffect = new GameplayEffect();
+        AddModifier(BaseDmgEffect, "Damage", typeof(AbilitySystemTestAttributeSet), EGameplayModOp.Additive, new FScalableFloat(DamageValue));
+        BaseDmgEffect.DurationPolicy = EGameplayEffectDurationType.Instant;
+        SourceComponent.ApplyGameplayEffectToTarget(BaseDmgEffect, DestComponent, 1);
+
+        Debug.Log($"Health Reduced   {DestComponent.GetSet<AbilitySystemTestAttributeSet>().Health.CurrentValue}={StartingHealth - DamageValue}");
+        Debug.Log($"Damage Applied   {DestComponent.GetSet<AbilitySystemTestAttributeSet>().Damage.CurrentValue}={0}");
+    }
+    public void Test_ManaBuff()
+    {
+        float BuffValue = 30.0f;
+        float StartingMana = DestComponent.GetSet<AbilitySystemTestAttributeSet>().Mana.CurrentValue;
+        ActiveGameplayEffectHandle BuffHandle;
+        GameplayEffect DamageBuffEffect = new GameplayEffect();
+        DamageBuffEffect.DurationPolicy = EGameplayEffectDurationType.Infinite;
+
+        BuffHandle = SourceComponent.ApplyGameplayEffectToTarget(DamageBuffEffect, DestComponent, 1.0f);
+
+        Debug.Log($"Mana Buffed   {DestComponent.GetSet<AbilitySystemTestAttributeSet>().Mana.CurrentValue}={StartingMana - BuffValue}");
+
+        DestComponent.RemoveActiveGameplayEffect(BuffHandle);
+
+        Debug.Log($"Mana Restored   {DestComponent.GetSet<AbilitySystemTestAttributeSet>().Mana.CurrentValue}={StartingMana}");
     }
     public void AddModifier(GameplayEffect Effect, string Property, Type PropOwner, EGameplayModOp Op, FScalableFloat Magnitude)
     {

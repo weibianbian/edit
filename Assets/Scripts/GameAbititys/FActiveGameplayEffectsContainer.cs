@@ -7,93 +7,13 @@ using System.Reflection;
 
 namespace GameplayAbilitySystem
 {
-    public class FInheritedTagContainer
-    {
-        public GameplayTagContainer CombinedTags;
-        public GameplayTagContainer Added;
-        public GameplayTagContainer Removed;
-    }
-    public class FGameplayTagQuery
-    {
-
-
-    }
-
-    public class FGameplayEffectQuery
-    {
-        public FGameplayTagQuery OwningTagQuery;
-        public FGameplayTagQuery EffectTagQuery;
-        public FGameplayTagQuery SourceTagQuery;
-        public bool Matches(GameplayEffectSpec Spec)
-        {
-            if (Spec == null)
-            {
-                return false;
-            }
-            return true;
-        }
-
-    }
-    public class FGameplayEffectModCallbackData
-    {
-        public GameplayEffectSpec EffectSpec;
-        public FGameplayModifierEvaluatedData EvaluatedData;
-        public AbilitySystemComponent Target;
-
-        public FGameplayEffectModCallbackData(GameplayEffectSpec InEffectSpec, FGameplayModifierEvaluatedData InEvaluatedData, AbilitySystemComponent InTarget)
-        {
-            EffectSpec = InEffectSpec;
-            EvaluatedData = InEvaluatedData;
-            Target = InTarget;
-        }
-    }
-    public class FAggregator
-    {
-        public float BaseValue = 0;
-        public float GetBaseValue()
-        {
-            return BaseValue;
-        }
-        public void SetBaseValue(float NewBaseValue)
-        {
-            BaseValue = NewBaseValue;
-        }
-        public static float StaticExecModOnBaseValue(float BaseValue, EGameplayModOp ModifierOp, float EvaluatedMagnitude)
-        {
-            switch (ModifierOp)
-            {
-                case EGameplayModOp.Override:
-                    {
-                        BaseValue = EvaluatedMagnitude;
-                        break;
-                    }
-                case EGameplayModOp.Additive:
-                    {
-                        BaseValue += EvaluatedMagnitude;
-                        break;
-                    }
-                case EGameplayModOp.Multiplicitive:
-                    {
-                        BaseValue *= EvaluatedMagnitude;
-                        break;
-                    }
-                case EGameplayModOp.Division:
-                    {
-                        BaseValue /= EvaluatedMagnitude;
-                        break;
-                    }
-            }
-
-            return BaseValue;
-        }
-    }
-    public class ActiveGameplayEffectsContainer : List<ActiveGameplayEffect>
+    public class FActiveGameplayEffectsContainer : List<ActiveGameplayEffect>
     {
         AbilitySystemComponent Owner;
         public Dictionary<GameplayAttribute, OnGameplayAttributeValueChange> AttributeValueChangeDelegates;
         public Dictionary<GameplayAttribute, FAggregator> AttributeAggregatorMap;
         public List<GameplayEffect> ApplicationImmunityQueryEffects;
-        public ActiveGameplayEffectsContainer()
+        public FActiveGameplayEffectsContainer()
         {
             ApplicationImmunityQueryEffects = new List<GameplayEffect>();
             AttributeAggregatorMap = new Dictionary<GameplayAttribute, FAggregator>();
@@ -365,6 +285,19 @@ namespace GameplayAbilitySystem
                 }
 
             }
+        }
+        public bool RemoveActiveGameplayEffect(ActiveGameplayEffectHandle Handle, int StacksToRemove)
+        {
+            int NumGameplayEffects = GetNumGameplayEffects();
+            for (int ActiveGEIdx = 0; ActiveGEIdx < NumGameplayEffects; ActiveGEIdx++)
+            {
+                ActiveGameplayEffect  Effect = GetActiveGameplayEffect(ActiveGEIdx);
+            }
+            return false;
+        }
+        public int GetNumGameplayEffects()
+        {
+            return 0;
         }
     }
 

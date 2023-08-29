@@ -1,109 +1,15 @@
-using JetBrains.Annotations;
 using RailShootGame;
 using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Reflection;
-using System.Xml.Linq;
-using Unity.VisualScripting;
 using UnityEngine;
-using static UnityEngine.UI.GridLayoutGroup;
 
 namespace GameplayAbilitySystem
 {
-    //AbilitySystemComponent
-    //              ---TryActivateAbility
-    //GameplayAbility
-    //              ---CanActivateAbility
-    //GameplayAbility
-    //              ---CallActivateAbility
-    //GameplayAbility
-    //              ---K2_ActivateAbility
-    //GameplayAbility
-    //              ---CommitAbility
-    //执行蓝图AbilityTask
-    //              ---PlayMontageTask-------Wati-------GameplayAbility(EndAbility)
-    //执行事件（动画轴上的事件）
-    //              ---SendGameplayEventToActor
-    //GameplayAbility
-    //              ---ApplyGameplayEffectToTarget
-    public struct GameplayAbilitySpecHandle
-    {
-
-        int Handle;
-
-        public override bool Equals(object obj)
-        {
-            return base.Equals(obj);
-        }
-
-        public override int GetHashCode()
-        {
-            return base.GetHashCode();
-        }
-
-        public override string ToString()
-        {
-            return base.ToString();
-        }
-
-        public static bool operator ==(GameplayAbilitySpecHandle a, GameplayAbilitySpecHandle b)
-        {
-            return a.Handle == b.Handle;
-        }
-        public static bool operator !=(GameplayAbilitySpecHandle a, GameplayAbilitySpecHandle b)
-        {
-            return a.Handle != b.Handle;
-        }
-
-    }
-    public class GameplayAttribute
-    {
-        public Type AttributeOwner;
-        public string Attribute;
-
-        public void SetUProperty(string NewProperty, Type InAttributeOwner)
-        {
-            Attribute = NewProperty;
-            AttributeOwner = InAttributeOwner;
-        }
-        public FieldInfo GetUProperty()
-        {
-            return AttributeOwner.GetField(Attribute);
-        }
-        public float GetNumericValue(AttributeSet Src)
-        {
-            FieldInfo fi = AttributeOwner.GetField(Attribute);
-            GameplayAttributeData DataPtr = (GameplayAttributeData)fi.GetValue(Src);
-            return DataPtr.GetCurrentValue();
-        }
-        public void SetNumericValueChecked(float NewValue, AttributeSet Dest)
-        {
-            float OldValue = 0.0f;
-            FieldInfo fi = AttributeOwner.GetField(Attribute);
-            GameplayAttributeData DataPtr = (GameplayAttributeData)fi.GetValue(Dest);
-            OldValue = DataPtr.GetCurrentValue();
-            Dest.PreAttributeChange(this, NewValue);
-            DataPtr.SetCurrentValue(NewValue);
-
-            fi.SetValue(Dest, DataPtr);
-            Dest.PostAttributeChange(this, OldValue, NewValue);
-        }
-        public static bool operator ==(GameplayAttribute a, GameplayAttribute b)
-        {
-            return a.Attribute == b.Attribute;
-        }
-        public static bool operator !=(GameplayAttribute a, GameplayAttribute b)
-        {
-            return a.Attribute != b.Attribute;
-        }
-
-    }
 
     public class AbilitySystemComponent : ActorComponent
     {
         public GameplayAbilitySpecContainer ActivatableAbilities;
-        public ActiveGameplayEffectsContainer ActiveGameplayEffects;
+        public FActiveGameplayEffectsContainer ActiveGameplayEffects;
         public GameplayTagCountContainer GameplayTagCountContainer;
         public List<AttributeSet> SpawnedAttributes;
         public GameplayAbilityActorInfo AbilityActorInfo;
@@ -112,7 +18,7 @@ namespace GameplayAbilitySystem
         {
             SpawnedAttributes = new List<AttributeSet>();
             AbilityActorInfo = ReferencePool.Acquire<GameplayAbilityActorInfo>();
-            ActiveGameplayEffects = new ActiveGameplayEffectsContainer();
+            ActiveGameplayEffects = new FActiveGameplayEffectsContainer();
         }
 
         public override void OnRegister()
@@ -384,6 +290,10 @@ namespace GameplayAbilitySystem
                 AttributeSet = GetAttributeSubobject(AttributeSetClass);
             }
             Attribute.SetNumericValueChecked(NewFloatValue, AttributeSet);
+        }
+        public bool RemoveActiveGameplayEffect(ActiveGameplayEffectHandle Handle, int StacksToRemove = -1)
+        {
+            return ActiveGameplayEffects.RemoveActiveGameplayEffect(Handle, StacksToRemove);
         }
     }
 }
