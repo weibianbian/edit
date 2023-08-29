@@ -28,7 +28,7 @@ namespace RailShootGame
         public Vector3 position;
         public ULevel Outer;
 
-        private HashSet<ActorComponent> OwnedComponents;
+        private HashSet<ActorComponent> OwnedComponents=new HashSet<ActorComponent>();
 
         public HashSet<ActorComponent> GetInstanceComponents()
         {
@@ -73,6 +73,8 @@ namespace RailShootGame
             UWorld World =GetWorld();
             ExecuteConstruction();
             PostActorConstruction();
+
+            RegisterAllComponents();
         }
         public void ExecuteConstruction()
         {
@@ -84,6 +86,19 @@ namespace RailShootGame
         }
         public virtual void PostInitializeComponents()
         {
+        }
+        public void RegisterAllComponents()
+        {
+            IncrementalRegisterComponents();
+        }
+        public bool IncrementalRegisterComponents()
+        {
+            UWorld World = GetWorld();
+            foreach (var Component in OwnedComponents)
+            {
+                Component.RegisterComponentWithWorld(World);
+            }
+            return true;
         }
         //通知脚本怪物已被触发器或手电筒激活
         public void Activate()

@@ -3,6 +3,7 @@ using RailShootGame;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 
 namespace GameplayAbilitySystem
 {
@@ -180,8 +181,11 @@ namespace GameplayAbilitySystem
                 {
                     return BaseValue;
                 }
+                FieldInfo fi = Attribute.GetUProperty();
+                GameplayAttributeData DataPtr = (GameplayAttributeData)fi.GetValue(AttributeSet);
+                BaseValue = DataPtr.GetBaseValue();
             }
-            return 0;
+            return BaseValue;
         }
         public void SetAttributeBaseValue(GameplayAttribute Attribute, float NewBaseValue)
         {
@@ -218,7 +222,8 @@ namespace GameplayAbilitySystem
         }
         public void InternalUpdateNumericalAttribute(GameplayAttribute Attribute, float NewValue, FGameplayEffectModCallbackData ModData, bool bFromRecursiveCall = false)
         {
-
+            float OldValue = Owner.GetNumericAttribute(Attribute);
+            Owner.SetNumericAttribute_Internal(Attribute, NewValue);
         }
         public ActiveGameplayEffect ApplyGameplayEffectSpec(GameplayEffectSpec Spec, ref bool bFoundExistingStackableGE)
         {

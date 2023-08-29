@@ -1,7 +1,7 @@
 ﻿using RailShootGame;
 using Sirenix.Utilities;
-using System;
 using System.Collections.Generic;
+using UnityEngine.Rendering;
 
 namespace GameplayAbilitySystem
 {
@@ -61,11 +61,13 @@ namespace GameplayAbilitySystem
         public GameplayEffectSpec(GameplayEffect InDef, GameplayEffectContextHandle InEffectContext, float InLevel)
         {
             CapturedRelevantAttributes = new FGameplayEffectAttributeCaptureSpecContainer();
+            StackCount = 1;
             Initialize(InDef, InEffectContext, InLevel);
         }
         public GameplayEffectSpec(GameplayEffectSpec Other)
         {
-
+            CapturedRelevantAttributes = new FGameplayEffectAttributeCaptureSpecContainer();
+            StackCount = 1;
         }
         public void Initialize(GameplayEffect InDef, GameplayEffectContextHandle InEffectContext, float InLevel)
         {
@@ -88,7 +90,13 @@ namespace GameplayAbilitySystem
         }
         public float GetModifierMagnitude(int ModifierIdx, bool bFactorInStackCount)
         {
-            return 0;
+            float SingleEvaluatedMagnitude = Modifiers[ModifierIdx].GetEvaluatedMagnitude();
+            float ModMagnitude = SingleEvaluatedMagnitude;
+            if (bFactorInStackCount)
+            {
+                ModMagnitude= GameplayEffectUtilities.ComputeStackedModifierMagnitude(SingleEvaluatedMagnitude, StackCount, Def.Modifiers[ModifierIdx].ModifierOp);
+            }
+            return ModMagnitude;
         }
         public void SetLevel(float InLevel)
         {

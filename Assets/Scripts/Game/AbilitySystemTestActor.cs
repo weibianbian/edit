@@ -13,6 +13,7 @@ namespace RailShootGame
         {
             AbilitySystemComponent = ReferencePool.Acquire<AbilitySystemComponent>();
             AbilitySystemComponent.SetOwner(this);
+            AbilitySystemComponent.PostInitProperties();
         }
         public override void PostInitializeComponents()
         {

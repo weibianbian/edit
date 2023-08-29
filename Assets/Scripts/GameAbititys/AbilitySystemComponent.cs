@@ -2,9 +2,12 @@ using JetBrains.Annotations;
 using RailShootGame;
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Reflection;
 using System.Xml.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
+using static UnityEngine.UI.GridLayoutGroup;
 
 namespace GameplayAbilitySystem
 {
@@ -64,6 +67,37 @@ namespace GameplayAbilitySystem
             Attribute = NewProperty;
             AttributeOwner = InAttributeOwner;
         }
+        public FieldInfo GetUProperty()
+        {
+            return AttributeOwner.GetField(Attribute);
+        }
+        public float GetNumericValue(AttributeSet Src)
+        {
+            FieldInfo fi = AttributeOwner.GetField(Attribute);
+            GameplayAttributeData DataPtr = (GameplayAttributeData)fi.GetValue(Src);
+            return DataPtr.GetCurrentValue();
+        }
+        public void SetNumericValueChecked(float NewValue, AttributeSet Dest)
+        {
+            float OldValue = 0.0f;
+            FieldInfo fi = AttributeOwner.GetField(Attribute);
+            GameplayAttributeData DataPtr = (GameplayAttributeData)fi.GetValue(Dest);
+            OldValue = DataPtr.GetCurrentValue();
+            Dest.PreAttributeChange(this, NewValue);
+            DataPtr.SetCurrentValue(NewValue);
+
+            fi.SetValue(Dest, DataPtr);
+            Dest.PostAttributeChange(this, OldValue, NewValue);
+        }
+        public static bool operator ==(GameplayAttribute a, GameplayAttribute b)
+        {
+            return a.Attribute == b.Attribute;
+        }
+        public static bool operator !=(GameplayAttribute a, GameplayAttribute b)
+        {
+            return a.Attribute != b.Attribute;
+        }
+
     }
 
     public class AbilitySystemComponent : ActorComponent
@@ -80,7 +114,8 @@ namespace GameplayAbilitySystem
             AbilityActorInfo = ReferencePool.Acquire<GameplayAbilityActorInfo>();
             ActiveGameplayEffects = new ActiveGameplayEffectsContainer();
         }
-        public void OnRegister()
+
+        public override void OnRegister()
         {
             ActiveGameplayEffects.RegisterWithOwner(this);
         }
@@ -328,7 +363,27 @@ namespace GameplayAbilitySystem
         }
         public float GetNumericAttribute(GameplayAttribute Attribute)
         {
-            return 0;
+            AttributeSet AttributeSetOrNull = null;
+            Type AttributeSetClass = Attribute.AttributeOwner;
+            if (AttributeSetClass != null && AttributeSetClass.IsSubclassOf(typeof(AttributeSet)))
+            {
+                AttributeSetOrNull = GetAttributeSubobject(AttributeSetClass);
+            }
+            if (AttributeSetOrNull == null)
+            {
+                return 0;
+            }
+            return Attribute.GetNumericValue(AttributeSetOrNull);
+        }
+        public void SetNumericAttribute_Internal(GameplayAttribute Attribute, float NewFloatValue)
+        {
+            AttributeSet AttributeSet = null;
+            Type AttributeSetClass = Attribute.AttributeOwner;
+            if (AttributeSetClass != null && AttributeSetClass.IsSubclassOf(typeof(AttributeSet)))
+            {
+                AttributeSet = GetAttributeSubobject(AttributeSetClass);
+            }
+            Attribute.SetNumericValueChecked(NewFloatValue, AttributeSet);
         }
     }
 }

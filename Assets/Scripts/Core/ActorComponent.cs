@@ -11,6 +11,22 @@
         {
 
         }
+        public virtual void PostInitProperties()
+        {
+            Outer.AddOwnedComponent(this);
+        }
+        public void RegisterComponentWithWorld(UWorld World)
+        {
+            ExecuteRegisterEvents();
+        }
+        public void ExecuteRegisterEvents()
+        {
+            OnRegister();
+        }
+        public virtual void OnRegister()
+        {
+
+        }
         public void SetOwner(Actor InOuter)
         {
             Outer = InOuter;

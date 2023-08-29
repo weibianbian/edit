@@ -18,6 +18,13 @@ namespace GameplayAbilitySystem
         {
             return true;
         }
+        public virtual void PreAttributeChange(GameplayAttribute Attribute, float NewValue)
+        {
+        }
+        public virtual void PostAttributeChange(GameplayAttribute Attribute, float OldValue, float NewValue)
+        {
+
+        }
         public virtual void PreAttributeBaseChange(GameplayAttribute Attribute, float NewValue)
         {
 

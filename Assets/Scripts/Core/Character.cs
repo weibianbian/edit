@@ -13,6 +13,22 @@ namespace RailShootGame
             BaseValue = DefaultValue;
             CurrentValue = DefaultValue;
         }
+        public float GetBaseValue()
+        {
+            return BaseValue;
+        }
+        public float GetCurrentValue()
+        {
+            return CurrentValue;
+        }
+        public void SetCurrentValue(float NewValue)
+        {
+            CurrentValue = NewValue;
+        }
+        public void SetBaseValue(float NewValue)
+        {
+            BaseValue = NewValue;
+        }
     }
 
     public class Character : Pawn

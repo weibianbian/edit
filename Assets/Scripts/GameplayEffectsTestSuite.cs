@@ -68,7 +68,7 @@ public class GameplayEffectsTestSuite : MonoBehaviour
         BaseDmgEffect.DurationPolicy = EGameplayEffectDurationType.Instant;
         SourceComponent.ApplyGameplayEffectToTarget(BaseDmgEffect, DestComponent, 1);
 
-        Debug.Log($"Health Reduced   {DestComponent.GetSet<AbilitySystemTestAttributeSet>().Health}={StartingHealth - DamageValue}");
+        Debug.Log($"Health Reduced   {DestComponent.GetSet<AbilitySystemTestAttributeSet>().Health.CurrentValue}={StartingHealth - DamageValue}");
     }
     public void AddModifier(GameplayEffect Effect, string Property, Type PropOwner, EGameplayModOp Op, FScalableFloat Magnitude)
     {
@@ -77,6 +77,5 @@ public class GameplayEffectsTestSuite : MonoBehaviour
         Info.ModifierOp = Op;
         Info.ModifierMagnitude = Magnitude;
         Info.Attribute.SetUProperty(Property, PropOwner);
-        PropOwner.GetField(Property).SetValue(PropOwner, Property);
     }
 }
