@@ -1,7 +1,7 @@
-using JetBrains.Annotations;
 using System;
-using System.Collections;
 using System.Collections.Generic;
+using Test.Core;
+using Test.GamePlay;
 using UnityEngine;
 
 public class toceshi : MonoBehaviour
@@ -9,26 +9,80 @@ public class toceshi : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        //通过反射
         ClassC c = new ClassC();
 
         c.classList.Add(new ClassB());
+        //提交信息给Core代码
+        c.AddModifier(typeof(ClassB), "Health");
+        //调用Core代码的执行
+        c.ExecuteModifier();
+        //=================================================
 
-        ClassBase instance = c.GetObj(typeof(ClassB));
-
-
-        instance.GetType().GetField("Health").SetValue(instance,10);
-
-        Debug.Log(instance.GetType().GetField("Health").GetValue(instance));
+        //非反射
+        c.classList.Add(new ClassB());
+        //提交信息给Core代码
+        c.AddModifier(typeof(ClassB), (int)EAttributeType.Health);
+        //调用Core代码的执行
+        c.ExecuteModifier();
     }
-    public class ClassBase { }
+
+
+}
+namespace Test.GamePlay
+{
+    public enum EAttributeType
+    {
+        Health,
+    }
+    public class ClassBase
+    {
+        public virtual void ExecuteModifier(int EAttributeType)
+        {
+        }
+
+    }
 
     public class ClassB : ClassBase
     {
         public float Health;
+        public override void ExecuteModifier(int InEAttributeType)
+        {
+            if (InEAttributeType == (int)EAttributeType.Health)
+            {
+
+            }
+        }
     }
+}
+namespace Test.Core
+{
     public class ClassC
     {
         public List<ClassBase> classList = new List<ClassBase>();
+        public Type AttributeOwner;
+        public string Attribute;
+        public int EAttributeType;
+        public void AddModifier(Type AttributeOwner, string NewProperty)
+        {
+            this.AttributeOwner = AttributeOwner;
+            this.Attribute = NewProperty;
+        }
+        public void AddModifier(Type AttributeOwner, int EAttributeType)
+        {
+            this.AttributeOwner = AttributeOwner;
+            this.EAttributeType = EAttributeType;
+        }
+        public void ExecuteModifier()
+        {
+            //反射代码
+            //ClassBase instance = GetObj(AttributeOwner);
+            //instance.GetType().GetField(Attribute).SetValue(instance, 10);
+
+            //非反射
+            ClassBase instance = GetObj(AttributeOwner);
+            instance.ExecuteModifier(EAttributeType);
+        }
 
         public ClassBase GetObj(Type type)
         {
@@ -43,3 +97,4 @@ public class toceshi : MonoBehaviour
         }
     }
 }
+
