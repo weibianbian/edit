@@ -84,6 +84,10 @@ namespace GameplayAbilitySystem
         {
             EffectContext = NewEffectContext;
         }
+        public GameplayEffectContextHandle GetEffectContext()
+        {
+            return EffectContext;
+        }
         public GameplayEffectContextHandle GetContext()
         {
             return EffectContext;
@@ -94,7 +98,7 @@ namespace GameplayAbilitySystem
             float ModMagnitude = SingleEvaluatedMagnitude;
             if (bFactorInStackCount)
             {
-                ModMagnitude= GameplayEffectUtilities.ComputeStackedModifierMagnitude(SingleEvaluatedMagnitude, StackCount, Def.Modifiers[ModifierIdx].ModifierOp);
+                ModMagnitude = GameplayEffectUtilities.ComputeStackedModifierMagnitude(SingleEvaluatedMagnitude, StackCount, Def.Modifiers[ModifierIdx].ModifierOp);
             }
             return ModMagnitude;
         }

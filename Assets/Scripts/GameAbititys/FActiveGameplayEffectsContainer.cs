@@ -288,9 +288,25 @@ namespace GameplayAbilitySystem
 
             }
         }
-        public void InternalRemoveActiveGameplayEffect(int Idx, int StacksToRemove, bool bPrematureRemoval)
+        public bool InternalRemoveActiveGameplayEffect(int Idx, int StacksToRemove, bool bPrematureRemoval)
         {
+            FActiveGameplayEffect Effect = GetActiveGameplayEffect(Idx);
+            FGameplayEffectRemovalInfo GameplayEffectRemovalInfo = new FGameplayEffectRemovalInfo()
+            {
+                StackCount = Effect.Spec.StackCount,
+                bPrematureRemoval = bPrematureRemoval,
+                EffectContext = Effect.Spec.GetEffectContext()
+            };
+            if (StacksToRemove > 0 && Effect.Spec.StackCount > StacksToRemove)
+            {
+                // This won't be a full remove, only a change in StackCount.
+                int StartingStackCount = Effect.Spec.StackCount;
+                Effect.Spec.StackCount -= StacksToRemove;
+                //OnStackCountChange(Effect, StartingStackCount, Effect.Spec.StackCount);
+                return false;
+            }
 
+            return false;
         }
         public bool RemoveActiveGameplayEffect(ActiveGameplayEffectHandle Handle, int StacksToRemove)
         {
@@ -318,6 +334,18 @@ namespace GameplayAbilitySystem
             }
             return null;
         }
+    }
+    public class FGameplayEffectRemovalInfo
+    {
+        /** 当玩法效果的持续时间没有过期时是正确的，这意味着玩法效果被强行移除 */
+        public bool bPrematureRemoval = false;
+
+        /** 这个游戏效果在被移除之前的堆栈数量。 */
+        public int StackCount = 0;
+
+        /** 演员这个游戏效果是有针对性的。 */
+        public GameplayEffectContextHandle EffectContext;
+
     }
 
 }
