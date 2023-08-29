@@ -288,6 +288,10 @@ namespace GameplayAbilitySystem
 
             }
         }
+        public void InternalRemoveActiveGameplayEffect(int Idx, int StacksToRemove, bool bPrematureRemoval)
+        {
+
+        }
         public bool RemoveActiveGameplayEffect(ActiveGameplayEffectHandle Handle, int StacksToRemove)
         {
             int NumGameplayEffects = GetNumGameplayEffects();
@@ -296,7 +300,8 @@ namespace GameplayAbilitySystem
                 FActiveGameplayEffect Effect = GetActiveGameplayEffect(ActiveGEIdx);
                 if (Effect.Handle == Handle && Effect.IsPendingRemove == false)
                 {
-
+                    InternalRemoveActiveGameplayEffect(ActiveGEIdx, StacksToRemove, true);
+                    return true;
                 }
             }
             return false;
