@@ -28,7 +28,7 @@ namespace GameplayAbilitySystem
             return NewHandle;
         }
     }
-    public class ActiveGameplayEffect
+    public class FActiveGameplayEffect
     {
         public GameplayEffectSpec Spec;
         public ActiveGameplayEffectHandle Handle;

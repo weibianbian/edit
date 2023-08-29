@@ -165,7 +165,7 @@ namespace GameplayAbilitySystem
         {
             //ActiveGameplayEffectsContainer.ApplyGameplayEffectSpec
             //我们是否对此免疫
-            ActiveGameplayEffect ImmunityGE = null;
+            FActiveGameplayEffect ImmunityGE = null;
             if (ActiveGameplayEffects.HasApplicationImmunityToSpec(Spec, ImmunityGE))
             {
                 return new ActiveGameplayEffectHandle();
@@ -177,7 +177,7 @@ namespace GameplayAbilitySystem
             ActiveGameplayEffectHandle MyHandle = new ActiveGameplayEffectHandle(-1);
             bool bFoundExistingStackableGE = false;
 
-            ActiveGameplayEffect AppliedEffect = new ActiveGameplayEffect();
+            FActiveGameplayEffect AppliedEffect = new FActiveGameplayEffect();
             bool bInvokeGameplayCueApplied = Spec.Def.DurationPolicy != EGameplayEffectDurationType.Instant;
             GameplayEffectSpec StackSpec = null;
             GameplayEffectSpec OurCopyOfSpec = null;
