@@ -221,9 +221,8 @@ namespace GameplayAbilitySystem
 
                     TimerManager.SetTimer(ref AppliedActiveGE.DurationHandle, Delegate, AppliedEffectSpec.GetPeriod(), false);
                 }
-                return new FActiveGameplayEffect();
             }
-            return null;
+            return AppliedActiveGE;
         }
         public OnGameplayAttributeValueChange GetGameplayAttributeValueChangeDelegate(GameplayAttribute Attribute)
         {
