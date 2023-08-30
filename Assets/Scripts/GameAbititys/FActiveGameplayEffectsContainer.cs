@@ -25,9 +25,9 @@ namespace GameplayAbilitySystem
             Owner = InOwner;
         }
         //这是在属性和ActiveGameplayEffects上执行GameplayEffect的主函数
-        public void ExecuteActiveEffectsFrom(GameplayEffectSpec Spec)
+        public void ExecuteActiveEffectsFrom(FGameplayEffectSpec Spec)
         {
-            GameplayEffectSpec SpecToUse = Spec;
+            FGameplayEffectSpec SpecToUse = Spec;
 
             SpecToUse.CalculateModifierMagnitudes();
             //这将修改属性的基值
@@ -61,7 +61,7 @@ namespace GameplayAbilitySystem
             }
 
         }
-        public bool InternalExecuteMod(GameplayEffectSpec Spec, FGameplayModifierEvaluatedData ModEvalData)
+        public bool InternalExecuteMod(FGameplayEffectSpec Spec, FGameplayModifierEvaluatedData ModEvalData)
         {
             bool bExecuted = false;
             AttributeSet AttributeSet = null;
@@ -147,7 +147,7 @@ namespace GameplayAbilitySystem
             float OldValue = Owner.GetNumericAttribute(Attribute);
             Owner.SetNumericAttribute_Internal(Attribute, NewValue);
         }
-        public FActiveGameplayEffect ApplyGameplayEffectSpec(GameplayEffectSpec Spec, ref bool bFoundExistingStackableGE)
+        public FActiveGameplayEffect ApplyGameplayEffectSpec(FGameplayEffectSpec Spec, ref bool bFoundExistingStackableGE)
         {
             bFoundExistingStackableGE = false;
             FActiveGameplayEffect AppliedActiveGE = null;
@@ -161,7 +161,7 @@ namespace GameplayAbilitySystem
             if (ExistingStackableGE != null)
             {
                 bFoundExistingStackableGE = true;
-                GameplayEffectSpec ExistingSpec = ExistingStackableGE.Spec;
+                FGameplayEffectSpec ExistingSpec = ExistingStackableGE.Spec;
                 StartingStackCount = ExistingSpec.StackCount;
 
                 if (ExistingSpec.StackCount == ExistingSpec.Def.StackLimitCount)
@@ -181,13 +181,18 @@ namespace GameplayAbilitySystem
             }
             else
             {
-                ActiveGameplayEffectHandle NewHandle = ActiveGameplayEffectHandle.GenerateNewHandle(Owner);
+                FActiveGameplayEffectHandle NewHandle = FActiveGameplayEffectHandle.GenerateNewHandle(Owner);
                 AppliedActiveGE = new FActiveGameplayEffect()
                 {
                     Handle = NewHandle,
                     Spec = Spec,
                 };
-                GameplayEffectSpec AppliedEffectSpec = AppliedActiveGE.Spec;
+                FGameplayEffectSpec AppliedEffectSpec = AppliedActiveGE.Spec;
+                //float DefCalcDuration = 0.0f;
+                if (AppliedEffectSpec.AttemptCalculateDurationFromDef(out float DefCalcDuration))
+                {
+                    AppliedEffectSpec.SetDuration(DefCalcDuration, false);
+                }
                 float DurationBaseValue = AppliedEffectSpec.GetDuration();
                 if (DurationBaseValue > 0)
                 {
@@ -199,12 +204,22 @@ namespace GameplayAbilitySystem
                     //AppliedEffectSpec.SetDuration(FinalDuration, true);
                     if (Owner != null && bSetDuration)
                     {
-                        TimerManager TimerManager = new TimerManager();
-                        TimerManager.SetTimer(ref AppliedActiveGE.DurationHandle, TimerDelegate<AbilitySystemComponent, ActiveGameplayEffectHandle>.Create((@owner, @handle) =>
+                        TimerManager TimerManager = Owner.GetWorld().GetTimerManager();
+                        TimerManager.SetTimer(ref AppliedActiveGE.DurationHandle, TimerDelegate<AbilitySystemComponent, FActiveGameplayEffectHandle>.Create((@owner, @handle) =>
                         {
                             @owner.CheckDurationExpired(@handle);
                         }, Owner, AppliedActiveGE.Handle), FinalDuration, false);
                     }
+                }
+                if (bSetDuration && Owner != null && AppliedEffectSpec.GetPeriod() > 0)
+                {
+                    TimerManager TimerManager = Owner.GetWorld().GetTimerManager();
+                    ITimerDelegate Delegate = TimerDelegate<AbilitySystemComponent, FActiveGameplayEffectHandle>.Create((@owner, @handle) =>
+                    {
+                        @owner.ExecutePeriodicEffect(@handle);
+                    }, Owner, AppliedActiveGE.Handle);
+
+                    TimerManager.SetTimer(ref AppliedActiveGE.DurationHandle, Delegate, AppliedEffectSpec.GetPeriod(), false);
                 }
                 return new FActiveGameplayEffect();
             }
@@ -219,7 +234,7 @@ namespace GameplayAbilitySystem
             }
             return value;
         }
-        public void CheckDuration(ActiveGameplayEffectHandle Handle)
+        public void CheckDuration(FActiveGameplayEffectHandle Handle)
         {
             for (int ActiveGEIdx = 0; ActiveGEIdx < this.Count; ++ActiveGEIdx)
             {
@@ -236,7 +251,7 @@ namespace GameplayAbilitySystem
                 //float CurrentTime = GetWorldTime();
             }
         }
-        public bool HasApplicationImmunityToSpec(GameplayEffectSpec SpecToApply, FActiveGameplayEffect OutGEThatProvidedImmunity)
+        public bool HasApplicationImmunityToSpec(FGameplayEffectSpec SpecToApply, FActiveGameplayEffect OutGEThatProvidedImmunity)
         {
             for (int i = 0; i < ApplicationImmunityQueryEffects.Count; i++)
             {
@@ -244,7 +259,7 @@ namespace GameplayAbilitySystem
             }
             return false;
         }
-        public FActiveGameplayEffect FindStackableActiveGameplayEffect(GameplayEffectSpec Spec)
+        public FActiveGameplayEffect FindStackableActiveGameplayEffect(FGameplayEffectSpec Spec)
         {
             FActiveGameplayEffect StackableGE = null;
             GameplayEffect GEDef = Spec.Def;
@@ -265,7 +280,7 @@ namespace GameplayAbilitySystem
             }
             return StackableGE;
         }
-        public bool HandleActiveGameplayEffectStackOverflow(FActiveGameplayEffect ActiveStackableGE, GameplayEffectSpec OldSpec, GameplayEffectSpec OverflowingSpec)
+        public bool HandleActiveGameplayEffectStackOverflow(FActiveGameplayEffect ActiveStackableGE, FGameplayEffectSpec OldSpec, FGameplayEffectSpec OverflowingSpec)
         {
             GameplayEffect StackedGE = OldSpec.Def;
             bool bAllowOverflowApplication = !(StackedGE.bDenyOverflowApplication);
@@ -276,7 +291,7 @@ namespace GameplayAbilitySystem
             }
             return bAllowOverflowApplication;
         }
-        public void AttemptRemoveActiveEffectsOnEffectApplication(GameplayEffectSpec InSpec, ActiveGameplayEffectHandle InHandle)
+        public void AttemptRemoveActiveEffectsOnEffectApplication(FGameplayEffectSpec InSpec, FActiveGameplayEffectHandle InHandle)
         {
             if (InSpec.Def != null)
             {
@@ -308,7 +323,7 @@ namespace GameplayAbilitySystem
 
             return false;
         }
-        public bool RemoveActiveGameplayEffect(ActiveGameplayEffectHandle Handle, int StacksToRemove)
+        public bool RemoveActiveGameplayEffect(FActiveGameplayEffectHandle Handle, int StacksToRemove)
         {
             int NumGameplayEffects = GetNumGameplayEffects();
             for (int ActiveGEIdx = 0; ActiveGEIdx < NumGameplayEffects; ActiveGEIdx++)
@@ -333,6 +348,10 @@ namespace GameplayAbilitySystem
                 return GameplayEffects_Internal[idx];
             }
             return null;
+        }
+        public void ExecutePeriodicGameplayEffect(FActiveGameplayEffectHandle Handle)
+        {
+
         }
     }
     public class FGameplayEffectRemovalInfo

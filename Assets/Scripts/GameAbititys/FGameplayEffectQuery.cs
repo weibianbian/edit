@@ -5,7 +5,7 @@
         public FGameplayTagQuery OwningTagQuery;
         public FGameplayTagQuery EffectTagQuery;
         public FGameplayTagQuery SourceTagQuery;
-        public bool Matches(GameplayEffectSpec Spec)
+        public bool Matches(FGameplayEffectSpec Spec)
         {
             if (Spec == null)
             {

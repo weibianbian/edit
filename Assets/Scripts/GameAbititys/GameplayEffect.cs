@@ -21,6 +21,7 @@ namespace GameplayAbilitySystem
         public List<GameplayModifierInfo> Modifiers = new List<GameplayModifierInfo>();
         public List<GameplayCue> GameplayCues = new List<GameplayCue>();
         public FInheritedTagContainer RemoveGameplayEffectsWithTags = new FInheritedTagContainer();
+        public FGameplayEffectModifierMagnitude DurationMagnitude;
 
         public float Period;
         public float Duration;
@@ -48,23 +49,25 @@ namespace GameplayAbilitySystem
         /** This magnitude will be set explicitly by the code/blueprint that creates the spec. */
         SetByCaller,
     }
-    public class GameplayEffectSpec
+    public class FGameplayEffectSpec
     {
         public GameplayEffect Def;
         public float Duration;
+        public float Period;
         public float Level;
         private GameplayEffectContextHandle EffectContext;
         public int StackCount;
+        public bool bDurationLocked = false;
         public List<GameplayEffectSpecHandle> TargetEffectSpecs = new List<GameplayEffectSpecHandle>();
         public List<FModifierSpec> Modifiers = new List<FModifierSpec>();
         public FGameplayEffectAttributeCaptureSpecContainer CapturedRelevantAttributes;
-        public GameplayEffectSpec(GameplayEffect InDef, GameplayEffectContextHandle InEffectContext, float InLevel)
+        public FGameplayEffectSpec(GameplayEffect InDef, GameplayEffectContextHandle InEffectContext, float InLevel)
         {
             CapturedRelevantAttributes = new FGameplayEffectAttributeCaptureSpecContainer();
             StackCount = 1;
             Initialize(InDef, InEffectContext, InLevel);
         }
-        public GameplayEffectSpec(GameplayEffectSpec Other)
+        public FGameplayEffectSpec(FGameplayEffectSpec Other)
         {
             CapturedRelevantAttributes = new FGameplayEffectAttributeCaptureSpecContainer();
             StackCount = 1;
@@ -110,6 +113,24 @@ namespace GameplayAbilitySystem
         {
             return Level;
         }
+        public float GetPeriod()
+        {
+            return Period;
+        }
+        public void SetDuration(float NewDuration, bool bLockDuration)
+        {
+            if (!bDurationLocked)
+            {
+                Duration = NewDuration;
+                bDurationLocked = bLockDuration;
+                if (Duration > 0.0f)
+                {
+                    //如果游戏应用基于持续时间的即时效果的游戏效果，我们可能会有潜在的问题
+                    // (例如, 每一次火焰伤害, 一个点也适用)。我们可能需要持续一段时间才能被捕获。
+                    //CapturedRelevantAttributes.AddCaptureDefinition(AbilitySystemComponent.GetOutgoingDurationCapture());
+                }
+            }
+        }
         public float GetDuration()
         {
             return Duration;
@@ -124,7 +145,7 @@ namespace GameplayAbilitySystem
             {
                 GameplayModifierInfo ModDef = Def.Modifiers[ModIdx];
                 FModifierSpec ModSpec = Modifiers[ModIdx];
-                if (!ModDef.ModifierMagnitude.AttemptCalculateMagnitude(this, ref ModSpec.EvaluatedMagnitude))
+                if (!ModDef.ModifierMagnitude.AttemptCalculateMagnitude(this, out ModSpec.EvaluatedMagnitude))
                 {
                     ModSpec.EvaluatedMagnitude = 0.0f;
                 }
@@ -133,6 +154,25 @@ namespace GameplayAbilitySystem
         public bool HasValidCapturedAttributes(List<FGameplayEffectAttributeCaptureDefinition> InCaptureDefsToCheck)
         {
             return CapturedRelevantAttributes.HasValidCapturedAttributes(InCaptureDefsToCheck);
+        }
+        public bool AttemptCalculateDurationFromDef(out float OutDefDuration)
+        {
+            bool bCalculatedDuration = true;
+            OutDefDuration = 0;
+            EGameplayEffectDurationType DurType = Def.DurationPolicy;
+            if (DurType == EGameplayEffectDurationType.Infinite)
+            {
+                OutDefDuration = -1;
+            }
+            else if (DurType == EGameplayEffectDurationType.Instant)
+            {
+                OutDefDuration = 0;
+            }
+            else
+            {
+                bCalculatedDuration = Def.DurationMagnitude.AttemptCalculateMagnitude(this, out OutDefDuration, false, 1.0f);
+            }
+            return bCalculatedDuration;
         }
     }
     public class FGameplayEffectAttributeCaptureSpecContainer
@@ -145,8 +185,8 @@ namespace GameplayAbilitySystem
     }
     public class GameplayEffectSpecHandle
     {
-        public GameplayEffectSpec Data;
-        public GameplayEffectSpecHandle(GameplayEffectSpec InData)
+        public FGameplayEffectSpec Data;
+        public GameplayEffectSpecHandle(FGameplayEffectSpec InData)
         {
             Data = InData;
         }

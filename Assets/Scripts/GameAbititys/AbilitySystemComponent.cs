@@ -37,6 +37,10 @@ namespace GameplayAbilitySystem
                 SpawnedAttributes.Add(Attribute);
             }
         }
+        public void ExecutePeriodicEffect(FActiveGameplayEffectHandle Handle)
+        {
+            ActiveGameplayEffects.ExecutePeriodicGameplayEffect(Handle);
+        }
         public AttributeSet GetOrCreateAttributeSubobject(Type AttributeClass)
         {
             Actor OwningActor = GetOwner();
@@ -145,48 +149,48 @@ namespace GameplayAbilitySystem
         {
             return ActiveGameplayEffects.GetGameplayAttributeValueChangeDelegate(Attribute);
         }
-        public ActiveGameplayEffectHandle ApplyGameplayEffectToTarget(GameplayEffect InGameplayEffect, AbilitySystemComponent InTarget, float InLevel)
+        public FActiveGameplayEffectHandle ApplyGameplayEffectToTarget(GameplayEffect InGameplayEffect, AbilitySystemComponent InTarget, float InLevel)
         {
             GameplayEffectContextHandle Context = MakeEffectContext();
-            GameplayEffectSpec Spec = new GameplayEffectSpec(InGameplayEffect, Context, InLevel);
-            ActiveGameplayEffectHandle ret = ApplyGameplayEffectSpecToTarget(Spec, InTarget);
+            FGameplayEffectSpec Spec = new FGameplayEffectSpec(InGameplayEffect, Context, InLevel);
+            FActiveGameplayEffectHandle ret = ApplyGameplayEffectSpecToTarget(Spec, InTarget);
             return ret;
         }
-        public ActiveGameplayEffectHandle ApplyGameplayEffectSpecToTarget(GameplayEffectSpec Spec, AbilitySystemComponent InTarget)
+        public FActiveGameplayEffectHandle ApplyGameplayEffectSpecToTarget(FGameplayEffectSpec Spec, AbilitySystemComponent InTarget)
         {
-            ActiveGameplayEffectHandle ReturnHandle = new ActiveGameplayEffectHandle();
+            FActiveGameplayEffectHandle ReturnHandle = new FActiveGameplayEffectHandle();
             if (InTarget != null)
             {
                 ReturnHandle = InTarget.ApplyGameplayEffectSpecToSelf(Spec);
             }
             return ReturnHandle;
         }
-        public ActiveGameplayEffectHandle ApplyGameplayEffectSpecToSelf(GameplayEffectSpec Spec)
+        public FActiveGameplayEffectHandle ApplyGameplayEffectSpecToSelf(FGameplayEffectSpec Spec)
         {
             //ActiveGameplayEffectsContainer.ApplyGameplayEffectSpec
             //我们是否对此免疫
             FActiveGameplayEffect ImmunityGE = null;
             if (ActiveGameplayEffects.HasApplicationImmunityToSpec(Spec, ImmunityGE))
             {
-                return new ActiveGameplayEffectHandle();
+                return new FActiveGameplayEffectHandle();
             }
 
             //确保我们在正确的位置创建规范的副本
             //我们在这里用INDEX_NONE初始化FActiveGameplayEffectHandle来处理即时GE的情况
             //像这样初始化它会将FActiveGameplayEffectHandle上的bPassedFiltersAndWasExecuted设置为true，这样我们就可以知道我们应用了GE
-            ActiveGameplayEffectHandle MyHandle = new ActiveGameplayEffectHandle(-1);
+            FActiveGameplayEffectHandle MyHandle = new FActiveGameplayEffectHandle(-1);
             bool bFoundExistingStackableGE = false;
 
             FActiveGameplayEffect AppliedEffect = new FActiveGameplayEffect();
             bool bInvokeGameplayCueApplied = Spec.Def.DurationPolicy != EGameplayEffectDurationType.Instant;
-            GameplayEffectSpec StackSpec = null;
-            GameplayEffectSpec OurCopyOfSpec = null;
+            FGameplayEffectSpec StackSpec = null;
+            FGameplayEffectSpec OurCopyOfSpec = null;
             if (Spec.Def.DurationPolicy != EGameplayEffectDurationType.Instant)
             {
                 AppliedEffect = ActiveGameplayEffects.ApplyGameplayEffectSpec(Spec, ref bFoundExistingStackableGE);
                 if (AppliedEffect == null)
                 {
-                    return new ActiveGameplayEffectHandle();
+                    return new FActiveGameplayEffectHandle();
                 }
                 MyHandle = AppliedEffect.Handle;
                 OurCopyOfSpec = AppliedEffect.Spec;
@@ -225,11 +229,11 @@ namespace GameplayAbilitySystem
 
             return MyHandle;
         }
-        public void ExecuteGameplayEffect(GameplayEffectSpec Spec)
+        public void ExecuteGameplayEffect(FGameplayEffectSpec Spec)
         {
             ActiveGameplayEffects.ExecuteActiveEffectsFrom(Spec);
         }
-        public void CheckDurationExpired(ActiveGameplayEffectHandle Handle)
+        public void CheckDurationExpired(FActiveGameplayEffectHandle Handle)
         {
             ActiveGameplayEffects.CheckDuration(Handle);
         }
@@ -243,7 +247,7 @@ namespace GameplayAbilitySystem
         }
         public GameplayEffectSpecHandle MakeOutgoingSpec(GameplayEffect InGameplayEffect, float Level, GameplayEffectContextHandle Context)
         {
-            GameplayEffectSpec NewSpec = new GameplayEffectSpec(InGameplayEffect, Context, Level);
+            FGameplayEffectSpec NewSpec = new FGameplayEffectSpec(InGameplayEffect, Context, Level);
             //传递给投掷物，投掷物击中到目标后被应用
             return new GameplayEffectSpecHandle(NewSpec);
         }
@@ -259,11 +263,11 @@ namespace GameplayAbilitySystem
         {
             Action<GameplayTag, int> ret = GameplayTagCountContainer.RegisterGameplayTagEvent(Tag, EventType);
         }
-        public void OnGameplayEffectAppliedToTarget(AbilitySystemComponent Target, GameplayEffectSpec SpecApplied, ActiveGameplayEffectHandle ActiveHandle)
+        public void OnGameplayEffectAppliedToTarget(AbilitySystemComponent Target, FGameplayEffectSpec SpecApplied, FActiveGameplayEffectHandle ActiveHandle)
         {
 
         }
-        public void OnGameplayEffectAppliedToSelf(AbilitySystemComponent Source, GameplayEffectSpec SpecApplied, ActiveGameplayEffectHandle ActiveHandle)
+        public void OnGameplayEffectAppliedToSelf(AbilitySystemComponent Source, FGameplayEffectSpec SpecApplied, FActiveGameplayEffectHandle ActiveHandle)
         {
 
         }
@@ -291,7 +295,7 @@ namespace GameplayAbilitySystem
             }
             Attribute.SetNumericValueChecked(NewFloatValue, AttributeSet);
         }
-        public bool RemoveActiveGameplayEffect(ActiveGameplayEffectHandle Handle, int StacksToRemove = -1)
+        public bool RemoveActiveGameplayEffect(FActiveGameplayEffectHandle Handle, int StacksToRemove = -1)
         {
             return ActiveGameplayEffects.RemoveActiveGameplayEffect(Handle, StacksToRemove);
         }

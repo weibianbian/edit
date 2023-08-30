@@ -1,8 +1,7 @@
-﻿using System;
+﻿using Core.Timer;
+using System;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
-using static UnityEditor.FilePathAttribute;
 
 namespace RailShootGame
 {
@@ -11,9 +10,15 @@ namespace RailShootGame
         public List<Actor> Actors = new List<Actor>();
         public UWorld OwningWorld;
     }
+
     public class UWorld
     {
         public ULevel CurrentLevel;
+        public TimerManager TimerManager;
+        public UWorld()
+        {
+            TimerManager=new TimerManager();
+        }
         public void AddToWorld(ULevel Level)
         {
             Level.OwningWorld = this;
@@ -35,6 +40,10 @@ namespace RailShootGame
             Actor.PostSpawnInitialize();
 
             return Actor;
+        }
+        public TimerManager GetTimerManager()
+        {
+            return TimerManager;
         }
     }
 }

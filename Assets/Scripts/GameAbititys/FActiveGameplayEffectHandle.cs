@@ -5,33 +5,33 @@ namespace GameplayAbilitySystem
 {
     public static class GlobalActiveGameplayEffectHandles
     {
-        public static Dictionary<ActiveGameplayEffectHandle, AbilitySystemComponent> Map = new Dictionary<ActiveGameplayEffectHandle, AbilitySystemComponent>();
+        public static Dictionary<FActiveGameplayEffectHandle, AbilitySystemComponent> Map = new Dictionary<FActiveGameplayEffectHandle, AbilitySystemComponent>();
     }
-    public class ActiveGameplayEffectHandle
+    public class FActiveGameplayEffectHandle
     {
         public int Handle;
         private bool bPassedFiltersAndWasExecuted;
-        public ActiveGameplayEffectHandle(int InHandle)
+        public FActiveGameplayEffectHandle(int InHandle)
         {
             Handle = InHandle;
             bPassedFiltersAndWasExecuted = true;
         }
-        public ActiveGameplayEffectHandle()
+        public FActiveGameplayEffectHandle()
         {
             Handle = -1;
             bPassedFiltersAndWasExecuted = false;
         }
-        public static ActiveGameplayEffectHandle GenerateNewHandle(AbilitySystemComponent OwningComponent)
+        public static FActiveGameplayEffectHandle GenerateNewHandle(AbilitySystemComponent OwningComponent)
         {
-            ActiveGameplayEffectHandle NewHandle = new ActiveGameplayEffectHandle();
+            FActiveGameplayEffectHandle NewHandle = new FActiveGameplayEffectHandle();
             GlobalActiveGameplayEffectHandles.Map.Add(NewHandle, OwningComponent);
             return NewHandle;
         }
     }
     public class FActiveGameplayEffect
     {
-        public GameplayEffectSpec Spec;
-        public ActiveGameplayEffectHandle Handle;
+        public FGameplayEffectSpec Spec;
+        public FActiveGameplayEffectHandle Handle;
         public TimerHandle DurationHandle;
         public bool IsPendingRemove;
 

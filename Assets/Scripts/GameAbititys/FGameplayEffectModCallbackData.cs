@@ -2,11 +2,11 @@
 {
     public class FGameplayEffectModCallbackData
     {
-        public GameplayEffectSpec EffectSpec;
+        public FGameplayEffectSpec EffectSpec;
         public FGameplayModifierEvaluatedData EvaluatedData;
         public AbilitySystemComponent Target;
 
-        public FGameplayEffectModCallbackData(GameplayEffectSpec InEffectSpec, FGameplayModifierEvaluatedData InEvaluatedData, AbilitySystemComponent InTarget)
+        public FGameplayEffectModCallbackData(FGameplayEffectSpec InEffectSpec, FGameplayModifierEvaluatedData InEvaluatedData, AbilitySystemComponent InTarget)
         {
             EffectSpec = InEffectSpec;
             EvaluatedData = InEvaluatedData;

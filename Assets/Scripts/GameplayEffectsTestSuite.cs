@@ -52,8 +52,9 @@ public class GameplayEffectsTestSuite : MonoBehaviour
         DestComponent.GetSet<AbilitySystemTestAttributeSet>().MaxHealth = new GameplayAttributeData(StartingHealth);
         DestComponent.GetSet<AbilitySystemTestAttributeSet>().Mana = new GameplayAttributeData(StartingMana);
         DestComponent.GetSet<AbilitySystemTestAttributeSet>().MaxMana = new GameplayAttributeData(StartingMana);
-        Test_InstantDamage();
+        //Test_InstantDamage();
         //Test_InstantDamageRemap();
+        Test_ManaBuff();
     }
 
     // Update is called once per frame
@@ -88,7 +89,7 @@ public class GameplayEffectsTestSuite : MonoBehaviour
     {
         float BuffValue = 30.0f;
         float StartingMana = DestComponent.GetSet<AbilitySystemTestAttributeSet>().Mana.CurrentValue;
-        ActiveGameplayEffectHandle BuffHandle;
+        FActiveGameplayEffectHandle BuffHandle;
         GameplayEffect DamageBuffEffect = new GameplayEffect();
         DamageBuffEffect.DurationPolicy = EGameplayEffectDurationType.Infinite;
 

@@ -14,7 +14,7 @@ namespace GameplayAbilitySystem
     public class GameplayCueManager
     {
         public List<FGameplayCuePendingExecute> PendingExecuteCues = new List<FGameplayCuePendingExecute>();
-        public virtual void InvokeGameplayCueExecuted_FromSpec(AbilitySystemComponent OwningComponent, GameplayEffectSpec Spec)
+        public virtual void InvokeGameplayCueExecuted_FromSpec(AbilitySystemComponent OwningComponent, FGameplayEffectSpec Spec)
         {
             if (Spec.Def.GameplayCues.Count == 0)
             {

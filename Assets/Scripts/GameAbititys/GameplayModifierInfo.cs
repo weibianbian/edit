@@ -35,7 +35,7 @@ namespace GameplayAbilitySystem
         public FGameplayEffectModifierMagnitude ModifierMagnitude;
         public GameplayModifierInfo()
         {
-            Attribute=new GameplayAttribute();
+            Attribute = new GameplayAttribute();
         }
     }
     public enum EGameplayEffectAttributeCaptureSource
@@ -60,9 +60,10 @@ namespace GameplayAbilitySystem
             ScalableFloatMagnitude = InScalableFloatMagnitude;
             MagnitudeCalculationType = EGameplayEffectMagnitudeCalculation.ScalableFloat;
         }
-        public bool AttemptCalculateMagnitude(GameplayEffectSpec InRelevantSpec, ref float OutCalculatedMagnitude)
+        public bool AttemptCalculateMagnitude(FGameplayEffectSpec InRelevantSpec, out float OutCalculatedMagnitude, bool WarnIfSetByCallerFail = true, float DefaultSetbyCaller = 0)
         {
             bool bCanCalc = CanCalculateMagnitude(InRelevantSpec);
+            OutCalculatedMagnitude = 0;
             if (bCanCalc)
             {
                 switch (MagnitudeCalculationType)
@@ -71,10 +72,13 @@ namespace GameplayAbilitySystem
                         OutCalculatedMagnitude = ScalableFloatMagnitude.GetValueAtLevel(InRelevantSpec.GetLevel());
                         break;
                     case EGameplayEffectMagnitudeCalculation.AttributeBased:
+                        OutCalculatedMagnitude = 0;
                         break;
                     case EGameplayEffectMagnitudeCalculation.CustomCalculationClass:
+                        OutCalculatedMagnitude = 0;
                         break;
                     case EGameplayEffectMagnitudeCalculation.SetByCaller:
+                        OutCalculatedMagnitude = 0;
                         break;
                     default:
                         break;
@@ -87,9 +91,9 @@ namespace GameplayAbilitySystem
 
             return bCanCalc;
         }
-        public bool CanCalculateMagnitude(GameplayEffectSpec InRelevantSpec)
+        public bool CanCalculateMagnitude(FGameplayEffectSpec InRelevantSpec)
         {
-            List<FGameplayEffectAttributeCaptureDefinition> ReqCaptureDefs=new List<FGameplayEffectAttributeCaptureDefinition>();
+            List<FGameplayEffectAttributeCaptureDefinition> ReqCaptureDefs = new List<FGameplayEffectAttributeCaptureDefinition>();
             GetAttributeCaptureDefinitions(ReqCaptureDefs);
             return InRelevantSpec.HasValidCapturedAttributes(ReqCaptureDefs);
         }

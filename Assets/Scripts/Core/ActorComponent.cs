@@ -3,7 +3,7 @@
     public abstract class ActorComponent : ReferencePoolObject
     {
         protected Actor Outer;
-
+        private UWorld WorldPrivate;
         public ActorComponent()
         {
         }
@@ -15,9 +15,10 @@
         {
             Outer.AddOwnedComponent(this);
         }
-        public void RegisterComponentWithWorld(UWorld World)
+        public void RegisterComponentWithWorld(UWorld InWorld)
         {
             ExecuteRegisterEvents();
+            WorldPrivate = InWorld;
         }
         public void ExecuteRegisterEvents()
         {
@@ -26,6 +27,10 @@
         public virtual void OnRegister()
         {
 
+        }
+        public virtual UWorld GetWorld()
+        {
+            return WorldPrivate;
         }
         public void SetOwner(Actor InOuter)
         {
