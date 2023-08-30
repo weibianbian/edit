@@ -50,7 +50,7 @@ namespace GameplayAbilitySystem
         GameplayAttribute GetHealthAttribute()
         {
             GameplayAttribute ret = new GameplayAttribute();
-            ret.SetUProperty("Health", typeof(AbilitySystemTestAttributeSet));
+            ret.SetUProperty(typeof(AbilitySystemTestAttributeSet).GetField("Health"), typeof(AbilitySystemTestAttributeSet));
             return ret;
         }
 

@@ -1,6 +1,7 @@
 using GameplayAbilitySystem;
 using RailShootGame;
 using System;
+using System.Reflection;
 using UnityEngine;
 public struct TestA
 {
@@ -51,8 +52,8 @@ public class GameplayEffectsTestSuite : MonoBehaviour
         DestComponent.GetSet<AbilitySystemTestAttributeSet>().MaxHealth = new GameplayAttributeData(StartingHealth);
         DestComponent.GetSet<AbilitySystemTestAttributeSet>().Mana = new GameplayAttributeData(StartingMana);
         DestComponent.GetSet<AbilitySystemTestAttributeSet>().MaxMana = new GameplayAttributeData(StartingMana);
-        //Test_InstantDamage();
-        Test_InstantDamageRemap();
+        Test_InstantDamage();
+        //Test_InstantDamageRemap();
     }
 
     // Update is called once per frame
@@ -65,7 +66,7 @@ public class GameplayEffectsTestSuite : MonoBehaviour
         float DamageValue = 5.0f;
         float StartingHealth = DestComponent.GetSet<AbilitySystemTestAttributeSet>().Health.CurrentValue;
         GameplayEffect BaseDmgEffect = new GameplayEffect();
-        AddModifier(BaseDmgEffect, "Health", typeof(AbilitySystemTestAttributeSet), EGameplayModOp.Additive, new FScalableFloat(-DamageValue));
+        AddModifier(BaseDmgEffect, typeof(AbilitySystemTestAttributeSet).GetField("Health"), typeof(AbilitySystemTestAttributeSet), EGameplayModOp.Additive, new FScalableFloat(-DamageValue));
         BaseDmgEffect.DurationPolicy = EGameplayEffectDurationType.Instant;
         SourceComponent.ApplyGameplayEffectToTarget(BaseDmgEffect, DestComponent, 1);
 
@@ -76,7 +77,7 @@ public class GameplayEffectsTestSuite : MonoBehaviour
         float DamageValue = 5.0f;
         float StartingHealth = DestComponent.GetSet<AbilitySystemTestAttributeSet>().Health.CurrentValue;
         GameplayEffect BaseDmgEffect = new GameplayEffect();
-        AddModifier(BaseDmgEffect, "Damage", typeof(AbilitySystemTestAttributeSet), EGameplayModOp.Additive, new FScalableFloat(DamageValue));
+        AddModifier(BaseDmgEffect, typeof(AbilitySystemTestAttributeSet).GetField("Damage"), typeof(AbilitySystemTestAttributeSet), EGameplayModOp.Additive, new FScalableFloat(DamageValue));
         BaseDmgEffect.DurationPolicy = EGameplayEffectDurationType.Instant;
         SourceComponent.ApplyGameplayEffectToTarget(BaseDmgEffect, DestComponent, 1);
 
@@ -99,7 +100,7 @@ public class GameplayEffectsTestSuite : MonoBehaviour
 
         Debug.Log($"Mana Restored   {DestComponent.GetSet<AbilitySystemTestAttributeSet>().Mana.CurrentValue}={StartingMana}");
     }
-    public void AddModifier(GameplayEffect Effect, string Property, Type PropOwner, EGameplayModOp Op, FScalableFloat Magnitude)
+    public void AddModifier(GameplayEffect Effect, FieldInfo Property, Type PropOwner, EGameplayModOp Op, FScalableFloat Magnitude)
     {
         GameplayModifierInfo Info = new GameplayModifierInfo();
         Effect.Modifiers.Add(Info);

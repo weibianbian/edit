@@ -7,27 +7,27 @@ namespace GameplayAbilitySystem
     public class GameplayAttribute
     {
         public Type AttributeOwner;
-        public string Attribute;
+        public FieldInfo Attribute;
 
-        public void SetUProperty(string NewProperty, Type InAttributeOwner)
+        public void SetUProperty(FieldInfo NewProperty, Type InAttributeOwner)
         {
             Attribute = NewProperty;
             AttributeOwner = InAttributeOwner;
         }
         public FieldInfo GetUProperty()
         {
-            return AttributeOwner.GetField(Attribute);
+            return (Attribute);
         }
         public float GetNumericValue(AttributeSet Src)
         {
-            FieldInfo fi = AttributeOwner.GetField(Attribute);
+            FieldInfo fi = (Attribute);
             GameplayAttributeData DataPtr = (GameplayAttributeData)fi.GetValue(Src);
             return DataPtr.GetCurrentValue();
         }
         public void SetNumericValueChecked(float NewValue, AttributeSet Dest)
         {
             float OldValue = 0.0f;
-            FieldInfo fi = AttributeOwner.GetField(Attribute);
+            FieldInfo fi = (Attribute);
             GameplayAttributeData DataPtr = (GameplayAttributeData)fi.GetValue(Dest);
             OldValue = DataPtr.GetCurrentValue();
             Dest.PreAttributeChange(this, NewValue);
