@@ -5,7 +5,7 @@ namespace RailShootGame
     public class GameplayTagNode
     {
         public string Tag;
-        public GameplayTagContainer CompleteTagWithParents=new GameplayTagContainer();
+        public FGameplayTagContainer CompleteTagWithParents=new FGameplayTagContainer();
         public List<GameplayTagNode> ChildTags;
         public GameplayTagNode ParentNode;
 

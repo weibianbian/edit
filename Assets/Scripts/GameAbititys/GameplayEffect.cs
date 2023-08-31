@@ -22,7 +22,7 @@ namespace GameplayAbilitySystem
         public List<GameplayCue> GameplayCues = new List<GameplayCue>();
         public FInheritedTagContainer RemoveGameplayEffectsWithTags = new FInheritedTagContainer();
         public FGameplayEffectModifierMagnitude DurationMagnitude;
-
+        public FGameplayTagRequirements OngoingTagRequirements;
         public float Period;
         public float Duration;
         public int StackLimitCount;

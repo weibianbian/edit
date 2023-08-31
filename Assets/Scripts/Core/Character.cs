@@ -1,5 +1,4 @@
 ﻿using GameplayAbilitySystem;
-using UnityEditor.AnimatedValues;
 
 namespace RailShootGame
 {

@@ -222,7 +222,21 @@ namespace GameplayAbilitySystem
                     TimerManager.SetTimer(ref AppliedActiveGE.DurationHandle, Delegate, AppliedEffectSpec.GetPeriod(), false);
                 }
             }
+            if (ExistingStackableGE != null)
+            {
+
+            }
+            else
+            {
+                InternalOnActiveGameplayEffectAdded(AppliedActiveGE);
+            }
             return AppliedActiveGE;
+        }
+        public void InternalOnActiveGameplayEffectAdded(FActiveGameplayEffect Effect)
+        {
+            GameplayEffect EffectDef = Effect.Spec.Def;
+
+            Effect.CheckOngoingTagRequirements();
         }
         public OnGameplayAttributeValueChange GetGameplayAttributeValueChangeDelegate(GameplayAttribute Attribute)
         {

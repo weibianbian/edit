@@ -44,7 +44,7 @@ namespace GameplayAbilitySystem
         {
             return true;
         }
-        public virtual void HandleGameplayCues(Actor TargetActor, GameplayTagContainer GameplayCueTags, EGameplayCueEvent EventType, GameplayCueParameters Parameters)
+        public virtual void HandleGameplayCues(Actor TargetActor, FGameplayTagContainer GameplayCueTags, EGameplayCueEvent EventType, GameplayCueParameters Parameters)
         {
             for (int i = 0; i < GameplayCueTags.GameplayTags.Count; i++)
             {
