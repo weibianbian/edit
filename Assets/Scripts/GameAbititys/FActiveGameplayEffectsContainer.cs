@@ -3,13 +3,14 @@ using RailShootGame;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Reflection;
 
 namespace GameplayAbilitySystem
 {
     public class FActiveGameplayEffectsContainer : List<FActiveGameplayEffect>
     {
-        AbilitySystemComponent Owner;
+        UAbilitySystemComponent Owner;
         public Dictionary<GameplayAttribute, OnGameplayAttributeValueChange> AttributeValueChangeDelegates;
         public Dictionary<GameplayAttribute, FAggregator> AttributeAggregatorMap;
         public List<GameplayEffect> ApplicationImmunityQueryEffects;
@@ -20,7 +21,7 @@ namespace GameplayAbilitySystem
             AttributeAggregatorMap = new Dictionary<GameplayAttribute, FAggregator>();
             GameplayEffects_Internal = new List<FActiveGameplayEffect>();
         }
-        public void RegisterWithOwner(AbilitySystemComponent InOwner)
+        public void RegisterWithOwner(UAbilitySystemComponent InOwner)
         {
             Owner = InOwner;
         }
@@ -204,8 +205,8 @@ namespace GameplayAbilitySystem
                     //AppliedEffectSpec.SetDuration(FinalDuration, true);
                     if (Owner != null && bSetDuration)
                     {
-                        TimerManager TimerManager = Owner.GetWorld().GetTimerManager();
-                        TimerManager.SetTimer(ref AppliedActiveGE.DurationHandle, TimerDelegate<AbilitySystemComponent, FActiveGameplayEffectHandle>.Create((@owner, @handle) =>
+                        FTimerManager TimerManager = Owner.GetWorld().GetTimerManager();
+                        TimerManager.SetTimer(ref AppliedActiveGE.DurationHandle, TimerDelegate<UAbilitySystemComponent, FActiveGameplayEffectHandle>.Create((@owner, @handle) =>
                         {
                             @owner.CheckDurationExpired(@handle);
                         }, Owner, AppliedActiveGE.Handle), FinalDuration, false);
@@ -213,8 +214,8 @@ namespace GameplayAbilitySystem
                 }
                 if (bSetDuration && Owner != null && AppliedEffectSpec.GetPeriod() > 0)
                 {
-                    TimerManager TimerManager = Owner.GetWorld().GetTimerManager();
-                    ITimerDelegate Delegate = TimerDelegate<AbilitySystemComponent, FActiveGameplayEffectHandle>.Create((@owner, @handle) =>
+                    FTimerManager TimerManager = Owner.GetWorld().GetTimerManager();
+                    ITimerDelegate Delegate = TimerDelegate<UAbilitySystemComponent, FActiveGameplayEffectHandle>.Create((@owner, @handle) =>
                     {
                         @owner.ExecutePeriodicEffect(@handle);
                     }, Owner, AppliedActiveGE.Handle);
@@ -232,11 +233,19 @@ namespace GameplayAbilitySystem
             }
             return AppliedActiveGE;
         }
+        //在客户端和服务器端添加新的ActiveGameplayEffect时调用*/
         public void InternalOnActiveGameplayEffectAdded(FActiveGameplayEffect Effect)
         {
             GameplayEffect EffectDef = Effect.Spec.Def;
 
-            Effect.CheckOngoingTagRequirements();
+            //将我们正在进行的标记需求添加到依赖关系图中。我们将在下面检查这些标签。
+
+            //如有必要，添加任何可能影响效果的外部依赖项
+
+            //检查我们是否应该打开(这将是我们第一次打开)
+            FGameplayTagContainer OwnerTags = new FGameplayTagContainer();
+            Owner.GetOwnedGameplayTags(OwnerTags);
+            Effect.CheckOngoingTagRequirements(OwnerTags, this);
         }
         public OnGameplayAttributeValueChange GetGameplayAttributeValueChangeDelegate(GameplayAttribute Attribute)
         {
@@ -259,9 +268,54 @@ namespace GameplayAbilitySystem
                         break;
                     }
                 }
-                TimerManager TimerManager = null;
+                FTimerManager TimerManager = Owner.GetWorld().GetTimerManager();
                 float Duration = Effect.GetDuration();
                 //float CurrentTime = GetWorldTime();
+                int StacksToRemove = -2;
+                bool RefreshStartTime = false;
+                bool RefreshDurationTimer = false;
+                bool CheckForFinalPeriodicExec = false;
+                if (CheckForFinalPeriodicExec)
+                {
+                    //这个游戏效果已经达到了它的持续时间。检查它是否需要在删除前最后一次执行。
+                    if (Effect.PeriodHandle.IsValid() && TimerManager.TimerExists(Effect.PeriodHandle))
+                    {
+                        float PeriodTimeRemaining = TimerManager.GetTimerRemaining(Effect.PeriodHandle);
+                        if (PeriodTimeRemaining <= (1.0E-4F) && !Effect.bIsInhibited)
+                        {
+                            InternalExecutePeriodicGameplayEffect(Effect);
+
+                            //在InternalExecutePeriodicGameplayEffect中调用ExecuteActiveEffectsFrom会导致这个效果被显式地移除
+                            //(例如，它可以杀死所有者并导致通过死亡来消除效果)。
+                            //在这种情况下，我们需要提前退出，而不是继续下面的调用InternalRemoveActiveGameplayEffect
+                            if (Effect.IsPendingRemove)
+                            {
+                                break;
+                            }
+                            // 强制清除周期性刻度，因为此效果将被删除
+                            TimerManager.ClearTimer(Effect.PeriodHandle);
+                        }
+                    }
+                }
+            }
+        }
+        public void InternalExecutePeriodicGameplayEffect(FActiveGameplayEffect ActiveEffect)
+        {
+            if (!ActiveEffect.bIsInhibited)
+            {
+                // 每次定时执行前清除修改后的属性
+                ActiveEffect.Spec.ModifiedAttributes.Clear();
+
+                // Execute
+                ExecuteActiveEffectsFrom(ActiveEffect.Spec);
+
+                // 为正在执行的周期性效果调用委托
+                UAbilitySystemComponent SourceASC = ActiveEffect.Spec.GetContext().GetInstigatorAbilitySystemComponent();
+                //Owner.OnPeriodicGameplayEffectExecuteOnSelf(SourceASC, ActiveEffect.Spec, ActiveEffect.Handle);
+                if (SourceASC != null)
+                {
+                    //SourceASC.OnPeriodicGameplayEffectExecuteOnTarget(Owner, ActiveEffect.Spec, ActiveEffect.Handle);
+                }
             }
         }
         public bool HasApplicationImmunityToSpec(FGameplayEffectSpec SpecToApply, FActiveGameplayEffect OutGEThatProvidedImmunity)
@@ -279,7 +333,7 @@ namespace GameplayAbilitySystem
             EGameplayEffectStackingType StackingType = GEDef.StackingType;
             if ((StackingType != EGameplayEffectStackingType.None) && (GEDef.DurationPolicy != EGameplayEffectDurationType.Instant))
             {
-                AbilitySystemComponent SourceASC = Spec.GetContext().GetInstigatorAbilitySystemComponent();
+                UAbilitySystemComponent SourceASC = Spec.GetContext().GetInstigatorAbilitySystemComponent();
                 for (int i = 0; i < this.Count; i++)
                 {
                     FActiveGameplayEffect ActiveEffect = this[i];
@@ -333,8 +387,28 @@ namespace GameplayAbilitySystem
                 //OnStackCountChange(Effect, StartingStackCount, Effect.Spec.StackCount);
                 return false;
             }
+            // Invoke Remove GameplayCue event
+            bool ShouldInvokeGameplayCueEvent = true;
+            ShouldInvokeGameplayCueEvent &= !Effect.bIsInhibited;
+            // 标记待移除的效果，并移除该效果的所有副作用
+            InternalOnActiveGameplayEffectRemoved(Effect, ShouldInvokeGameplayCueEvent, GameplayEffectRemovalInfo);
 
-            return false;
+            if (Effect.DurationHandle.IsValid())
+            {
+                Owner.GetWorld().GetTimerManager().ClearTimer(Effect.DurationHandle);
+            }
+            if (Effect.PeriodHandle.IsValid())
+            {
+                Owner.GetWorld().GetTimerManager().ClearTimer(Effect.PeriodHandle);
+            }
+            //从全局映射中删除此句柄
+            Effect.Handle.RemoveFromGlobalMap();
+            //如有必要，尝试使用过期效果
+            //InternalApplyExpirationEffects(Effect.Spec, bPrematureRemoval);
+            bool ModifiedArray = false;
+            GameplayEffects_Internal.RemoveAt(Idx);
+            ModifiedArray = true;
+            return ModifiedArray;
         }
         public bool RemoveActiveGameplayEffect(FActiveGameplayEffectHandle Handle, int StacksToRemove)
         {
@@ -349,6 +423,11 @@ namespace GameplayAbilitySystem
                 }
             }
             return false;
+        }
+        //由客户端和服务器调用:无论效果是在本地删除还是由于复制而删除，都必须进行清理
+        public void InternalOnActiveGameplayEffectRemoved(FActiveGameplayEffect Effect, bool bInvokeGameplayCueEvents,  FGameplayEffectRemovalInfo GameplayEffectRemovalInfo)
+        {
+
         }
         public int GetNumGameplayEffects()
         {
@@ -379,6 +458,12 @@ namespace GameplayAbilitySystem
         public GameplayEffectContextHandle EffectContext;
 
     }
-
+    public struct FScopeCurrentGameplayEffectBeingApplied
+    {
+        public FScopeCurrentGameplayEffectBeingApplied(FGameplayEffectSpec Spec, UAbilitySystemComponent AbilitySystemComponent)
+        {
+            //UAbilitySystemGlobals.Get().PushCurrentAppliedGE(Spec, AbilitySystemComponent);
+        }
+    };
 }
 

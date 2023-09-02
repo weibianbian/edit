@@ -1,5 +1,4 @@
-﻿using RailShootGame;
-using Sirenix.Utilities;
+﻿using Sirenix.Utilities;
 using System.Collections.Generic;
 using UnityEngine.Rendering;
 
@@ -7,11 +6,11 @@ namespace GameplayAbilitySystem
 {
     public enum EGameplayEffectDurationType
     {
-        /** This effect applies instantly */
+        /** 此效果即刻生效 */
         Instant,
-        /** This effect lasts forever */
+        /** 这种效果会持续到永远 */
         Infinite,
-        /** The duration of this effect will be specified by a magnitude */
+        /** 这种效果的持续时间将由一个量级来指定 */
         HasDuration
     }
     public class GameplayEffect
@@ -23,7 +22,7 @@ namespace GameplayAbilitySystem
         public FInheritedTagContainer RemoveGameplayEffectsWithTags = new FInheritedTagContainer();
         public FGameplayEffectModifierMagnitude DurationMagnitude;
         public FGameplayTagRequirements OngoingTagRequirements;
-        public float Period;
+        public FScalableFloat Period;
         public float Duration;
         public int StackLimitCount;
         public bool bDenyOverflowApplication = false;
@@ -61,9 +60,11 @@ namespace GameplayAbilitySystem
         public List<GameplayEffectSpecHandle> TargetEffectSpecs = new List<GameplayEffectSpecHandle>();
         public List<FModifierSpec> Modifiers = new List<FModifierSpec>();
         public FGameplayEffectAttributeCaptureSpecContainer CapturedRelevantAttributes;
+        public List<FGameplayEffectModifiedAttribute> ModifiedAttributes;
         public FGameplayEffectSpec(GameplayEffect InDef, GameplayEffectContextHandle InEffectContext, float InLevel)
         {
             CapturedRelevantAttributes = new FGameplayEffectAttributeCaptureSpecContainer();
+            ModifiedAttributes=new List<FGameplayEffectModifiedAttribute>();
             StackCount = 1;
             Initialize(InDef, InEffectContext, InLevel);
         }
@@ -108,6 +109,8 @@ namespace GameplayAbilitySystem
         public void SetLevel(float InLevel)
         {
             Level = InLevel;
+
+            Period=Def.Period.GetValueAtLevel(Level);
         }
         public float GetLevel()
         {
@@ -175,53 +178,5 @@ namespace GameplayAbilitySystem
             return bCalculatedDuration;
         }
     }
-    public class FGameplayEffectAttributeCaptureSpecContainer
-    {
-        public bool HasValidCapturedAttributes(List<FGameplayEffectAttributeCaptureDefinition> InCaptureDefsToCheck)
-        {
-            bool bHasValid = true;
-            return bHasValid;
-        }
-    }
-    public class GameplayEffectSpecHandle
-    {
-        public FGameplayEffectSpec Data;
-        public GameplayEffectSpecHandle(FGameplayEffectSpec InData)
-        {
-            Data = InData;
-        }
-    }
-    public class GameplayEffectContext
-    {
-        public Actor Instigator;
-        public Actor EffectCauser;
-        public AbilitySystemComponent InstigatorAbilitySystemComponent;
-        public void AddInstigator(Actor InInstigator, Actor InEffectCauser)
-        {
-            Instigator = InInstigator;
-            EffectCauser = InEffectCauser;
-        }
-        public AbilitySystemComponent GetInstigatorAbilitySystemComponent()
-        {
-            return InstigatorAbilitySystemComponent;
-        }
-    }
-    public class GameplayEffectContextHandle
-    {
-        public GameplayEffectContext Data;
-        public GameplayEffectContextHandle(GameplayEffectContext InData)
-        {
-            Data = InData;
-        }
-        public void AddInstigator(Actor InInstigator, Actor InEffectCauser)
-        {
-            Data.AddInstigator(InInstigator, InEffectCauser);
-        }
-        public AbilitySystemComponent GetInstigatorAbilitySystemComponent()
-        {
-            return Data.GetInstigatorAbilitySystemComponent();
-        }
-    }
-    public class GameplayCue { }
 }
 

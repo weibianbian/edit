@@ -1,14 +1,38 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using Unity.VisualScripting.FullSerializer;
+using UnityEngine.Tilemaps;
 
 namespace Core.Timer
 {
-    public class TimerManager
+    public struct FTimerHeapOrder : IComparer<FTimerHandle>
     {
-        List<TimerHandle> ActiveTimerHeap = new List<TimerHandle>();
-        List<TimerData> Timers = new List<TimerData>();
-        List<TimerHandle> PendingTimerSet = new List<TimerHandle>();
-        List<TimerHandle> PausedTimerSet = new List<TimerHandle>();
-        TimerHandle CurrentlyExecutingTimer;
+        List<FTimerData> Timers;
+
+        public FTimerHeapOrder(List<FTimerData> InTimers)
+        {
+            Timers = InTimers;
+        }
+
+        public int Compare(FTimerHandle LhsHandle, FTimerHandle RhsHandle)
+        {
+            int LhsIndex = LhsHandle.GetIndex();
+            int RhsIndex = RhsHandle.GetIndex();
+
+            FTimerData LhsData = Timers[LhsIndex];
+            FTimerData RhsData = Timers[RhsIndex];
+
+            return (LhsData.ExpireTime > RhsData.ExpireTime) ? 1 : -1;
+        }
+    }
+    public class FTimerManager
+    {
+        List<FTimerHandle> ActiveTimerHeap = new List<FTimerHandle>();
+        List<FTimerData> Timers = new List<FTimerData>();
+        List<FTimerHandle> PendingTimerSet = new List<FTimerHandle>();
+        List<FTimerHandle> PausedTimerSet = new List<FTimerHandle>();
+        FTimerHandle CurrentlyExecutingTimer;
         double InternalTime;
         ulong LastAssignedSerialNumber = 0;
         ulong LastTickedFrame;
@@ -21,9 +45,9 @@ namespace Core.Timer
             InternalTime += DeltaTime;
             while (ActiveTimerHeap.Count > 0)
             {
-                TimerHandle TopHandle = ActiveTimerHeap[0];
+                FTimerHandle TopHandle = ActiveTimerHeap[0];
                 int TopIndex = TopHandle.GetIndex();
-                TimerData Top = Timers[TopIndex];
+                FTimerData Top = Timers[TopIndex];
                 if (Top.Status == ETimerStatus.ActivePendingRemoval)
                 {
                     ActiveTimerHeap.RemoveAt(0);
@@ -52,12 +76,14 @@ namespace Core.Timer
                             Top.ExpireTime += CallCount * Top.Rate;
                             Top.Status = ETimerStatus.Active;
                             ActiveTimerHeap.Add(CurrentlyExecutingTimer);
+                            ActiveTimerHeap.Sort(new FTimerHeapOrder(Timers));
                         }
                         else
                         {
                             RemoveTimer(CurrentlyExecutingTimer);
+                            //CurrentlyExecutingTimer.Invalidate();
                         }
-                        CurrentlyExecutingTimer.Invalidate();
+
                     }
                 }
                 else
@@ -69,46 +95,47 @@ namespace Core.Timer
             {
                 for (int i = 0; i < PendingTimerSet.Count; i++)
                 {
-                    TimerHandle Handle = PendingTimerSet[i];
-                    TimerData TimerToActivate = GetTimer(Handle);
+                    FTimerHandle Handle = PendingTimerSet[i];
+                    FTimerData TimerToActivate = GetTimer(Handle);
                     TimerToActivate.ExpireTime += InternalTime;
                     TimerToActivate.Status = ETimerStatus.Active;
                     ActiveTimerHeap.Add(Handle);
                 }
+                ActiveTimerHeap.Sort(new FTimerHeapOrder(Timers));
                 PendingTimerSet.Clear();
             }
         }
-        public TimerHandle AddTimer(TimerData TimerData)
+        public FTimerHandle AddTimer(FTimerData TimerData)
         {
             Timers.Add(TimerData);
-            TimerHandle Result = GenerateHandle(Timers.Count - 1);
+            FTimerHandle Result = GenerateHandle(Timers.Count - 1);
             Timers[Timers.Count - 1].Handle = Result;
             return Result;
         }
 
-        public void RemoveTimer(TimerHandle Handle)
+        public void RemoveTimer(FTimerHandle Handle)
         {
             Timers.RemoveAt(Handle.GetIndex());
         }
-        public TimerData GetTimer(TimerHandle InHandle)
+        public FTimerData GetTimer(FTimerHandle InHandle)
         {
             int Index = InHandle.GetIndex();
-            TimerData Timer = Timers[Index];
+            FTimerData Timer = Timers[Index];
             return Timer;
         }
-        TimerHandle GenerateHandle(int Index)
+        FTimerHandle GenerateHandle(int Index)
         {
             ulong NewSerialNumber = ++LastAssignedSerialNumber;
-            if (!(NewSerialNumber != TimerHandle.MaxSerialNumber))
+            if (!(NewSerialNumber != FTimerHandle.MaxSerialNumber))
             {
                 NewSerialNumber = (ulong)1;
             }
 
-            TimerHandle Result = new TimerHandle();
+            FTimerHandle Result = new FTimerHandle();
             Result.SetIndexAndSerialNumber(Index, NewSerialNumber);
             return Result;
         }
-        public void SetTimer(ref TimerHandle InOutHandle, ITimerDelegate InDelegate, float InRate, bool InbLoop, float InFirstDelay = -1.0f)
+        public void SetTimer(ref FTimerHandle InOutHandle, ITimerDelegate InDelegate, float InRate, bool InbLoop, float InFirstDelay = -1.0f)
         {
             InternalSetTimer(ref InOutHandle, InDelegate, InRate, InbLoop, InFirstDelay);
         }
@@ -117,7 +144,7 @@ namespace Core.Timer
             //return (LastTickedFrame == GFrameCounter);
             return false;
         }
-        public TimerData FindTimer(TimerHandle InHandle)
+        public FTimerData FindTimer(FTimerHandle InHandle)
         {
             if (!InHandle.IsValid())
             {
@@ -128,7 +155,7 @@ namespace Core.Timer
             {
                 return null;
             }
-            TimerData Timer = Timers[Index];
+            FTimerData Timer = Timers[Index];
             if (Timer.Handle != InHandle || Timer.Status == ETimerStatus.ActivePendingRemoval)
             {
                 return null;
@@ -136,9 +163,9 @@ namespace Core.Timer
 
             return Timer;
         }
-        public void InternalClearTimer(TimerHandle InHandle)
+        public void InternalClearTimer(FTimerHandle InHandle)
         {
-            TimerData Data = GetTimer(InHandle);
+            FTimerData Data = GetTimer(InHandle);
             switch (Data.Status)
             {
                 case ETimerStatus.Pending:
@@ -173,7 +200,46 @@ namespace Core.Timer
                     break;
             }
         }
-        public void InternalSetTimer(ref TimerHandle InOutHandle, ITimerDelegate InDelegate, float InRate, bool InbLoop, float InFirstDelay)
+        public void ClearTimer(FTimerHandle InHandle)
+        {
+            FTimerData TimerData = FindTimer(InHandle);
+            if (TimerData != null)
+            {
+                InternalClearTimer(InHandle);
+            }
+            InHandle.Invalidate();
+        }
+        public bool TimerExists(FTimerHandle InHandle)
+        {
+            return FindTimer(InHandle) != null;
+        }
+        public float GetTimerRemaining(FTimerHandle InHandle)
+        {
+
+            FTimerData TimerData = FindTimer(InHandle);
+            return InternalGetTimerRemaining(TimerData);
+        }
+        public float InternalGetTimerRemaining(FTimerData TimerData)
+        {
+            if (TimerData != null)
+            {
+                switch (TimerData.Status)
+                {
+                    case ETimerStatus.Active:
+                        return (float)(TimerData.ExpireTime - InternalTime);
+
+                    case ETimerStatus.Executing:
+                        return 0.0f;
+
+                    default:
+                        //过期时间是暂停计时器的剩余时间
+                        return (float)TimerData.ExpireTime;
+                }
+            }
+
+            return -1.0f;
+        }
+        public void InternalSetTimer(ref FTimerHandle InOutHandle, ITimerDelegate InDelegate, float InRate, bool InbLoop, float InFirstDelay)
         {
             if (FindTimer(InOutHandle) != null)
             {
@@ -183,7 +249,7 @@ namespace Core.Timer
             }
             if (InRate > 0.0f)
             {
-                TimerData NewTimerData = new TimerData()
+                FTimerData NewTimerData = new FTimerData()
                 {
                     Rate = InRate,
                     bLoop = InbLoop,
@@ -191,7 +257,7 @@ namespace Core.Timer
                 };
                 float FirstDelay = (InFirstDelay >= 0.0f) ? InFirstDelay : InRate;
 
-                TimerHandle NewTimerHandle = new TimerHandle();
+                FTimerHandle NewTimerHandle = new FTimerHandle();
 
                 if (HasBeenTickedThisFrame())
                 {
@@ -199,6 +265,7 @@ namespace Core.Timer
                     NewTimerData.Status = ETimerStatus.Active;
                     NewTimerHandle = AddTimer(NewTimerData);
                     ActiveTimerHeap.Add(NewTimerHandle);
+                    ActiveTimerHeap.Sort(new FTimerHeapOrder(Timers));
                 }
                 else
                 {

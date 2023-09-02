@@ -1,36 +1,20 @@
 using GameplayAbilitySystem;
+using JetBrains.Annotations;
 using RailShootGame;
 using System;
 using System.Reflection;
 using UnityEngine;
-public struct TestA
-{
-    public TestB b;
-    public TestA(TestB Inb)
-    {
-        b = Inb;
-    }
-    public static implicit operator TestA(TestB data)
-    {
-        return new TestA(data);
-    }
-}
-public struct TestB
-{
 
-}
 public class GameplayEffectsTestSuite : MonoBehaviour
 {
     public UWorld World;
     public AbilitySystemTestActor SourceActor;
     public AbilitySystemTestActor DestActor;
-    public AbilitySystemComponent SourceComponent;
-    public AbilitySystemComponent DestComponent;
+    public UAbilitySystemComponent SourceComponent;
+    public UAbilitySystemComponent DestComponent;
     // Start is called before the first frame update
     void Start()
     {
-        TestB testB = new TestB();
-        TestA testA = testB;
         World = new UWorld();
         ULevel level = new ULevel();
         World.AddToWorld(level);
@@ -100,6 +84,22 @@ public class GameplayEffectsTestSuite : MonoBehaviour
         DestComponent.RemoveActiveGameplayEffect(BuffHandle);
 
         Debug.Log($"Mana Restored   {DestComponent.GetSet<AbilitySystemTestAttributeSet>().Mana.CurrentValue}={StartingMana}");
+    }
+    public void Test_PeriodicDamage()
+    {
+        int NumPeriods = 10;
+        float PeriodSecs = 1.0f;
+        float DamagePerPeriod = 5.0f;
+        float StartingHealth = DestComponent.GetSet<AbilitySystemTestAttributeSet>().Health.CurrentValue;
+        GameplayEffect BaseDmgEffect = new GameplayEffect();
+        AddModifier(BaseDmgEffect, typeof(AbilitySystemTestAttributeSet).GetField("Health"), typeof(AbilitySystemTestAttributeSet), EGameplayModOp.Additive, new FScalableFloat(-DamagePerPeriod));
+        BaseDmgEffect.DurationPolicy = EGameplayEffectDurationType.HasDuration;
+        BaseDmgEffect.DurationMagnitude = new FGameplayEffectModifierMagnitude(new FScalableFloat(NumPeriods * PeriodSecs));
+        BaseDmgEffect.Period.Value = PeriodSecs;
+
+        SourceComponent.ApplyGameplayEffectToTarget(BaseDmgEffect, DestComponent, 1.0f);
+
+        int NumApplications = 0;
     }
     public void AddModifier(GameplayEffect Effect, FieldInfo Property, Type PropOwner, EGameplayModOp Op, FScalableFloat Magnitude)
     {

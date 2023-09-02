@@ -39,7 +39,7 @@ namespace RailShootGame
         private float JumpForceTimeRemaining = 0;
 
         public CharacterMovementComponent CharacterMovement;
-        public AbilitySystemComponent asc;
+        public UAbilitySystemComponent asc;
 
         public void Input()
         {

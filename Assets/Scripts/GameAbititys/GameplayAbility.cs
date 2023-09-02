@@ -11,7 +11,7 @@ namespace GameplayAbilitySystem
     {
         public Actor OwnerActor;
         public Actor AvatarActor;
-        public AbilitySystemComponent AbilitySystemComponent;
+        public UAbilitySystemComponent AbilitySystemComponent;
 
     }
     public class GameplayAbility
@@ -96,7 +96,7 @@ namespace GameplayAbilitySystem
         }
         public GameplayEffectSpecHandle MakeOutgoingGameplayEffectSpec(GameplayAbilitySpecHandle Handle, GameplayAbilityActorInfo ActorInfo, GameplayEffect InGamepayEffect, float GameplayEffectLevel)
         {
-            AbilitySystemComponent AbilitySystemComponent = ActorInfo.AbilitySystemComponent;
+            UAbilitySystemComponent AbilitySystemComponent = ActorInfo.AbilitySystemComponent;
             GameplayEffectSpecHandle NewHandle = AbilitySystemComponent.MakeOutgoingSpec(null, GameplayEffectLevel, null);
             return null;
         }

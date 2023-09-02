@@ -2,7 +2,7 @@
 {
     public interface IAbilitySystemInterface
     {
-        AbilitySystemComponent GetAbilitySystemComponent();
+        UAbilitySystemComponent GetAbilitySystemComponent();
     }
 }
 

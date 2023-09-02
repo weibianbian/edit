@@ -14,10 +14,10 @@ namespace RailShootGame
     public class UWorld
     {
         public ULevel CurrentLevel;
-        public TimerManager TimerManager;
+        public FTimerManager TimerManager;
         public UWorld()
         {
-            TimerManager=new TimerManager();
+            TimerManager=new FTimerManager();
         }
         public void AddToWorld(ULevel Level)
         {
@@ -41,7 +41,7 @@ namespace RailShootGame
 
             return Actor;
         }
-        public TimerManager GetTimerManager()
+        public FTimerManager GetTimerManager()
         {
             return TimerManager;
         }

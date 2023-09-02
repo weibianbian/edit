@@ -1,6 +1,6 @@
 ﻿namespace Core.Timer
 {
-    public class TimerData
+    public class FTimerData
     {
         public bool bLoop;
         public bool bRequiresDelegate;
@@ -8,7 +8,7 @@
         public float Rate;
         public double ExpireTime;
         public ITimerDelegate TimerDelegate;
-        public TimerHandle Handle;
+        public FTimerHandle Handle;
     }
 }
 

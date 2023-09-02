@@ -4,14 +4,14 @@ namespace RailShootGame
 {
     public class AbilitySystemTestActor : Actor, IGameplayCueInterface, IAbilitySystemInterface
     {
-        private AbilitySystemComponent AbilitySystemComponent;
-        public AbilitySystemComponent GetAbilitySystemComponent()
+        private UAbilitySystemComponent AbilitySystemComponent;
+        public UAbilitySystemComponent GetAbilitySystemComponent()
         {
             return AbilitySystemComponent;
         }
         public AbilitySystemTestActor()
         {
-            AbilitySystemComponent = ReferencePool.Acquire<AbilitySystemComponent>();
+            AbilitySystemComponent = ReferencePool.Acquire<UAbilitySystemComponent>();
             AbilitySystemComponent.SetOwner(this);
             AbilitySystemComponent.PostInitProperties();
         }

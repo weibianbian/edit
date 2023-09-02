@@ -1,6 +1,6 @@
 ﻿namespace Core.Timer
 {
-    public struct TimerHandle
+    public struct FTimerHandle
     {
         public const int IndexBits = 24;
         public const int SerialNumberBits = 40;
@@ -23,11 +23,11 @@
         {
             Handle = (SerialNumber << IndexBits) | (ulong)Index;
         }
-        public static bool operator !=(TimerHandle a, TimerHandle b)
+        public static bool operator !=(FTimerHandle a, FTimerHandle b)
         {
             return a.Handle != b.Handle;
         }
-        public static bool operator ==(TimerHandle a, TimerHandle b)
+        public static bool operator ==(FTimerHandle a, FTimerHandle b)
         {
             return a.Handle == b.Handle;
         }

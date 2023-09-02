@@ -5,9 +5,9 @@ namespace GameplayAbilitySystem
     public class GameplayAbilitySpecContainer
     {
         public List<GameplayAbilitySpec> items;
-        AbilitySystemComponent owner;
+        UAbilitySystemComponent owner;
 
-        public void RegisterWithOwner(AbilitySystemComponent owner)
+        public void RegisterWithOwner(UAbilitySystemComponent owner)
         {
             this.owner = owner;
         }

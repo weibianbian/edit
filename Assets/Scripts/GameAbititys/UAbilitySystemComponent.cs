@@ -6,15 +6,15 @@ using UnityEngine;
 namespace GameplayAbilitySystem
 {
 
-    public class AbilitySystemComponent : ActorComponent
+    public class UAbilitySystemComponent : ActorComponent
     {
         public GameplayAbilitySpecContainer ActivatableAbilities;
         public FActiveGameplayEffectsContainer ActiveGameplayEffects;
-        public GameplayTagCountContainer GameplayTagCountContainer;
+        public FGameplayTagCountContainer GameplayTagCountContainer;
         public List<AttributeSet> SpawnedAttributes;
         public GameplayAbilityActorInfo AbilityActorInfo;
 
-        public AbilitySystemComponent()
+        public UAbilitySystemComponent()
         {
             SpawnedAttributes = new List<AttributeSet>();
             AbilityActorInfo = ReferencePool.Acquire<GameplayAbilityActorInfo>();
@@ -79,6 +79,12 @@ namespace GameplayAbilitySystem
                 }
             }
             return null;
+        }
+        public virtual void GetOwnedGameplayTags(FGameplayTagContainer TagContainer)
+        {
+            TagContainer.Reset();
+
+            TagContainer.AppendTags(GameplayTagCountContainer.GetExplicitGameplayTags());
         }
         public bool TryActiveAbility(GameplayAbilitySpecHandle AbilityToActivate)
         {
@@ -149,14 +155,14 @@ namespace GameplayAbilitySystem
         {
             return ActiveGameplayEffects.GetGameplayAttributeValueChangeDelegate(Attribute);
         }
-        public FActiveGameplayEffectHandle ApplyGameplayEffectToTarget(GameplayEffect InGameplayEffect, AbilitySystemComponent InTarget, float InLevel)
+        public FActiveGameplayEffectHandle ApplyGameplayEffectToTarget(GameplayEffect InGameplayEffect, UAbilitySystemComponent InTarget, float InLevel)
         {
             GameplayEffectContextHandle Context = MakeEffectContext();
             FGameplayEffectSpec Spec = new FGameplayEffectSpec(InGameplayEffect, Context, InLevel);
             FActiveGameplayEffectHandle ret = ApplyGameplayEffectSpecToTarget(Spec, InTarget);
             return ret;
         }
-        public FActiveGameplayEffectHandle ApplyGameplayEffectSpecToTarget(FGameplayEffectSpec Spec, AbilitySystemComponent InTarget)
+        public FActiveGameplayEffectHandle ApplyGameplayEffectSpecToTarget(FGameplayEffectSpec Spec, UAbilitySystemComponent InTarget)
         {
             FActiveGameplayEffectHandle ReturnHandle = new FActiveGameplayEffectHandle();
             if (InTarget != null)
@@ -220,7 +226,7 @@ namespace GameplayAbilitySystem
             {
                 ApplyGameplayEffectSpecToSelf(Spec.TargetEffectSpecs[i].Data);
             }
-            AbilitySystemComponent InstigatorASC = Spec.GetContext().GetInstigatorAbilitySystemComponent();
+            UAbilitySystemComponent InstigatorASC = Spec.GetContext().GetInstigatorAbilitySystemComponent();
             OnGameplayEffectAppliedToSelf(this, OurCopyOfSpec, MyHandle);
             if (InstigatorASC != null)
             {
@@ -263,11 +269,11 @@ namespace GameplayAbilitySystem
         {
             Action<GameplayTag, int> ret = GameplayTagCountContainer.RegisterGameplayTagEvent(Tag, EventType);
         }
-        public void OnGameplayEffectAppliedToTarget(AbilitySystemComponent Target, FGameplayEffectSpec SpecApplied, FActiveGameplayEffectHandle ActiveHandle)
+        public void OnGameplayEffectAppliedToTarget(UAbilitySystemComponent Target, FGameplayEffectSpec SpecApplied, FActiveGameplayEffectHandle ActiveHandle)
         {
 
         }
-        public void OnGameplayEffectAppliedToSelf(AbilitySystemComponent Source, FGameplayEffectSpec SpecApplied, FActiveGameplayEffectHandle ActiveHandle)
+        public void OnGameplayEffectAppliedToSelf(UAbilitySystemComponent Source, FGameplayEffectSpec SpecApplied, FActiveGameplayEffectHandle ActiveHandle)
         {
 
         }

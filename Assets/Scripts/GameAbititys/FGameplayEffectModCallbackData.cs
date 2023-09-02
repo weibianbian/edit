@@ -4,9 +4,9 @@
     {
         public FGameplayEffectSpec EffectSpec;
         public FGameplayModifierEvaluatedData EvaluatedData;
-        public AbilitySystemComponent Target;
+        public UAbilitySystemComponent Target;
 
-        public FGameplayEffectModCallbackData(FGameplayEffectSpec InEffectSpec, FGameplayModifierEvaluatedData InEvaluatedData, AbilitySystemComponent InTarget)
+        public FGameplayEffectModCallbackData(FGameplayEffectSpec InEffectSpec, FGameplayModifierEvaluatedData InEvaluatedData, UAbilitySystemComponent InTarget)
         {
             EffectSpec = InEffectSpec;
             EvaluatedData = InEvaluatedData;

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace GameplayAbilitySystem
 {
-    public class GameplayTagCountContainer
+    public class FGameplayTagCountContainer
     {
         public class DelegateInfo
         {
@@ -12,7 +12,7 @@ namespace GameplayAbilitySystem
             public Action<GameplayTag, int> OnAnyChange;
         }
         public Dictionary<GameplayTag, DelegateInfo> GameplayTagEventMap = new Dictionary<GameplayTag, DelegateInfo>();
-
+        public FGameplayTagContainer ExplicitTags;
         public Action<GameplayTag, int> RegisterGameplayTagEvent(GameplayTag Tag, EGameplayTagEventType EventType)
         {
             if (!GameplayTagEventMap.TryGetValue(Tag, out DelegateInfo Info))
@@ -25,6 +25,10 @@ namespace GameplayAbilitySystem
                 return Info.OnNewOrRemove;
             }
             return Info.OnAnyChange;
+        }
+        public FGameplayTagContainer GetExplicitGameplayTags()
+        {
+            return ExplicitTags;
         }
     }
 
