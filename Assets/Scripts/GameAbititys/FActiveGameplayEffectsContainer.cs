@@ -2,23 +2,28 @@
 using RailShootGame;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Numerics;
 using System.Reflection;
+using Unity.VisualScripting;
+using UnityEditor.PackageManager;
+using UnityEngine;
+using static UnityEngine.UI.GridLayoutGroup;
 
 namespace GameplayAbilitySystem
 {
     public class FActiveGameplayEffectsContainer : List<FActiveGameplayEffect>
     {
         UAbilitySystemComponent Owner;
-        public Dictionary<GameplayAttribute, OnGameplayAttributeValueChange> AttributeValueChangeDelegates;
-        public Dictionary<GameplayAttribute, FAggregator> AttributeAggregatorMap;
+        public Dictionary<FGameplayAttribute, OnGameplayAttributeValueChange> AttributeValueChangeDelegates;
+        public Dictionary<FGameplayAttribute, FAggregator> AttributeAggregatorMap;
         public List<GameplayEffect> ApplicationImmunityQueryEffects;
         public List<FActiveGameplayEffect> GameplayEffects_Internal;
         public FActiveGameplayEffectsContainer()
         {
             ApplicationImmunityQueryEffects = new List<GameplayEffect>();
-            AttributeAggregatorMap = new Dictionary<GameplayAttribute, FAggregator>();
+            AttributeAggregatorMap = new Dictionary<FGameplayAttribute, FAggregator>();
             GameplayEffects_Internal = new List<FActiveGameplayEffect>();
         }
         public void RegisterWithOwner(UAbilitySystemComponent InOwner)
@@ -36,7 +41,7 @@ namespace GameplayAbilitySystem
 
             for (int ModIdx = 0; ModIdx < SpecToUse.Modifiers.Count(); ++ModIdx)
             {
-                GameplayModifierInfo ModDef = SpecToUse.Def.Modifiers[ModIdx];
+                FGameplayModifierInfo ModDef = SpecToUse.Def.Modifiers[ModIdx];
                 FGameplayModifierEvaluatedData EvalData = new FGameplayModifierEvaluatedData()
                 {
                     Attribute = ModDef.Attribute,
@@ -65,9 +70,9 @@ namespace GameplayAbilitySystem
         public bool InternalExecuteMod(FGameplayEffectSpec Spec, FGameplayModifierEvaluatedData ModEvalData)
         {
             bool bExecuted = false;
-            AttributeSet AttributeSet = null;
+            UAttributeSet AttributeSet = null;
             Type AttributeSetClass = ModEvalData.Attribute.AttributeOwner;
-            if (AttributeSetClass != null && AttributeSetClass.IsSubclassOf(typeof(AttributeSet)))
+            if (AttributeSetClass != null && AttributeSetClass.IsSubclassOf(typeof(UAttributeSet)))
             {
                 AttributeSet = Owner.GetAttributeSubobject(AttributeSetClass);
             }
@@ -82,21 +87,21 @@ namespace GameplayAbilitySystem
             }
             return bExecuted;
         }
-        public void ApplyModToAttribute(GameplayAttribute Attribute, EGameplayModOp ModifierOp, float ModifierMagnitude, FGameplayEffectModCallbackData ModData)
+        public void ApplyModToAttribute(FGameplayAttribute Attribute, EGameplayModOp ModifierOp, float ModifierMagnitude, FGameplayEffectModCallbackData ModData)
         {
             float CurrentBase = GetAttributeBaseValue(Attribute);
             float NewBase = FAggregator.StaticExecModOnBaseValue(CurrentBase, ModifierOp, ModifierMagnitude);
             SetAttributeBaseValue(Attribute, NewBase);
         }
-        public float GetAttributeBaseValue(GameplayAttribute Attribute)
+        public float GetAttributeBaseValue(FGameplayAttribute Attribute)
         {
             float BaseValue = 0.0f;
 
             if (Owner != null)
             {
-                AttributeSet AttributeSet = null;
+                UAttributeSet AttributeSet = null;
                 Type AttributeSetClass = Attribute.AttributeOwner;
-                if (AttributeSetClass != null && AttributeSetClass.IsSubclassOf(typeof(AttributeSet)))
+                if (AttributeSetClass != null && AttributeSetClass.IsSubclassOf(typeof(UAttributeSet)))
                 {
                     AttributeSet = Owner.GetAttributeSubobject(AttributeSetClass);
                 }
@@ -110,11 +115,11 @@ namespace GameplayAbilitySystem
             }
             return BaseValue;
         }
-        public void SetAttributeBaseValue(GameplayAttribute Attribute, float NewBaseValue)
+        public void SetAttributeBaseValue(FGameplayAttribute Attribute, float NewBaseValue)
         {
-            AttributeSet Set = null;
+            UAttributeSet Set = null;
             Type AttributeSetClass = Attribute.AttributeOwner;
-            if (AttributeSetClass != null && AttributeSetClass.IsSubclassOf(typeof(AttributeSet)))
+            if (AttributeSetClass != null && AttributeSetClass.IsSubclassOf(typeof(UAttributeSet)))
             {
                 Set = Owner.GetAttributeSubobject(AttributeSetClass);
             }
@@ -143,7 +148,7 @@ namespace GameplayAbilitySystem
                 Set.PostAttributeBaseChange(Attribute, OldBaseValue, NewBaseValue);
             }
         }
-        public void InternalUpdateNumericalAttribute(GameplayAttribute Attribute, float NewValue, FGameplayEffectModCallbackData ModData, bool bFromRecursiveCall = false)
+        public void InternalUpdateNumericalAttribute(FGameplayAttribute Attribute, float NewValue, FGameplayEffectModCallbackData ModData, bool bFromRecursiveCall = false)
         {
             float OldValue = Owner.GetNumericAttribute(Attribute);
             Owner.SetNumericAttribute_Internal(Attribute, NewValue);
@@ -219,19 +224,97 @@ namespace GameplayAbilitySystem
                     {
                         @owner.ExecutePeriodicEffect(@handle);
                     }, Owner, AppliedActiveGE.Handle);
-
-                    TimerManager.SetTimer(ref AppliedActiveGE.DurationHandle, Delegate, AppliedEffectSpec.GetPeriod(), false);
+                    //计时器管理器在第一个tick检查活动列表后将事情从挂起列表移动到活动列表，因此我们需要在这里执行
+                    if (AppliedEffectSpec.Def.bExecutePeriodicEffectOnApplication)
+                    {
+                        TimerManager.SetTimerForNextTick(Delegate);
+                    }
+                    TimerManager.SetTimer(ref AppliedActiveGE.DurationHandle, Delegate, AppliedEffectSpec.GetPeriod(), true);
                 }
             }
+            // @注意@todo:这是目前假设(可能是错误的)堆叠GE的抑制状态不会改变
+            //作为堆叠的结果。实际上，它可以在具有不同动态授予标记集的复杂情况下使用。
             if (ExistingStackableGE != null)
             {
-
+                OnStackCountChange(ExistingStackableGE, StartingStackCount, NewStackCount);
             }
             else
             {
                 InternalOnActiveGameplayEffectAdded(AppliedActiveGE);
             }
             return AppliedActiveGE;
+        }
+        public void OnStackCountChange(FActiveGameplayEffect ActiveEffect, int OldStackCount, int NewStackCount)
+        {
+            if (OldStackCount != NewStackCount)
+            {
+                //只有当堆栈计数实际改变时才更新属性。
+                UpdateAllAggregatorModMagnitudes(ActiveEffect);
+            }
+        }
+        public void UpdateAllAggregatorModMagnitudes(FActiveGameplayEffect ActiveEffect)
+        {
+            //我们不应该为周期性效果这样做，因为它们的mod在属性聚合器上不是持久化的
+            if (ActiveEffect.Spec.GetPeriod() > 0)
+            {
+                return;
+            }
+            ////我们不需要更新抑制效果
+            if (ActiveEffect.bIsInhibited)
+            {
+                return;
+            }
+            FGameplayEffectSpec Spec = ActiveEffect.Spec;
+            if (Spec.Def == null)
+            {
+                UnityEngine.Debug.LogError($"UpdateAllAggregatorModMagnitudes called with no UGameplayEffect def.");
+                return;
+            }
+            HashSet<FGameplayAttribute> AttributesToUpdate = new HashSet<FGameplayAttribute>();
+            for (int ModIdx = 0; ModIdx < Spec.Modifiers.Count; ++ModIdx)
+            {
+                FGameplayModifierInfo ModDef = Spec.Def.Modifiers[ModIdx];
+                AttributesToUpdate.Add(ModDef.Attribute);
+            }
+            UpdateAggregatorModMagnitudes(AttributesToUpdate, ActiveEffect);
+        }
+        void UpdateAggregatorModMagnitudes(HashSet<FGameplayAttribute> AttributesToUpdate, FActiveGameplayEffect ActiveEffect)
+        {
+            FGameplayEffectSpec Spec = ActiveEffect.Spec;
+            foreach (FGameplayAttribute Attribute in AttributesToUpdate)
+            {
+                // skip over any modifiers for attributes that we don't have
+                if (Owner == null || Owner.HasAttributeSetForAttribute(Attribute) == false)
+                {
+                    continue;
+                }
+
+                FAggregator Aggregator = FindOrCreateAttributeAggregator(Attribute);
+                // Update the aggregator Mods.
+                Aggregator.UpdateAggregatorMod(ActiveEffect.Handle, Attribute, Spec, ActiveEffect.PredictionKey.WasLocallyGenerated(), ActiveEffect.Handle);
+            }
+        }
+        FAggregator FindOrCreateAttributeAggregator(FGameplayAttribute Attribute)
+        {
+            if (AttributeAggregatorMap.TryGetValue(Attribute, out FAggregator RefPtr))
+            {
+                return RefPtr;
+            }
+
+            // 为此属性创建一个新的聚合器。
+            float CurrentBaseValueOfProperty = Owner.GetNumericAttributeBase(Attribute);
+
+            FAggregator NewAttributeAggregator = new FAggregator(CurrentBaseValueOfProperty);
+            UAttributeSet AttributeSet = null;
+            Type AttributeSetClass = Attribute.AttributeOwner;
+            //if (Attribute.IsSystemAttribute() == false)
+            {
+                // 回调，以防集合想做什么
+                UAttributeSet Set = Owner.GetAttributeSubobject(AttributeSetClass);
+                //Set.OnAttributeAggregatorCreated(Attribute, NewAttributeAggregator);
+            }
+            AttributeAggregatorMap.Add(Attribute, (NewAttributeAggregator));
+            return NewAttributeAggregator;
         }
         //在客户端和服务器端添加新的ActiveGameplayEffect时调用*/
         public void InternalOnActiveGameplayEffectAdded(FActiveGameplayEffect Effect)
@@ -247,7 +330,7 @@ namespace GameplayAbilitySystem
             Owner.GetOwnedGameplayTags(OwnerTags);
             Effect.CheckOngoingTagRequirements(OwnerTags, this);
         }
-        public OnGameplayAttributeValueChange GetGameplayAttributeValueChangeDelegate(GameplayAttribute Attribute)
+        public OnGameplayAttributeValueChange GetGameplayAttributeValueChangeDelegate(FGameplayAttribute Attribute)
         {
             if (!AttributeValueChangeDelegates.TryGetValue(Attribute, out OnGameplayAttributeValueChange value))
             {
@@ -425,7 +508,7 @@ namespace GameplayAbilitySystem
             return false;
         }
         //由客户端和服务器调用:无论效果是在本地删除还是由于复制而删除，都必须进行清理
-        public void InternalOnActiveGameplayEffectRemoved(FActiveGameplayEffect Effect, bool bInvokeGameplayCueEvents,  FGameplayEffectRemovalInfo GameplayEffectRemovalInfo)
+        public void InternalOnActiveGameplayEffectRemoved(FActiveGameplayEffect Effect, bool bInvokeGameplayCueEvents, FGameplayEffectRemovalInfo GameplayEffectRemovalInfo)
         {
 
         }

@@ -17,7 +17,7 @@ namespace GameplayAbilitySystem
     {
         public EGameplayEffectDurationType DurationPolicy;
         public EGameplayEffectStackingType StackingType;
-        public List<GameplayModifierInfo> Modifiers = new List<GameplayModifierInfo>();
+        public List<FGameplayModifierInfo> Modifiers = new List<FGameplayModifierInfo>();
         public List<GameplayCue> GameplayCues = new List<GameplayCue>();
         public FInheritedTagContainer RemoveGameplayEffectsWithTags = new FInheritedTagContainer();
         public FGameplayEffectModifierMagnitude DurationMagnitude;
@@ -27,11 +27,17 @@ namespace GameplayAbilitySystem
         public int StackLimitCount;
         public bool bDenyOverflowApplication = false;
         public bool bClearStackOnOverflow = false;
+        /*如果为true，效果在应用程序上执行，然后在每个周期间隔执行。如果为false，则在第一个周期结束之前不会执行。*/
+        public bool bExecutePeriodicEffectOnApplication;
 
         public GameplayEffect()
         {
             DurationPolicy = EGameplayEffectDurationType.Instant;
         }
+    }
+    public class FAggregatorRef
+    {
+
     }
     public class FModifierSpec
     {
@@ -64,7 +70,7 @@ namespace GameplayAbilitySystem
         public FGameplayEffectSpec(GameplayEffect InDef, GameplayEffectContextHandle InEffectContext, float InLevel)
         {
             CapturedRelevantAttributes = new FGameplayEffectAttributeCaptureSpecContainer();
-            ModifiedAttributes=new List<FGameplayEffectModifiedAttribute>();
+            ModifiedAttributes = new List<FGameplayEffectModifiedAttribute>();
             StackCount = 1;
             Initialize(InDef, InEffectContext, InLevel);
         }
@@ -110,7 +116,7 @@ namespace GameplayAbilitySystem
         {
             Level = InLevel;
 
-            Period=Def.Period.GetValueAtLevel(Level);
+            Period = Def.Period.GetValueAtLevel(Level);
         }
         public float GetLevel()
         {
@@ -146,7 +152,7 @@ namespace GameplayAbilitySystem
         {
             for (int ModIdx = 0; ModIdx < Modifiers.Count; ModIdx++)
             {
-                GameplayModifierInfo ModDef = Def.Modifiers[ModIdx];
+                FGameplayModifierInfo ModDef = Def.Modifiers[ModIdx];
                 FModifierSpec ModSpec = Modifiers[ModIdx];
                 if (!ModDef.ModifierMagnitude.AttemptCalculateMagnitude(this, out ModSpec.EvaluatedMagnitude))
                 {

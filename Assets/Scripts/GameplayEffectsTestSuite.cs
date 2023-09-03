@@ -103,7 +103,7 @@ public class GameplayEffectsTestSuite : MonoBehaviour
     }
     public void AddModifier(GameplayEffect Effect, FieldInfo Property, Type PropOwner, EGameplayModOp Op, FScalableFloat Magnitude)
     {
-        GameplayModifierInfo Info = new GameplayModifierInfo();
+        FGameplayModifierInfo Info = new FGameplayModifierInfo();
         Effect.Modifiers.Add(Info);
         Info.ModifierOp = Op;
         Info.ModifierMagnitude = Magnitude;

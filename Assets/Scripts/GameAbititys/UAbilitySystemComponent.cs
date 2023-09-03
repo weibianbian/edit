@@ -11,12 +11,12 @@ namespace GameplayAbilitySystem
         public GameplayAbilitySpecContainer ActivatableAbilities;
         public FActiveGameplayEffectsContainer ActiveGameplayEffects;
         public FGameplayTagCountContainer GameplayTagCountContainer;
-        public List<AttributeSet> SpawnedAttributes;
+        public List<UAttributeSet> SpawnedAttributes;
         public GameplayAbilityActorInfo AbilityActorInfo;
 
         public UAbilitySystemComponent()
         {
-            SpawnedAttributes = new List<AttributeSet>();
+            SpawnedAttributes = new List<UAttributeSet>();
             AbilityActorInfo = ReferencePool.Acquire<GameplayAbilityActorInfo>();
             ActiveGameplayEffects = new FActiveGameplayEffectsContainer();
         }
@@ -25,12 +25,12 @@ namespace GameplayAbilitySystem
         {
             ActiveGameplayEffects.RegisterWithOwner(this);
         }
-        public AttributeSet InitStats(Type Attributes)
+        public UAttributeSet InitStats(Type Attributes)
         {
-            AttributeSet AttributeObj = GetOrCreateAttributeSubobject(Attributes);
+            UAttributeSet AttributeObj = GetOrCreateAttributeSubobject(Attributes);
             return AttributeObj;
         }
-        public void AddSpawnedAttribute(AttributeSet Attribute)
+        public void AddSpawnedAttribute(UAttributeSet Attribute)
         {
             if (!SpawnedAttributes.Contains(Attribute))
             {
@@ -41,23 +41,23 @@ namespace GameplayAbilitySystem
         {
             ActiveGameplayEffects.ExecutePeriodicGameplayEffect(Handle);
         }
-        public AttributeSet GetOrCreateAttributeSubobject(Type AttributeClass)
+        public UAttributeSet GetOrCreateAttributeSubobject(Type AttributeClass)
         {
             Actor OwningActor = GetOwner();
-            AttributeSet MyAttributes = null;
+            UAttributeSet MyAttributes = null;
             if (OwningActor != null && AttributeClass != null)
             {
                 MyAttributes = GetAttributeSubobject(AttributeClass);
                 if (MyAttributes == null)
                 {
-                    AttributeSet Attributes = ReferencePool.Acquire(AttributeClass) as AttributeSet;
+                    UAttributeSet Attributes = ReferencePool.Acquire(AttributeClass) as UAttributeSet;
                     AddSpawnedAttribute(Attributes);
                     MyAttributes = Attributes;
                 }
             }
             return MyAttributes;
         }
-        public AttributeSet GetAttributeSubobject(Type AttributeClass)
+        public UAttributeSet GetAttributeSubobject(Type AttributeClass)
         {
             for (int i = 0; i < SpawnedAttributes.Count; i++)
             {
@@ -69,7 +69,7 @@ namespace GameplayAbilitySystem
             return null;
         }
 
-        public T GetSet<T>() where T : AttributeSet
+        public T GetSet<T>() where T : UAttributeSet
         {
             for (int i = 0; i < SpawnedAttributes.Count; i++)
             {
@@ -151,7 +151,7 @@ namespace GameplayAbilitySystem
         {
 
         }
-        public OnGameplayAttributeValueChange GetGameplayAttributeValueChangeDelegate(GameplayAttribute Attribute)
+        public OnGameplayAttributeValueChange GetGameplayAttributeValueChangeDelegate(FGameplayAttribute Attribute)
         {
             return ActiveGameplayEffects.GetGameplayAttributeValueChangeDelegate(Attribute);
         }
@@ -235,6 +235,11 @@ namespace GameplayAbilitySystem
 
             return MyHandle;
         }
+        public bool HasAttributeSetForAttribute(FGameplayAttribute Attribute)
+        {
+            //return (Attribute.IsValid() && (Attribute.IsSystemAttribute() || GetAttributeSubobject(Attribute.GetAttributeSetClass()) != nullptr));
+            return true;
+        }
         public void ExecuteGameplayEffect(FGameplayEffectSpec Spec)
         {
             ActiveGameplayEffects.ExecuteActiveEffectsFrom(Spec);
@@ -242,6 +247,15 @@ namespace GameplayAbilitySystem
         public void CheckDurationExpired(FActiveGameplayEffectHandle Handle)
         {
             ActiveGameplayEffects.CheckDuration(Handle);
+        }
+        public float GetNumericAttributeBase(FGameplayAttribute Attribute)
+        {
+            //if (Attribute.IsSystemAttribute())
+            //{
+            //    return 0.0f;
+            //}
+
+            return ActiveGameplayEffects.GetAttributeBaseValue(Attribute);
         }
         public GameplayEffectContextHandle MakeEffectContext()
         {
@@ -277,11 +291,11 @@ namespace GameplayAbilitySystem
         {
 
         }
-        public float GetNumericAttribute(GameplayAttribute Attribute)
+        public float GetNumericAttribute(FGameplayAttribute Attribute)
         {
-            AttributeSet AttributeSetOrNull = null;
+            UAttributeSet AttributeSetOrNull = null;
             Type AttributeSetClass = Attribute.AttributeOwner;
-            if (AttributeSetClass != null && AttributeSetClass.IsSubclassOf(typeof(AttributeSet)))
+            if (AttributeSetClass != null && AttributeSetClass.IsSubclassOf(typeof(UAttributeSet)))
             {
                 AttributeSetOrNull = GetAttributeSubobject(AttributeSetClass);
             }
@@ -291,11 +305,11 @@ namespace GameplayAbilitySystem
             }
             return Attribute.GetNumericValue(AttributeSetOrNull);
         }
-        public void SetNumericAttribute_Internal(GameplayAttribute Attribute, float NewFloatValue)
+        public void SetNumericAttribute_Internal(FGameplayAttribute Attribute, float NewFloatValue)
         {
-            AttributeSet AttributeSet = null;
+            UAttributeSet AttributeSet = null;
             Type AttributeSetClass = Attribute.AttributeOwner;
-            if (AttributeSetClass != null && AttributeSetClass.IsSubclassOf(typeof(AttributeSet)))
+            if (AttributeSetClass != null && AttributeSetClass.IsSubclassOf(typeof(UAttributeSet)))
             {
                 AttributeSet = GetAttributeSubobject(AttributeSetClass);
             }

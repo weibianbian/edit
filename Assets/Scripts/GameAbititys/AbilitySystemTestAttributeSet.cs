@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace GameplayAbilitySystem
 {
-    public class AbilitySystemTestAttributeSet : AttributeSet
+    public class AbilitySystemTestAttributeSet : UAttributeSet
     {
         public GameplayAttributeData MaxHealth;
         public GameplayAttributeData Health;
@@ -23,18 +23,18 @@ namespace GameplayAbilitySystem
         public GameplayAttributeData StackingAttribute2;
         public GameplayAttributeData NoStackAttribute;
 
-        public override void PreAttributeBaseChange(GameplayAttribute Attribute, float NewValue)
+        public override void PreAttributeBaseChange(FGameplayAttribute Attribute, float NewValue)
         {
             base.PreAttributeBaseChange(Attribute, NewValue);
 
             ClampAttribute(Attribute, ref NewValue);
         }
-        public override void PostAttributeBaseChange(GameplayAttribute Attribute, float OldValue, float NewValue)
+        public override void PostAttributeBaseChange(FGameplayAttribute Attribute, float OldValue, float NewValue)
         {
             base.PostAttributeBaseChange(Attribute, OldValue, NewValue);
 
         }
-        void ClampAttribute(GameplayAttribute Attribute, ref float NewValue)
+        void ClampAttribute(FGameplayAttribute Attribute, ref float NewValue)
         {
             if (Attribute == GetHealthAttribute())
             {
@@ -47,9 +47,9 @@ namespace GameplayAbilitySystem
             //    NewValue = FMath::Max(NewValue, 1.0f);
             //}
         }
-        GameplayAttribute GetHealthAttribute()
+        FGameplayAttribute GetHealthAttribute()
         {
-            GameplayAttribute ret = new GameplayAttribute();
+            FGameplayAttribute ret = new FGameplayAttribute();
             ret.SetUProperty(typeof(AbilitySystemTestAttributeSet).GetField("Health"), typeof(AbilitySystemTestAttributeSet));
             return ret;
         }

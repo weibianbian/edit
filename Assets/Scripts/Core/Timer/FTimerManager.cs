@@ -213,6 +213,24 @@ namespace Core.Timer
         {
             return FindTimer(InHandle) != null;
         }
+        public FTimerHandle SetTimerForNextTick(ITimerDelegate InDelegate)
+        {
+            return InternalSetTimerForNextTick((InDelegate));
+        }
+        public FTimerHandle InternalSetTimerForNextTick(ITimerDelegate InDelegate)
+        {
+            FTimerData NewTimerData = new FTimerData();
+            NewTimerData.Rate = 0.0f;
+            NewTimerData.bLoop = false;
+            NewTimerData.bRequiresDelegate = true;
+            NewTimerData.TimerDelegate = (InDelegate);
+            NewTimerData.ExpireTime = InternalTime;
+            NewTimerData.Status = ETimerStatus.Active;
+            FTimerHandle NewTimerHandle = AddTimer((NewTimerData));
+            ActiveTimerHeap.Add(NewTimerHandle);
+            ActiveTimerHeap.Sort(new FTimerHeapOrder(Timers));
+            return NewTimerHandle;
+        }
         public float GetTimerRemaining(FTimerHandle InHandle)
         {
 

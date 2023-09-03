@@ -24,18 +24,20 @@ namespace GameplayAbilitySystem
     }
     public class FGameplayModifierEvaluatedData
     {
-        public GameplayAttribute Attribute;
+        public FGameplayAttribute Attribute;
         public EGameplayModOp ModifierOp;
         public float Magnitude;
     }
-    public class GameplayModifierInfo
+    public class FGameplayModifierInfo
     {
-        public GameplayAttribute Attribute;
+        public FGameplayAttribute Attribute;
         public EGameplayModOp ModifierOp;
         public FGameplayEffectModifierMagnitude ModifierMagnitude;
-        public GameplayModifierInfo()
+        public FGameplayTagRequirements SourceTags;
+        public FGameplayTagRequirements TargetTags;
+        public FGameplayModifierInfo()
         {
-            Attribute = new GameplayAttribute();
+            Attribute = new FGameplayAttribute();
         }
     }
     public enum EGameplayEffectAttributeCaptureSource

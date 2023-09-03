@@ -4,7 +4,7 @@ using System.Reflection;
 
 namespace GameplayAbilitySystem
 {
-    public class GameplayAttribute
+    public class FGameplayAttribute
     {
         public Type AttributeOwner;
         public FieldInfo Attribute;
@@ -18,13 +18,13 @@ namespace GameplayAbilitySystem
         {
             return (Attribute);
         }
-        public float GetNumericValue(AttributeSet Src)
+        public float GetNumericValue(UAttributeSet Src)
         {
             FieldInfo fi = (Attribute);
             GameplayAttributeData DataPtr = (GameplayAttributeData)fi.GetValue(Src);
             return DataPtr.GetCurrentValue();
         }
-        public void SetNumericValueChecked(float NewValue, AttributeSet Dest)
+        public void SetNumericValueChecked(float NewValue, UAttributeSet Dest)
         {
             float OldValue = 0.0f;
             FieldInfo fi = (Attribute);
@@ -36,11 +36,11 @@ namespace GameplayAbilitySystem
             fi.SetValue(Dest, DataPtr);
             Dest.PostAttributeChange(this, OldValue, NewValue);
         }
-        public static bool operator ==(GameplayAttribute a, GameplayAttribute b)
+        public static bool operator ==(FGameplayAttribute a, FGameplayAttribute b)
         {
             return a.Attribute == b.Attribute;
         }
-        public static bool operator !=(GameplayAttribute a, GameplayAttribute b)
+        public static bool operator !=(FGameplayAttribute a, FGameplayAttribute b)
         {
             return a.Attribute != b.Attribute;
         }

@@ -12,7 +12,7 @@ namespace GameplayAbilitySystem
     //* 属性集被作为子对象添加到actor中，然后注册到AbilitySystemComponent
     //* 它通常希望每个项目都有几个相互继承的集合//
     //* 你可以创建一个基础的生命值集合，然后拥有一个继承它并添加更多属性的玩家集合
-    public class AttributeSet : ReferencePoolObject, IProp
+    public class UAttributeSet : ReferencePoolObject, IProp
     {
         public virtual bool PreGameplayEffectExecute(FGameplayEffectModCallbackData Data)
         {
@@ -22,18 +22,18 @@ namespace GameplayAbilitySystem
         {
             return true;
         }
-        public virtual void PreAttributeChange(GameplayAttribute Attribute, float NewValue)
+        public virtual void PreAttributeChange(FGameplayAttribute Attribute, float NewValue)
         {
         }
-        public virtual void PostAttributeChange(GameplayAttribute Attribute, float OldValue, float NewValue)
-        {
-
-        }
-        public virtual void PreAttributeBaseChange(GameplayAttribute Attribute, float NewValue)
+        public virtual void PostAttributeChange(FGameplayAttribute Attribute, float OldValue, float NewValue)
         {
 
         }
-        public virtual void PostAttributeBaseChange(GameplayAttribute Attribute, float OldValue, float NewValue)
+        public virtual void PreAttributeBaseChange(FGameplayAttribute Attribute, float NewValue)
+        {
+
+        }
+        public virtual void PostAttributeBaseChange(FGameplayAttribute Attribute, float OldValue, float NewValue)
         {
 
         }
