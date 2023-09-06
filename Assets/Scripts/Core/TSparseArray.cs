@@ -2,7 +2,7 @@
 
 namespace Core
 {
-    public class FFreeListLink
+    public struct FFreeListLink
     {
         /** 如果元素没有分配,这是一个链接到前一个元素的数组的空闲列表. */
         public int PrevFreeIndex;
@@ -15,6 +15,10 @@ namespace Core
     {
         public T ElementData;
         public FFreeListLink FreeListLink;
+        public FElementOrFreeListLink()
+        {
+            FreeListLink=new FFreeListLink();
+        }
     }
 
     public class TSparseArray<T>
