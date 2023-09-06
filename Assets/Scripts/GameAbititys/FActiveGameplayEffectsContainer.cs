@@ -291,7 +291,7 @@ namespace GameplayAbilitySystem
 
                 FAggregator Aggregator = FindOrCreateAttributeAggregator(Attribute);
                 // Update the aggregator Mods.
-                Aggregator.UpdateAggregatorMod(ActiveEffect.Handle, Attribute, Spec, ActiveEffect.PredictionKey.WasLocallyGenerated(), ActiveEffect.Handle);
+                //Aggregator.UpdateAggregatorMod(ActiveEffect.Handle, Attribute, Spec, ActiveEffect.PredictionKey.WasLocallyGenerated(), ActiveEffect.Handle);
             }
         }
         FAggregator FindOrCreateAttributeAggregator(FGameplayAttribute Attribute)

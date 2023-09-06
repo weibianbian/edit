@@ -1,6 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 
+namespace Core
+{
+}
+
 namespace RailShootGame
 {
     public static class ReferencePool

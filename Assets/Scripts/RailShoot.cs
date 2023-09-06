@@ -28,7 +28,9 @@ public class RailShoot : MonoBehaviour
             @owner.timerManager.ClearTimer(@owner.DurationHandle);
 
         }, this);
+        timerManager.SetTimerForNextTick(PeriodSecsDelegate);
         timerManager.SetTimer(ref PeriodHandle, PeriodSecsDelegate, PeriodSecs, true);
+
         timerManager.SetTimer(ref DurationHandle, DurationDelegate, Duration, true);
     }
     public void Update()

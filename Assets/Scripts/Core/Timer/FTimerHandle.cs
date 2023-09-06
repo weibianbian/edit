@@ -4,7 +4,7 @@
     {
         public const int IndexBits = 24;
         public const int SerialNumberBits = 40;
-        public const int MaxIndex = (int)(1 << IndexBits);
+        public const int MaxIndex =(int)(1 << IndexBits);
         public const ulong MaxSerialNumber = (ulong)1 << SerialNumberBits;
         public ulong Handle;
         public bool IsValid()
@@ -21,7 +21,11 @@
         }
         public void SetIndexAndSerialNumber(int Index, ulong SerialNumber)
         {
-            Handle = (SerialNumber << IndexBits) | (ulong)Index;
+            Handle = (SerialNumber << IndexBits) | ((ulong)(uint)Index);
+        }
+        public ulong GetSerialNumber()
+        {
+            return Handle >> IndexBits;
         }
         public static bool operator !=(FTimerHandle a, FTimerHandle b)
         {

@@ -1,8 +1,5 @@
-﻿using System.Linq;
-using System;
-using System.Collections.Generic;
-using Unity.VisualScripting;
-
+﻿using System.Collections.Generic;
+using Unity.Collections;
 namespace GameplayAbilitySystem
 {
     public class FAggregator
@@ -59,8 +56,8 @@ namespace GameplayAbilitySystem
                 FGameplayModifierInfo ModDef = Spec.Def.Modifiers[ModIdx];
                 if (ModDef.Attribute == Attribute)
                 {
-                    FAggregatorModChannel ModChannel = ModChannels.FindOrAddModChannel(ModDef.EvaluationChannelSettings.GetEvaluationChannel());
-                    ModChannel.AddMod(Spec.GetModifierMagnitude(ModIdx, true), ModDef.ModifierOp, ModDef.SourceTags, ModDef.TargetTags, bWasLocallyGenerated, InHandle);
+                    //FAggregatorModChannel ModChannel = ModChannels.FindOrAddModChannel(ModDef.EvaluationChannelSettings.GetEvaluationChannel());
+                    //ModChannel.AddMod(Spec.GetModifierMagnitude(ModIdx, true), ModDef.ModifierOp, ModDef.SourceTags, ModDef.TargetTags, bWasLocallyGenerated, InHandle);
                 }
             }
         }
@@ -96,7 +93,8 @@ namespace GameplayAbilitySystem
         {
             FAggregatorMod[] ModList = Mods;
 
-            int NewIdx = ModList.AddUninitialized();
+            //int NewIdx = ModList.AddUninitialized();
+            int NewIdx = 0;
             FAggregatorMod NewMod = ModList[NewIdx];
 
             NewMod.SourceTagReqs = SourceTagReqs;
