@@ -6,6 +6,11 @@ namespace GameplayAbilitySystem
     {
         FGameplayTagContainer RequireTags;
         FGameplayTagContainer IgnoreTags;
+        public FGameplayTagRequirements()
+        {
+            RequireTags=new FGameplayTagContainer();
+            IgnoreTags=new FGameplayTagContainer();
+        }
         public bool RequirementsMet(FGameplayTagContainer Container)
         {
 

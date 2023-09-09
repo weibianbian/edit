@@ -33,6 +33,8 @@ namespace GameplayAbilitySystem
         public GameplayEffect()
         {
             DurationPolicy = EGameplayEffectDurationType.Instant;
+            Period = new FScalableFloat(0);
+            OngoingTagRequirements = new FGameplayTagRequirements();
         }
     }
     public class FAggregatorRef
@@ -67,6 +69,8 @@ namespace GameplayAbilitySystem
         public List<FModifierSpec> Modifiers = new List<FModifierSpec>();
         public FGameplayEffectAttributeCaptureSpecContainer CapturedRelevantAttributes;
         public List<FGameplayEffectModifiedAttribute> ModifiedAttributes;
+        public FTagContainerAggregator CapturedSourceTags=new FTagContainerAggregator();
+        public FTagContainerAggregator CapturedTargetTags = new FTagContainerAggregator();
         public FGameplayEffectSpec(GameplayEffect InDef, GameplayEffectContextHandle InEffectContext, float InLevel)
         {
             CapturedRelevantAttributes = new FGameplayEffectAttributeCaptureSpecContainer();
@@ -144,9 +148,15 @@ namespace GameplayAbilitySystem
         {
             return Duration;
         }
+        //辅助函数，在应用源和目标技能系统组件的相关修饰符后返回持续时间
         public float CalculateModifiedDuration()
         {
-            return 0;
+            FAggregator DurationAgg = new FAggregator();
+            
+            FAggregatorEvaluateParameters Params=new FAggregatorEvaluateParameters();
+            Params.SourceTags = CapturedSourceTags.GetAggregatedTags();
+            Params.TargetTags = CapturedTargetTags.GetAggregatedTags();
+            return DurationAgg.EvaluateWithBase(GetDuration(), Params);
         }
         public void CalculateModifierMagnitudes()
         {

@@ -12,7 +12,7 @@ namespace RailShootGame
             GameplayTags.Clear();
             ParentTags.Clear(); 
         }
-        public int Count()
+        public int Num()
         {
             return GameplayTags.Count;
         }

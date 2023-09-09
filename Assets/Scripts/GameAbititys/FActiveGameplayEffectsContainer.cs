@@ -446,7 +446,7 @@ namespace GameplayAbilitySystem
             if (InSpec.Def != null)
             {
                 FGameplayEffectQuery ClearQuery = new FGameplayEffectQuery();
-                for (int i = 0; i < InSpec.Def.RemoveGameplayEffectsWithTags.CombinedTags.Count(); i++)
+                for (int i = 0; i < InSpec.Def.RemoveGameplayEffectsWithTags.CombinedTags.Num(); i++)
                 {
 
                 }

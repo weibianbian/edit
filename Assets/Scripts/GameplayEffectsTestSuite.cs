@@ -1,6 +1,7 @@
 using GameplayAbilitySystem;
 using JetBrains.Annotations;
 using RailShootGame;
+using Sirenix.Utilities.Editor;
 using System;
 using System.Reflection;
 using UnityEngine;
@@ -38,7 +39,7 @@ public class GameplayEffectsTestSuite : MonoBehaviour
         DestComponent.GetSet<AbilitySystemTestAttributeSet>().MaxMana = new GameplayAttributeData(StartingMana);
         //Test_InstantDamage();
         //Test_InstantDamageRemap();
-        Test_ManaBuff();
+        Test_PeriodicDamage();
     }
 
     // Update is called once per frame
@@ -100,6 +101,21 @@ public class GameplayEffectsTestSuite : MonoBehaviour
         SourceComponent.ApplyGameplayEffectToTarget(BaseDmgEffect, DestComponent, 1.0f);
 
         int NumApplications = 0;
+
+        TickWorld(PeriodSecs * 0.1f);
+
+        for (int i = 0; i < NumPeriods; ++i)
+        {
+            // advance time by one period
+            TickWorld(PeriodSecs);
+
+            ++NumApplications;
+
+            // check that health has been reduced
+            Debug.Log($"DestComponent->GetSet<UAbilitySystemTestAttributeSet>()->Health={DestComponent.GetSet<AbilitySystemTestAttributeSet>().Health.CurrentValue} " +
+                $"   ={StartingHealth - (DamagePerPeriod * NumApplications)}");
+            TickWorld(PeriodSecs);
+        }
     }
     public void AddModifier(GameplayEffect Effect, FieldInfo Property, Type PropOwner, EGameplayModOp Op, FScalableFloat Magnitude)
     {
@@ -108,5 +124,11 @@ public class GameplayEffectsTestSuite : MonoBehaviour
         Info.ModifierOp = Op;
         Info.ModifierMagnitude = Magnitude;
         Info.Attribute.SetUProperty(Property, PropOwner);
+    }
+    public void TickWorld(float InTime)
+    {
+        {
+            World.Tick(InTime);
+        }
     }
 }

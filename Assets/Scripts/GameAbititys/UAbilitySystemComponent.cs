@@ -19,6 +19,7 @@ namespace GameplayAbilitySystem
             SpawnedAttributes = new List<UAttributeSet>();
             AbilityActorInfo = ReferencePool.Acquire<GameplayAbilityActorInfo>();
             ActiveGameplayEffects = new FActiveGameplayEffectsContainer();
+            GameplayTagCountContainer = new FGameplayTagCountContainer();
         }
 
         public override void OnRegister()

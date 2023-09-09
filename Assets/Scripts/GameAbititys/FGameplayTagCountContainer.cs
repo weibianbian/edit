@@ -13,6 +13,10 @@ namespace GameplayAbilitySystem
         }
         public Dictionary<GameplayTag, DelegateInfo> GameplayTagEventMap = new Dictionary<GameplayTag, DelegateInfo>();
         public FGameplayTagContainer ExplicitTags;
+        public FGameplayTagCountContainer()
+        {
+            ExplicitTags = new FGameplayTagContainer();
+        }
         public Action<GameplayTag, int> RegisterGameplayTagEvent(GameplayTag Tag, EGameplayTagEventType EventType)
         {
             if (!GameplayTagEventMap.TryGetValue(Tag, out DelegateInfo Info))

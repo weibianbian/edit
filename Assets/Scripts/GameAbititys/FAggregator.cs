@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using System.Security.Cryptography;
 using Unity.Collections;
 namespace GameplayAbilitySystem
 {
@@ -9,6 +9,7 @@ namespace GameplayAbilitySystem
         public FAggregator(float InBaseValue = 0.0f)
         {
             BaseValue = InBaseValue;
+            ModChannels = new FAggregatorModChannelContainer();
         }
         public float GetBaseValue()
         {
@@ -61,7 +62,24 @@ namespace GameplayAbilitySystem
                 }
             }
         }
+        //使用任意基值计算聚合器
+        public float EvaluateWithBase(float InlineBaseValue, FAggregatorEvaluateParameters Parameters)
+        {
+            EvaluateQualificationForAllMods(Parameters);
+            return ModChannels.EvaluateWithBase(InlineBaseValue, Parameters);
+        }
+        //在每个mod上调用::updatequaliqs。当您需要手动检查聚合器时非常有用
+        public void EvaluateQualificationForAllMods(FAggregatorEvaluateParameters Parameters)
+        {
+            // First run our "Default" qualifies function
+            //ModChannels.EvaluateQualificationForAllMods(Parameters);
 
+            // Then run custom func
+            //if (EvaluationMetaData && EvaluationMetaData->CustomQualifiesFunc)
+            //{
+            //    EvaluationMetaData->CustomQualifiesFunc(Parameters, this);
+            //}
+        }
     }
     public class FAggregatorMod
     {
@@ -89,6 +107,12 @@ namespace GameplayAbilitySystem
                 //false);
             }
         }
+        public bool ReverseEvaluate(float FinalValue, FAggregatorEvaluateParameters Parameters, out float ComputedValue)
+        {
+            ComputedValue = 0;
+            return true;
+        }
+
         void AddMod(float EvaluatedMagnitude, EGameplayModOp ModOp, FGameplayTagRequirements SourceTagReqs, FGameplayTagRequirements TargetTagReqs, bool bIsPredicted, FActiveGameplayEffectHandle ActiveHandle)
         {
             FAggregatorMod[] ModList = Mods;
@@ -103,31 +127,6 @@ namespace GameplayAbilitySystem
             NewMod.StackCount = 0;
             NewMod.ActiveHandle = ActiveHandle;
             NewMod.IsPredicted = bIsPredicted;
-        }
-    }
-    public class FAggregatorModChannelContainer
-    {
-        Dictionary<EGameplayModEvaluationChannel, FAggregatorModChannel> ModChannelsMap = new Dictionary<EGameplayModEvaluationChannel, FAggregatorModChannel>();
-        public void RemoveAggregatorMod(FActiveGameplayEffectHandle ActiveHandle)
-        {
-            //if (ActiveHandle.IsValid())
-            {
-                foreach (var ChannelEntry in ModChannelsMap)
-                {
-                    FAggregatorModChannel CurChannel = ChannelEntry.Value;
-                    CurChannel.RemoveModsWithActiveHandle(ActiveHandle);
-                }
-            }
-        }
-        public FAggregatorModChannel FindOrAddModChannel(EGameplayModEvaluationChannel Channel)
-        {
-            if (!ModChannelsMap.TryGetValue(Channel, out FAggregatorModChannel FoundChannel))
-            {
-                //添加新通道时，需要借助于映射来保存键序进行评估
-                FoundChannel = new FAggregatorModChannel();
-                ModChannelsMap.Add(Channel, FoundChannel);
-            }
-            return FoundChannel;
         }
     }
     public enum EGameplayModEvaluationChannel
