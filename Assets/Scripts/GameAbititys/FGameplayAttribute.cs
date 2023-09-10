@@ -1,5 +1,6 @@
 ﻿using RailShootGame;
 using System;
+using System.Diagnostics;
 using System.Reflection;
 
 namespace GameplayAbilitySystem
@@ -31,11 +32,26 @@ namespace GameplayAbilitySystem
             GameplayAttributeData DataPtr = (GameplayAttributeData)fi.GetValue(Dest);
             OldValue = DataPtr.GetCurrentValue();
             Dest.PreAttributeChange(this, NewValue);
-            DataPtr.SetCurrentValue(NewValue);
-
             fi.SetValue(Dest, DataPtr);
+            UnityEngine.Debug.Log($"SetNumericValueChecked=NewValue={NewValue}");
             Dest.PostAttributeChange(this, OldValue, NewValue);
         }
+
+        public override bool Equals(object obj)
+        {
+            return base.Equals(obj);
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
+
+        public override string ToString()
+        {
+            return base.ToString();
+        }
+
         public static bool operator ==(FGameplayAttribute a, FGameplayAttribute b)
         {
             return a.Attribute == b.Attribute;

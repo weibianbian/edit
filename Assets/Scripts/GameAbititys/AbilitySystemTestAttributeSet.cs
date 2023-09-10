@@ -22,7 +22,16 @@ namespace GameplayAbilitySystem
         public GameplayAttributeData StackingAttribute1;
         public GameplayAttributeData StackingAttribute2;
         public GameplayAttributeData NoStackAttribute;
+        public override void PreAttributeChange(FGameplayAttribute Attribute, float NewValue)
+        {
+            base.PreAttributeChange(Attribute, NewValue);
 
+            ClampAttribute(Attribute, ref NewValue);
+        }
+        public override void PostAttributeChange(FGameplayAttribute Attribute, float OldValue, float NewValue)
+        {
+            base.PostAttributeChange(Attribute, OldValue, NewValue);
+        }
         public override void PreAttributeBaseChange(FGameplayAttribute Attribute, float NewValue)
         {
             base.PreAttributeBaseChange(Attribute, NewValue);

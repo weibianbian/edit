@@ -1,5 +1,6 @@
 ﻿using Sirenix.Utilities;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine.Rendering;
 
 namespace GameplayAbilitySystem
@@ -69,7 +70,7 @@ namespace GameplayAbilitySystem
         public List<FModifierSpec> Modifiers = new List<FModifierSpec>();
         public FGameplayEffectAttributeCaptureSpecContainer CapturedRelevantAttributes;
         public List<FGameplayEffectModifiedAttribute> ModifiedAttributes;
-        public FTagContainerAggregator CapturedSourceTags=new FTagContainerAggregator();
+        public FTagContainerAggregator CapturedSourceTags = new FTagContainerAggregator();
         public FTagContainerAggregator CapturedTargetTags = new FTagContainerAggregator();
         public FGameplayEffectSpec(GameplayEffect InDef, GameplayEffectContextHandle InEffectContext, float InLevel)
         {
@@ -130,6 +131,18 @@ namespace GameplayAbilitySystem
         {
             return Period;
         }
+        public FGameplayEffectModifiedAttribute GetModifiedAttribute(FGameplayAttribute Attribute)
+        {
+            for (int i = 0; i < ModifiedAttributes.Count; i++)
+            {
+                FGameplayEffectModifiedAttribute ModifiedAttribute = ModifiedAttributes[i];
+                if (ModifiedAttribute.Attribute == Attribute)
+                {
+                    return ModifiedAttribute;
+                }
+            }
+            return null;
+        }
         public void SetDuration(float NewDuration, bool bLockDuration)
         {
             if (!bDurationLocked)
@@ -152,8 +165,8 @@ namespace GameplayAbilitySystem
         public float CalculateModifiedDuration()
         {
             FAggregator DurationAgg = new FAggregator();
-            
-            FAggregatorEvaluateParameters Params=new FAggregatorEvaluateParameters();
+
+            FAggregatorEvaluateParameters Params = new FAggregatorEvaluateParameters();
             Params.SourceTags = CapturedSourceTags.GetAggregatedTags();
             Params.TargetTags = CapturedTargetTags.GetAggregatedTags();
             return DurationAgg.EvaluateWithBase(GetDuration(), Params);

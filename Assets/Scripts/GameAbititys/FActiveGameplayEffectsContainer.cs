@@ -13,7 +13,7 @@ using static UnityEngine.UI.GridLayoutGroup;
 
 namespace GameplayAbilitySystem
 {
-    public class FActiveGameplayEffectsContainer : List<FActiveGameplayEffect>
+    public class FActiveGameplayEffectsContainer
     {
         UAbilitySystemComponent Owner;
         public Dictionary<FGameplayAttribute, OnGameplayAttributeValueChange> AttributeValueChangeDelegates;
@@ -79,10 +79,23 @@ namespace GameplayAbilitySystem
             if (AttributeSet != null)
             {
                 FGameplayEffectModCallbackData ExecuteData = new FGameplayEffectModCallbackData(Spec, ModEvalData, Owner);
+                //这应该适用于“游戏范围”规则。比如将生命值限制在最大生命值，或者每增加一点力量就增加3点生命值等等
+                //PreAttributeModify可以返回false来“抛出”这个修改。
                 if (AttributeSet.PreGameplayEffectExecute(ExecuteData))
                 {
+                    float OldValueOfProperty = Owner.GetNumericAttribute(ModEvalData.Attribute);
                     ApplyModToAttribute(ModEvalData.Attribute, ModEvalData.ModifierOp, ModEvalData.Magnitude, ExecuteData);
+                    FGameplayEffectModifiedAttribute ModifiedAttribute = Spec.GetModifiedAttribute(ModEvalData.Attribute);
+                    if (ModifiedAttribute == null)
+                    {
+                        //如果我们还没有创建一个修改过的属性持有人，那就创建它
+                        //ModifiedAttribute = Spec.addmo
+                    }
+                    ModifiedAttribute.TotalMagnitude += ModEvalData.Magnitude;
+                    //这应该适用于“游戏范围”规则。比如将生命值限制在最大生命值，或者每增加一点力量就增加3点生命值等等
+                    AttributeSet.PostGameplayEffectExecute(ExecuteData);
 
+                    bExecuted = true;
                 }
             }
             return bExecuted;
@@ -131,6 +144,13 @@ namespace GameplayAbilitySystem
             bool bBaseValueSet = false;
             Set.PreAttributeBaseChange(Attribute, NewBaseValue);
 
+            FieldInfo fi = Attribute.GetUProperty();
+            GameplayAttributeData DataPtr = (GameplayAttributeData)fi.GetValue(Set);
+
+            OldBaseValue = DataPtr.GetBaseValue();
+            DataPtr.SetBaseValue(NewBaseValue);
+            bBaseValueSet = true;
+
             if (AttributeAggregatorMap.TryGetValue(Attribute, out FAggregator Aggregator))
             {
                 OldBaseValue = Aggregator.GetBaseValue();
@@ -148,7 +168,7 @@ namespace GameplayAbilitySystem
                 Set.PostAttributeBaseChange(Attribute, OldBaseValue, NewBaseValue);
             }
         }
-        public void InternalUpdateNumericalAttribute(FGameplayAttribute Attribute, float NewValue, FGameplayEffectModCallbackData ModData, bool bFromRecursiveCall = false)
+        private void InternalUpdateNumericalAttribute(FGameplayAttribute Attribute, float NewValue, FGameplayEffectModCallbackData ModData, bool bFromRecursiveCall = false)
         {
             float OldValue = Owner.GetNumericAttribute(Attribute);
             Owner.SetNumericAttribute_Internal(Attribute, NewValue);
@@ -193,6 +213,7 @@ namespace GameplayAbilitySystem
                     Handle = NewHandle,
                     Spec = Spec,
                 };
+                GameplayEffects_Internal.Add(AppliedActiveGE);
                 FGameplayEffectSpec AppliedEffectSpec = AppliedActiveGE.Spec;
                 //float DefCalcDuration = 0.0f;
                 if (AppliedEffectSpec.AttemptCalculateDurationFromDef(out float DefCalcDuration))
@@ -341,9 +362,9 @@ namespace GameplayAbilitySystem
         }
         public void CheckDuration(FActiveGameplayEffectHandle Handle)
         {
-            for (int ActiveGEIdx = 0; ActiveGEIdx < this.Count; ++ActiveGEIdx)
+            for (int ActiveGEIdx = 0; ActiveGEIdx < GameplayEffects_Internal.Count; ++ActiveGEIdx)
             {
-                FActiveGameplayEffect Effect = this[ActiveGEIdx];
+                FActiveGameplayEffect Effect = GameplayEffects_Internal[ActiveGEIdx];
                 if (Effect.Handle == Handle)
                 {
                     if (Effect.IsPendingRemove)
@@ -417,9 +438,9 @@ namespace GameplayAbilitySystem
             if ((StackingType != EGameplayEffectStackingType.None) && (GEDef.DurationPolicy != EGameplayEffectDurationType.Instant))
             {
                 UAbilitySystemComponent SourceASC = Spec.GetContext().GetInstigatorAbilitySystemComponent();
-                for (int i = 0; i < this.Count; i++)
+                for (int i = 0; i < GameplayEffects_Internal.Count; i++)
                 {
-                    FActiveGameplayEffect ActiveEffect = this[i];
+                    FActiveGameplayEffect ActiveEffect = GameplayEffects_Internal[i];
                     if (ActiveEffect.Spec.Def == Spec.Def &&
                         ((StackingType == EGameplayEffectStackingType.AggregateByTarget) || (SourceASC != null && (SourceASC == ActiveEffect.Spec.GetContext().GetInstigatorAbilitySystemComponent()))))
                     {
@@ -524,9 +545,26 @@ namespace GameplayAbilitySystem
             }
             return null;
         }
+        public FActiveGameplayEffect GetActiveGameplayEffect(FActiveGameplayEffectHandle Handle)
+        {
+            for (int i = 0; i < GameplayEffects_Internal.Count; i++)
+            {
+                FActiveGameplayEffect Effect = GameplayEffects_Internal[i];
+                if (Effect.Handle == Handle)
+                {
+                    return Effect;
+                }
+            }
+            return null;
+        }
         public void ExecutePeriodicGameplayEffect(FActiveGameplayEffectHandle Handle)
         {
+            FActiveGameplayEffect ActiveEffect = GetActiveGameplayEffect(Handle);
 
+            if (ActiveEffect != null)
+            {
+                InternalExecutePeriodicGameplayEffect(ActiveEffect);
+            }
         }
     }
     public class FGameplayEffectRemovalInfo
