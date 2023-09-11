@@ -41,7 +41,6 @@ namespace GameplayAbilitySystem
         }
         public void ExecutePeriodicEffect(FActiveGameplayEffectHandle Handle)
         {
-            UnityEngine.Debug.Log($"@@@ExecutePeriodicEffect");
             ActiveGameplayEffects.ExecutePeriodicGameplayEffect(Handle);
         }
         public UAttributeSet GetOrCreateAttributeSubobject(Type AttributeClass)

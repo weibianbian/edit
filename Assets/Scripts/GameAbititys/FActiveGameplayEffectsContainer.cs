@@ -426,20 +426,18 @@ namespace GameplayAbilitySystem
         {
             if (!ActiveEffect.bIsInhibited)
             {
-                UnityEngine.Debug.Log($"Executed Periodic Effect {ActiveEffect.Spec.Def}");
                 for (int i = 0; i < ActiveEffect.Spec.Def.Modifiers.Count; i++)
                 {
                     FGameplayModifierInfo Modifier = ActiveEffect.Spec.Def.Modifiers[i];
                     float Magnitude = 0.0f;
                     Modifier.ModifierMagnitude.AttemptCalculateMagnitude(ActiveEffect.Spec,out Magnitude);
-                    UnityEngine.Debug.Log($"{Modifier.Attribute}: {Modifier.ModifierOp}  {Magnitude}");
+                    //UnityEngine.Debug.Log($"{Modifier.Attribute}: {Modifier.ModifierOp}  {Magnitude}");
                 }
                 // 每次定时执行前清除修改后的属性
                 ActiveEffect.Spec.ModifiedAttributes.Clear();
 
                 // Execute
                 ExecuteActiveEffectsFrom(ActiveEffect.Spec);
-                UnityEngine.Debug.Log($"Executed Periodic Effect@@@@@@@@@@@@@@@@@@@@ {ActiveEffect.Spec.Def}");
                 // 为正在执行的周期性效果调用委托
                 UAbilitySystemComponent SourceASC = ActiveEffect.Spec.GetContext().GetInstigatorAbilitySystemComponent();
                 //Owner.OnPeriodicGameplayEffectExecuteOnSelf(SourceASC, ActiveEffect.Spec, ActiveEffect.Handle);

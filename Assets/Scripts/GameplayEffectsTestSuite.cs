@@ -41,12 +41,6 @@ public class GameplayEffectsTestSuite : MonoBehaviour
         //Test_InstantDamageRemap();
         Test_PeriodicDamage();
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
     public void Test_InstantDamage()
     {
         float DamageValue = 5.0f;
@@ -104,7 +98,7 @@ public class GameplayEffectsTestSuite : MonoBehaviour
 
         //TickWorld(PeriodSecs * 0.1f);
 
-        for (int i = 0; i < NumPeriods; ++i)
+        for (int i = 0; i > NumPeriods; ++i)
         {
             // advance time by one period
             TickWorld(PeriodSecs);
@@ -115,7 +109,7 @@ public class GameplayEffectsTestSuite : MonoBehaviour
             Debug.Log($"DestComponent->GetSet<UAbilitySystemTestAttributeSet>()->Health={DestComponent.GetSet<AbilitySystemTestAttributeSet>().Health.BaseValue} " +
                 $"   ={StartingHealth - (DamagePerPeriod * NumApplications)}");
         }
-        TickWorld(PeriodSecs);
+        //TickWorld(PeriodSecs);
     }
     public void AddModifier(GameplayEffect Effect, FieldInfo Property, Type PropOwner, EGameplayModOp Op, FScalableFloat Magnitude)
     {
@@ -125,10 +119,15 @@ public class GameplayEffectsTestSuite : MonoBehaviour
         Info.ModifierMagnitude = Magnitude;
         Info.Attribute.SetUProperty(Property, PropOwner);
     }
+    public void Update()
+    {
+        TickWorld(Time.deltaTime);
+    }
     public void TickWorld(float InTime)
     {
         {
             World.Tick(InTime);
+            Debug.Log($"DestComponent->GetSet<UAbilitySystemTestAttributeSet>()->Health={DestComponent.GetSet<AbilitySystemTestAttributeSet>().Health.BaseValue} ");
         }
     }
 }
