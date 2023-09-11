@@ -13,8 +13,8 @@ namespace GameplayAbilitySystem
 
             float StackMag = BaseComputedMagnitude;
 
-            // Override modifiers don't care about stack count at all. All other modifier ops need to subtract out their bias value in order to handle
-            // stacking correctly
+            //覆盖修饰符根本不关心堆栈计数所有其他修饰操作都需要减去它们的偏差值才能处理
+            //正确堆叠
             if (ModOp != EGameplayModOp.Override)
             {
                 StackMag -= OperationBias;

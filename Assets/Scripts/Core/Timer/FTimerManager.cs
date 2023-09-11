@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Core.Timer
 {
@@ -55,7 +56,7 @@ namespace Core.Timer
                     CurrentlyExecutingTimer = ActiveTimerHeap[0];
                     ActiveTimerHeap.RemoveAt(0);
                     Top.Status = ETimerStatus.Executing;
-                    int CallCount = Top.bLoop ? (int)(((InternalTime - Top.ExpireTime) / Top.Rate) + 1) : 1;
+                    int CallCount = Top.bLoop ? (Convert.ToInt32((InternalTime - Top.ExpireTime) / Top.Rate)) + 1 : 1;
                     for (int CallIdx = 0; CallIdx < CallCount; ++CallIdx)
                     {
                         Top.TimerDelegate?.Execute();
@@ -79,7 +80,7 @@ namespace Core.Timer
                             RemoveTimer(CurrentlyExecutingTimer);
                             //CurrentlyExecutingTimer.Invalidate();
                         }
-
+                        CurrentlyExecutingTimer.Invalidate();
                     }
                 }
                 else

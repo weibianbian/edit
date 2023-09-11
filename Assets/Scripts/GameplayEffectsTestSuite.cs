@@ -102,7 +102,7 @@ public class GameplayEffectsTestSuite : MonoBehaviour
 
         int NumApplications = 0;
 
-        TickWorld(PeriodSecs * 0.1f);
+        //TickWorld(PeriodSecs * 0.1f);
 
         for (int i = 0; i < NumPeriods; ++i)
         {
@@ -112,10 +112,10 @@ public class GameplayEffectsTestSuite : MonoBehaviour
             ++NumApplications;
 
             // check that health has been reduced
-            Debug.Log($"DestComponent->GetSet<UAbilitySystemTestAttributeSet>()->Health={DestComponent.GetSet<AbilitySystemTestAttributeSet>().Health.CurrentValue} " +
+            Debug.Log($"DestComponent->GetSet<UAbilitySystemTestAttributeSet>()->Health={DestComponent.GetSet<AbilitySystemTestAttributeSet>().Health.BaseValue} " +
                 $"   ={StartingHealth - (DamagePerPeriod * NumApplications)}");
-            TickWorld(PeriodSecs);
         }
+        TickWorld(PeriodSecs);
     }
     public void AddModifier(GameplayEffect Effect, FieldInfo Property, Type PropOwner, EGameplayModOp Op, FScalableFloat Magnitude)
     {

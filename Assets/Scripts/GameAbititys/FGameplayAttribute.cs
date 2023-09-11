@@ -32,8 +32,7 @@ namespace GameplayAbilitySystem
             GameplayAttributeData DataPtr = (GameplayAttributeData)fi.GetValue(Dest);
             OldValue = DataPtr.GetCurrentValue();
             Dest.PreAttributeChange(this, NewValue);
-            fi.SetValue(Dest, DataPtr);
-            UnityEngine.Debug.Log($"SetNumericValueChecked=NewValue={NewValue}");
+            DataPtr.SetCurrentValue(NewValue);
             Dest.PostAttributeChange(this, OldValue, NewValue);
         }
 

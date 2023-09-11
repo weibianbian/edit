@@ -36,7 +36,10 @@ namespace GameplayAbilitySystem
             FGameplayEffectSpec SpecToUse = Spec;
 
             SpecToUse.CalculateModifierMagnitudes();
-            //这将修改属性的基值
+            // ------------------------------------------------------
+            //	Modifiers
+            //		这将修改属性的基值
+            // ------------------------------------------------------
             bool ModifierSuccessfullyExecuted = false;
 
             for (int ModIdx = 0; ModIdx < SpecToUse.Modifiers.Count(); ++ModIdx)
@@ -50,6 +53,10 @@ namespace GameplayAbilitySystem
                 };
                 ModifierSuccessfullyExecuted |= InternalExecuteMod(SpecToUse, EvalData);
             }
+            // ------------------------------------------------------
+            //	Executions
+            //		这将运行自定义代码来“做事情”。
+            // ------------------------------------------------------
             //调用GameplayCue事件
             bool bHasModifiers = SpecToUse.Modifiers.Count > 0;
             bool bHasExecutions = false;
@@ -84,12 +91,13 @@ namespace GameplayAbilitySystem
                 if (AttributeSet.PreGameplayEffectExecute(ExecuteData))
                 {
                     float OldValueOfProperty = Owner.GetNumericAttribute(ModEvalData.Attribute);
+
                     ApplyModToAttribute(ModEvalData.Attribute, ModEvalData.ModifierOp, ModEvalData.Magnitude, ExecuteData);
                     FGameplayEffectModifiedAttribute ModifiedAttribute = Spec.GetModifiedAttribute(ModEvalData.Attribute);
                     if (ModifiedAttribute == null)
                     {
                         //如果我们还没有创建一个修改过的属性持有人，那就创建它
-                        //ModifiedAttribute = Spec.addmo
+                        ModifiedAttribute = Spec.AddModifiedAttribute(ModEvalData.Attribute);
                     }
                     ModifiedAttribute.TotalMagnitude += ModEvalData.Magnitude;
                     //这应该适用于“游戏范围”规则。比如将生命值限制在最大生命值，或者每增加一点力量就增加3点生命值等等
@@ -100,6 +108,7 @@ namespace GameplayAbilitySystem
             }
             return bExecuted;
         }
+        //实际上将给定的mod应用于属性
         public void ApplyModToAttribute(FGameplayAttribute Attribute, EGameplayModOp ModifierOp, float ModifierMagnitude, FGameplayEffectModCallbackData ModData)
         {
             float CurrentBase = GetAttributeBaseValue(Attribute);
@@ -214,8 +223,18 @@ namespace GameplayAbilitySystem
                     Spec = Spec,
                 };
                 GameplayEffects_Internal.Add(AppliedActiveGE);
+
+                //UAbilitySystemGlobals.Get().SetCurrentAppliedGE(AppliedActiveGE.Spec);
+
                 FGameplayEffectSpec AppliedEffectSpec = AppliedActiveGE.Spec;
-                //float DefCalcDuration = 0.0f;
+                bool HasModifiedAttributes = AppliedEffectSpec.ModifiedAttributes.Count > 0;
+                bool HasDurationAndNoPeriod = AppliedEffectSpec.Def.DurationPolicy == EGameplayEffectDurationType.HasDuration && AppliedEffectSpec.GetPeriod() == 0;
+                bool HasPeriodAndNoDuration = AppliedEffectSpec.Def.DurationPolicy == EGameplayEffectDurationType.Instant && AppliedEffectSpec.GetPeriod() > 0;
+                bool ShouldBuildModifiedAttributeList = !HasModifiedAttributes && (HasDurationAndNoPeriod || HasPeriodAndNoDuration);
+                if (ShouldBuildModifiedAttributeList)
+                {
+
+                }
                 if (AppliedEffectSpec.AttemptCalculateDurationFromDef(out float DefCalcDuration))
                 {
                     AppliedEffectSpec.SetDuration(DefCalcDuration, false);
@@ -250,7 +269,7 @@ namespace GameplayAbilitySystem
                     {
                         TimerManager.SetTimerForNextTick(Delegate);
                     }
-                    TimerManager.SetTimer(ref AppliedActiveGE.DurationHandle, Delegate, AppliedEffectSpec.GetPeriod(), true);
+                    TimerManager.SetTimer(ref AppliedActiveGE.PeriodHandle, Delegate, AppliedEffectSpec.GetPeriod(), true);
                 }
             }
             // @注意@todo:这是目前假设(可能是错误的)堆叠GE的抑制状态不会改变
@@ -407,12 +426,20 @@ namespace GameplayAbilitySystem
         {
             if (!ActiveEffect.bIsInhibited)
             {
+                UnityEngine.Debug.Log($"Executed Periodic Effect {ActiveEffect.Spec.Def}");
+                for (int i = 0; i < ActiveEffect.Spec.Def.Modifiers.Count; i++)
+                {
+                    FGameplayModifierInfo Modifier = ActiveEffect.Spec.Def.Modifiers[i];
+                    float Magnitude = 0.0f;
+                    Modifier.ModifierMagnitude.AttemptCalculateMagnitude(ActiveEffect.Spec,out Magnitude);
+                    UnityEngine.Debug.Log($"{Modifier.Attribute}: {Modifier.ModifierOp}  {Magnitude}");
+                }
                 // 每次定时执行前清除修改后的属性
                 ActiveEffect.Spec.ModifiedAttributes.Clear();
 
                 // Execute
                 ExecuteActiveEffectsFrom(ActiveEffect.Spec);
-
+                UnityEngine.Debug.Log($"Executed Periodic Effect@@@@@@@@@@@@@@@@@@@@ {ActiveEffect.Spec.Def}");
                 // 为正在执行的周期性效果调用委托
                 UAbilitySystemComponent SourceASC = ActiveEffect.Spec.GetContext().GetInstigatorAbilitySystemComponent();
                 //Owner.OnPeriodicGameplayEffectExecuteOnSelf(SourceASC, ActiveEffect.Spec, ActiveEffect.Handle);

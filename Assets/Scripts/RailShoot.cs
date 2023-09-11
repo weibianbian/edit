@@ -11,7 +11,7 @@ public class RailShoot : MonoBehaviour
     FTimerManager timerManager = new FTimerManager();
     FTimerHandle PeriodHandle = new FTimerHandle();
     FTimerHandle DurationHandle = new FTimerHandle();
-    public void Awake()
+    public void Start()
     {
         float Duration = NumPeriods * PeriodSecs;
         int NumApplications = 0;

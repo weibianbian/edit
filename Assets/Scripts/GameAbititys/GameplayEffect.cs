@@ -1,4 +1,5 @@
 ﻿using Sirenix.Utilities;
+using System;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine.Rendering;
@@ -36,6 +37,7 @@ namespace GameplayAbilitySystem
             DurationPolicy = EGameplayEffectDurationType.Instant;
             Period = new FScalableFloat(0);
             OngoingTagRequirements = new FGameplayTagRequirements();
+            bExecutePeriodicEffectOnApplication = true;
         }
     }
     public class FAggregatorRef
@@ -116,6 +118,13 @@ namespace GameplayAbilitySystem
                 ModMagnitude = GameplayEffectUtilities.ComputeStackedModifierMagnitude(SingleEvaluatedMagnitude, StackCount, Def.Modifiers[ModifierIdx].ModifierOp);
             }
             return ModMagnitude;
+        }
+        public FGameplayEffectModifiedAttribute AddModifiedAttribute(FGameplayAttribute Attribute)
+        {
+            FGameplayEffectModifiedAttribute NewAttribute = new FGameplayEffectModifiedAttribute();
+            NewAttribute.Attribute = Attribute;
+            ModifiedAttributes.Add(NewAttribute);
+            return NewAttribute;
         }
         public void SetLevel(float InLevel)
         {

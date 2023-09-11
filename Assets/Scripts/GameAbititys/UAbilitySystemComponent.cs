@@ -1,6 +1,7 @@
 using RailShootGame;
 using System;
 using System.Collections.Generic;
+using UnityEditor.Events;
 using UnityEngine;
 
 namespace GameplayAbilitySystem
@@ -40,6 +41,7 @@ namespace GameplayAbilitySystem
         }
         public void ExecutePeriodicEffect(FActiveGameplayEffectHandle Handle)
         {
+            UnityEngine.Debug.Log($"@@@ExecutePeriodicEffect");
             ActiveGameplayEffects.ExecutePeriodicGameplayEffect(Handle);
         }
         public UAttributeSet GetOrCreateAttributeSubobject(Type AttributeClass)
