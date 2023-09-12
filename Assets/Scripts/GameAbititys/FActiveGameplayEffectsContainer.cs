@@ -398,6 +398,32 @@ namespace GameplayAbilitySystem
                 bool RefreshStartTime = false;
                 bool RefreshDurationTimer = false;
                 bool CheckForFinalPeriodicExec = false;
+                if (Duration > 0)
+                {
+                    switch (Effect.Spec.Def.StackExpirationPolicy)
+                    {
+                        case EGameplayEffectStackingExpirationPolicy.ClearEntireStack:
+                            StacksToRemove = -1; // Remove all stacks
+                            CheckForFinalPeriodicExec = true;
+                            break;
+
+                        case EGameplayEffectStackingExpirationPolicy.RemoveSingleStackAndRefreshDuration:
+                            StacksToRemove = 1;
+                            CheckForFinalPeriodicExec = (Effect.Spec.StackCount == 1);
+                            RefreshStartTime = true;
+                            RefreshDurationTimer = true;
+                            break;
+                        case EGameplayEffectStackingExpirationPolicy.RefreshDuration:
+                            RefreshStartTime = true;
+                            RefreshDurationTimer = true;
+                            break;
+                    }
+                }
+                else
+                {
+                    //效果尚未完成，只需刷新其持续时间定时器
+                    RefreshDurationTimer = true;
+                }
                 if (CheckForFinalPeriodicExec)
                 {
                     //这个游戏效果已经达到了它的持续时间。检查它是否需要在删除前最后一次执行。
@@ -420,6 +446,14 @@ namespace GameplayAbilitySystem
                         }
                     }
                 }
+                if (StacksToRemove >= -1)
+                {
+                    InternalRemoveActiveGameplayEffect(ActiveGEIdx, StacksToRemove, false);
+                }
+                if (RefreshStartTime)
+                {
+                    RestartActiveGameplayEffectDuration(Effect);
+                }
             }
         }
         public void InternalExecutePeriodicGameplayEffect(FActiveGameplayEffect ActiveEffect)
@@ -430,7 +464,7 @@ namespace GameplayAbilitySystem
                 {
                     FGameplayModifierInfo Modifier = ActiveEffect.Spec.Def.Modifiers[i];
                     float Magnitude = 0.0f;
-                    Modifier.ModifierMagnitude.AttemptCalculateMagnitude(ActiveEffect.Spec,out Magnitude);
+                    Modifier.ModifierMagnitude.AttemptCalculateMagnitude(ActiveEffect.Spec, out Magnitude);
                     //UnityEngine.Debug.Log($"{Modifier.Attribute}: {Modifier.ModifierOp}  {Magnitude}");
                 }
                 // 每次定时执行前清除修改后的属性
@@ -499,45 +533,56 @@ namespace GameplayAbilitySystem
 
             }
         }
+        public void RestartActiveGameplayEffectDuration(FActiveGameplayEffect ActiveGameplayEffect)
+        {
+        }
         public bool InternalRemoveActiveGameplayEffect(int Idx, int StacksToRemove, bool bPrematureRemoval)
         {
-            FActiveGameplayEffect Effect = GetActiveGameplayEffect(Idx);
-            FGameplayEffectRemovalInfo GameplayEffectRemovalInfo = new FGameplayEffectRemovalInfo()
+            if (Idx < GetNumGameplayEffects())
             {
-                StackCount = Effect.Spec.StackCount,
-                bPrematureRemoval = bPrematureRemoval,
-                EffectContext = Effect.Spec.GetEffectContext()
-            };
-            if (StacksToRemove > 0 && Effect.Spec.StackCount > StacksToRemove)
-            {
-                // This won't be a full remove, only a change in StackCount.
-                int StartingStackCount = Effect.Spec.StackCount;
-                Effect.Spec.StackCount -= StacksToRemove;
-                //OnStackCountChange(Effect, StartingStackCount, Effect.Spec.StackCount);
-                return false;
-            }
-            // Invoke Remove GameplayCue event
-            bool ShouldInvokeGameplayCueEvent = true;
-            ShouldInvokeGameplayCueEvent &= !Effect.bIsInhibited;
-            // 标记待移除的效果，并移除该效果的所有副作用
-            InternalOnActiveGameplayEffectRemoved(Effect, ShouldInvokeGameplayCueEvent, GameplayEffectRemovalInfo);
+                FActiveGameplayEffect Effect = GetActiveGameplayEffect(Idx);
+                FGameplayEffectRemovalInfo GameplayEffectRemovalInfo = new FGameplayEffectRemovalInfo()
+                {
+                    StackCount = Effect.Spec.StackCount,
+                    bPrematureRemoval = bPrematureRemoval,
+                    EffectContext = Effect.Spec.GetEffectContext()
+                };
+                if (StacksToRemove > 0 && Effect.Spec.StackCount > StacksToRemove)
+                {
+                    // 这不会是一个完全的删除，只是改变了StackCount.
+                    int StartingStackCount = Effect.Spec.StackCount;
+                    Effect.Spec.StackCount -= StacksToRemove;
+                    OnStackCountChange(Effect, StartingStackCount, Effect.Spec.StackCount);
+                    return false;
+                }
+                // 调用移除GameplayCue事件
+                bool ShouldInvokeGameplayCueEvent = true;
+                ShouldInvokeGameplayCueEvent &= !Effect.bIsInhibited;
+                // 标记待移除的效果，并移除该效果的所有副作用
+                InternalOnActiveGameplayEffectRemoved(Effect, ShouldInvokeGameplayCueEvent, GameplayEffectRemovalInfo);
 
-            if (Effect.DurationHandle.IsValid())
-            {
-                Owner.GetWorld().GetTimerManager().ClearTimer(Effect.DurationHandle);
+                if (Effect.DurationHandle.IsValid())
+                {
+                    Owner.GetWorld().GetTimerManager().ClearTimer(Effect.DurationHandle);
+                }
+                if (Effect.PeriodHandle.IsValid())
+                {
+                    Owner.GetWorld().GetTimerManager().ClearTimer(Effect.PeriodHandle);
+                }
+                //从全局映射中删除此句柄
+                Effect.Handle.RemoveFromGlobalMap();
+                //如有必要，尝试使用过期效果
+                InternalApplyExpirationEffects(Effect.Spec, bPrematureRemoval);
+                bool ModifiedArray = false;
+                GameplayEffects_Internal.RemoveAt(Idx);
+                ModifiedArray = true;
+                return ModifiedArray;
             }
-            if (Effect.PeriodHandle.IsValid())
-            {
-                Owner.GetWorld().GetTimerManager().ClearTimer(Effect.PeriodHandle);
-            }
-            //从全局映射中删除此句柄
-            Effect.Handle.RemoveFromGlobalMap();
-            //如有必要，尝试使用过期效果
-            //InternalApplyExpirationEffects(Effect.Spec, bPrematureRemoval);
-            bool ModifiedArray = false;
-            GameplayEffects_Internal.RemoveAt(Idx);
-            ModifiedArray = true;
-            return ModifiedArray;
+            return false;
+        }
+        public void InternalApplyExpirationEffects(FGameplayEffectSpec ExpiringSpec, bool bPrematureRemoval)
+        {
+            //不要预测过期的影响
         }
         public bool RemoveActiveGameplayEffect(FActiveGameplayEffectHandle Handle, int StacksToRemove)
         {
