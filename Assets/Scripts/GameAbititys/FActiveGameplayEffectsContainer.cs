@@ -18,11 +18,11 @@ namespace GameplayAbilitySystem
         UAbilitySystemComponent Owner;
         public Dictionary<FGameplayAttribute, OnGameplayAttributeValueChange> AttributeValueChangeDelegates;
         public Dictionary<FGameplayAttribute, FAggregator> AttributeAggregatorMap;
-        public List<GameplayEffect> ApplicationImmunityQueryEffects;
+        public List<UGameplayEffect> ApplicationImmunityQueryEffects;
         public List<FActiveGameplayEffect> GameplayEffects_Internal;
         public FActiveGameplayEffectsContainer()
         {
-            ApplicationImmunityQueryEffects = new List<GameplayEffect>();
+            ApplicationImmunityQueryEffects = new List<UGameplayEffect>();
             AttributeAggregatorMap = new Dictionary<FGameplayAttribute, FAggregator>();
             GameplayEffects_Internal = new List<FActiveGameplayEffect>();
         }
@@ -199,6 +199,9 @@ namespace GameplayAbilitySystem
                 FGameplayEffectSpec ExistingSpec = ExistingStackableGE.Spec;
                 StartingStackCount = ExistingSpec.StackCount;
 
+                //如何一次应用多个栈?如果我们触发一个可以拒绝应用程序的溢出怎么办?
+                //我们仍然想应用那些没有让我们崩溃的栈，但我们也想调用HandleActiveGameplayEffectStackOverflow。
+                //暂时:只有在已经达到限制时才调用HandleActiveGameplayEffectStackOverflow。否则，我们只需将堆栈限制设置为最大。
                 if (ExistingSpec.StackCount == ExistingSpec.Def.StackLimitCount)
                 {
                     if (!HandleActiveGameplayEffectStackOverflow(ExistingStackableGE, ExistingSpec, Spec))
@@ -213,6 +216,20 @@ namespace GameplayAbilitySystem
                 }
                 ExistingStackableGE.Spec = Spec;
                 ExistingStackableGE.Spec.StackCount = NewStackCount;
+
+                UGameplayEffect GEDef = ExistingSpec.Def;
+                if (GEDef.StackDurationRefreshPolicy == EGameplayEffectStackingDurationPolicy.NeverRefresh)
+                {
+                    bSetDuration = false;
+                }
+                else
+                {
+                    RestartActiveGameplayEffectDuration(ExistingStackableGE);
+                }
+                if (GEDef.StackPeriodResetPolicy == EGameplayEffectStackingPeriodPolicy.NeverReset)
+                {
+                    bSetPeriod = false;
+                }
             }
             else
             {
@@ -227,27 +244,60 @@ namespace GameplayAbilitySystem
                 //UAbilitySystemGlobals.Get().SetCurrentAppliedGE(AppliedActiveGE.Spec);
 
                 FGameplayEffectSpec AppliedEffectSpec = AppliedActiveGE.Spec;
+                //确保收集了目标的标签，以便我们可以正确地过滤无限效果
+                //AppliedEffectSpec.CapturedTargetTags.GetActorTags().Reset();
+                //Owner->GetOwnedGameplayTags(AppliedEffectSpec.CapturedTargetTags.GetActorTags());
+                //计算所有修改器的大小。有些可能需要在以后根据属性更改等进行更新，但这些应该进行更新
+                //通过委托回调完成。
+                //AppliedEffectSpec.CaptureAttributeDataFromTarget(Owner);
+                //AppliedEffectSpec.CalculateModifierMagnitudes();
+
+                //构建ModifiedAttribute列表，以便GCs可以在非周期的情况下获得量级信息
+                //注意:有一天可能不想调用gameplay cues，除非正在进行的标签要求得到满足(将需要将此移动到那里)
                 bool HasModifiedAttributes = AppliedEffectSpec.ModifiedAttributes.Count > 0;
                 bool HasDurationAndNoPeriod = AppliedEffectSpec.Def.DurationPolicy == EGameplayEffectDurationType.HasDuration && AppliedEffectSpec.GetPeriod() == 0;
                 bool HasPeriodAndNoDuration = AppliedEffectSpec.Def.DurationPolicy == EGameplayEffectDurationType.Instant && AppliedEffectSpec.GetPeriod() > 0;
                 bool ShouldBuildModifiedAttributeList = !HasModifiedAttributes && (HasDurationAndNoPeriod || HasPeriodAndNoDuration);
                 if (ShouldBuildModifiedAttributeList)
                 {
-
+                    int ModifierIndex = -1;
+                    for (int i = 0; i < AppliedEffectSpec.Def.Modifiers.Count; i++)
+                    {
+                        FGameplayModifierInfo Mod = AppliedEffectSpec.Def.Modifiers[i];
+                        ++ModifierIndex;
+                        //从已计算的数量级中取数量级
+                        float Magnitude = 0.0f;
+                        FModifierSpec ModSpec = AppliedEffectSpec.Modifiers[ModifierIndex];
+                        Magnitude = ModSpec.GetEvaluatedMagnitude();
+                        ////如果ModifiedAttribute列表不存在，则添加到列表中
+                        FGameplayEffectModifiedAttribute ModifiedAttribute = AppliedEffectSpec.GetModifiedAttribute(Mod.Attribute);
+                        if (ModifiedAttribute != null)
+                        {
+                            ModifiedAttribute = AppliedEffectSpec.AddModifiedAttribute(Mod.Attribute);
+                        }
+                        ModifiedAttribute.TotalMagnitude += Magnitude;
+                    }
                 }
+                //重新计算持续时间，因为它可能依赖于目标捕获的属性
                 if (AppliedEffectSpec.AttemptCalculateDurationFromDef(out float DefCalcDuration))
                 {
                     AppliedEffectSpec.SetDuration(DefCalcDuration, false);
+                }
+                else if (AppliedEffectSpec.Def.DurationMagnitude.GetMagnitudeCalculationType() == EGameplayEffectMagnitudeCalculation.SetByCaller)
+                {
+                    AppliedEffectSpec.Def.DurationMagnitude.AttemptCalculateMagnitude(AppliedEffectSpec, out AppliedEffectSpec.Duration);
                 }
                 float DurationBaseValue = AppliedEffectSpec.GetDuration();
                 if (DurationBaseValue > 0)
                 {
                     float FinalDuration = AppliedEffectSpec.CalculateModifiedDuration();
+                    //我们无法将自己修改为即时或无限持续的效果
                     if (FinalDuration <= 0.0f)
                     {
                         FinalDuration = 0.1f;
                     }
-                    //AppliedEffectSpec.SetDuration(FinalDuration, true);
+                    AppliedEffectSpec.SetDuration(FinalDuration, true);
+                    //用定时器管理器注册持续时间的回调函数
                     if (Owner != null && bSetDuration)
                     {
                         FTimerManager TimerManager = Owner.GetWorld().GetTimerManager();
@@ -359,7 +409,7 @@ namespace GameplayAbilitySystem
         //在客户端和服务器端添加新的ActiveGameplayEffect时调用*/
         public void InternalOnActiveGameplayEffectAdded(FActiveGameplayEffect Effect)
         {
-            GameplayEffect EffectDef = Effect.Spec.Def;
+            UGameplayEffect EffectDef = Effect.Spec.Def;
 
             //将我们正在进行的标记需求添加到依赖关系图中。我们将在下面检查这些标签。
 
@@ -485,17 +535,20 @@ namespace GameplayAbilitySystem
         {
             for (int i = 0; i < ApplicationImmunityQueryEffects.Count; i++)
             {
-                GameplayEffect EffectDef = ApplicationImmunityQueryEffects[i];
+                UGameplayEffect EffectDef = ApplicationImmunityQueryEffects[i];
             }
             return false;
         }
         public FActiveGameplayEffect FindStackableActiveGameplayEffect(FGameplayEffectSpec Spec)
         {
             FActiveGameplayEffect StackableGE = null;
-            GameplayEffect GEDef = Spec.Def;
+            UGameplayEffect GEDef = Spec.Def;
             EGameplayEffectStackingType StackingType = GEDef.StackingType;
             if ((StackingType != EGameplayEffectStackingType.None) && (GEDef.DurationPolicy != EGameplayEffectDurationType.Instant))
             {
+                //迭代GameplayEffects以查看是否找到匹配的结果。请注意，我们可以在map中缓存一个句柄，但我们仍然会这样做
+                //在GameplayEffects中进行线性搜索以找到实际的FActiveGameplayEffect(因为GameplayEffects数组不稳定)。
+                //如果这成为分析器的一个慢点，map仍然可以作为早期退出以避免不必要的扫描。
                 UAbilitySystemComponent SourceASC = Spec.GetContext().GetInstigatorAbilitySystemComponent();
                 for (int i = 0; i < GameplayEffects_Internal.Count; i++)
                 {
@@ -512,7 +565,7 @@ namespace GameplayAbilitySystem
         }
         public bool HandleActiveGameplayEffectStackOverflow(FActiveGameplayEffect ActiveStackableGE, FGameplayEffectSpec OldSpec, FGameplayEffectSpec OverflowingSpec)
         {
-            GameplayEffect StackedGE = OldSpec.Def;
+            UGameplayEffect StackedGE = OldSpec.Def;
             bool bAllowOverflowApplication = !(StackedGE.bDenyOverflowApplication);
 
             if (!bAllowOverflowApplication && StackedGE.bClearStackOnOverflow)

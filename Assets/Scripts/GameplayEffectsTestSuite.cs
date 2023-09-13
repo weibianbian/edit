@@ -45,7 +45,7 @@ public class GameplayEffectsTestSuite : MonoBehaviour
     {
         float DamageValue = 5.0f;
         float StartingHealth = DestComponent.GetSet<AbilitySystemTestAttributeSet>().Health.CurrentValue;
-        GameplayEffect BaseDmgEffect = new GameplayEffect();
+        UGameplayEffect BaseDmgEffect = new UGameplayEffect();
         AddModifier(BaseDmgEffect, typeof(AbilitySystemTestAttributeSet).GetField("Health"), typeof(AbilitySystemTestAttributeSet), EGameplayModOp.Additive, new FScalableFloat(-DamageValue));
         BaseDmgEffect.DurationPolicy = EGameplayEffectDurationType.Instant;
         SourceComponent.ApplyGameplayEffectToTarget(BaseDmgEffect, DestComponent, 1);
@@ -56,7 +56,7 @@ public class GameplayEffectsTestSuite : MonoBehaviour
     {
         float DamageValue = 5.0f;
         float StartingHealth = DestComponent.GetSet<AbilitySystemTestAttributeSet>().Health.CurrentValue;
-        GameplayEffect BaseDmgEffect = new GameplayEffect();
+        UGameplayEffect BaseDmgEffect = new UGameplayEffect();
         AddModifier(BaseDmgEffect, typeof(AbilitySystemTestAttributeSet).GetField("Damage"), typeof(AbilitySystemTestAttributeSet), EGameplayModOp.Additive, new FScalableFloat(DamageValue));
         BaseDmgEffect.DurationPolicy = EGameplayEffectDurationType.Instant;
         SourceComponent.ApplyGameplayEffectToTarget(BaseDmgEffect, DestComponent, 1);
@@ -69,7 +69,7 @@ public class GameplayEffectsTestSuite : MonoBehaviour
         float BuffValue = 30.0f;
         float StartingMana = DestComponent.GetSet<AbilitySystemTestAttributeSet>().Mana.CurrentValue;
         FActiveGameplayEffectHandle BuffHandle;
-        GameplayEffect DamageBuffEffect = new GameplayEffect();
+        UGameplayEffect DamageBuffEffect = new UGameplayEffect();
         DamageBuffEffect.DurationPolicy = EGameplayEffectDurationType.Infinite;
 
         BuffHandle = SourceComponent.ApplyGameplayEffectToTarget(DamageBuffEffect, DestComponent, 1.0f);
@@ -86,7 +86,7 @@ public class GameplayEffectsTestSuite : MonoBehaviour
         float PeriodSecs = 1.0f;
         float DamagePerPeriod = 5.0f;
         float StartingHealth = DestComponent.GetSet<AbilitySystemTestAttributeSet>().Health.CurrentValue;
-        GameplayEffect BaseDmgEffect = new GameplayEffect();
+        UGameplayEffect BaseDmgEffect = new UGameplayEffect();
         AddModifier(BaseDmgEffect, typeof(AbilitySystemTestAttributeSet).GetField("Health"), typeof(AbilitySystemTestAttributeSet), EGameplayModOp.Additive, new FScalableFloat(-DamagePerPeriod));
         BaseDmgEffect.DurationPolicy = EGameplayEffectDurationType.HasDuration;
         BaseDmgEffect.DurationMagnitude = new FGameplayEffectModifierMagnitude(new FScalableFloat(NumPeriods * PeriodSecs));
@@ -111,7 +111,7 @@ public class GameplayEffectsTestSuite : MonoBehaviour
         }
         TickWorld(PeriodSecs);
     }
-    public void AddModifier(GameplayEffect Effect, FieldInfo Property, Type PropOwner, EGameplayModOp Op, FScalableFloat Magnitude)
+    public void AddModifier(UGameplayEffect Effect, FieldInfo Property, Type PropOwner, EGameplayModOp Op, FScalableFloat Magnitude)
     {
         FGameplayModifierInfo Info = new FGameplayModifierInfo();
         Effect.Modifiers.Add(Info);

@@ -157,7 +157,7 @@ namespace GameplayAbilitySystem
         {
             return ActiveGameplayEffects.GetGameplayAttributeValueChangeDelegate(Attribute);
         }
-        public FActiveGameplayEffectHandle ApplyGameplayEffectToTarget(GameplayEffect InGameplayEffect, UAbilitySystemComponent InTarget, float InLevel)
+        public FActiveGameplayEffectHandle ApplyGameplayEffectToTarget(UGameplayEffect InGameplayEffect, UAbilitySystemComponent InTarget, float InLevel)
         {
             GameplayEffectContextHandle Context = MakeEffectContext();
             FGameplayEffectSpec Spec = new FGameplayEffectSpec(InGameplayEffect, Context, InLevel);
@@ -182,7 +182,12 @@ namespace GameplayAbilitySystem
             {
                 return new FActiveGameplayEffectHandle();
             }
-
+            //检查特效是否成功应用
+            float ChanceToApply = Spec.GetChanceToApplyToTarget();
+            if (ChanceToApply > 1.0f - 1E-8f)
+            {
+                return new FActiveGameplayEffectHandle();
+            }
             //确保我们在正确的位置创建规范的副本
             //我们在这里用INDEX_NONE初始化FActiveGameplayEffectHandle来处理即时GE的情况
             //像这样初始化它会将FActiveGameplayEffectHandle上的bPassedFiltersAndWasExecuted设置为true，这样我们就可以知道我们应用了GE
@@ -190,9 +195,10 @@ namespace GameplayAbilitySystem
             bool bFoundExistingStackableGE = false;
 
             FActiveGameplayEffect AppliedEffect = new FActiveGameplayEffect();
+            //在可能将预测即时效果修改为无限持续效果之前，现在将其缓存
             bool bInvokeGameplayCueApplied = Spec.Def.DurationPolicy != EGameplayEffectDurationType.Instant;
-            FGameplayEffectSpec StackSpec = null;
             FGameplayEffectSpec OurCopyOfSpec = null;
+            FGameplayEffectSpec StackSpec = null;
             if (Spec.Def.DurationPolicy != EGameplayEffectDurationType.Instant)
             {
                 AppliedEffect = ActiveGameplayEffects.ApplyGameplayEffectSpec(Spec, ref bFoundExistingStackableGE);
@@ -267,7 +273,7 @@ namespace GameplayAbilitySystem
             return Context;
 
         }
-        public GameplayEffectSpecHandle MakeOutgoingSpec(GameplayEffect InGameplayEffect, float Level, GameplayEffectContextHandle Context)
+        public GameplayEffectSpecHandle MakeOutgoingSpec(UGameplayEffect InGameplayEffect, float Level, GameplayEffectContextHandle Context)
         {
             FGameplayEffectSpec NewSpec = new FGameplayEffectSpec(InGameplayEffect, Context, Level);
             //传递给投掷物，投掷物击中到目标后被应用

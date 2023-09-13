@@ -1,62 +1,15 @@
-﻿using Sirenix.Utilities;
-using System;
-using System.Collections.Generic;
-using Unity.VisualScripting;
-using UnityEngine.Rendering;
+﻿using System.Collections.Generic;
 
 namespace GameplayAbilitySystem
 {
-    public class GameplayEffect
-    {
-        public EGameplayEffectDurationType DurationPolicy;
-        public EGameplayEffectStackingType StackingType;
-        public EGameplayEffectStackingExpirationPolicy StackExpirationPolicy;
-        public List<FGameplayModifierInfo> Modifiers = new List<FGameplayModifierInfo>();
-        public List<GameplayCue> GameplayCues = new List<GameplayCue>();
-        public FInheritedTagContainer RemoveGameplayEffectsWithTags = new FInheritedTagContainer();
-        public FGameplayEffectModifierMagnitude DurationMagnitude;
-        public FGameplayTagRequirements OngoingTagRequirements;
-        public FScalableFloat Period;
-        public float Duration;
-        public int StackLimitCount;
-        public bool bDenyOverflowApplication = false;
-        public bool bClearStackOnOverflow = false;
-        /*如果为true，效果在应用程序上执行，然后在每个周期间隔执行。如果为false，则在第一个周期结束之前不会执行。*/
-        public bool bExecutePeriodicEffectOnApplication;
-
-        public GameplayEffect()
-        {
-            DurationPolicy = EGameplayEffectDurationType.Instant;
-            Period = new FScalableFloat(0);
-            OngoingTagRequirements = new FGameplayTagRequirements();
-            bExecutePeriodicEffectOnApplication = true;
-        }
-    }
-    public class FAggregatorRef
-    {
-
-    }
-    public class FModifierSpec
-    {
-        public float EvaluatedMagnitude;
-        public float GetEvaluatedMagnitude() { return EvaluatedMagnitude; }
-    }
-    public enum EGameplayEffectMagnitudeCalculation
-    {
-        ScalableFloat,
-        /** Perform a calculation based upon an attribute. */
-        AttributeBased,
-        /** Perform a custom calculation, capable of capturing and acting on multiple attributes, in either BP or native. */
-        CustomCalculationClass,
-        /** This magnitude will be set explicitly by the code/blueprint that creates the spec. */
-        SetByCaller,
-    }
     public class FGameplayEffectSpec
     {
-        public GameplayEffect Def;
+        public UGameplayEffect Def;
         public float Duration;
         public float Period;
         public float Level;
+        //在0.0-1.0范围内，这个GameplayEffect将应用于目标属性或GameplayEffect的概率
+        public float ChanceToApplyToTarget;
         private GameplayEffectContextHandle EffectContext;
         public int StackCount;
         public bool bDurationLocked = false;
@@ -66,7 +19,7 @@ namespace GameplayAbilitySystem
         public List<FGameplayEffectModifiedAttribute> ModifiedAttributes;
         public FTagContainerAggregator CapturedSourceTags = new FTagContainerAggregator();
         public FTagContainerAggregator CapturedTargetTags = new FTagContainerAggregator();
-        public FGameplayEffectSpec(GameplayEffect InDef, GameplayEffectContextHandle InEffectContext, float InLevel)
+        public FGameplayEffectSpec(UGameplayEffect InDef, GameplayEffectContextHandle InEffectContext, float InLevel)
         {
             CapturedRelevantAttributes = new FGameplayEffectAttributeCaptureSpecContainer();
             ModifiedAttributes = new List<FGameplayEffectModifiedAttribute>();
@@ -78,7 +31,7 @@ namespace GameplayAbilitySystem
             CapturedRelevantAttributes = new FGameplayEffectAttributeCaptureSpecContainer();
             StackCount = 1;
         }
-        public void Initialize(GameplayEffect InDef, GameplayEffectContextHandle InEffectContext, float InLevel)
+        public void Initialize(UGameplayEffect InDef, GameplayEffectContextHandle InEffectContext, float InLevel)
         {
             Def = InDef;
             Level = InLevel;
@@ -100,6 +53,10 @@ namespace GameplayAbilitySystem
         public GameplayEffectContextHandle GetContext()
         {
             return EffectContext;
+        }
+        public float GetChanceToApplyToTarget()
+        {
+            return ChanceToApplyToTarget;
         }
         public float GetModifierMagnitude(int ModifierIdx, bool bFactorInStackCount)
         {
