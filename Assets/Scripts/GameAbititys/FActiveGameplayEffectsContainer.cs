@@ -132,7 +132,7 @@ namespace GameplayAbilitySystem
                     return BaseValue;
                 }
                 FieldInfo fi = Attribute.GetUProperty();
-                GameplayAttributeData DataPtr = (GameplayAttributeData)fi.GetValue(AttributeSet);
+                FGameplayAttributeData DataPtr = (FGameplayAttributeData)fi.GetValue(AttributeSet);
                 BaseValue = DataPtr.GetBaseValue();
             }
             return BaseValue;
@@ -154,7 +154,7 @@ namespace GameplayAbilitySystem
             Set.PreAttributeBaseChange(Attribute, NewBaseValue);
 
             FieldInfo fi = Attribute.GetUProperty();
-            GameplayAttributeData DataPtr = (GameplayAttributeData)fi.GetValue(Set);
+            FGameplayAttributeData DataPtr = (FGameplayAttributeData)fi.GetValue(Set);
 
             OldBaseValue = DataPtr.GetBaseValue();
             DataPtr.SetBaseValue(NewBaseValue);

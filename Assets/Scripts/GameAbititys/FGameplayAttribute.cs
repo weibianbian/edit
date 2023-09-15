@@ -22,14 +22,14 @@ namespace GameplayAbilitySystem
         public float GetNumericValue(UAttributeSet Src)
         {
             FieldInfo fi = (Attribute);
-            GameplayAttributeData DataPtr = (GameplayAttributeData)fi.GetValue(Src);
+            FGameplayAttributeData DataPtr = (FGameplayAttributeData)fi.GetValue(Src);
             return DataPtr.GetCurrentValue();
         }
         public void SetNumericValueChecked(float NewValue, UAttributeSet Dest)
         {
             float OldValue = 0.0f;
             FieldInfo fi = (Attribute);
-            GameplayAttributeData DataPtr = (GameplayAttributeData)fi.GetValue(Dest);
+            FGameplayAttributeData DataPtr = (FGameplayAttributeData)fi.GetValue(Dest);
             OldValue = DataPtr.GetCurrentValue();
             Dest.PreAttributeChange(this, NewValue);
             DataPtr.SetCurrentValue(NewValue);

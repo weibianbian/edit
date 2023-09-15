@@ -3,12 +3,12 @@
 namespace RailShootGame
 {
     //放置在AttributeSet中，创建一个可以使用FGameplayAttribute访问的属性。强烈建议使用这个而不是原始的float属性
-    public class GameplayAttributeData
+    public class FGameplayAttributeData
     {
         public float BaseValue;
         public float CurrentValue;
 
-        public GameplayAttributeData(float DefaultValue)
+        public FGameplayAttributeData(float DefaultValue)
         {
             BaseValue = DefaultValue;
             CurrentValue = DefaultValue;

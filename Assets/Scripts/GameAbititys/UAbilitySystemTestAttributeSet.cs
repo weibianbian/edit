@@ -4,24 +4,24 @@ using UnityEngine;
 
 namespace GameplayAbilitySystem
 {
-    public class AbilitySystemTestAttributeSet : UAttributeSet
+    public class UAbilitySystemTestAttributeSet : UAttributeSet
     {
-        public GameplayAttributeData MaxHealth;
-        public GameplayAttributeData Health;
-        public GameplayAttributeData Mana;
-        public GameplayAttributeData MaxMana;
-        public GameplayAttributeData Damage;
-        public GameplayAttributeData SpellDamage;
-        public GameplayAttributeData PhysicalDamage;
-        public GameplayAttributeData CritChance;
-        public GameplayAttributeData CritMultiplier;
-        public GameplayAttributeData ArmorDamageReduction;
-        public GameplayAttributeData DodgeChance;
-        public GameplayAttributeData LifeSteal;
-        public GameplayAttributeData Strength;
-        public GameplayAttributeData StackingAttribute1;
-        public GameplayAttributeData StackingAttribute2;
-        public GameplayAttributeData NoStackAttribute;
+        public FGameplayAttributeData MaxHealth;
+        public FGameplayAttributeData Health;
+        public FGameplayAttributeData Mana;
+        public FGameplayAttributeData MaxMana;
+        public FGameplayAttributeData Damage;
+        public FGameplayAttributeData SpellDamage;
+        public FGameplayAttributeData PhysicalDamage;
+        public FGameplayAttributeData CritChance;
+        public FGameplayAttributeData CritMultiplier;
+        public FGameplayAttributeData ArmorDamageReduction;
+        public FGameplayAttributeData DodgeChance;
+        public FGameplayAttributeData LifeSteal;
+        public FGameplayAttributeData Strength;
+        public FGameplayAttributeData StackingAttribute1;
+        public FGameplayAttributeData StackingAttribute2;
+        public FGameplayAttributeData NoStackAttribute;
         public override void PreAttributeChange(FGameplayAttribute Attribute, float NewValue)
         {
             base.PreAttributeChange(Attribute, NewValue);
@@ -59,7 +59,7 @@ namespace GameplayAbilitySystem
         FGameplayAttribute GetHealthAttribute()
         {
             FGameplayAttribute ret = new FGameplayAttribute();
-            ret.SetUProperty(typeof(AbilitySystemTestAttributeSet).GetField("Health"), typeof(AbilitySystemTestAttributeSet));
+            ret.SetUProperty(typeof(UAbilitySystemTestAttributeSet).GetField("Health"), typeof(UAbilitySystemTestAttributeSet));
             return ret;
         }
 
