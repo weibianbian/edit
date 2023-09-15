@@ -18,8 +18,10 @@ namespace GameplayAbilitySystem
         UAbilitySystemComponent Owner;
         public Dictionary<FGameplayAttribute, OnGameplayAttributeValueChange> AttributeValueChangeDelegates;
         public Dictionary<FGameplayAttribute, FAggregator> AttributeAggregatorMap;
+        //具有免疫查询的活跃GEs。这是一个加速列表，以避免频繁地搜索Active GameplayEffect列表。(我们只在免疫过程中搜索活性GE)
         public List<UGameplayEffect> ApplicationImmunityQueryEffects;
         public List<FActiveGameplayEffect> GameplayEffects_Internal;
+        public FGameplayTagCountContainer ApplicationImmunityGameplayTagCountContainer;
         public FActiveGameplayEffectsContainer()
         {
             ApplicationImmunityQueryEffects = new List<UGameplayEffect>();
@@ -533,9 +535,40 @@ namespace GameplayAbilitySystem
         }
         public bool HasApplicationImmunityToSpec(FGameplayEffectSpec SpecToApply, FActiveGameplayEffect OutGEThatProvidedImmunity)
         {
+            FGameplayTagContainer AggregatedSourceTags = SpecToApply.CapturedSourceTags.GetAggregatedTags();
+            if (AggregatedSourceTags==null)
+            {
+                return false;
+            }
             for (int i = 0; i < ApplicationImmunityQueryEffects.Count; i++)
             {
                 UGameplayEffect EffectDef = ApplicationImmunityQueryEffects[i];
+                if (EffectDef.GrantedApplicationImmunityQuery.Matches(SpecToApply))
+                {
+                    for (int n = 0; n < GameplayEffects_Internal.Count; n++)
+                    {
+                        FActiveGameplayEffect Effect = GameplayEffects_Internal[n];
+                        if (Effect.Spec.Def == EffectDef)
+                        {
+                            OutGEThatProvidedImmunity = Effect;
+                            return true;
+                        }
+                    }
+                    break;
+                } ;
+            }
+            if (!AggregatedSourceTags.HasAny(ApplicationImmunityGameplayTagCountContainer.GetExplicitGameplayTags()))
+            {
+                return false;
+            }
+            for (int n = 0; n < GameplayEffects_Internal.Count; n++)
+            {
+                FActiveGameplayEffect Effect = GameplayEffects_Internal[n];
+                if (Effect.Spec.Def.GrantedApplicationImmunityTags.IsEmpty() == false && Effect.Spec.Def.GrantedApplicationImmunityTags.RequirementsMet(AggregatedSourceTags))
+                {
+                    OutGEThatProvidedImmunity = Effect;
+                    return true;
+                }
             }
             return false;
         }

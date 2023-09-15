@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using RailShootGame;
+using System.Collections.Generic;
 
 namespace GameplayAbilitySystem
 {
@@ -19,6 +20,10 @@ namespace GameplayAbilitySystem
         public List<FGameplayEffectModifiedAttribute> ModifiedAttributes;
         public FTagContainerAggregator CapturedSourceTags = new FTagContainerAggregator();
         public FTagContainerAggregator CapturedTargetTags = new FTagContainerAggregator();
+        //被授予且不是来自UGameplayEffect def的标签。它们被复制
+        public FGameplayTagContainer DynamicGrantedTags = new FGameplayTagContainer();
+        //在这个效果规范上的标签不是来自UGameplayEffect def。这些是重复的
+        public FGameplayTagContainer DynamicAssetTags = new FGameplayTagContainer();
         public FGameplayEffectSpec(UGameplayEffect InDef, GameplayEffectContextHandle InEffectContext, float InLevel)
         {
             CapturedRelevantAttributes = new FGameplayEffectAttributeCaptureSpecContainer();
@@ -53,6 +58,10 @@ namespace GameplayAbilitySystem
         public GameplayEffectContextHandle GetContext()
         {
             return EffectContext;
+        }
+        public FGameplayTagContainer GetDynamicAssetTags()
+        {
+            return DynamicAssetTags;
         }
         public float GetChanceToApplyToTarget()
         {

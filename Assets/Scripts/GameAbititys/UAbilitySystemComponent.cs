@@ -118,7 +118,7 @@ namespace GameplayAbilitySystem
         public void GiveAbility(GameplayAbilitySpec AbilitySpec)
         {
             ActivatableAbilities.items.Add(AbilitySpec);
-            //ĞèÒª¸´ÖÆ
+            //éœ€è¦å¤åˆ¶
             OnGiveAbility(AbilitySpec);
         }
         public void OnGiveAbility(GameplayAbilitySpec Spec)
@@ -176,26 +176,26 @@ namespace GameplayAbilitySystem
         public FActiveGameplayEffectHandle ApplyGameplayEffectSpecToSelf(FGameplayEffectSpec Spec)
         {
             //ActiveGameplayEffectsContainer.ApplyGameplayEffectSpec
-            //ÎÒÃÇÊÇ·ñ¶Ô´ËÃâÒß
+            //æˆ‘ä»¬æ˜¯å¦å¯¹æ­¤å…ç–«
             FActiveGameplayEffect ImmunityGE = null;
             if (ActiveGameplayEffects.HasApplicationImmunityToSpec(Spec, ImmunityGE))
             {
                 return new FActiveGameplayEffectHandle();
             }
-            //¼ì²éÌØĞ§ÊÇ·ñ³É¹¦Ó¦ÓÃ
+            //æ£€æŸ¥ç‰¹æ•ˆæ˜¯å¦æˆåŠŸåº”ç”¨
             float ChanceToApply = Spec.GetChanceToApplyToTarget();
             if (ChanceToApply > 1.0f - 1E-8f)
             {
                 return new FActiveGameplayEffectHandle();
             }
-            //È·±£ÎÒÃÇÔÚÕıÈ·µÄÎ»ÖÃ´´½¨¹æ·¶µÄ¸±±¾
-            //ÎÒÃÇÔÚÕâÀïÓÃINDEX_NONE³õÊ¼»¯FActiveGameplayEffectHandleÀ´´¦Àí¼´Ê±GEµÄÇé¿ö
-            //ÏñÕâÑù³õÊ¼»¯Ëü»á½«FActiveGameplayEffectHandleÉÏµÄbPassedFiltersAndWasExecutedÉèÖÃÎªtrue£¬ÕâÑùÎÒÃÇ¾Í¿ÉÒÔÖªµÀÎÒÃÇÓ¦ÓÃÁËGE
+            //ç¡®ä¿æˆ‘ä»¬åœ¨æ­£ç¡®çš„ä½ç½®åˆ›å»ºè§„èŒƒçš„å‰¯æœ¬
+            //æˆ‘ä»¬åœ¨è¿™é‡Œç”¨INDEX_NONEåˆå§‹åŒ–FActiveGameplayEffectHandleæ¥å¤„ç†å³æ—¶GEçš„æƒ…å†µ
+            //åƒè¿™æ ·åˆå§‹åŒ–å®ƒä¼šå°†FActiveGameplayEffectHandleä¸Šçš„bPassedFiltersAndWasExecutedè®¾ç½®ä¸ºtrueï¼Œè¿™æ ·æˆ‘ä»¬å°±å¯ä»¥çŸ¥é“æˆ‘ä»¬åº”ç”¨äº†GE
             FActiveGameplayEffectHandle MyHandle = new FActiveGameplayEffectHandle(-1);
             bool bFoundExistingStackableGE = false;
 
             FActiveGameplayEffect AppliedEffect = new FActiveGameplayEffect();
-            //ÔÚ¿ÉÄÜ½«Ô¤²â¼´Ê±Ğ§¹ûĞŞ¸ÄÎªÎŞÏŞ³ÖĞøĞ§¹ûÖ®Ç°£¬ÏÖÔÚ½«Æä»º´æ
+            //åœ¨å¯èƒ½å°†é¢„æµ‹å³æ—¶æ•ˆæœä¿®æ”¹ä¸ºæ— é™æŒç»­æ•ˆæœä¹‹å‰ï¼Œç°åœ¨å°†å…¶ç¼“å­˜
             bool bInvokeGameplayCueApplied = Spec.Def.DurationPolicy != EGameplayEffectDurationType.Instant;
             FGameplayEffectSpec OurCopyOfSpec = null;
             FGameplayEffectSpec StackSpec = null;
@@ -276,7 +276,7 @@ namespace GameplayAbilitySystem
         public GameplayEffectSpecHandle MakeOutgoingSpec(UGameplayEffect InGameplayEffect, float Level, GameplayEffectContextHandle Context)
         {
             FGameplayEffectSpec NewSpec = new FGameplayEffectSpec(InGameplayEffect, Context, Level);
-            //´«µİ¸øÍ¶ÖÀÎï£¬Í¶ÖÀÎï»÷ÖĞµ½Ä¿±êºó±»Ó¦ÓÃ
+            //ä¼ é€’ç»™æŠ•æ·ç‰©ï¼ŒæŠ•æ·ç‰©å‡»ä¸­åˆ°ç›®æ ‡åè¢«åº”ç”¨
             return new GameplayEffectSpecHandle(NewSpec);
         }
         public bool InternalTryActivateAbility(GameplayAbilitySpecHandle Handle)

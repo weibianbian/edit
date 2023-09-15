@@ -16,8 +16,13 @@ namespace GameplayAbilitySystem
         public List<FGameplayModifierInfo> Modifiers = new List<FGameplayModifierInfo>();
         public List<GameplayCue> GameplayCues = new List<GameplayCue>();
         public FInheritedTagContainer RemoveGameplayEffectsWithTags = new FInheritedTagContainer();
+        public FInheritedTagContainer InheritableGameplayEffectTags = new FInheritedTagContainer();
+        public FInheritedTagContainer InheritableOwnedTagsContainer = new FInheritedTagContainer();
         public FGameplayEffectModifierMagnitude DurationMagnitude;
         public FGameplayTagRequirements OngoingTagRequirements;
+        public FGameplayTagRequirements GrantedApplicationImmunityTags;
+        //赋予匹配此查询的游戏特效免疫。查询功能更强大，但比GrantedApplicationImmunityTags稍慢。
+        public FGameplayEffectQuery GrantedApplicationImmunityQuery;
         public FScalableFloat Period;
         public float Duration;
         public int StackLimitCount;
