@@ -6,7 +6,7 @@ namespace RailShootGame
     public class FGameplayTag
     {
         public string TagName;
-
+        public static FGameplayTag EmptyTag = new FGameplayTag();
         public FGameplayTag(string tagName)
         {
             TagName = tagName;

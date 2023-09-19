@@ -22,7 +22,14 @@ namespace RailShootGame
         }
         public FGameplayTag GetCompleteTag()
         {
-            return CompleteTagWithParents.GameplayTags[0];
+            if (CompleteTagWithParents.GameplayTags.Count > 0)
+            {
+                return CompleteTagWithParents.GameplayTags[0];
+            }
+            else
+            {
+                return FGameplayTag.EmptyTag;
+            }
         }
         public string GetSimpleTagName()
         {

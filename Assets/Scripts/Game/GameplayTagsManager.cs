@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using UnityEditor.Build.Pipeline;
-
+using UnityEngine;
 namespace RailShootGame
 {
     public class GameplayTagsManager
@@ -25,7 +25,18 @@ namespace RailShootGame
             {
                 AddTagTableRow(texts[i]);
             }
-
+            DebugNode(GameplayRootTag);
+        }
+        public void DebugNode(FGameplayTagNode node)
+        {
+            Debug.LogError($"{node.GetCompleteTag().TagName}    {node.Tag}");
+            if (node.GetChildTagNodes().Count > 0)
+            {
+                for (int i = 0; i < node.GetChildTagNodes().Count; i++)
+                {
+                    DebugNode(node.GetChildTagNodes()[i]);
+                }
+            }
         }
         public void PopulateTreeFromDataTable()
         {
@@ -35,9 +46,10 @@ namespace RailShootGame
         public void AddTagTableRow(string TagRow)
         {
             FGameplayTagNode CurNode = GameplayRootTag;
-            string FullTagString = TagRow;
-            string[] SubTags = FullTagString.Split('.');
+            string OriginalTagName = TagRow;
+            string[] SubTags = OriginalTagName.Split('.');
             int NumSubTags = SubTags.Length;
+            string FullTagString = "";
             for (int SubTagIdx = 0; SubTagIdx < NumSubTags; SubTagIdx++)
             {
                 bool bIsExplicitTag = (SubTagIdx == (NumSubTags - 1));
@@ -46,7 +58,7 @@ namespace RailShootGame
                 if (bIsExplicitTag)
                 {
                     //我们已经知道了它的最终名字
-                    FullTagName = FullTagString;
+                    FullTagName = OriginalTagName;
                 }
                 else if (SubTagIdx == 0)
                 {
