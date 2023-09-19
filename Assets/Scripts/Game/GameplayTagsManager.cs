@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
+using UnityEditor.Build.Pipeline;
 
 namespace RailShootGame
 {
@@ -7,8 +9,8 @@ namespace RailShootGame
         public List<string> texts = new List<string>()
         {
             { "Damage"},
-            { "Damage.Basic"},
-            { "Damage.Type1"},
+            //{ "Damage.Basic"},
+            //{ "Damage.Type1"},
             { "Damage.Buffed.FireBuff"},
             { "Damage.Mitigated.Armor"},
         };
@@ -78,18 +80,13 @@ namespace RailShootGame
         {
             int FoundNodeIdx = -1;
             int WhereToInsert = -1;
-            int LowerBoundIndex = 0;
-            if (LowerBoundIndex < NodeArray.Count)
+            for (int i = 0; i < NodeArray.Count; i++)
             {
-                FGameplayTagNode CurrNode = NodeArray[LowerBoundIndex];
-                if (CurrNode.GetSimpleTagName() == Tag)
+                string tag = NodeArray[i].GetSimpleTagName();
+                if (Tag == tag)
                 {
-                    FoundNodeIdx = LowerBoundIndex;
-                }
-                else
-                {
-                    //在此之前插入新节点
-                    WhereToInsert = LowerBoundIndex;
+                    FoundNodeIdx = i;
+                    break;
                 }
             }
             if (FoundNodeIdx == -1)
