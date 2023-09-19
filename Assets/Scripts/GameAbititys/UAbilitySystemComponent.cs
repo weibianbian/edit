@@ -283,13 +283,13 @@ namespace GameplayAbilitySystem
         {
             return true;
         }
-        public Action<GameplayTag, int> RegisterGameplayTagEvent(GameplayTag Tag, EGameplayTagEventType EventType)
+        public Action<FGameplayTag, int> RegisterGameplayTagEvent(FGameplayTag Tag, EGameplayTagEventType EventType)
         {
             return GameplayTagCountContainer.RegisterGameplayTagEvent(Tag, EventType);
         }
-        public void UnregisterGameplayTagEvent(GameplayTag Tag, EGameplayTagEventType EventType)
+        public void UnregisterGameplayTagEvent(FGameplayTag Tag, EGameplayTagEventType EventType)
         {
-            Action<GameplayTag, int> ret = GameplayTagCountContainer.RegisterGameplayTagEvent(Tag, EventType);
+            Action<FGameplayTag, int> ret = GameplayTagCountContainer.RegisterGameplayTagEvent(Tag, EventType);
         }
         public void OnGameplayEffectAppliedToTarget(UAbilitySystemComponent Target, FGameplayEffectSpec SpecApplied, FActiveGameplayEffectHandle ActiveHandle)
         {

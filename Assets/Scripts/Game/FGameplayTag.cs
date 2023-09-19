@@ -3,21 +3,21 @@ using System;
 
 namespace RailShootGame
 {
-    public class GameplayTag
+    public class FGameplayTag
     {
         public string TagName;
 
-        public GameplayTag(string tagName)
+        public FGameplayTag(string tagName)
         {
             TagName = tagName;
         }
-        public GameplayTag()
+        public FGameplayTag()
         {
             TagName=string.Empty;
         }
         public override bool Equals(object obj)
         {
-            return obj is GameplayTag tag &&
+            return obj is FGameplayTag tag &&
                    TagName == tag.TagName;
         }
 
@@ -26,11 +26,11 @@ namespace RailShootGame
             return HashCode.Combine(TagName);
         }
 
-        public static bool operator ==(GameplayTag a, GameplayTag b)
+        public static bool operator ==(FGameplayTag a, FGameplayTag b)
         {
             return a.TagName == b.TagName;
         }
-        public static bool operator !=(GameplayTag a, GameplayTag b)
+        public static bool operator !=(FGameplayTag a, FGameplayTag b)
         {
             return a.TagName != b.TagName;
         }

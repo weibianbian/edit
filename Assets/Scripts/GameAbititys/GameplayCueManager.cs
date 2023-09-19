@@ -51,11 +51,11 @@ namespace GameplayAbilitySystem
                 HandleGameplayCues(TargetActor, GameplayCueTags.GameplayTags[i], EventType, Parameters);
             }
         }
-        public virtual void HandleGameplayCues(Actor TargetActor, GameplayTag GameplayCueTag, EGameplayCueEvent EventType, GameplayCueParameters Parameters)
+        public virtual void HandleGameplayCues(Actor TargetActor, FGameplayTag GameplayCueTag, EGameplayCueEvent EventType, GameplayCueParameters Parameters)
         {
             RouteGameplayCue(TargetActor, GameplayCueTag, EventType, Parameters);
         }
-        public virtual void RouteGameplayCue(Actor TargetActor, GameplayTag GameplayCueTag, EGameplayCueEvent EventType, GameplayCueParameters Parameters)
+        public virtual void RouteGameplayCue(Actor TargetActor, FGameplayTag GameplayCueTag, EGameplayCueEvent EventType, GameplayCueParameters Parameters)
         {
             IGameplayCueInterface GameplayCueInterface = TargetActor as IGameplayCueInterface;
 

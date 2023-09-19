@@ -4,7 +4,7 @@ namespace GameplayAbilitySystem
 {
     public interface IGameplayCueInterface
     {
-        void HandleGameplayCue(Actor TargetActor, GameplayTag GameplayCueTag, EGameplayCueEvent EventType, GameplayCueParameters Parameters);
+        void HandleGameplayCue(Actor TargetActor, FGameplayTag GameplayCueTag, EGameplayCueEvent EventType, GameplayCueParameters Parameters);
     }
 }
 

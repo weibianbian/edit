@@ -4,8 +4,8 @@ namespace RailShootGame
 {
     public class FGameplayTagContainer
     {
-        public List<GameplayTag> GameplayTags = new List<GameplayTag>();
-        public List<GameplayTag> ParentTags = new List<GameplayTag>();
+        public List<FGameplayTag> GameplayTags = new List<FGameplayTag>();
+        public List<FGameplayTag> ParentTags = new List<FGameplayTag>();
 
         public void Reset()
         {
