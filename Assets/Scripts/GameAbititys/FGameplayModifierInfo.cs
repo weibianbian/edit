@@ -62,6 +62,7 @@ namespace GameplayAbilitySystem
             ScalableFloatMagnitude = InScalableFloatMagnitude;
             MagnitudeCalculationType = EGameplayEffectMagnitudeCalculation.ScalableFloat;
         }
+        public EGameplayEffectMagnitudeCalculation GetMagnitudeCalculationType() { return MagnitudeCalculationType; }
         public bool AttemptCalculateMagnitude(FGameplayEffectSpec InRelevantSpec, out float OutCalculatedMagnitude, bool WarnIfSetByCallerFail = true, float DefaultSetbyCaller = 0)
         {
             bool bCanCalc = CanCalculateMagnitude(InRelevantSpec);

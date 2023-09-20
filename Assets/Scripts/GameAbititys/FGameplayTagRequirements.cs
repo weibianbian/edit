@@ -6,6 +6,11 @@ namespace GameplayAbilitySystem
     {
         FGameplayTagContainer RequireTags;
         FGameplayTagContainer IgnoreTags;
+        public FGameplayTagRequirements()
+        {
+            RequireTags = new FGameplayTagContainer();
+            IgnoreTags = new FGameplayTagContainer();
+        }
         public bool RequirementsMet(FGameplayTagContainer Container)
         {
 
@@ -13,6 +18,10 @@ namespace GameplayAbilitySystem
             bool HasIgnored = Container.HasAny(IgnoreTags);
 
             return HasRequired && !HasIgnored;
+        }
+        public bool IsEmpty()
+        {
+            return (RequireTags.Num() == 0 && IgnoreTags.Num() == 0);
         }
     }
 }

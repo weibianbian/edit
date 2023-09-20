@@ -17,10 +17,10 @@ namespace RailShootGame
         }
         public override void PostInitializeComponents()
         {
-            AbilitySystemComponent.InitStats(typeof(AbilitySystemTestAttributeSet));
+            AbilitySystemComponent.InitStats(typeof(UAbilitySystemTestAttributeSet));
         }
 
-        public void HandleGameplayCue(Actor TargetActor, GameplayTag GameplayCueTag, EGameplayCueEvent EventType, GameplayCueParameters Parameters)
+        public void HandleGameplayCue(Actor TargetActor, FGameplayTag GameplayCueTag, EGameplayCueEvent EventType, GameplayCueParameters Parameters)
         {
 
         }

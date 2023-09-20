@@ -1,5 +1,6 @@
 ﻿using RailShootGame;
 using System;
+using System.Diagnostics;
 using System.Reflection;
 
 namespace GameplayAbilitySystem
@@ -21,21 +22,35 @@ namespace GameplayAbilitySystem
         public float GetNumericValue(UAttributeSet Src)
         {
             FieldInfo fi = (Attribute);
-            GameplayAttributeData DataPtr = (GameplayAttributeData)fi.GetValue(Src);
+            FGameplayAttributeData DataPtr = (FGameplayAttributeData)fi.GetValue(Src);
             return DataPtr.GetCurrentValue();
         }
         public void SetNumericValueChecked(float NewValue, UAttributeSet Dest)
         {
             float OldValue = 0.0f;
             FieldInfo fi = (Attribute);
-            GameplayAttributeData DataPtr = (GameplayAttributeData)fi.GetValue(Dest);
+            FGameplayAttributeData DataPtr = (FGameplayAttributeData)fi.GetValue(Dest);
             OldValue = DataPtr.GetCurrentValue();
             Dest.PreAttributeChange(this, NewValue);
             DataPtr.SetCurrentValue(NewValue);
-
-            fi.SetValue(Dest, DataPtr);
             Dest.PostAttributeChange(this, OldValue, NewValue);
         }
+
+        public override bool Equals(object obj)
+        {
+            return base.Equals(obj);
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
+
+        public override string ToString()
+        {
+            return base.ToString();
+        }
+
         public static bool operator ==(FGameplayAttribute a, FGameplayAttribute b)
         {
             return a.Attribute == b.Attribute;

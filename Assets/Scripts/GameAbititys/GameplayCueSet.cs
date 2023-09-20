@@ -8,14 +8,14 @@ namespace GameplayAbilitySystem
     public class GameplayCueNotifyData
     {
         public Type LoadedGameplayCueClass;
-        public GameplayTag GameplayCueTag;
-        public GameplayTag ParentGameplayCueTag;
+        public FGameplayTag GameplayCueTag;
+        public FGameplayTag ParentGameplayCueTag;
     }
     //数据类（允许编辑模式进行编辑）
     public class GameplayCueSet
     {
-        public Dictionary<GameplayTag, GameplayCueNotifyData> GameplayCueDataMap = new Dictionary<GameplayTag, GameplayCueNotifyData>();
-        public virtual bool HandleGameplayCue(Actor TargetActor, GameplayTag GameplayCueTag, EGameplayCueEvent EventType, GameplayCueParameters Parameters)
+        public Dictionary<FGameplayTag, GameplayCueNotifyData> GameplayCueDataMap = new Dictionary<FGameplayTag, GameplayCueNotifyData>();
+        public virtual bool HandleGameplayCue(Actor TargetActor, FGameplayTag GameplayCueTag, EGameplayCueEvent EventType, GameplayCueParameters Parameters)
         {
             if (GameplayCueDataMap.TryGetValue(GameplayCueTag, out GameplayCueNotifyData CueData))
             {

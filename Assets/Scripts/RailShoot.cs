@@ -11,7 +11,7 @@ public class RailShoot : MonoBehaviour
     FTimerManager timerManager = new FTimerManager();
     FTimerHandle PeriodHandle = new FTimerHandle();
     FTimerHandle DurationHandle = new FTimerHandle();
-    public void Awake()
+    public void Start()
     {
         float Duration = NumPeriods * PeriodSecs;
         int NumApplications = 0;
@@ -28,7 +28,9 @@ public class RailShoot : MonoBehaviour
             @owner.timerManager.ClearTimer(@owner.DurationHandle);
 
         }, this);
+        timerManager.SetTimerForNextTick(PeriodSecsDelegate);
         timerManager.SetTimer(ref PeriodHandle, PeriodSecsDelegate, PeriodSecs, true);
+
         timerManager.SetTimer(ref DurationHandle, DurationDelegate, Duration, true);
     }
     public void Update()

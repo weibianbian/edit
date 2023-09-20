@@ -3,7 +3,7 @@ using UnityEditor.PackageManager;
 
 namespace GameplayAbilitySystem
 {
-    public class CooldownGameplayEffect : GameplayEffect
+    public class CooldownGameplayEffect : UGameplayEffect
     {
 
     }
@@ -73,7 +73,7 @@ namespace GameplayAbilitySystem
         }
         public void ApplyCooldown(GameplayAbilitySpecHandle Handle, GameplayAbilityActorInfo ActorInfo)
         {
-            GameplayEffect CooldownGE = GetCooldownGameplayEffect();
+            UGameplayEffect CooldownGE = GetCooldownGameplayEffect();
             if (CooldownGE != null)
             {
                 //ApplyGameplayEffectToOwner(Handle, ActorInfo, CooldownGE, GetAbilityLevel(Handle, ActorInfo));
@@ -87,14 +87,14 @@ namespace GameplayAbilitySystem
         {
             return CooldownGameplayEffect;
         }
-        public void ApplyGameplayEffectToOwner(GameplayAbilitySpecHandle Handle, GameplayAbilityActorInfo ActorInfo, GameplayEffect InGamepayEffect, float GameplayEffectLevel)
+        public void ApplyGameplayEffectToOwner(GameplayAbilitySpecHandle Handle, GameplayAbilityActorInfo ActorInfo, UGameplayEffect InGamepayEffect, float GameplayEffectLevel)
         {
             if (InGamepayEffect != null)
             {
                 GameplayEffectSpecHandle SpecHandle = MakeOutgoingGameplayEffectSpec(Handle, ActorInfo, InGamepayEffect, GameplayEffectLevel);
             }
         }
-        public GameplayEffectSpecHandle MakeOutgoingGameplayEffectSpec(GameplayAbilitySpecHandle Handle, GameplayAbilityActorInfo ActorInfo, GameplayEffect InGamepayEffect, float GameplayEffectLevel)
+        public GameplayEffectSpecHandle MakeOutgoingGameplayEffectSpec(GameplayAbilitySpecHandle Handle, GameplayAbilityActorInfo ActorInfo, UGameplayEffect InGamepayEffect, float GameplayEffectLevel)
         {
             UAbilitySystemComponent AbilitySystemComponent = ActorInfo.AbilitySystemComponent;
             GameplayEffectSpecHandle NewHandle = AbilitySystemComponent.MakeOutgoingSpec(null, GameplayEffectLevel, null);

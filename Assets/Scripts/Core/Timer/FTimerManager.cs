@@ -1,16 +1,13 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting.FullSerializer;
-using UnityEngine.Tilemaps;
 
 namespace Core.Timer
 {
     public struct FTimerHeapOrder : IComparer<FTimerHandle>
     {
-        List<FTimerData> Timers;
+        TSparseArray<FTimerData> Timers;
 
-        public FTimerHeapOrder(List<FTimerData> InTimers)
+        public FTimerHeapOrder(TSparseArray<FTimerData> InTimers)
         {
             Timers = InTimers;
         }
@@ -29,7 +26,7 @@ namespace Core.Timer
     public class FTimerManager
     {
         List<FTimerHandle> ActiveTimerHeap = new List<FTimerHandle>();
-        List<FTimerData> Timers = new List<FTimerData>();
+        TSparseArray<FTimerData> Timers = new TSparseArray<FTimerData>();
         List<FTimerHandle> PendingTimerSet = new List<FTimerHandle>();
         List<FTimerHandle> PausedTimerSet = new List<FTimerHandle>();
         FTimerHandle CurrentlyExecutingTimer;
@@ -59,7 +56,7 @@ namespace Core.Timer
                     CurrentlyExecutingTimer = ActiveTimerHeap[0];
                     ActiveTimerHeap.RemoveAt(0);
                     Top.Status = ETimerStatus.Executing;
-                    int CallCount = Top.bLoop ? (int)(((InternalTime - Top.ExpireTime) / Top.Rate) + 1) : 1;
+                    int CallCount = Top.bLoop ? (Convert.ToInt32((InternalTime - Top.ExpireTime) / Top.Rate)) + 1 : 1;
                     for (int CallIdx = 0; CallIdx < CallCount; ++CallIdx)
                     {
                         Top.TimerDelegate?.Execute();
@@ -83,7 +80,7 @@ namespace Core.Timer
                             RemoveTimer(CurrentlyExecutingTimer);
                             //CurrentlyExecutingTimer.Invalidate();
                         }
-
+                        CurrentlyExecutingTimer.Invalidate();
                     }
                 }
                 else
@@ -107,26 +104,42 @@ namespace Core.Timer
         }
         public FTimerHandle AddTimer(FTimerData TimerData)
         {
-            Timers.Add(TimerData);
-            FTimerHandle Result = GenerateHandle(Timers.Count - 1);
-            Timers[Timers.Count - 1].Handle = Result;
+            int NewIndex = Timers.Add(TimerData);
+            FTimerHandle Result = GenerateHandle(NewIndex);
+            Timers[NewIndex].Handle = Result;
             return Result;
         }
 
         public void RemoveTimer(FTimerHandle Handle)
         {
-            Timers.RemoveAt(Handle.GetIndex());
+            int Idx = Handle.GetIndex();
+            if (Idx < 0 || Idx >= Timers.GetMaxIndex())
+            {
+                UnityEngine.Debug.LogError($"RemoveTimer   Idx={Idx}");
+            }
+            else
+            {
+                Timers.RemoveAt(Idx);
+            }
         }
         public FTimerData GetTimer(FTimerHandle InHandle)
         {
             int Index = InHandle.GetIndex();
-            FTimerData Timer = Timers[Index];
-            return Timer;
+            if (Index < 0 || Index >= Timers.GetMaxIndex())
+            {
+                UnityEngine.Debug.LogError($"GetTimer   Index={Index}");
+                return null;
+            }
+            else
+            {
+                FTimerData Timer = Timers[Index];
+                return Timer;
+            }
         }
         FTimerHandle GenerateHandle(int Index)
         {
             ulong NewSerialNumber = ++LastAssignedSerialNumber;
-            if (!(NewSerialNumber != FTimerHandle.MaxSerialNumber))
+            if ((NewSerialNumber == FTimerHandle.MaxSerialNumber))
             {
                 NewSerialNumber = (ulong)1;
             }
@@ -151,7 +164,7 @@ namespace Core.Timer
                 return null;
             }
             int Index = InHandle.GetIndex();
-            if (Index < 0 || Index >= Timers.Count)
+            if (Index < 0 || Index >= Timers.GetMaxIndex())
             {
                 return null;
             }

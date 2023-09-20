@@ -1,7 +1,10 @@
-﻿namespace GameplayAbilitySystem
+﻿using System;
+
+namespace GameplayAbilitySystem
 {
     public class FActiveGameplayEffectHandle
     {
+        public static int GHandleID = 0;
         public int Handle;
         private bool bPassedFiltersAndWasExecuted;
         public FActiveGameplayEffectHandle(int InHandle)
@@ -16,7 +19,8 @@
         }
         public static FActiveGameplayEffectHandle GenerateNewHandle(UAbilitySystemComponent OwningComponent)
         {
-            FActiveGameplayEffectHandle NewHandle = new FActiveGameplayEffectHandle();
+            GHandleID++;
+            FActiveGameplayEffectHandle NewHandle = new FActiveGameplayEffectHandle(GHandleID);
             GlobalActiveGameplayEffectHandles.Map.Add(NewHandle, OwningComponent);
             return NewHandle;
         }

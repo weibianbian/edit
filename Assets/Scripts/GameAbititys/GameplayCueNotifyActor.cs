@@ -33,7 +33,7 @@ namespace GameplayAbilitySystem
 
         }
         // 该通知实例被激活的对应标签
-        GameplayTag GameplayCueTag;
+        FGameplayTag GameplayCueTag;
     }
 }
 

@@ -45,5 +45,9 @@ namespace RailShootGame
         {
             return TimerManager;
         }
+        public void Tick(float InTime)
+        {
+            TimerManager.Tick(InTime);
+        }
     }
 }

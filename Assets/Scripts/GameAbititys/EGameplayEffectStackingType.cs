@@ -2,11 +2,11 @@
 {
     public enum EGameplayEffectStackingType
     {
-        /** No stacking. Multiple applications of this GameplayEffect are treated as separate instances. */
+        /** 没有堆积。这种游戏效果的多个应用被视为单独的实例. */
         None,
-        /** Each caster has its own stack. */
+        /** 每个施法者都有自己的栈. */
         AggregateBySource,
-        /** Each target has its own stack. */
+        /** 每个目标都有自己的栈. */
         AggregateByTarget,
     };
 }
