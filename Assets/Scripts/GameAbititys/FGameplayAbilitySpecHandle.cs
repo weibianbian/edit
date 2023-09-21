@@ -16,7 +16,7 @@
     //              ---SendGameplayEventToActor
     //GameplayAbility
     //              ---ApplyGameplayEffectToTarget
-    public struct FGameplayAbilitySpecHandle
+    public class FGameplayAbilitySpecHandle
     {
 
         int Handle;
