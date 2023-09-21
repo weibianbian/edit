@@ -88,7 +88,7 @@ namespace GameplayAbilitySystem
 
             TagContainer.AppendTags(GameplayTagCountContainer.GetExplicitGameplayTags());
         }
-        public bool TryActiveAbility(GameplayAbilitySpecHandle AbilityToActivate)
+        public bool TryActiveAbility(FGameplayAbilitySpecHandle AbilityToActivate)
         {
             GameplayAbilitySpec Spec = FindAbilitySpecFromHandle(AbilityToActivate);
             if (Spec == null)
@@ -104,7 +104,7 @@ namespace GameplayAbilitySystem
             }
             return true;
         }
-        public GameplayAbilitySpec FindAbilitySpecFromHandle(GameplayAbilitySpecHandle Handle)
+        public GameplayAbilitySpec FindAbilitySpecFromHandle(FGameplayAbilitySpecHandle Handle)
         {
             for (int i = 0; i < ActivatableAbilities.items.Count; i++)
             {
@@ -278,13 +278,13 @@ namespace GameplayAbilitySystem
             return Context;
 
         }
-        public GameplayEffectSpecHandle MakeOutgoingSpec(UGameplayEffect InGameplayEffect, float Level, GameplayEffectContextHandle Context)
+        public FGameplayEffectSpecHandle MakeOutgoingSpec(UGameplayEffect InGameplayEffect, float Level, GameplayEffectContextHandle Context)
         {
             FGameplayEffectSpec NewSpec = new FGameplayEffectSpec(InGameplayEffect, Context, Level);
             //传递给投掷物，投掷物击中到目标后被应用
-            return new GameplayEffectSpecHandle(NewSpec);
+            return new FGameplayEffectSpecHandle(NewSpec);
         }
-        public bool InternalTryActivateAbility(GameplayAbilitySpecHandle Handle)
+        public bool InternalTryActivateAbility(FGameplayAbilitySpecHandle Handle)
         {
             return true;
         }

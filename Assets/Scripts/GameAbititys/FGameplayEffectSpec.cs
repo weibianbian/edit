@@ -14,7 +14,7 @@ namespace GameplayAbilitySystem
         private GameplayEffectContextHandle EffectContext;
         public int StackCount;
         public bool bDurationLocked = false;
-        public List<GameplayEffectSpecHandle> TargetEffectSpecs = new List<GameplayEffectSpecHandle>();
+        public List<FGameplayEffectSpecHandle> TargetEffectSpecs = new List<FGameplayEffectSpecHandle>();
         public List<FModifierSpec> Modifiers = new List<FModifierSpec>();
         public FGameplayEffectAttributeCaptureSpecContainer CapturedRelevantAttributes;
         public List<FGameplayEffectModifiedAttribute> ModifiedAttributes;
