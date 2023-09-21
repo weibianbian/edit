@@ -4,7 +4,7 @@ namespace GameplayAbilitySystem
 {
     public class GameplayAbilitySpecContainer
     {
-        public List<GameplayAbilitySpec> items;
+        public List<FGameplayAbilitySpec> items;
         UAbilitySystemComponent owner;
 
         public void RegisterWithOwner(UAbilitySystemComponent owner)

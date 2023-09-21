@@ -46,7 +46,7 @@ namespace RailShootGame
 
         public void Input()
         {
-            asc.GiveAbility(new GameplayAbilitySpec());
+            asc.GiveAbility(new FGameplayAbilitySpec());
         }
         public void Jump()
         {

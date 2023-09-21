@@ -7,14 +7,14 @@ namespace GameplayAbilitySystem
     {
 
     }
-    public class GameplayAbilityActorInfo : ReferencePoolObject
+    public class FGameplayAbilityActorInfo : ReferencePoolObject
     {
         public Actor OwnerActor;
         public Actor AvatarActor;
         public UAbilitySystemComponent AbilitySystemComponent;
 
     }
-    public class GameplayAbility
+    public class UGameplayAbility
     {
         //	The important functions:
         //	
@@ -45,7 +45,7 @@ namespace GameplayAbilitySystem
         public void PreActivate(FGameplayAbilitySpecHandle Handle)
         {
         }
-        public virtual void ActivateAbility(FGameplayAbilitySpecHandle Handle, GameplayAbilityActorInfo ActorInfo, Character owner)
+        public virtual void ActivateAbility(FGameplayAbilitySpecHandle Handle, FGameplayAbilityActorInfo ActorInfo, Character owner)
         {
             if (CommitAbility(Handle, ActorInfo))
             {
@@ -56,22 +56,22 @@ namespace GameplayAbilitySystem
         {
 
         }
-        public virtual bool CommitAbility(FGameplayAbilitySpecHandle Handle, GameplayAbilityActorInfo ActorInfo)
+        public virtual bool CommitAbility(FGameplayAbilitySpecHandle Handle, FGameplayAbilityActorInfo ActorInfo)
         {
             CommitExecute(Handle, ActorInfo);
             return false;
         }
-        public void CommitExecute(FGameplayAbilitySpecHandle Handle, GameplayAbilityActorInfo ActorInfo)
+        public void CommitExecute(FGameplayAbilitySpecHandle Handle, FGameplayAbilityActorInfo ActorInfo)
         {
             ApplyCooldown(Handle, ActorInfo);
             ApplyCost();
         }
-        public bool CommitAbilityCooldown(FGameplayAbilitySpecHandle Handle, GameplayAbilityActorInfo ActorInfo)
+        public bool CommitAbilityCooldown(FGameplayAbilitySpecHandle Handle, FGameplayAbilityActorInfo ActorInfo)
         {
             ApplyCooldown(Handle, ActorInfo);
             return true;
         }
-        public void ApplyCooldown(FGameplayAbilitySpecHandle Handle, GameplayAbilityActorInfo ActorInfo)
+        public void ApplyCooldown(FGameplayAbilitySpecHandle Handle, FGameplayAbilityActorInfo ActorInfo)
         {
             UGameplayEffect CooldownGE = GetCooldownGameplayEffect();
             if (CooldownGE != null)
@@ -87,7 +87,7 @@ namespace GameplayAbilitySystem
         {
             return CooldownGameplayEffect;
         }
-        public FActiveGameplayEffectHandle ApplyGameplayEffectToOwner(FGameplayAbilitySpecHandle Handle, GameplayAbilityActorInfo ActorInfo, UGameplayEffect InGamepayEffect, float GameplayEffectLevel)
+        public FActiveGameplayEffectHandle ApplyGameplayEffectToOwner(FGameplayAbilitySpecHandle Handle, FGameplayAbilityActorInfo ActorInfo, UGameplayEffect InGamepayEffect, float GameplayEffectLevel)
         {
             if (InGamepayEffect != null)
             {
@@ -99,7 +99,7 @@ namespace GameplayAbilitySystem
             }
             return new FActiveGameplayEffectHandle();
         }
-        public FActiveGameplayEffectHandle ApplyGameplayEffectSpecToOwner(FGameplayAbilitySpecHandle AbilityHandle, GameplayAbilityActorInfo ActorInfo, FGameplayEffectSpecHandle SpecHandle)
+        public FActiveGameplayEffectHandle ApplyGameplayEffectSpecToOwner(FGameplayAbilitySpecHandle AbilityHandle, FGameplayAbilityActorInfo ActorInfo, FGameplayEffectSpecHandle SpecHandle)
         {
             if (SpecHandle != null)
             {
@@ -108,7 +108,7 @@ namespace GameplayAbilitySystem
             }
             return new FActiveGameplayEffectHandle();
         }
-        public FGameplayEffectSpecHandle MakeOutgoingGameplayEffectSpec(FGameplayAbilitySpecHandle Handle, GameplayAbilityActorInfo ActorInfo, UGameplayEffect InGamepayEffect, float GameplayEffectLevel)
+        public FGameplayEffectSpecHandle MakeOutgoingGameplayEffectSpec(FGameplayAbilitySpecHandle Handle, FGameplayAbilityActorInfo ActorInfo, UGameplayEffect InGamepayEffect, float GameplayEffectLevel)
         {
             UAbilitySystemComponent AbilitySystemComponent = ActorInfo.AbilitySystemComponent;
             FGameplayEffectSpecHandle NewHandle = AbilitySystemComponent.MakeOutgoingSpec(null, GameplayEffectLevel, null);

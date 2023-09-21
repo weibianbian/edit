@@ -13,12 +13,12 @@ namespace GameplayAbilitySystem
         public FActiveGameplayEffectsContainer ActiveGameplayEffects;
         public FGameplayTagCountContainer GameplayTagCountContainer;
         public List<UAttributeSet> SpawnedAttributes;
-        public GameplayAbilityActorInfo AbilityActorInfo;
+        public FGameplayAbilityActorInfo AbilityActorInfo;
 
         public UAbilitySystemComponent()
         {
             SpawnedAttributes = new List<UAttributeSet>();
-            AbilityActorInfo = ReferencePool.Acquire<GameplayAbilityActorInfo>();
+            AbilityActorInfo = ReferencePool.Acquire<FGameplayAbilityActorInfo>();
             ActiveGameplayEffects = new FActiveGameplayEffectsContainer();
             GameplayTagCountContainer = new FGameplayTagCountContainer();
         }
@@ -90,13 +90,13 @@ namespace GameplayAbilitySystem
         }
         public bool TryActiveAbility(FGameplayAbilitySpecHandle AbilityToActivate)
         {
-            GameplayAbilitySpec Spec = FindAbilitySpecFromHandle(AbilityToActivate);
+            FGameplayAbilitySpec Spec = FindAbilitySpecFromHandle(AbilityToActivate);
             if (Spec == null)
             {
                 Debug.LogError("TryActivateAbility called with invalid Handle");
                 return false;
             }
-            GameplayAbility Ability = Spec.Ability;
+            UGameplayAbility Ability = Spec.Ability;
             if (Ability == null)
             {
                 Debug.LogError("TryActivateAbility called with invalid Handle");
@@ -104,7 +104,7 @@ namespace GameplayAbilitySystem
             }
             return true;
         }
-        public GameplayAbilitySpec FindAbilitySpecFromHandle(FGameplayAbilitySpecHandle Handle)
+        public FGameplayAbilitySpec FindAbilitySpecFromHandle(FGameplayAbilitySpecHandle Handle)
         {
             for (int i = 0; i < ActivatableAbilities.items.Count; i++)
             {
@@ -113,15 +113,15 @@ namespace GameplayAbilitySystem
                     return ActivatableAbilities.items[i];
                 }
             }
-            return GameplayAbilitySpec.Default;
+            return FGameplayAbilitySpec.Default;
         }
-        public void GiveAbility(GameplayAbilitySpec AbilitySpec)
+        public void GiveAbility(FGameplayAbilitySpec AbilitySpec)
         {
             ActivatableAbilities.items.Add(AbilitySpec);
             //需要复制
             OnGiveAbility(AbilitySpec);
         }
-        public void OnGiveAbility(GameplayAbilitySpec Spec)
+        public void OnGiveAbility(FGameplayAbilitySpec Spec)
         {
 
         }
@@ -137,11 +137,11 @@ namespace GameplayAbilitySystem
                 }
             }
         }
-        public void OnRemoveAbility(GameplayAbilitySpec Spec)
+        public void OnRemoveAbility(FGameplayAbilitySpec Spec)
         {
 
         }
-        public void AbilitySpecInputPressed(GameplayAbilitySpec Spec)
+        public void AbilitySpecInputPressed(FGameplayAbilitySpec Spec)
         {
             Spec.InputPressed = true;
             if (Spec.IsActive())
