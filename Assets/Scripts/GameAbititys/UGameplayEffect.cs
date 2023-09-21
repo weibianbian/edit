@@ -20,8 +20,9 @@ namespace GameplayAbilitySystem
         public FInheritedTagContainer InheritableOwnedTagsContainer = new FInheritedTagContainer();
         public FGameplayEffectModifierMagnitude DurationMagnitude;
         public FGameplayTagRequirements OngoingTagRequirements;
+        //授予(Granted)
         public FGameplayTagRequirements GrantedApplicationImmunityTags;
-        //赋予匹配此查询的游戏特效免疫。查询功能更强大，但比GrantedApplicationImmunityTags稍慢。
+        //授予(Granted)匹配此查询的游戏特效免疫。查询功能更强大，但比GrantedApplicationImmunityTags稍慢。
         public FGameplayEffectQuery GrantedApplicationImmunityQuery;
         public FScalableFloat Period;
         public float Duration;

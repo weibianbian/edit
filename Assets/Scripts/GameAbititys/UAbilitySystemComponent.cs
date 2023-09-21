@@ -180,6 +180,7 @@ namespace GameplayAbilitySystem
             FActiveGameplayEffect ImmunityGE = null;
             if (ActiveGameplayEffects.HasApplicationImmunityToSpec(Spec, ImmunityGE))
             {
+                OnImmunityBlockGameplayEffect(Spec, ImmunityGE);
                 return new FActiveGameplayEffectHandle();
             }
             //检查特效是否成功应用
@@ -242,6 +243,10 @@ namespace GameplayAbilitySystem
             }
 
             return MyHandle;
+        }
+        public void OnImmunityBlockGameplayEffect(FGameplayEffectSpec Spec, FActiveGameplayEffect ImmunityGE)
+        {
+
         }
         public bool HasAttributeSetForAttribute(FGameplayAttribute Attribute)
         {

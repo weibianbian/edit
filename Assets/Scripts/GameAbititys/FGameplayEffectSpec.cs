@@ -18,6 +18,7 @@ namespace GameplayAbilitySystem
         public List<FModifierSpec> Modifiers = new List<FModifierSpec>();
         public FGameplayEffectAttributeCaptureSpecContainer CapturedRelevantAttributes;
         public List<FGameplayEffectModifiedAttribute> ModifiedAttributes;
+        //捕获的源标签GameplayEffectSpec创建
         public FTagContainerAggregator CapturedSourceTags = new FTagContainerAggregator();
         public FTagContainerAggregator CapturedTargetTags = new FTagContainerAggregator();
         //被授予且不是来自UGameplayEffect def的标签。它们被复制
@@ -46,6 +47,7 @@ namespace GameplayAbilitySystem
             {
                 Modifiers.Add(new FModifierSpec());
             }
+            CapturedSourceTags.GetSpecTags().AppendTags(InDef.InheritableGameplayEffectTags.CombinedTags);
         }
         public void SetContext(GameplayEffectContextHandle NewEffectContext)
         {
