@@ -159,7 +159,7 @@ namespace GameplayAbilitySystem
         }
         public FActiveGameplayEffectHandle ApplyGameplayEffectToTarget(UGameplayEffect InGameplayEffect, UAbilitySystemComponent InTarget, float InLevel)
         {
-            GameplayEffectContextHandle Context = MakeEffectContext();
+            FGameplayEffectContextHandle Context = MakeEffectContext();
             FGameplayEffectSpec Spec = new FGameplayEffectSpec(InGameplayEffect, Context, InLevel);
             FActiveGameplayEffectHandle ret = ApplyGameplayEffectSpecToTarget(Spec, InTarget);
             return ret;
@@ -270,15 +270,15 @@ namespace GameplayAbilitySystem
 
             return ActiveGameplayEffects.GetAttributeBaseValue(Attribute);
         }
-        public GameplayEffectContextHandle MakeEffectContext()
+        public FGameplayEffectContextHandle MakeEffectContext()
         {
-            GameplayEffectContextHandle Context = new GameplayEffectContextHandle(new GameplayEffectContext());
+            FGameplayEffectContextHandle Context = new FGameplayEffectContextHandle(new FGameplayEffectContext());
 
             Context.AddInstigator(AbilityActorInfo.OwnerActor, AbilityActorInfo.AvatarActor);
             return Context;
 
         }
-        public FGameplayEffectSpecHandle MakeOutgoingSpec(UGameplayEffect InGameplayEffect, float Level, GameplayEffectContextHandle Context)
+        public FGameplayEffectSpecHandle MakeOutgoingSpec(UGameplayEffect InGameplayEffect, float Level, FGameplayEffectContextHandle Context)
         {
             FGameplayEffectSpec NewSpec = new FGameplayEffectSpec(InGameplayEffect, Context, Level);
             //传递给投掷物，投掷物击中到目标后被应用

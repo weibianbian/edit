@@ -732,7 +732,7 @@ namespace GameplayAbilitySystem
         public int StackCount = 0;
 
         /** 演员这个游戏效果是有针对性的。 */
-        public GameplayEffectContextHandle EffectContext;
+        public FGameplayEffectContextHandle EffectContext;
 
     }
     public struct FScopeCurrentGameplayEffectBeingApplied

@@ -11,7 +11,7 @@ namespace GameplayAbilitySystem
         public float Level;
         //在0.0-1.0范围内，这个GameplayEffect将应用于目标属性或GameplayEffect的概率
         public float ChanceToApplyToTarget;
-        private GameplayEffectContextHandle EffectContext;
+        private FGameplayEffectContextHandle EffectContext;
         public int StackCount;
         public bool bDurationLocked = false;
         public List<FGameplayEffectSpecHandle> TargetEffectSpecs = new List<FGameplayEffectSpecHandle>();
@@ -25,7 +25,7 @@ namespace GameplayAbilitySystem
         public FGameplayTagContainer DynamicGrantedTags = new FGameplayTagContainer();
         //在这个效果规范上的标签不是来自UGameplayEffect def。这些是重复的
         public FGameplayTagContainer DynamicAssetTags = new FGameplayTagContainer();
-        public FGameplayEffectSpec(UGameplayEffect InDef, GameplayEffectContextHandle InEffectContext, float InLevel)
+        public FGameplayEffectSpec(UGameplayEffect InDef, FGameplayEffectContextHandle InEffectContext, float InLevel)
         {
             CapturedRelevantAttributes = new FGameplayEffectAttributeCaptureSpecContainer();
             ModifiedAttributes = new List<FGameplayEffectModifiedAttribute>();
@@ -37,7 +37,7 @@ namespace GameplayAbilitySystem
             CapturedRelevantAttributes = new FGameplayEffectAttributeCaptureSpecContainer();
             StackCount = 1;
         }
-        public void Initialize(UGameplayEffect InDef, GameplayEffectContextHandle InEffectContext, float InLevel)
+        public void Initialize(UGameplayEffect InDef, FGameplayEffectContextHandle InEffectContext, float InLevel)
         {
             Def = InDef;
             Level = InLevel;
@@ -49,15 +49,15 @@ namespace GameplayAbilitySystem
             }
             CapturedSourceTags.GetSpecTags().AppendTags(InDef.InheritableGameplayEffectTags.CombinedTags);
         }
-        public void SetContext(GameplayEffectContextHandle NewEffectContext)
+        public void SetContext(FGameplayEffectContextHandle NewEffectContext)
         {
             EffectContext = NewEffectContext;
         }
-        public GameplayEffectContextHandle GetEffectContext()
+        public FGameplayEffectContextHandle GetEffectContext()
         {
             return EffectContext;
         }
-        public GameplayEffectContextHandle GetContext()
+        public FGameplayEffectContextHandle GetContext()
         {
             return EffectContext;
         }
