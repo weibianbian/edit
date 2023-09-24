@@ -6,6 +6,7 @@ namespace GameplayAbilitySystem
     public class FInheritedTagContainer
     {
         //Tags that I inherited and tags that I added minus tags that I removed
+        //我继承的标签和我添加的标签减去我删除的标签
         public FGameplayTagContainer CombinedTags;
         // Tags that I have in addition to my parent's tags
         public FGameplayTagContainer Added;
