@@ -1,0 +1,16 @@
+{
+    "name": "UIToolkit.Atlas.Editor",
+    "rootNamespace": "",
+    "references": [
+        "GUID:6102254941fd0d34bb3fba441be7bc47"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
