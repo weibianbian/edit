@@ -7,14 +7,14 @@ namespace GameplayAbilitySystem
     {
 
     }
-    public class GameplayAbilityActorInfo : ReferencePoolObject
+    public class FGameplayAbilityActorInfo : ReferencePoolObject
     {
         public Actor OwnerActor;
         public Actor AvatarActor;
         public UAbilitySystemComponent AbilitySystemComponent;
 
     }
-    public class GameplayAbility
+    public class UGameplayAbility
     {
         //	The important functions:
         //	
@@ -33,50 +33,50 @@ namespace GameplayAbilitySystem
         //
         //		EndAbility()			- The ability has ended. This is intended to be called by the ability to end itself.
         public CooldownGameplayEffect CooldownGameplayEffect { get; set; }
-        public virtual bool CanActivateAbility(GameplayAbilitySpecHandle Handle)
+        public virtual bool CanActivateAbility(FGameplayAbilitySpecHandle Handle)
         {
             return false;
         }
-        public void CallActivateAbility(GameplayAbilitySpecHandle Handle)
+        public void CallActivateAbility(FGameplayAbilitySpecHandle Handle)
         {
             PreActivate(Handle);
             //ActivateAbility(Handle, null);
         }
-        public void PreActivate(GameplayAbilitySpecHandle Handle)
+        public void PreActivate(FGameplayAbilitySpecHandle Handle)
         {
         }
-        public virtual void ActivateAbility(GameplayAbilitySpecHandle Handle, GameplayAbilityActorInfo ActorInfo, Character owner)
+        public virtual void ActivateAbility(FGameplayAbilitySpecHandle Handle, FGameplayAbilityActorInfo ActorInfo, Character owner)
         {
             if (CommitAbility(Handle, ActorInfo))
             {
 
             }
         }
-        public virtual void CancelAbility(GameplayAbilitySpecHandle Handle)
+        public virtual void CancelAbility(FGameplayAbilitySpecHandle Handle)
         {
 
         }
-        public virtual bool CommitAbility(GameplayAbilitySpecHandle Handle, GameplayAbilityActorInfo ActorInfo)
+        public virtual bool CommitAbility(FGameplayAbilitySpecHandle Handle, FGameplayAbilityActorInfo ActorInfo)
         {
             CommitExecute(Handle, ActorInfo);
             return false;
         }
-        public void CommitExecute(GameplayAbilitySpecHandle Handle, GameplayAbilityActorInfo ActorInfo)
+        public void CommitExecute(FGameplayAbilitySpecHandle Handle, FGameplayAbilityActorInfo ActorInfo)
         {
             ApplyCooldown(Handle, ActorInfo);
             ApplyCost();
         }
-        public bool CommitAbilityCooldown(GameplayAbilitySpecHandle Handle, GameplayAbilityActorInfo ActorInfo)
+        public bool CommitAbilityCooldown(FGameplayAbilitySpecHandle Handle, FGameplayAbilityActorInfo ActorInfo)
         {
             ApplyCooldown(Handle, ActorInfo);
             return true;
         }
-        public void ApplyCooldown(GameplayAbilitySpecHandle Handle, GameplayAbilityActorInfo ActorInfo)
+        public void ApplyCooldown(FGameplayAbilitySpecHandle Handle, FGameplayAbilityActorInfo ActorInfo)
         {
             UGameplayEffect CooldownGE = GetCooldownGameplayEffect();
             if (CooldownGE != null)
             {
-                //ApplyGameplayEffectToOwner(Handle, ActorInfo, CooldownGE, GetAbilityLevel(Handle, ActorInfo));
+                ApplyGameplayEffectToOwner(Handle, ActorInfo, CooldownGE, 1);
             }
         }
         public void ApplyCost()
@@ -87,17 +87,31 @@ namespace GameplayAbilitySystem
         {
             return CooldownGameplayEffect;
         }
-        public void ApplyGameplayEffectToOwner(GameplayAbilitySpecHandle Handle, GameplayAbilityActorInfo ActorInfo, UGameplayEffect InGamepayEffect, float GameplayEffectLevel)
+        public FActiveGameplayEffectHandle ApplyGameplayEffectToOwner(FGameplayAbilitySpecHandle Handle, FGameplayAbilityActorInfo ActorInfo, UGameplayEffect InGamepayEffect, float GameplayEffectLevel)
         {
             if (InGamepayEffect != null)
             {
-                GameplayEffectSpecHandle SpecHandle = MakeOutgoingGameplayEffectSpec(Handle, ActorInfo, InGamepayEffect, GameplayEffectLevel);
+                FGameplayEffectSpecHandle SpecHandle = MakeOutgoingGameplayEffectSpec(Handle, ActorInfo, InGamepayEffect, GameplayEffectLevel);
+                if (SpecHandle != null)
+                {
+                    return ApplyGameplayEffectSpecToOwner(Handle, ActorInfo, SpecHandle);
+                }
             }
+            return new FActiveGameplayEffectHandle();
         }
-        public GameplayEffectSpecHandle MakeOutgoingGameplayEffectSpec(GameplayAbilitySpecHandle Handle, GameplayAbilityActorInfo ActorInfo, UGameplayEffect InGamepayEffect, float GameplayEffectLevel)
+        public FActiveGameplayEffectHandle ApplyGameplayEffectSpecToOwner(FGameplayAbilitySpecHandle AbilityHandle, FGameplayAbilityActorInfo ActorInfo, FGameplayEffectSpecHandle SpecHandle)
+        {
+            if (SpecHandle != null)
+            {
+                UAbilitySystemComponent AbilitySystemComponent = ActorInfo.AbilitySystemComponent;
+                return AbilitySystemComponent.ApplyGameplayEffectSpecToSelf(SpecHandle.Data);
+            }
+            return new FActiveGameplayEffectHandle();
+        }
+        public FGameplayEffectSpecHandle MakeOutgoingGameplayEffectSpec(FGameplayAbilitySpecHandle Handle, FGameplayAbilityActorInfo ActorInfo, UGameplayEffect InGamepayEffect, float GameplayEffectLevel)
         {
             UAbilitySystemComponent AbilitySystemComponent = ActorInfo.AbilitySystemComponent;
-            GameplayEffectSpecHandle NewHandle = AbilitySystemComponent.MakeOutgoingSpec(null, GameplayEffectLevel, null);
+            FGameplayEffectSpecHandle NewHandle = AbilitySystemComponent.MakeOutgoingSpec(null, GameplayEffectLevel, null);
             return null;
         }
     }

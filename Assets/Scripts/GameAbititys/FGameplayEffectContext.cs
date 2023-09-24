@@ -2,7 +2,7 @@
 
 namespace GameplayAbilitySystem
 {
-    public class GameplayEffectContext
+    public class FGameplayEffectContext
     {
         public Actor Instigator;
         public Actor EffectCauser;

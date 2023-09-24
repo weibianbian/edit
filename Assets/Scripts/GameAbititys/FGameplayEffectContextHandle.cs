@@ -2,10 +2,10 @@
 
 namespace GameplayAbilitySystem
 {
-    public class GameplayEffectContextHandle
+    public class FGameplayEffectContextHandle
     {
-        public GameplayEffectContext Data;
-        public GameplayEffectContextHandle(GameplayEffectContext InData)
+        public FGameplayEffectContext Data;
+        public FGameplayEffectContextHandle(FGameplayEffectContext InData)
         {
             Data = InData;
         }

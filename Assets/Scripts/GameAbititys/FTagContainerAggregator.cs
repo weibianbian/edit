@@ -2,6 +2,7 @@
 
 namespace GameplayAbilitySystem
 {
+    //结构，用于在效果执行过程中组合来自不同来源的标签
     public class FTagContainerAggregator
     {
         public bool CacheIsValid = false;
@@ -22,7 +23,10 @@ namespace GameplayAbilitySystem
 
             return CachedAggregator;
         }
+        public FGameplayTagContainer GetSpecTags()
+        {
+            return CapturedSpecTags;
+        }
     }
-
 }
 

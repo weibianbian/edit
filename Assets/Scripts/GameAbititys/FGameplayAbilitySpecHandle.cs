@@ -16,7 +16,7 @@
     //              ---SendGameplayEventToActor
     //GameplayAbility
     //              ---ApplyGameplayEffectToTarget
-    public struct GameplayAbilitySpecHandle
+    public class FGameplayAbilitySpecHandle
     {
 
         int Handle;
@@ -36,11 +36,11 @@
             return base.ToString();
         }
 
-        public static bool operator ==(GameplayAbilitySpecHandle a, GameplayAbilitySpecHandle b)
+        public static bool operator ==(FGameplayAbilitySpecHandle a, FGameplayAbilitySpecHandle b)
         {
             return a.Handle == b.Handle;
         }
-        public static bool operator !=(GameplayAbilitySpecHandle a, GameplayAbilitySpecHandle b)
+        public static bool operator !=(FGameplayAbilitySpecHandle a, FGameplayAbilitySpecHandle b)
         {
             return a.Handle != b.Handle;
         }

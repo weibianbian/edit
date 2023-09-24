@@ -13,12 +13,12 @@ namespace GameplayAbilitySystem
         public FActiveGameplayEffectsContainer ActiveGameplayEffects;
         public FGameplayTagCountContainer GameplayTagCountContainer;
         public List<UAttributeSet> SpawnedAttributes;
-        public GameplayAbilityActorInfo AbilityActorInfo;
+        public FGameplayAbilityActorInfo AbilityActorInfo;
 
         public UAbilitySystemComponent()
         {
             SpawnedAttributes = new List<UAttributeSet>();
-            AbilityActorInfo = ReferencePool.Acquire<GameplayAbilityActorInfo>();
+            AbilityActorInfo = ReferencePool.Acquire<FGameplayAbilityActorInfo>();
             ActiveGameplayEffects = new FActiveGameplayEffectsContainer();
             GameplayTagCountContainer = new FGameplayTagCountContainer();
         }
@@ -88,15 +88,15 @@ namespace GameplayAbilitySystem
 
             TagContainer.AppendTags(GameplayTagCountContainer.GetExplicitGameplayTags());
         }
-        public bool TryActiveAbility(GameplayAbilitySpecHandle AbilityToActivate)
+        public bool TryActiveAbility(FGameplayAbilitySpecHandle AbilityToActivate)
         {
-            GameplayAbilitySpec Spec = FindAbilitySpecFromHandle(AbilityToActivate);
+            FGameplayAbilitySpec Spec = FindAbilitySpecFromHandle(AbilityToActivate);
             if (Spec == null)
             {
                 Debug.LogError("TryActivateAbility called with invalid Handle");
                 return false;
             }
-            GameplayAbility Ability = Spec.Ability;
+            UGameplayAbility Ability = Spec.Ability;
             if (Ability == null)
             {
                 Debug.LogError("TryActivateAbility called with invalid Handle");
@@ -104,7 +104,7 @@ namespace GameplayAbilitySystem
             }
             return true;
         }
-        public GameplayAbilitySpec FindAbilitySpecFromHandle(GameplayAbilitySpecHandle Handle)
+        public FGameplayAbilitySpec FindAbilitySpecFromHandle(FGameplayAbilitySpecHandle Handle)
         {
             for (int i = 0; i < ActivatableAbilities.items.Count; i++)
             {
@@ -113,15 +113,15 @@ namespace GameplayAbilitySystem
                     return ActivatableAbilities.items[i];
                 }
             }
-            return GameplayAbilitySpec.Default;
+            return FGameplayAbilitySpec.Default;
         }
-        public void GiveAbility(GameplayAbilitySpec AbilitySpec)
+        public void GiveAbility(FGameplayAbilitySpec AbilitySpec)
         {
             ActivatableAbilities.items.Add(AbilitySpec);
             //需要复制
             OnGiveAbility(AbilitySpec);
         }
-        public void OnGiveAbility(GameplayAbilitySpec Spec)
+        public void OnGiveAbility(FGameplayAbilitySpec Spec)
         {
 
         }
@@ -137,11 +137,11 @@ namespace GameplayAbilitySystem
                 }
             }
         }
-        public void OnRemoveAbility(GameplayAbilitySpec Spec)
+        public void OnRemoveAbility(FGameplayAbilitySpec Spec)
         {
 
         }
-        public void AbilitySpecInputPressed(GameplayAbilitySpec Spec)
+        public void AbilitySpecInputPressed(FGameplayAbilitySpec Spec)
         {
             Spec.InputPressed = true;
             if (Spec.IsActive())
@@ -159,7 +159,7 @@ namespace GameplayAbilitySystem
         }
         public FActiveGameplayEffectHandle ApplyGameplayEffectToTarget(UGameplayEffect InGameplayEffect, UAbilitySystemComponent InTarget, float InLevel)
         {
-            GameplayEffectContextHandle Context = MakeEffectContext();
+            FGameplayEffectContextHandle Context = MakeEffectContext();
             FGameplayEffectSpec Spec = new FGameplayEffectSpec(InGameplayEffect, Context, InLevel);
             FActiveGameplayEffectHandle ret = ApplyGameplayEffectSpecToTarget(Spec, InTarget);
             return ret;
@@ -180,6 +180,7 @@ namespace GameplayAbilitySystem
             FActiveGameplayEffect ImmunityGE = null;
             if (ActiveGameplayEffects.HasApplicationImmunityToSpec(Spec, ImmunityGE))
             {
+                OnImmunityBlockGameplayEffect(Spec, ImmunityGE);
                 return new FActiveGameplayEffectHandle();
             }
             //检查特效是否成功应用
@@ -243,6 +244,10 @@ namespace GameplayAbilitySystem
 
             return MyHandle;
         }
+        public void OnImmunityBlockGameplayEffect(FGameplayEffectSpec Spec, FActiveGameplayEffect ImmunityGE)
+        {
+
+        }
         public bool HasAttributeSetForAttribute(FGameplayAttribute Attribute)
         {
             //return (Attribute.IsValid() && (Attribute.IsSystemAttribute() || GetAttributeSubobject(Attribute.GetAttributeSetClass()) != nullptr));
@@ -265,21 +270,21 @@ namespace GameplayAbilitySystem
 
             return ActiveGameplayEffects.GetAttributeBaseValue(Attribute);
         }
-        public GameplayEffectContextHandle MakeEffectContext()
+        public FGameplayEffectContextHandle MakeEffectContext()
         {
-            GameplayEffectContextHandle Context = new GameplayEffectContextHandle(new GameplayEffectContext());
+            FGameplayEffectContextHandle Context = new FGameplayEffectContextHandle(new FGameplayEffectContext());
 
             Context.AddInstigator(AbilityActorInfo.OwnerActor, AbilityActorInfo.AvatarActor);
             return Context;
 
         }
-        public GameplayEffectSpecHandle MakeOutgoingSpec(UGameplayEffect InGameplayEffect, float Level, GameplayEffectContextHandle Context)
+        public FGameplayEffectSpecHandle MakeOutgoingSpec(UGameplayEffect InGameplayEffect, float Level, FGameplayEffectContextHandle Context)
         {
             FGameplayEffectSpec NewSpec = new FGameplayEffectSpec(InGameplayEffect, Context, Level);
             //传递给投掷物，投掷物击中到目标后被应用
-            return new GameplayEffectSpecHandle(NewSpec);
+            return new FGameplayEffectSpecHandle(NewSpec);
         }
-        public bool InternalTryActivateAbility(GameplayAbilitySpecHandle Handle)
+        public bool InternalTryActivateAbility(FGameplayAbilitySpecHandle Handle)
         {
             return true;
         }

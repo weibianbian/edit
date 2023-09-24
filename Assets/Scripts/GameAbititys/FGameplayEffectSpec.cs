@@ -11,20 +11,21 @@ namespace GameplayAbilitySystem
         public float Level;
         //在0.0-1.0范围内，这个GameplayEffect将应用于目标属性或GameplayEffect的概率
         public float ChanceToApplyToTarget;
-        private GameplayEffectContextHandle EffectContext;
+        private FGameplayEffectContextHandle EffectContext;
         public int StackCount;
         public bool bDurationLocked = false;
-        public List<GameplayEffectSpecHandle> TargetEffectSpecs = new List<GameplayEffectSpecHandle>();
+        public List<FGameplayEffectSpecHandle> TargetEffectSpecs = new List<FGameplayEffectSpecHandle>();
         public List<FModifierSpec> Modifiers = new List<FModifierSpec>();
         public FGameplayEffectAttributeCaptureSpecContainer CapturedRelevantAttributes;
         public List<FGameplayEffectModifiedAttribute> ModifiedAttributes;
+        //捕获的源标签GameplayEffectSpec创建
         public FTagContainerAggregator CapturedSourceTags = new FTagContainerAggregator();
         public FTagContainerAggregator CapturedTargetTags = new FTagContainerAggregator();
         //被授予且不是来自UGameplayEffect def的标签。它们被复制
         public FGameplayTagContainer DynamicGrantedTags = new FGameplayTagContainer();
         //在这个效果规范上的标签不是来自UGameplayEffect def。这些是重复的
         public FGameplayTagContainer DynamicAssetTags = new FGameplayTagContainer();
-        public FGameplayEffectSpec(UGameplayEffect InDef, GameplayEffectContextHandle InEffectContext, float InLevel)
+        public FGameplayEffectSpec(UGameplayEffect InDef, FGameplayEffectContextHandle InEffectContext, float InLevel)
         {
             CapturedRelevantAttributes = new FGameplayEffectAttributeCaptureSpecContainer();
             ModifiedAttributes = new List<FGameplayEffectModifiedAttribute>();
@@ -36,7 +37,7 @@ namespace GameplayAbilitySystem
             CapturedRelevantAttributes = new FGameplayEffectAttributeCaptureSpecContainer();
             StackCount = 1;
         }
-        public void Initialize(UGameplayEffect InDef, GameplayEffectContextHandle InEffectContext, float InLevel)
+        public void Initialize(UGameplayEffect InDef, FGameplayEffectContextHandle InEffectContext, float InLevel)
         {
             Def = InDef;
             Level = InLevel;
@@ -46,16 +47,17 @@ namespace GameplayAbilitySystem
             {
                 Modifiers.Add(new FModifierSpec());
             }
+            CapturedSourceTags.GetSpecTags().AppendTags(InDef.InheritableGameplayEffectTags.CombinedTags);
         }
-        public void SetContext(GameplayEffectContextHandle NewEffectContext)
+        public void SetContext(FGameplayEffectContextHandle NewEffectContext)
         {
             EffectContext = NewEffectContext;
         }
-        public GameplayEffectContextHandle GetEffectContext()
+        public FGameplayEffectContextHandle GetEffectContext()
         {
             return EffectContext;
         }
-        public GameplayEffectContextHandle GetContext()
+        public FGameplayEffectContextHandle GetContext()
         {
             return EffectContext;
         }

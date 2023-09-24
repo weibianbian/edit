@@ -1,9 +1,9 @@
 ﻿namespace GameplayAbilitySystem
 {
-    public class GameplayEffectSpecHandle
+    public class FGameplayEffectSpecHandle
     {
         public FGameplayEffectSpec Data;
-        public GameplayEffectSpecHandle(FGameplayEffectSpec InData)
+        public FGameplayEffectSpecHandle(FGameplayEffectSpec InData)
         {
             Data = InData;
         }

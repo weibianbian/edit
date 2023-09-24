@@ -6,7 +6,7 @@ namespace GameplayAbilitySystem
 {
     public class AbilityTaskWaitOverlap : AbilityTask
     {
-        public static AbilityTaskWaitOverlap WaitForOverlap(GameplayAbility OwningAbility)
+        public static AbilityTaskWaitOverlap WaitForOverlap(UGameplayAbility OwningAbility)
         {
             AbilityTaskWaitOverlap MyObj = NewAbilityTask<AbilityTaskWaitOverlap>(OwningAbility);
             return MyObj;
@@ -38,13 +38,13 @@ namespace GameplayAbilitySystem
     public class AbilityTask
     {
         public EGameplayTaskState TaskState;
-        public static T NewAbilityTask<T>(GameplayAbility ThisAbility) where T : AbilityTask
+        public static T NewAbilityTask<T>(UGameplayAbility ThisAbility) where T : AbilityTask
         {
             T MyObj = Activator.CreateInstance<T>();
             MyObj.InitTask(ThisAbility);
             return MyObj;
         }
-        public void InitTask(GameplayAbility InTaskOwner)
+        public void InitTask(UGameplayAbility InTaskOwner)
         {
 
         }

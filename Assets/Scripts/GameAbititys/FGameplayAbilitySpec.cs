@@ -1,13 +1,13 @@
 ﻿namespace GameplayAbilitySystem
 {
-    public class GameplayAbilitySpec
+    public class FGameplayAbilitySpec
     {
         public int id;
-        public GameplayAbility Ability;
+        public UGameplayAbility Ability;
         public int level;
         public bool InputPressed;
-        public GameplayAbilitySpecHandle Handle;
-        public static GameplayAbilitySpec Default=new GameplayAbilitySpec();
+        public FGameplayAbilitySpecHandle Handle;
+        public static FGameplayAbilitySpec Default=new FGameplayAbilitySpec();
 
         public bool IsActive()
         {

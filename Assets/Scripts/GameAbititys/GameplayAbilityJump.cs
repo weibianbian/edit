@@ -2,7 +2,7 @@
 
 namespace GameplayAbilitySystem
 {
-    public class GameplayAbilityJump : GameplayAbility
+    public class GameplayAbilityJump : UGameplayAbility
     {
         //public override void ActivateAbility(GameplayAbilitySpecHandle Handle, Character owner)
         //{
