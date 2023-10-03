@@ -10,7 +10,7 @@ namespace RailShootGame
         public void Reset()
         {
             GameplayTags.Clear();
-            ParentTags.Clear(); 
+            ParentTags.Clear();
         }
         public int Num()
         {
@@ -38,12 +38,17 @@ namespace RailShootGame
             }
             return false;
         }
+        public bool HasTagExact(FGameplayTag TagToCheck)
+        {
+            return GameplayTags.Contains(TagToCheck);
+        }
+
         public void AppendTags(FGameplayTagContainer Other)
         {
             GameplayTags.AddRange(Other.GameplayTags);
             ParentTags.AddRange(Other.ParentTags);
         }
-        
+
     }
 }
 

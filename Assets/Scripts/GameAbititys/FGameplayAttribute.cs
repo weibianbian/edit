@@ -2,6 +2,7 @@
 using System;
 using System.Diagnostics;
 using System.Reflection;
+using System.Security.Cryptography;
 
 namespace GameplayAbilitySystem
 {
@@ -34,6 +35,14 @@ namespace GameplayAbilitySystem
             Dest.PreAttributeChange(this, NewValue);
             DataPtr.SetCurrentValue(NewValue);
             Dest.PostAttributeChange(this, OldValue, NewValue);
+        }
+        public float GetNumericValueChecked(UAttributeSet Src)
+        {
+            FieldInfo fi = (Attribute);
+            FGameplayAttributeData DataPtr = (FGameplayAttributeData)fi.GetValue(Src);
+            {
+                return DataPtr.GetCurrentValue();
+            }
         }
 
         public override bool Equals(object obj)

@@ -17,6 +17,10 @@ namespace GameplayAbilitySystem
         {
             return Data.GetInstigatorAbilitySystemComponent();
         }
+        public void SetAbility(UGameplayAbility InGameplayAbility)
+        {
+            Data.SetAbility(InGameplayAbility);
+        }
     }
 }
 

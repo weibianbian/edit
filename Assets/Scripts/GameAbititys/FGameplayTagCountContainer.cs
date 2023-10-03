@@ -12,6 +12,7 @@ namespace GameplayAbilitySystem
             public Action<FGameplayTag, int> OnAnyChange;
         }
         public Dictionary<FGameplayTag, DelegateInfo> GameplayTagEventMap = new Dictionary<FGameplayTag, DelegateInfo>();
+        public Dictionary<FGameplayTag, int> GameplayTagCountMap = new Dictionary<FGameplayTag, int>();
         public FGameplayTagContainer ExplicitTags;
         public FGameplayTagCountContainer()
         {
@@ -33,6 +34,24 @@ namespace GameplayAbilitySystem
         public FGameplayTagContainer GetExplicitGameplayTags()
         {
             return ExplicitTags;
+        }
+        public bool HasAnyMatchingGameplayTags(FGameplayTagContainer TagContainer)
+        {
+            if (TagContainer.Num() == 0)
+            {
+                return false;
+            }
+
+            bool AnyMatch = false;
+            for (int i = 0; i < TagContainer.Num(); i++)
+            {
+                FGameplayTag Tag = TagContainer.GameplayTags[i];
+                if (GameplayTagCountMap.TryGetValue(Tag, out int FindRef) && FindRef > 0)
+                {
+                    AnyMatch = true;
+                }
+            }
+            return AnyMatch;
         }
     }
 

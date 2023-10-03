@@ -3,6 +3,8 @@
     public class UAbilitySystemGlobals
     {
         public GameplayCueManager GlobalGameplayCueManager;
+        protected bool bIgnoreAbilitySystemCooldowns;
+        protected bool bIgnoreAbilitySystemCosts;
         public static UAbilitySystemGlobals Get()
         {
             return GameplayAbilitiesModule.Get().GetAbilitySystemGlobals();
@@ -15,6 +17,15 @@
             }
             GlobalGameplayCueManager.OnCreated();
             return GlobalGameplayCueManager;
+        }
+        public bool ShouldIgnoreCooldowns()
+        {
+            return bIgnoreAbilitySystemCooldowns;
+        }
+
+        public bool ShouldIgnoreCosts()
+        {
+            return bIgnoreAbilitySystemCosts;
         }
     }
 }
