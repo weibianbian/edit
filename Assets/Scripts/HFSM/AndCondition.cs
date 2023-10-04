@@ -6,7 +6,7 @@ namespace HFSMRuntime
     {
         public ICondition conditionA;
         public ICondition conditionB;
-        public bool Test(UWorld g, Actor e)
+        public bool Test(UWorld g, AActor e)
         {
             return conditionA.Test(g,e) && conditionB.Test(g,e);
         }

@@ -16,7 +16,7 @@ namespace HFSMRuntime
         {
             return state.GetAction();
         }
-        public override UpdateResult Update(UWorld g, Actor e)
+        public override UpdateResult Update(UWorld g, AActor e)
         {
             return base.Update(g, e);
         }

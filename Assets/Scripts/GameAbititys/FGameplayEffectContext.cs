@@ -6,10 +6,10 @@ namespace GameplayAbilitySystem
     public class FGameplayEffectContext
     {
         public int AbilityLevel;
-        public Actor Instigator;
-        public Actor EffectCauser;
+        public AActor Instigator;
+        public AActor EffectCauser;
         public UAbilitySystemComponent InstigatorAbilitySystemComponent;
-        public void AddInstigator(Actor InInstigator, Actor InEffectCauser)
+        public void AddInstigator(AActor InInstigator, AActor InEffectCauser)
         {
             Instigator = InInstigator;
             EffectCauser = InEffectCauser;

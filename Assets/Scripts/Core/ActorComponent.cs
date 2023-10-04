@@ -2,12 +2,16 @@
 {
     public abstract class ActorComponent : ReferencePoolObject
     {
-        protected Actor Outer;
+        protected AActor Outer;
         private UWorld WorldPrivate;
         public ActorComponent()
         {
         }
         public virtual void TickComponent()
+        {
+
+        }
+        public virtual void InitializeComponent()
         {
 
         }
@@ -32,11 +36,11 @@
         {
             return WorldPrivate;
         }
-        public void SetOwner(Actor InOuter)
+        public void SetOwner(AActor InOuter)
         {
             Outer = InOuter;
         }
-        public Actor GetOwner()
+        public AActor GetOwner()
         {
             return Outer;
         }

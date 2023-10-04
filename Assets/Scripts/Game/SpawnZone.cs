@@ -15,7 +15,7 @@ namespace RailShootGame
         }
         public EState state = EState.E_WAITING_FOR_START;
         public SpawnPointEnemy[] spawnPoints = null;
-        private List<Actor> enemiesAlive = new List<Actor>();
+        private List<AActor> enemiesAlive = new List<AActor>();
         public bool IsActive() { return enemiesAlive.Count > 0; }
         public int GetEnemyCount() { return enemiesAlive.Count; }
         private void OnTriggerEnter(Collider other)
@@ -26,7 +26,7 @@ namespace RailShootGame
             for (int i = 0; i < spawnPoints.Length; i++)
             {
                 SpawnPointEnemy pointEnemy = spawnPoints[i];
-                Actor actor = GameManager.ActorManager.SpawnActor(pointEnemy.actorType, pointEnemy.spawnPoint.transform.position);
+                AActor actor = GameManager.ActorManager.SpawnActor(pointEnemy.actorType, pointEnemy.spawnPoint.transform.position);
                 enemiesAlive.Add(actor);
             }
 

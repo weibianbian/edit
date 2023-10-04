@@ -31,7 +31,7 @@ namespace RailShootGame
         private Dictionary<EActorType, ESceneObjType> actorMapping = new Dictionary<EActorType, ESceneObjType>() {
             { EActorType.Cube,ESceneObjType.Enemy},
         };
-        public List<Actor> gameActors = new List<Actor>(100);
+        public List<AActor> gameActors = new List<AActor>(100);
         private ResourceManager resourceManager;
         public void Awake()
         {
@@ -49,7 +49,7 @@ namespace RailShootGame
         {
             this.resourceManager = resourceManager;
         }
-        public Actor SpawnActor(EActorType actorType,Vector3 spawnPos)
+        public AActor SpawnActor(EActorType actorType,Vector3 spawnPos)
         {
             ESceneObjType sceneObjType = actorMapping[actorType];
 
@@ -66,7 +66,7 @@ namespace RailShootGame
 
             instance.transform.parent = rootObjs[(int)sceneObjType].transform;
 
-            Actor actorLogic = actorObject.AttachLogic();
+            AActor actorLogic = actorObject.AttachLogic();
 
             actorLogic.Spawn();
 

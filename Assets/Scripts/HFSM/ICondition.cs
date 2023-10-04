@@ -5,7 +5,7 @@ namespace HFSMRuntime
 {
     public interface ICondition
     {
-        bool Test(UWorld g, Actor e);
+        bool Test(UWorld g, AActor e);
     }
     public class RandomTimerCondition : ICondition
     {
@@ -20,7 +20,7 @@ namespace HFSMRuntime
             timer = random.Next(seconds - 400, seconds);
         }
 
-        public bool Test(UWorld g, Actor e)
+        public bool Test(UWorld g, AActor e)
         {
             --timer;
             if (timer == 0)
@@ -33,7 +33,7 @@ namespace HFSMRuntime
     }
     public class SoundSensorCondition : ICondition
     {
-        public bool Test(UWorld g, Actor e)
+        public bool Test(UWorld g, AActor e)
         {
             SoundSensor soundSensor = e.sensor.GetSensor(Sensor.ESensorType.Sound) as SoundSensor;
             if (soundSensor != null)

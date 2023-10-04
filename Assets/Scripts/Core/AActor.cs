@@ -1,5 +1,6 @@
 using GameplayAbilitySystem;
 using System.Collections.Generic;
+using Unity.Collections.LowLevel.Unsafe;
 using UnityEngine;
 
 namespace RailShootGame
@@ -13,13 +14,13 @@ namespace RailShootGame
     {
         void UpdateLogic(float delta);
     }
-    public class Pawn : Actor
+    public class Pawn : AActor
     {
 
     }
 
     //Spawn -----  Init  ----Activate
-    public class Actor : ReferencePoolObject
+    public class AActor : ReferencePoolObject
     {
         public ActorObject actorObject;
         public MovementCompt move;
@@ -71,10 +72,14 @@ namespace RailShootGame
 
             //延迟生成和非延迟生成的序列应该是相同的
             UWorld World =GetWorld();
-            ExecuteConstruction();
-            PostActorConstruction();
 
             RegisterAllComponents();
+            FinishSpawning();
+        }
+        public void FinishSpawning()
+        {
+            ExecuteConstruction();
+            PostActorConstruction();
         }
         public void ExecuteConstruction()
         {
@@ -83,9 +88,18 @@ namespace RailShootGame
         public void PostActorConstruction()
         {
             PostInitializeComponents();
+
+            InitializeComponents();
         }
         public virtual void PostInitializeComponents()
         {
+        }
+        public void InitializeComponents()
+        {
+            foreach (var ActorComp in OwnedComponents)
+            {
+                ActorComp.InitializeComponent();
+            }
         }
         public void RegisterAllComponents()
         {

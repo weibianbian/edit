@@ -11,7 +11,7 @@ namespace GameplayAbilitySystem
             AbilityTaskWaitOverlap MyObj = NewAbilityTask<AbilityTaskWaitOverlap>(OwningAbility);
             return MyObj;
         }
-        public void OnHitCallback(Actor HitActor, Actor OtherActor, Vector3 NormalImpulse)
+        public void OnHitCallback(AActor HitActor, AActor OtherActor, Vector3 NormalImpulse)
         {
             if (OtherActor != null)
             {

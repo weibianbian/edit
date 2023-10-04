@@ -5,7 +5,7 @@ using System.Numerics;
 namespace GameplayAbilitySystem
 {
 
-    public class GameplayCueNotifyActor : Actor
+    public class GameplayCueNotifyActor : AActor
     {
         // 处理玩法提示事件
         public virtual void HandleGameplayCue()

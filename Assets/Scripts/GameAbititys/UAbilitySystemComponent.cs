@@ -1,6 +1,7 @@
 using RailShootGame;
 using System;
 using System.Collections.Generic;
+using System.Numerics;
 using UnityEngine;
 using UnityEngine.Experimental.AI;
 using UnityEngine.UIElements;
@@ -18,6 +19,7 @@ namespace GameplayAbilitySystem
         public List<FGameplayAbilitySpecHandle> InputPressedSpecHandles;
         public List<FGameplayAbilitySpecHandle> InputHeldSpecHandles;
         public static List<FGameplayAbilitySpecHandle> AbilitiesToActivate;
+        public AActor OwnerActor;
         public UAbilitySystemComponent()
         {
             SpawnedAttributes = new List<UAttributeSet>();
@@ -29,7 +31,22 @@ namespace GameplayAbilitySystem
             InputHeldSpecHandles = new List<FGameplayAbilitySpecHandle>();
             ActivatableAbilities = new GameplayAbilitySpecContainer();
         }
+        public override void InitializeComponent()
+        {
+            base.InitializeComponent();
+            AActor Owner = GetOwner();
+            InitAbilityActorInfo(Owner, Owner);
+        }
+        public virtual void InitAbilityActorInfo(AActor InOwnerActor, AActor InAvatarActor)
+        {
+            AbilityActorInfo.InitFromActor(InOwnerActor, InAvatarActor, this);
 
+            SetOwnerActor(InOwnerActor);
+        }
+        public void SetOwnerActor(AActor NewOwnerActor)
+        {
+            OwnerActor = NewOwnerActor;
+        }
         public override void OnRegister()
         {
             ActiveGameplayEffects.RegisterWithOwner(this);
@@ -86,13 +103,22 @@ namespace GameplayAbilitySystem
             InputPressedSpecHandles.Clear();
             InputHeldSpecHandles.Clear();
         }
+        public void NotifyAbilityEnded(FGameplayAbilitySpecHandle Handle, UGameplayAbility Ability, bool bWasCancelled)
+        {
+            FGameplayAbilitySpec Spec = FindAbilitySpecFromHandle(Handle);
+            if (Spec == null)
+            {
+                // The ability spec may have been removed while we were ending. We can assume everything was cleaned up if the spec isnt here.
+                return;
+            }
+        }
         public void ExecutePeriodicEffect(FActiveGameplayEffectHandle Handle)
         {
             ActiveGameplayEffects.ExecutePeriodicGameplayEffect(Handle);
         }
         public UAttributeSet GetOrCreateAttributeSubobject(Type AttributeClass)
         {
-            Actor OwningActor = GetOwner();
+            AActor OwningActor = GetOwner();
             UAttributeSet MyAttributes = null;
             if (OwningActor != null && AttributeClass != null)
             {

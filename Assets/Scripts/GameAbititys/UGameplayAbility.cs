@@ -48,7 +48,7 @@ namespace GameplayAbilitySystem
                 return false;
             }
             FGameplayAbilitySpec Spec = AbilitySystemComponent.FindAbilitySpecFromHandle(Handle);
-            if (Spec==null)
+            if (Spec == null)
             {
                 UnityEngine.Debug.LogError($"CanActivateAbility {this} failed, called with invalid Handle");
                 return false;
@@ -70,10 +70,17 @@ namespace GameplayAbilitySystem
 
             }
         }
-        public virtual void CancelAbility(FGameplayAbilitySpecHandle Handle)
+        public virtual void CancelAbility(FGameplayAbilitySpecHandle Handle, FGameplayAbilityActorInfo ActorInfo, FGameplayAbilityActivationInfo ActivationInfo)
         {
-
+            bool bWasCancelled = true;
+            EndAbility(Handle, ActorInfo,ActivationInfo, bWasCancelled);
         }
+        public virtual void EndAbility(FGameplayAbilitySpecHandle Handle, FGameplayAbilityActorInfo ActorInfo, FGameplayAbilityActivationInfo ActivationInfo, bool bWasCancelled)
+        {
+            UAbilitySystemComponent AbilitySystemComponent = ActorInfo.AbilitySystemComponent;
+            AbilitySystemComponent.NotifyAbilityEnded(Handle, this, bWasCancelled);
+        }
+
         public virtual bool CommitAbility(FGameplayAbilitySpecHandle Handle, FGameplayAbilityActorInfo ActorInfo, FGameplayAbilityActivationInfo ActivationInfo)
         {
             //最后一次失败的机会(也许我们不再有资源提交，因为我们开始这个技能激活后)

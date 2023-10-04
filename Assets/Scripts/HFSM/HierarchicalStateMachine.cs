@@ -49,7 +49,7 @@ namespace HFSMRuntime
             this.states.Add(initialState);
             initialState.parent = this;
         }
-        public override UpdateResult Update(UWorld g, Actor e)
+        public override UpdateResult Update(UWorld g, AActor e)
         {
             UpdateResult result;
             if (currentState == null)

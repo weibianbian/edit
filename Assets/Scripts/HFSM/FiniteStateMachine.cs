@@ -27,7 +27,7 @@ namespace FSMRuntime
         {
             return currentState.name;
         }
-        public List<IAction> UpdateFSM(UWorld g, Actor e)
+        public List<IAction> UpdateFSM(UWorld g, AActor e)
         {
             Transition triggeredTransition = null;
             foreach (Transition t in currentState.GetTransitions())

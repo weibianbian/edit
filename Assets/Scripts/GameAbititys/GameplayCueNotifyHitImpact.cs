@@ -9,7 +9,7 @@ namespace GameplayAbilitySystem
         {
             return EventType == EGameplayCueEvent.Executed;
         }
-        public override void HandleGameplayCue(Actor TargetActor, EGameplayCueEvent EventType, GameplayCueParameters Parameters)
+        public override void HandleGameplayCue(AActor TargetActor, EGameplayCueEvent EventType, GameplayCueParameters Parameters)
         {
             Debug.Log("GameplayCueNotifyHitImpact.HandleGameplayCue");
             if (EventType != EGameplayCueEvent.Executed)

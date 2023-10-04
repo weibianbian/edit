@@ -1,22 +1,35 @@
+using Core;
 using GameplayAbilitySystem;
 using JetBrains.Annotations;
 using RailShootGame;
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Collections.LowLevel.Unsafe;
 using UnityEngine;
 
 public class TestGAS : MonoBehaviour
 {
-    UAbilitySystemComponent uAbilitySystemComponent;
-    // Start is called before the first frame update
+    public UWorld World;
+    AbilitySystemTestActor SourceActor;
     void Start()
     {
-        uAbilitySystemComponent = new UAbilitySystemComponent();
+        Type t = typeof(GameplayAbilitiesModule);
+        Debug.Log(t.GetInterface(typeof(IModuleInterface).Name));
+        World = new UWorld();
+        ULevel level = new ULevel();
+        World.AddToWorld(level);
+        World.CurrentLevel = level;
 
-        GameplayAbilityJump gameplayAbilityJump = new GameplayAbilityJump();
-        FGameplayAbilitySpec AbilitySpec = new FGameplayAbilitySpec(gameplayAbilityJump,1);
+        float StartingHealth = 100.0f;
+        float StartingMana = 200.0f;
+
+        SourceActor = World.SpawnActor<AbilitySystemTestActor>();
+
+        UGameplayAbilityJump gameplayAbilityJump = new UGameplayAbilityJump();
+        FGameplayAbilitySpec AbilitySpec = new FGameplayAbilitySpec(gameplayAbilityJump, 1);
         AbilitySpec.DynamicAbilityTags.AddTag(new FGameplayTag("InputTag.Jump"));
-        uAbilitySystemComponent.GiveAbility(AbilitySpec);
+        SourceActor.GetAbilitySystemComponent().GiveAbility(AbilitySpec);
     }
 
     // Update is called once per frame
@@ -24,11 +37,11 @@ public class TestGAS : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(0))
         {
-            uAbilitySystemComponent.AbilityInputTagPressed(new FGameplayTag("InputTag.Jump"));
+            SourceActor.GetAbilitySystemComponent().AbilityInputTagPressed(new FGameplayTag("InputTag.Jump"));
         }
-        if (uAbilitySystemComponent != null)
+        if (SourceActor.GetAbilitySystemComponent() != null)
         {
-            uAbilitySystemComponent.ProcessAbilityInput(Time.deltaTime);
+            SourceActor.GetAbilitySystemComponent().ProcessAbilityInput(Time.deltaTime);
         }
     }
 }

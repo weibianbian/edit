@@ -9,7 +9,7 @@ namespace GameplayAbilitySystem
         {
             Data = InData;
         }
-        public void AddInstigator(Actor InInstigator, Actor InEffectCauser)
+        public void AddInstigator(AActor InInstigator, AActor InEffectCauser)
         {
             Data.AddInstigator(InInstigator, InEffectCauser);
         }
