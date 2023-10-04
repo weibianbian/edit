@@ -48,7 +48,29 @@ namespace RailShootGame
             GameplayTags.AddRange(Other.GameplayTags);
             ParentTags.AddRange(Other.ParentTags);
         }
+        public void AddTag(FGameplayTag TagToAdd)
+        {
+            if (TagToAdd.IsValid())
+            {
+                // Don't want duplicate tags
+                GameplayTags.Add(TagToAdd);
 
+                AddParentsForTag(TagToAdd);
+            }
+        }
+        public void AddParentsForTag(FGameplayTag Tag)
+        {
+            FGameplayTagContainer SingleContainer = UGameplayTagsManager.Get().GetSingleTagContainer(Tag);
+            if (SingleContainer != null)
+            {
+                // Add Parent tags from this tag to our own
+                for (int i = 0; i < SingleContainer.ParentTags.Count; i++)
+                {
+                    FGameplayTag ParentTag = SingleContainer.ParentTags[i];
+                    ParentTags.Add(ParentTag);
+                }
+            }
+        }
     }
 }
 

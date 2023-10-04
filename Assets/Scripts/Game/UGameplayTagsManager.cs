@@ -2,9 +2,10 @@
 using System.Linq;
 using UnityEditor.Build.Pipeline;
 using UnityEngine;
+using Core;
 namespace RailShootGame
 {
-    public class GameplayTagsManager
+    public class UGameplayTagsManager : Singleton<UGameplayTagsManager>
     {
         public List<string> texts = new List<string>()
         {
@@ -13,9 +14,19 @@ namespace RailShootGame
             //{ "Damage.Type1"},
             { "Damage.Buffed.FireBuff"},
             { "Damage.Mitigated.Armor"},
+            { "InputTag.Jump"},
         };
         public FGameplayTagNode GameplayRootTag;
         public Dictionary<FGameplayTag, FGameplayTagNode> GameplayTagNodeMap = new Dictionary<FGameplayTag, FGameplayTagNode>();
+
+        public UGameplayTagsManager()
+        {
+
+        }
+        public override void InitializeManager()
+        {
+            ConstructGameplayTagTree();
+        }
 
         public void ConstructGameplayTagTree()
         {
@@ -26,6 +37,14 @@ namespace RailShootGame
                 AddTagTableRow(texts[i]);
             }
             DebugNode(GameplayRootTag);
+        }
+        public FGameplayTagContainer GetSingleTagContainer(FGameplayTag GameplayTag)
+        {
+            if (GameplayTagNodeMap.TryGetValue(GameplayTag,out FGameplayTagNode Node))
+            {
+                return Node.GetSingleTagContainer();
+            }
+            return null;
         }
         public void DebugNode(FGameplayTagNode node)
         {

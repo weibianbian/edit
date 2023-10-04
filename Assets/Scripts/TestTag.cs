@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class TestTag : MonoBehaviour
 {
-    GameplayTagsManager TagsManager=new GameplayTagsManager();
+    UGameplayTagsManager TagsManager=new UGameplayTagsManager();
 
     // Start is called before the first frame update
     void Start()

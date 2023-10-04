@@ -1,12 +1,9 @@
 using RailShootGame;
 using System;
 using System.Collections.Generic;
-using Unity.Collections;
-using Unity.VisualScripting;
-using UnityEditor;
-using UnityEditor.Events;
-using UnityEditor.PackageManager;
 using UnityEngine;
+using UnityEngine.Experimental.AI;
+using UnityEngine.UIElements;
 
 namespace GameplayAbilitySystem
 {
@@ -27,6 +24,10 @@ namespace GameplayAbilitySystem
             AbilityActorInfo = ReferencePool.Acquire<FGameplayAbilityActorInfo>();
             ActiveGameplayEffects = new FActiveGameplayEffectsContainer();
             GameplayTagCountContainer = new FGameplayTagCountContainer();
+            AbilitiesToActivate = new List<FGameplayAbilitySpecHandle>();
+            InputPressedSpecHandles = new List<FGameplayAbilitySpecHandle>();
+            InputHeldSpecHandles = new List<FGameplayAbilitySpecHandle>();
+            ActivatableAbilities = new GameplayAbilitySpecContainer();
         }
 
         public override void OnRegister()
@@ -65,12 +66,16 @@ namespace GameplayAbilitySystem
             {
                 FGameplayAbilitySpecHandle SpecHandle = InputPressedSpecHandles[i];
                 FGameplayAbilitySpec AbilitySpec = FindAbilitySpecFromHandle(SpecHandle);
-                if (AbilitySpec != null)
+                if (AbilitySpec != null && AbilitySpec.Ability != null)
                 {
-                    if (AbilitySpec.Ability != null)
+                    AbilitySpec.InputPressed = true;
+                    if (AbilitySpec.IsActive())
                     {
-                        AbilitySpec.InputPressed = true;
                         AbilitySpecInputPressed(AbilitySpec);
+                    }
+                    else
+                    {
+                        AbilitiesToActivate.Add(AbilitySpec.Handle);
                     }
                 }
             }
@@ -78,6 +83,8 @@ namespace GameplayAbilitySystem
             {
                 TryActivateAbility(AbilitiesToActivate[i]);
             }
+            InputPressedSpecHandles.Clear();
+            InputHeldSpecHandles.Clear();
         }
         public void ExecutePeriodicEffect(FActiveGameplayEffectHandle Handle)
         {

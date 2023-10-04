@@ -1,4 +1,6 @@
-﻿namespace GameplayAbilitySystem
+﻿using System;
+
+namespace GameplayAbilitySystem
 {
     //AbilitySystemComponent
     //              ---TryActivateAbility
@@ -20,7 +22,11 @@
     {
 
         int Handle;
-
+        static int GHandle = 1;
+        public void GenerateNewHandle()
+        {
+            Handle = GHandle++;
+        }
         public override bool Equals(object obj)
         {
             return base.Equals(obj);

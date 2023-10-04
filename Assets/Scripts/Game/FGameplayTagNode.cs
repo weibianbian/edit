@@ -39,6 +39,7 @@ namespace RailShootGame
         {
             return ChildTags;
         }
-    }
+        public FGameplayTagContainer GetSingleTagContainer() { return CompleteTagWithParents; }
+}
 }
 

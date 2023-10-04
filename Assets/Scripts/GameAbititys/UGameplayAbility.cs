@@ -32,7 +32,28 @@ namespace GameplayAbilitySystem
         public FGameplayAbilitySpecHandle CurrentSpecHandle;
         public virtual bool CanActivateAbility(FGameplayAbilitySpecHandle Handle, FGameplayAbilityActorInfo ActorInfo, FGameplayTagContainer SourceTags, FGameplayTagContainer TargetTags, FGameplayTagContainer OptionalRelevantTags)
         {
-            return false;
+            UAbilitySystemComponent AbilitySystemComponent = ActorInfo.AbilitySystemComponent;
+            if (AbilitySystemComponent == null)
+            {
+                return false;
+            }
+
+            UAbilitySystemGlobals AbilitySystemGlobals = UAbilitySystemGlobals.Get();
+            if (!AbilitySystemGlobals.ShouldIgnoreCooldowns() && !CheckCooldown(Handle, ActorInfo))
+            {
+                return false;
+            }
+            if (!AbilitySystemGlobals.ShouldIgnoreCosts() && !CheckCost(Handle, ActorInfo))
+            {
+                return false;
+            }
+            FGameplayAbilitySpec Spec = AbilitySystemComponent.FindAbilitySpecFromHandle(Handle);
+            if (Spec==null)
+            {
+                UnityEngine.Debug.LogError($"CanActivateAbility {this} failed, called with invalid Handle");
+                return false;
+            }
+            return true;
         }
         public void CallActivateAbility(FGameplayAbilitySpecHandle Handle, FGameplayAbilityActorInfo ActorInfo, FGameplayAbilityActivationInfo ActivationInfo, FGameplayEventData TriggerEventData)
         {
