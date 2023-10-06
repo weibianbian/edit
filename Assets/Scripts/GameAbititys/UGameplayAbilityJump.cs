@@ -1,6 +1,4 @@
 ﻿using RailShootGame;
-using System.Diagnostics;
-using Unity.VisualScripting;
 
 namespace GameplayAbilitySystem
 {
@@ -20,7 +18,37 @@ namespace GameplayAbilitySystem
             {
                 return;
             }
+            CharacterJumpStart();
+            UAbilityTask_StartAbilityState.StartAbilityState(this,"Jumping",true);
+            UAbilityTask_WaitInputRelease task= UAbilityTask_WaitInputRelease.WaitInputRelease(this);
+            task.ReadyForActivation();
             UnityEngine.Debug.Log($"Character->Jump();");
+        }
+        public void CharacterJumpStart()                                           
+        {
+            //if (ALyraCharacter * LyraCharacter = GetLyraCharacterFromActorInfo())
+            //{
+            //    if (LyraCharacter->IsLocallyControlled() && !LyraCharacter->bPressedJump)
+            //    {
+            //        LyraCharacter->UnCrouch();
+            //        LyraCharacter->Jump();
+            //    }
+            //}
+        }
+        public void CharacterJumpStop()
+        {
+            //if (ALyraCharacter * LyraCharacter = GetLyraCharacterFromActorInfo())
+            //{
+            //    if (LyraCharacter->IsLocallyControlled() && LyraCharacter->bPressedJump)
+            //    {
+            //        LyraCharacter->StopJumping();
+            //    }
+            //}
+        }
+        public override void EndAbility(FGameplayAbilitySpecHandle Handle, FGameplayAbilityActorInfo ActorInfo, FGameplayAbilityActivationInfo ActivationInfo, bool bWasCancelled)
+        {
+            CharacterJumpStop();
+            base.EndAbility(Handle, ActorInfo, ActivationInfo, bWasCancelled);
         }
         public override void CancelAbility(FGameplayAbilitySpecHandle Handle, FGameplayAbilityActorInfo ActorInfo, FGameplayAbilityActivationInfo ActivationInfo)
         {

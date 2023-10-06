@@ -7,7 +7,7 @@
         public ActorComponent()
         {
         }
-        public virtual void TickComponent()
+        public virtual void TickComponent(float DeltaTime)
         {
 
         }

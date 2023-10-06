@@ -1,13 +1,28 @@
-﻿using RailShootGame;
+﻿using Core;
+using RailShootGame;
 using Sirenix.Utilities.Editor;
 using System;
 using Unity.VisualScripting;
 using UnityEditor.PackageManager;
+using static GameplayAbilitySystem.UGameplayAbility;
 
 namespace GameplayAbilitySystem
 {
-    public class UGameplayAbility
+    public class UGameplayAbility : IGameplayTaskOwnerInterface
     {
+        public delegate void FOnGameplayAbilityEnded();
+
+        /** Notification that the ability has ended with data on how it was ended */
+        public delegate void FGameplayAbilityEndedDelegate();
+
+        /** Notification that the ability is being cancelled.  Called before OnGameplayAbilityEnded. */
+        public delegate void FOnGameplayAbilityCancelled();
+
+        /** Used by the ability state task to handle when a state is ended */
+        public delegate void FOnGameplayAbilityStateEnded(string name);
+
+        /** Callback for when this ability has been confirmed by the server */
+        public delegate void FGenericAbilityDelegate();
         //	The important functions:
         //	
         //		CanActivateAbility()	-   Const函数检查ability是否可激活。可由UI等调用
@@ -27,9 +42,34 @@ namespace GameplayAbilitySystem
         public CooldownGameplayEffect CooldownGameplayEffect { get; set; }
         public UGameplayEffect CostGameplayEffectClass;
         public FGameplayAbilityActorInfo CurrentActorInfo;
+        //
+        public FOnGameplayAbilityEnded OnGameplayAbilityEnded;
+
+        /** Notification that the ability has ended with data on how it was ended */
+        public FGameplayAbilityEndedDelegate OnGameplayAbilityEndedWithData;
+
+        /** Notification that the ability is being cancelled.  Called before OnGameplayAbilityEnded. */
+        public FOnGameplayAbilityCancelled OnGameplayAbilityCancelled;
+
+        /** Used by the ability state task to handle when a state is ended */
+        public FOnGameplayAbilityStateEnded OnGameplayAbilityStateEnded;
+
+        /** Callback for when this ability has been confirmed by the server */
+        public FGenericAbilityDelegate OnConfirmDelegate;
+        //
 
         /** For instanced abilities */
         public FGameplayAbilitySpecHandle CurrentSpecHandle;
+        public FGameplayAbilitySpec GetCurrentAbilitySpec()
+        {
+            UAbilitySystemComponent AbilitySystemComponent = GetAbilitySystemComponentFromActorInfo_Checked();
+            return AbilitySystemComponent.FindAbilitySpecFromHandle(CurrentSpecHandle);
+        }
+        public UAbilitySystemComponent GetAbilitySystemComponentFromActorInfo_Checked()
+        {
+            UAbilitySystemComponent AbilitySystemComponent = CurrentActorInfo != null ? CurrentActorInfo.AbilitySystemComponent : null;
+            return AbilitySystemComponent;
+        }
         public virtual bool CanActivateAbility(FGameplayAbilitySpecHandle Handle, FGameplayAbilityActorInfo ActorInfo, FGameplayTagContainer SourceTags, FGameplayTagContainer TargetTags, FGameplayTagContainer OptionalRelevantTags)
         {
             UAbilitySystemComponent AbilitySystemComponent = ActorInfo.AbilitySystemComponent;
@@ -73,7 +113,7 @@ namespace GameplayAbilitySystem
         public virtual void CancelAbility(FGameplayAbilitySpecHandle Handle, FGameplayAbilityActorInfo ActorInfo, FGameplayAbilityActivationInfo ActivationInfo)
         {
             bool bWasCancelled = true;
-            EndAbility(Handle, ActorInfo,ActivationInfo, bWasCancelled);
+            EndAbility(Handle, ActorInfo, ActivationInfo, bWasCancelled);
         }
         public virtual void EndAbility(FGameplayAbilitySpecHandle Handle, FGameplayAbilityActorInfo ActorInfo, FGameplayAbilityActivationInfo ActivationInfo, bool bWasCancelled)
         {
@@ -178,6 +218,10 @@ namespace GameplayAbilitySystem
 
             return Context;
         }
+        public void EndAbilityState(string OptionalStateNameToEnd)
+        {
+            OnGameplayAbilityStateEnded.Invoke(OptionalStateNameToEnd);
+        }
         public FGameplayTagContainer GetCooldownTags()
         {
             UGameplayEffect CDGE = GetCooldownGameplayEffect();
@@ -236,6 +280,52 @@ namespace GameplayAbilitySystem
             UAbilitySystemComponent AbilitySystemComponent = ActorInfo.AbilitySystemComponent;
             FGameplayEffectSpecHandle NewHandle = AbilitySystemComponent.MakeOutgoingSpec(null, GameplayEffectLevel, null);
             return null;
+        }
+        public void OnGiveAbility(FGameplayAbilityActorInfo ActorInfo, FGameplayAbilitySpec Spec)
+        {
+            SetCurrentActorInfo(Spec.Handle, ActorInfo);
+        }
+        public void SetCurrentActorInfo(FGameplayAbilitySpecHandle Handle, FGameplayAbilityActorInfo ActorInfo)
+        {
+            {
+                CurrentActorInfo = ActorInfo;
+                CurrentSpecHandle = Handle;
+            }
+        }
+        public FGameplayAbilityActorInfo GetCurrentActorInfo()
+        {
+            return CurrentActorInfo;
+        }
+        public bool IsValid()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void OnGameplayTaskActivated(UGameplayTask Task)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void OnGameplayTaskDeactivated(UGameplayTask Task)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void OnGameplayTaskInitialized(UGameplayTask Task)
+        {
+            UAbilityTask AbilityTask = Task as UAbilityTask;
+            FGameplayAbilityActorInfo ActorInfo = GetCurrentActorInfo();
+
+            if (AbilityTask != null && ActorInfo != null)
+            {
+                AbilityTask.SetAbilitySystemComponent(ActorInfo.AbilitySystemComponent);
+                AbilityTask.Ability = this;
+            }
+        }
+
+        public virtual UGameplayTasksComponent GetGameplayTasksComponent(UGameplayTask Task)
+        {
+            return GetCurrentActorInfo() != null ? GetCurrentActorInfo().AbilitySystemComponent : null;
         }
     }
 }

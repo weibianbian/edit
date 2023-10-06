@@ -4,11 +4,11 @@ using UnityEngine;
 
 namespace GameplayAbilitySystem
 {
-    public class AbilityTaskWaitOverlap : AbilityTask
+    public class AbilityTaskWaitOverlap : UAbilityTask
     {
         public static AbilityTaskWaitOverlap WaitForOverlap(UGameplayAbility OwningAbility)
         {
-            AbilityTaskWaitOverlap MyObj = NewAbilityTask<AbilityTaskWaitOverlap>(OwningAbility);
+            AbilityTaskWaitOverlap MyObj = NewAbilityTask<AbilityTaskWaitOverlap>(OwningAbility,"");
             return MyObj;
         }
         public void OnHitCallback(AActor HitActor, AActor OtherActor, Vector3 NormalImpulse)
@@ -31,35 +31,6 @@ namespace GameplayAbilitySystem
             }
         }
         public override void Activate()
-        {
-
-        }
-    }
-    public class AbilityTask
-    {
-        public EGameplayTaskState TaskState;
-        public static T NewAbilityTask<T>(UGameplayAbility ThisAbility) where T : AbilityTask
-        {
-            T MyObj = Activator.CreateInstance<T>();
-            MyObj.InitTask(ThisAbility);
-            return MyObj;
-        }
-        public void InitTask(UGameplayAbility InTaskOwner)
-        {
-
-        }
-        public void EndTask()
-        {
-            if (TaskState != EGameplayTaskState.Finished)
-            {
-                OnDestroy();
-            }
-        }
-        public void OnDestroy()
-        {
-            TaskState = EGameplayTaskState.Finished;
-        }
-        public virtual void Activate()
         {
 
         }

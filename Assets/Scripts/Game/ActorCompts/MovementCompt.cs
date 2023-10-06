@@ -18,7 +18,7 @@ namespace RailShootGame
         }
 
 
-        public override void TickComponent()
+        public override void TickComponent(float DeltaTime)
         {
             switch (move.moveType)
             {

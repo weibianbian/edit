@@ -2,6 +2,7 @@ using RailShootGame;
 using System;
 using System.Collections.Generic;
 using System.Numerics;
+using UnityEditor.PackageManager;
 using UnityEngine;
 using UnityEngine.Experimental.AI;
 using UnityEngine.UIElements;
@@ -9,7 +10,7 @@ using UnityEngine.UIElements;
 namespace GameplayAbilitySystem
 {
 
-    public class UAbilitySystemComponent : ActorComponent
+    public class UAbilitySystemComponent : UGameplayTasksComponent
     {
         public GameplayAbilitySpecContainer ActivatableAbilities;
         public FActiveGameplayEffectsContainer ActiveGameplayEffects;
@@ -196,7 +197,7 @@ namespace GameplayAbilitySystem
         }
         public void OnGiveAbility(FGameplayAbilitySpec Spec)
         {
-
+            Spec.Ability.OnGiveAbility(AbilityActorInfo, Spec);
         }
         public void ClearAbility(int id)
         {
@@ -222,7 +223,7 @@ namespace GameplayAbilitySystem
                 //Spec.Ability.
             }
         }
-        public override void TickComponent()
+        public override void TickComponent(float DeltaTime)
         {
 
         }
