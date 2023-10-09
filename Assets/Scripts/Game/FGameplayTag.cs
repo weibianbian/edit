@@ -13,7 +13,11 @@ namespace RailShootGame
         }
         public FGameplayTag()
         {
-            TagName=string.Empty;
+            TagName = string.Empty;
+        }
+        public bool IsValid()
+        {
+            return !string.IsNullOrEmpty(TagName);
         }
         public override bool Equals(object obj)
         {

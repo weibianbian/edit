@@ -30,7 +30,7 @@ namespace RailShootGame
             EMovementMode PrevMovementMode = MovementMode;
             MovementMode = NewMovementMode;
         }
-        public override void TickComponent()
+        public override void TickComponent(float DeltaTime)
         {
             ControlledCharacterMove(Vector3.zero,1);
         }

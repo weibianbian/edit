@@ -44,18 +44,18 @@ namespace GameplayAbilitySystem
         {
             return true;
         }
-        public virtual void HandleGameplayCues(Actor TargetActor, FGameplayTagContainer GameplayCueTags, EGameplayCueEvent EventType, GameplayCueParameters Parameters)
+        public virtual void HandleGameplayCues(AActor TargetActor, FGameplayTagContainer GameplayCueTags, EGameplayCueEvent EventType, GameplayCueParameters Parameters)
         {
             for (int i = 0; i < GameplayCueTags.GameplayTags.Count; i++)
             {
                 HandleGameplayCues(TargetActor, GameplayCueTags.GameplayTags[i], EventType, Parameters);
             }
         }
-        public virtual void HandleGameplayCues(Actor TargetActor, FGameplayTag GameplayCueTag, EGameplayCueEvent EventType, GameplayCueParameters Parameters)
+        public virtual void HandleGameplayCues(AActor TargetActor, FGameplayTag GameplayCueTag, EGameplayCueEvent EventType, GameplayCueParameters Parameters)
         {
             RouteGameplayCue(TargetActor, GameplayCueTag, EventType, Parameters);
         }
-        public virtual void RouteGameplayCue(Actor TargetActor, FGameplayTag GameplayCueTag, EGameplayCueEvent EventType, GameplayCueParameters Parameters)
+        public virtual void RouteGameplayCue(AActor TargetActor, FGameplayTag GameplayCueTag, EGameplayCueEvent EventType, GameplayCueParameters Parameters)
         {
             IGameplayCueInterface GameplayCueInterface = TargetActor as IGameplayCueInterface;
 

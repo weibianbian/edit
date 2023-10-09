@@ -2,16 +2,20 @@ using Sirenix.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
+using Unity.VisualScripting;
 
 namespace Core
 {
-
     public class FModuleManager
     {
         public static FModuleManager Singleton;
 
         public static FModuleManager Get()
         {
+            if (Singleton == null)
+            {
+                Singleton = new FModuleManager();
+            }
             return Singleton;
         }
         public Dictionary<string, IModuleInterface> Modules = new Dictionary<string, IModuleInterface>();
@@ -54,12 +58,12 @@ namespace Core
             {
                 foreach (var type in assembly.GetTypes())
                 {
-                    if (!type.IsAbstract || !type.IsSealed)
+                    if (type.IsAbstract || type.IsSealed)
                     {
                         continue;
                     }
                     var att = type.GetCustomAttribute<ModuleNameAttribute>(true);
-                    if (att != null && att.ModuleName == InModuleName && type.IsSubclassOf(typeof(IModuleInterface)))
+                    if (att != null && att.ModuleName == InModuleName && type.GetInterface(typeof(IModuleInterface).Name) != null)
                     {
                         moduleType = type;
                         break;

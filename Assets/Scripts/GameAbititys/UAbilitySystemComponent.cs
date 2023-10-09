@@ -1,28 +1,53 @@
 using RailShootGame;
 using System;
 using System.Collections.Generic;
-using UnityEditor.Events;
+using System.Numerics;
+using UnityEditor.PackageManager;
 using UnityEngine;
+using UnityEngine.Experimental.AI;
+using UnityEngine.UIElements;
 
 namespace GameplayAbilitySystem
 {
 
-    public class UAbilitySystemComponent : ActorComponent
+    public class UAbilitySystemComponent : UGameplayTasksComponent
     {
         public GameplayAbilitySpecContainer ActivatableAbilities;
         public FActiveGameplayEffectsContainer ActiveGameplayEffects;
         public FGameplayTagCountContainer GameplayTagCountContainer;
         public List<UAttributeSet> SpawnedAttributes;
         public FGameplayAbilityActorInfo AbilityActorInfo;
-
+        public List<FGameplayAbilitySpecHandle> InputPressedSpecHandles;
+        public List<FGameplayAbilitySpecHandle> InputHeldSpecHandles;
+        public static List<FGameplayAbilitySpecHandle> AbilitiesToActivate;
+        public AActor OwnerActor;
         public UAbilitySystemComponent()
         {
             SpawnedAttributes = new List<UAttributeSet>();
             AbilityActorInfo = ReferencePool.Acquire<FGameplayAbilityActorInfo>();
             ActiveGameplayEffects = new FActiveGameplayEffectsContainer();
             GameplayTagCountContainer = new FGameplayTagCountContainer();
+            AbilitiesToActivate = new List<FGameplayAbilitySpecHandle>();
+            InputPressedSpecHandles = new List<FGameplayAbilitySpecHandle>();
+            InputHeldSpecHandles = new List<FGameplayAbilitySpecHandle>();
+            ActivatableAbilities = new GameplayAbilitySpecContainer();
         }
+        public override void InitializeComponent()
+        {
+            base.InitializeComponent();
+            AActor Owner = GetOwner();
+            InitAbilityActorInfo(Owner, Owner);
+        }
+        public virtual void InitAbilityActorInfo(AActor InOwnerActor, AActor InAvatarActor)
+        {
+            AbilityActorInfo.InitFromActor(InOwnerActor, InAvatarActor, this);
 
+            SetOwnerActor(InOwnerActor);
+        }
+        public void SetOwnerActor(AActor NewOwnerActor)
+        {
+            OwnerActor = NewOwnerActor;
+        }
         public override void OnRegister()
         {
             ActiveGameplayEffects.RegisterWithOwner(this);
@@ -39,13 +64,62 @@ namespace GameplayAbilitySystem
                 SpawnedAttributes.Add(Attribute);
             }
         }
+        public void AbilityInputTagPressed(FGameplayTag InputTag)
+        {
+            for (int i = 0; i < ActivatableAbilities.items.Count; i++)
+            {
+                FGameplayAbilitySpec AbilitySpec = ActivatableAbilities.items[i];
+                if (AbilitySpec.Ability != null && AbilitySpec.DynamicAbilityTags.HasTagExact(InputTag))
+                {
+                    InputPressedSpecHandles.Add(AbilitySpec.Handle);
+                    InputHeldSpecHandles.Add(AbilitySpec.Handle);
+                }
+
+            }
+        }
+        public void ProcessAbilityInput(float DeltaTime)
+        {
+            AbilitiesToActivate.Clear();
+            for (int i = 0; i < InputPressedSpecHandles.Count; i++)
+            {
+                FGameplayAbilitySpecHandle SpecHandle = InputPressedSpecHandles[i];
+                FGameplayAbilitySpec AbilitySpec = FindAbilitySpecFromHandle(SpecHandle);
+                if (AbilitySpec != null && AbilitySpec.Ability != null)
+                {
+                    AbilitySpec.InputPressed = true;
+                    if (AbilitySpec.IsActive())
+                    {
+                        AbilitySpecInputPressed(AbilitySpec);
+                    }
+                    else
+                    {
+                        AbilitiesToActivate.Add(AbilitySpec.Handle);
+                    }
+                }
+            }
+            for (int i = 0; i < AbilitiesToActivate.Count; i++)
+            {
+                TryActivateAbility(AbilitiesToActivate[i]);
+            }
+            InputPressedSpecHandles.Clear();
+            InputHeldSpecHandles.Clear();
+        }
+        public void NotifyAbilityEnded(FGameplayAbilitySpecHandle Handle, UGameplayAbility Ability, bool bWasCancelled)
+        {
+            FGameplayAbilitySpec Spec = FindAbilitySpecFromHandle(Handle);
+            if (Spec == null)
+            {
+                // The ability spec may have been removed while we were ending. We can assume everything was cleaned up if the spec isnt here.
+                return;
+            }
+        }
         public void ExecutePeriodicEffect(FActiveGameplayEffectHandle Handle)
         {
             ActiveGameplayEffects.ExecutePeriodicGameplayEffect(Handle);
         }
         public UAttributeSet GetOrCreateAttributeSubobject(Type AttributeClass)
         {
-            Actor OwningActor = GetOwner();
+            AActor OwningActor = GetOwner();
             UAttributeSet MyAttributes = null;
             if (OwningActor != null && AttributeClass != null)
             {
@@ -88,7 +162,7 @@ namespace GameplayAbilitySystem
 
             TagContainer.AppendTags(GameplayTagCountContainer.GetExplicitGameplayTags());
         }
-        public bool TryActiveAbility(FGameplayAbilitySpecHandle AbilityToActivate)
+        public bool TryActivateAbility(FGameplayAbilitySpecHandle AbilityToActivate)
         {
             FGameplayAbilitySpec Spec = FindAbilitySpecFromHandle(AbilityToActivate);
             if (Spec == null)
@@ -102,7 +176,7 @@ namespace GameplayAbilitySystem
                 Debug.LogError("TryActivateAbility called with invalid Handle");
                 return false;
             }
-            return true;
+            return InternalTryActivateAbility(AbilityToActivate, null);
         }
         public FGameplayAbilitySpec FindAbilitySpecFromHandle(FGameplayAbilitySpecHandle Handle)
         {
@@ -123,7 +197,7 @@ namespace GameplayAbilitySystem
         }
         public void OnGiveAbility(FGameplayAbilitySpec Spec)
         {
-
+            Spec.Ability.OnGiveAbility(AbilityActorInfo, Spec);
         }
         public void ClearAbility(int id)
         {
@@ -146,12 +220,16 @@ namespace GameplayAbilitySystem
             Spec.InputPressed = true;
             if (Spec.IsActive())
             {
-
+                //Spec.Ability.
             }
         }
-        public override void TickComponent()
+        public override void TickComponent(float DeltaTime)
         {
 
+        }
+        public bool CanApplyAttributeModifiers(UGameplayEffect GameplayEffect, float Level, FGameplayEffectContextHandle EffectContext)
+        {
+            return ActiveGameplayEffects.CanApplyAttributeModifiers(GameplayEffect, Level, EffectContext);
         }
         public OnGameplayAttributeValueChange GetGameplayAttributeValueChangeDelegate(FGameplayAttribute Attribute)
         {
@@ -284,8 +362,36 @@ namespace GameplayAbilitySystem
             //传递给投掷物，投掷物击中到目标后被应用
             return new FGameplayEffectSpecHandle(NewSpec);
         }
-        public bool InternalTryActivateAbility(FGameplayAbilitySpecHandle Handle)
+        public bool InternalTryActivateAbility(FGameplayAbilitySpecHandle Handle, FGameplayEventData TriggerEventData)
         {
+            FGameplayAbilitySpec Spec = FindAbilitySpecFromHandle(Handle);
+            if (Spec == null)
+            {
+                Debug.LogError($"InternalTryActivateAbility called with a valid handle but no matching ability was found. Handle");
+                return false;
+            }
+            UGameplayAbility Ability = Spec.Ability;
+
+            if (Ability == null)
+            {
+                Debug.LogError(("InternalTryActivateAbility called with invalid Ability"));
+                return false;
+            }
+            FGameplayTagContainer SourceTags = null;
+            FGameplayTagContainer TargetTags = null;
+            if (TriggerEventData != null)
+            {
+                SourceTags = TriggerEventData.InstigatorTags;
+                TargetTags = TriggerEventData.TargetTags;
+            }
+            FGameplayTagContainer InternalTryActivateAbilityFailureTags = new FGameplayTagContainer();
+            if (!Ability.CanActivateAbility(Handle, AbilityActorInfo, SourceTags, TargetTags, InternalTryActivateAbilityFailureTags))
+            {
+                return false;
+            }
+            Spec.ActivationInfo = new FGameplayAbilityActivationInfo();
+            FGameplayAbilityActivationInfo ActivationInfo = Spec.ActivationInfo;
+            Ability.CallActivateAbility(Handle, AbilityActorInfo, ActivationInfo, TriggerEventData);
             return true;
         }
         public Action<FGameplayTag, int> RegisterGameplayTagEvent(FGameplayTag Tag, EGameplayTagEventType EventType)
@@ -303,6 +409,10 @@ namespace GameplayAbilitySystem
         public void OnGameplayEffectAppliedToSelf(UAbilitySystemComponent Source, FGameplayEffectSpec SpecApplied, FActiveGameplayEffectHandle ActiveHandle)
         {
 
+        }
+        public virtual bool HasAnyMatchingGameplayTags(FGameplayTagContainer TagContainer)
+        {
+            return GameplayTagCountContainer.HasAnyMatchingGameplayTags(TagContainer);
         }
         public float GetNumericAttribute(FGameplayAttribute Attribute)
         {

@@ -7,7 +7,7 @@ namespace GameplayAbilitySystem
     public class GameplayCueNotifyBurst : GameplayCueNotifyStatic
     {
         protected FGameplayCueNotify_BurstEffects BurstEffects=new FGameplayCueNotify_BurstEffects();
-        public override void HandleGameplayCue(Actor TargetActor, EGameplayCueEvent EventType, GameplayCueParameters Parameters)
+        public override void HandleGameplayCue(AActor TargetActor, EGameplayCueEvent EventType, GameplayCueParameters Parameters)
         {
             BurstEffects.ExecuteEffects();
         }
@@ -21,7 +21,7 @@ namespace GameplayAbilitySystem
             return true;
         }
         // 处理玩法提示事件
-        public virtual void HandleGameplayCue(Actor TargetActor, EGameplayCueEvent EventType, GameplayCueParameters Parameters)
+        public virtual void HandleGameplayCue(AActor TargetActor, EGameplayCueEvent EventType, GameplayCueParameters Parameters)
         {
             switch (EventType)
             {

@@ -15,7 +15,7 @@ namespace GameplayAbilitySystem
     public class GameplayCueSet
     {
         public Dictionary<FGameplayTag, GameplayCueNotifyData> GameplayCueDataMap = new Dictionary<FGameplayTag, GameplayCueNotifyData>();
-        public virtual bool HandleGameplayCue(Actor TargetActor, FGameplayTag GameplayCueTag, EGameplayCueEvent EventType, GameplayCueParameters Parameters)
+        public virtual bool HandleGameplayCue(AActor TargetActor, FGameplayTag GameplayCueTag, EGameplayCueEvent EventType, GameplayCueParameters Parameters)
         {
             if (GameplayCueDataMap.TryGetValue(GameplayCueTag, out GameplayCueNotifyData CueData))
             {
@@ -23,7 +23,7 @@ namespace GameplayAbilitySystem
             }
             return false;
         }
-        public virtual bool HandleGameplayCueNotify_Internal(Actor TargetActor, GameplayCueNotifyData CueData, EGameplayCueEvent EventType, GameplayCueParameters Parameters)
+        public virtual bool HandleGameplayCueNotify_Internal(AActor TargetActor, GameplayCueNotifyData CueData, EGameplayCueEvent EventType, GameplayCueParameters Parameters)
         {
             bool bReturnVal = false;
             if (CueData.LoadedGameplayCueClass.IsSubclassOf(typeof(GameplayCueNotifyStatic)))

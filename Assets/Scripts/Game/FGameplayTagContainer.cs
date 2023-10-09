@@ -10,7 +10,7 @@ namespace RailShootGame
         public void Reset()
         {
             GameplayTags.Clear();
-            ParentTags.Clear(); 
+            ParentTags.Clear();
         }
         public int Num()
         {
@@ -38,12 +38,39 @@ namespace RailShootGame
             }
             return false;
         }
+        public bool HasTagExact(FGameplayTag TagToCheck)
+        {
+            return GameplayTags.Contains(TagToCheck);
+        }
+
         public void AppendTags(FGameplayTagContainer Other)
         {
             GameplayTags.AddRange(Other.GameplayTags);
             ParentTags.AddRange(Other.ParentTags);
         }
-        
+        public void AddTag(FGameplayTag TagToAdd)
+        {
+            if (TagToAdd.IsValid())
+            {
+                // Don't want duplicate tags
+                GameplayTags.Add(TagToAdd);
+
+                AddParentsForTag(TagToAdd);
+            }
+        }
+        public void AddParentsForTag(FGameplayTag Tag)
+        {
+            FGameplayTagContainer SingleContainer = UGameplayTagsManager.Get().GetSingleTagContainer(Tag);
+            if (SingleContainer != null)
+            {
+                // Add Parent tags from this tag to our own
+                for (int i = 0; i < SingleContainer.ParentTags.Count; i++)
+                {
+                    FGameplayTag ParentTag = SingleContainer.ParentTags[i];
+                    ParentTags.Add(ParentTag);
+                }
+            }
+        }
     }
 }
 

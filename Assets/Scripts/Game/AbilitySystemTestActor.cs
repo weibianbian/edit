@@ -2,7 +2,7 @@
 
 namespace RailShootGame
 {
-    public class AbilitySystemTestActor : Actor, IGameplayCueInterface, IAbilitySystemInterface
+    public class AbilitySystemTestActor : AActor, IGameplayCueInterface, IAbilitySystemInterface
     {
         private UAbilitySystemComponent AbilitySystemComponent;
         public UAbilitySystemComponent GetAbilitySystemComponent()
@@ -20,7 +20,7 @@ namespace RailShootGame
             AbilitySystemComponent.InitStats(typeof(UAbilitySystemTestAttributeSet));
         }
 
-        public void HandleGameplayCue(Actor TargetActor, FGameplayTag GameplayCueTag, EGameplayCueEvent EventType, GameplayCueParameters Parameters)
+        public void HandleGameplayCue(AActor TargetActor, FGameplayTag GameplayCueTag, EGameplayCueEvent EventType, GameplayCueParameters Parameters)
         {
 
         }

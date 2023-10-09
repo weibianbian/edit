@@ -7,7 +7,7 @@ namespace RailShootGame
 {
     public class ULevel
     {
-        public List<Actor> Actors = new List<Actor>();
+        public List<AActor> Actors = new List<AActor>();
         public UWorld OwningWorld;
     }
 
@@ -23,17 +23,17 @@ namespace RailShootGame
         {
             Level.OwningWorld = this;
         }
-        public T SpawnActor<T>() where T : Actor
+        public T SpawnActor<T>() where T : AActor
         {
-            Actor Actor = SpawnActor(typeof(T), Vector3.zero, Quaternion.identity);
+            AActor Actor = SpawnActor(typeof(T), Vector3.zero, Quaternion.identity);
             return Actor as T;
         }
-        public Actor SpawnActor(Type type, Vector3 Location, Quaternion Rotation)
+        public AActor SpawnActor(Type type, Vector3 Location, Quaternion Rotation)
         {
             ULevel LevelToSpawnIn = CurrentLevel;
             Guid ActorGuid = Guid.NewGuid();
 
-            Actor Actor = ReferencePool.Acquire(type) as Actor;
+            AActor Actor = ReferencePool.Acquire(type) as AActor;
             Actor.Outer = LevelToSpawnIn;
             LevelToSpawnIn.Actors.Add(Actor);
 

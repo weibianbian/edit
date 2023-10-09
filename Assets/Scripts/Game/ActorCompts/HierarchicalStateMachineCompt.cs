@@ -16,7 +16,7 @@ namespace RailShootGame
             hsm = new HierarchicalStateMachine(Outer.GetWorld(), l, m);
         }
 
-        public override void TickComponent()
+        public override void TickComponent(float DeltaTime)
         {
             hsm.Update(Outer.GetWorld(), Outer);
         }

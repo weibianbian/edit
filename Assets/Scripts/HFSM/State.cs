@@ -37,7 +37,7 @@ namespace HFSMRuntime
             actions.Add(action1);
             actions.Add(action2);
         }
-        public override UpdateResult Update(UWorld g, Actor e)
+        public override UpdateResult Update(UWorld g, AActor e)
         {
             return new UpdateResult() { actions = GetAction(), transition = null, level = 0 };
         }

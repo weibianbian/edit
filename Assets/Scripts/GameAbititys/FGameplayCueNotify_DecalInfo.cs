@@ -15,7 +15,7 @@ namespace GameplayAbilitySystem
         {
             return null;
         }
-        private DecalComponent CreateDecalComponent(Actor Actor, float LifeSpan)
+        private DecalComponent CreateDecalComponent(AActor Actor, float LifeSpan)
         {
             DecalComponent DecalComp = new DecalComponent();
 

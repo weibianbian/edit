@@ -5,7 +5,7 @@ namespace HFSMRuntime
 {
     public interface ITransition
     {
-        bool IsTriggered(UWorld g, Actor e);
+        bool IsTriggered(UWorld g, AActor e);
         State GetTargetState();
         List<IAction> GetActions();
         int GetLevel();
@@ -25,7 +25,7 @@ namespace HFSMRuntime
             actions = new List<IAction>();
             this.level = level;
         }
-        public bool IsTriggered(UWorld g, Actor e)
+        public bool IsTriggered(UWorld g, AActor e)
         {
             return condition.Test(g,e);
         }

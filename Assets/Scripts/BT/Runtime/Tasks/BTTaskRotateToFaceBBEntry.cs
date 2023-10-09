@@ -8,7 +8,7 @@ namespace BT.Runtime
         public BTTaskRotateToFaceBBEntry()
         {
             nodeName = "Rotate to face BB entry";
-            blackboardKey.AddObjectFilter(this, "", typeof(Actor));
+            blackboardKey.AddObjectFilter(this, "", typeof(AActor));
             blackboardKey.AddStringFilter(this, "");
         }
     }

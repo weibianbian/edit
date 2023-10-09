@@ -6,16 +6,16 @@ using UnityEngine.AI;
 
 public class ActorObject : MonoBehaviour
 {
-    public Actor actor;
+    public AActor actor;
     public UWorld game;
     public WaypointGroup waypointGroup;
     public void Start()
     {
 
     }
-    public Actor AttachLogic()
+    public AActor AttachLogic()
     {
-        actor = new Actor();
+        actor = new AActor();
         actor.actorObject = this;
         actor.Init(game);
         actor.move.agent = gameObject.GetComponent<NavMeshAgent>();

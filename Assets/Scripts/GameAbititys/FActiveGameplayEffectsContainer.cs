@@ -386,6 +386,32 @@ namespace GameplayAbilitySystem
                 //Aggregator.UpdateAggregatorMod(ActiveEffect.Handle, Attribute, Spec, ActiveEffect.PredictionKey.WasLocallyGenerated(), ActiveEffect.Handle);
             }
         }
+        public bool CanApplyAttributeModifiers(UGameplayEffect GameplayEffect, float Level, FGameplayEffectContextHandle EffectContext)
+        {
+            FGameplayEffectSpec Spec = new FGameplayEffectSpec(GameplayEffect, EffectContext, Level);
+
+            Spec.CalculateModifierMagnitudes();
+
+            for (int ModIdx = 0; ModIdx < Spec.Modifiers.Count; ++ModIdx)
+            {
+                FGameplayModifierInfo ModDef = Spec.Def.Modifiers[ModIdx];
+                FModifierSpec ModSpec = Spec.Modifiers[ModIdx];
+
+                // It only makes sense to check additive operators
+                if (ModDef.ModifierOp == EGameplayModOp.Additive)
+                {
+                    UAttributeSet Set = Owner.GetAttributeSubobject(ModDef.Attribute.AttributeOwner);
+                    float CurrentValue = ModDef.Attribute.GetNumericValueChecked(Set);
+                    float CostValue = ModSpec.GetEvaluatedMagnitude();
+
+                    if (CurrentValue + CostValue < 0.0f)
+                    {
+                        return false;
+                    }
+                }
+            }
+            return true;
+        }
         FAggregator FindOrCreateAttributeAggregator(FGameplayAttribute Attribute)
         {
             if (AttributeAggregatorMap.TryGetValue(Attribute, out FAggregator RefPtr))
@@ -536,7 +562,7 @@ namespace GameplayAbilitySystem
         public bool HasApplicationImmunityToSpec(FGameplayEffectSpec SpecToApply, FActiveGameplayEffect OutGEThatProvidedImmunity)
         {
             FGameplayTagContainer AggregatedSourceTags = SpecToApply.CapturedSourceTags.GetAggregatedTags();
-            if (AggregatedSourceTags==null)
+            if (AggregatedSourceTags == null)
             {
                 return false;
             }
@@ -555,7 +581,7 @@ namespace GameplayAbilitySystem
                         }
                     }
                     break;
-                } ;
+                };
             }
             if (!AggregatedSourceTags.HasAny(ApplicationImmunityGameplayTagCountContainer.GetExplicitGameplayTags()))
             {
