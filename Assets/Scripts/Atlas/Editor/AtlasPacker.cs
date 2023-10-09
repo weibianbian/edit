@@ -18,7 +18,7 @@ namespace UIToolkit.Editor
 {
     public class AtlasPacker : OdinEditorWindow
     {
-        [MenuItem("Tools/Atlas Packer")] 
+        [MenuItem("Tools/Atlas Packer(´«Í³ÀëÏßAtlas)")] 
         public static void ShowWindow()
         {
             EditorWindow.GetWindow(typeof(AtlasPacker));

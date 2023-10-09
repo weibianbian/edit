@@ -1,0 +1,13 @@
+#pragma kernel GenAtlas
+
+RWTexture2D<float4> rt;
+
+Texture2D<float4> tex2D;
+int2 offset;
+
+[numthreads(8, 8, 1)]
+void GenAtlas(uint3 id : SV_DispatchThreadID)
+{
+    int2 targetPos = id.xy + offset;
+    rt[targetPos] = tex2D[id.xy];
+}
