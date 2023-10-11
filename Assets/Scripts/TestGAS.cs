@@ -35,9 +35,14 @@ public class TestGAS : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        SourceActor.Update(Time.deltaTime);
         if (Input.GetMouseButtonDown(0))
         {
             SourceActor.GetAbilitySystemComponent().AbilityInputTagPressed(new FGameplayTag("InputTag.Jump"));
+        }
+        if (Input.GetMouseButtonUp(0))
+        {
+            SourceActor.GetAbilitySystemComponent().AbilityInputTagReleased(new FGameplayTag("InputTag.Jump"));
         }
         if (SourceActor.GetAbilitySystemComponent() != null)
         {

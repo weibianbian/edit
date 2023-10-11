@@ -16,6 +16,7 @@ namespace GameplayAbilitySystem
         {
             StartTime = 0.0f;
             bTestInitialState = false;
+            bTickingTask = true;
         }
         public static UAbilityTask_WaitInputRelease WaitInputRelease(UGameplayAbility OwningAbility, bool bTestAlreadyReleased = false)
         {
@@ -47,7 +48,7 @@ namespace GameplayAbilitySystem
                         return;
                     }
                 }
-
+                //ASC.
                 //DelegateHandle = ASC.AbilityReplicatedEventDelegate(EAbilityGenericReplicatedEvent::InputReleased, GetAbilitySpecHandle(), GetActivationPredictionKey()).AddUObject(this, &UAbilityTask_WaitInputRelease::OnReleaseCallback);
             }
         }

@@ -32,7 +32,7 @@ public class ActorObject : MonoBehaviour
     //}
     public void Update()
     {
-        actor?.Update();
+        actor?.Update(Time.deltaTime);
     }
 
 }

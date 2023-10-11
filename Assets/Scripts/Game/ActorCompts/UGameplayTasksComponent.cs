@@ -33,12 +33,16 @@ namespace RailShootGame
         public List<FGameplayTaskEventData> TaskEvents = new List<FGameplayTaskEventData>();
         public List<UGameplayTask> TickingTasks = new List<UGameplayTask>();
         public List<UGameplayTask> TaskPriorityQueue = new List<UGameplayTask>();
+        public UGameplayTasksComponent()
+        {
+            Debug.Log($"UGameplayTasksComponent={this.GetHashCode()}");
+        }
         public override void TickComponent(float DeltaTime)
         {
             base.TickComponent(DeltaTime);
             int NumTickingTasks = TickingTasks.Count();
             int NumActuallyTicked = 0;
-            switch (NumActuallyTicked)
+            switch (NumTickingTasks)
             {
                 case 0:
                     break;
@@ -73,6 +77,7 @@ namespace RailShootGame
                     {
                         FGameplayResourceSet RequiredResources = TaskPriorityQueue[TaskIndex].GetRequiredResources();
                         FGameplayResourceSet ClaimedResources = TaskPriorityQueue[TaskIndex].GetClaimedResources();
+                        ActivationList.Add(TaskPriorityQueue[TaskIndex]);
                     }
                 }
                 for (int Idx = 0; Idx < ActivationList.Count; Idx++)
@@ -96,13 +101,35 @@ namespace RailShootGame
         }
         public void ProcessTaskEvents()
         {
-            UpdateTaskActivations();
+            while (TaskEvents.Count > 0)
+            {
+                for (int EventIndex = 0; EventIndex < TaskEvents.Count; ++EventIndex)
+                {
+                    switch (TaskEvents[EventIndex].Event)
+                    {
+                        case EGameplayTaskEvent.Add:
+                            if (TaskEvents[EventIndex].RelatedTask.TaskState != EGameplayTaskState.Finished)
+                            {
+                                AddTaskToPriorityQueue(TaskEvents[EventIndex].RelatedTask);
+                            }
+                            break;
+                        case EGameplayTaskEvent.Remove:
+                            RemoveTaskFromPriorityQueue(TaskEvents[EventIndex].RelatedTask);
+                            break;
+                        default:
+                            break;
+                    }
+                }
+                TaskEvents.Clear();
+                UpdateTaskActivations();
+            }
         }
         public virtual void OnGameplayTaskActivated(UGameplayTask Task)
         {
             if (Task.IsTickingTask())
             {
                 TickingTasks.Add(Task);
+                Debug.Log($"OnGameplayTaskActivated={this.GetHashCode()}     {TickingTasks.GetHashCode()}");
                 if (TickingTasks.Count() == 1)
                 {
 
@@ -114,7 +141,39 @@ namespace RailShootGame
                 TaskOwner.OnGameplayTaskActivated(Task);
             }
         }
+        public void AddTaskToPriorityQueue(UGameplayTask NewTask)
+        {
+            int InsertionPoint = -1;
 
+            for (int Idx = 0; Idx < TaskPriorityQueue.Count; ++Idx)
+            {
+                if (TaskPriorityQueue[Idx] == null)
+                {
+                    continue;
+                }
+
+                //if ((bStartOnTopOfSamePriority && TaskPriorityQueue[Idx]->GetPriority() <= NewTask.GetPriority())
+                //    || (!bStartOnTopOfSamePriority && TaskPriorityQueue[Idx]->GetPriority() < NewTask.GetPriority()))
+                //{
+                //    TaskPriorityQueue.Insert(&NewTask, Idx);
+                //    InsertionPoint = Idx;
+                //    break;
+                //}
+            }
+
+            if (InsertionPoint == -1)
+            {
+                TaskPriorityQueue.Add(NewTask);
+            }
+        }
+        public void RemoveTaskFromPriorityQueue(UGameplayTask Task)
+        {
+            int RemovedTaskIndex = TaskPriorityQueue.IndexOf(Task);
+            if (RemovedTaskIndex != -1)
+            {
+                TaskPriorityQueue.RemoveAt(RemovedTaskIndex);
+            }
+        }
         public virtual void OnGameplayTaskDeactivated(UGameplayTask Task)
         {
             bool bIsFinished = (Task.GetState() == EGameplayTaskState.Finished);

@@ -1,4 +1,5 @@
 ﻿using RailShootGame;
+using System;
 
 namespace GameplayAbilitySystem
 {
@@ -11,6 +12,7 @@ namespace GameplayAbilitySystem
         public int id;
         public UGameplayAbility Ability;
         public int Level;
+        public int InputID;
         public int ActiveCount = 0;
         public bool InputPressed;
         public FGameplayAbilitySpecHandle Handle;

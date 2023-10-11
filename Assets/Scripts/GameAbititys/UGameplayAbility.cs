@@ -296,10 +296,6 @@ namespace GameplayAbilitySystem
         {
             return CurrentActorInfo;
         }
-        public bool IsValid()
-        {
-            throw new NotImplementedException();
-        }
 
         public void OnGameplayTaskActivated(UGameplayTask Task)
         {

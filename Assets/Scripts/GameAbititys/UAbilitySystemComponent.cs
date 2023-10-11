@@ -19,6 +19,7 @@ namespace GameplayAbilitySystem
         public FGameplayAbilityActorInfo AbilityActorInfo;
         public List<FGameplayAbilitySpecHandle> InputPressedSpecHandles;
         public List<FGameplayAbilitySpecHandle> InputHeldSpecHandles;
+        public List<FGameplayAbilitySpecHandle> InputReleasedSpecHandles;
         public static List<FGameplayAbilitySpecHandle> AbilitiesToActivate;
         public AActor OwnerActor;
         public UAbilitySystemComponent()
@@ -30,6 +31,7 @@ namespace GameplayAbilitySystem
             AbilitiesToActivate = new List<FGameplayAbilitySpecHandle>();
             InputPressedSpecHandles = new List<FGameplayAbilitySpecHandle>();
             InputHeldSpecHandles = new List<FGameplayAbilitySpecHandle>();
+            InputReleasedSpecHandles = new List<FGameplayAbilitySpecHandle>();
             ActivatableAbilities = new GameplayAbilitySpecContainer();
         }
         public override void InitializeComponent()
@@ -77,6 +79,19 @@ namespace GameplayAbilitySystem
 
             }
         }
+        public void AbilityInputTagReleased(FGameplayTag InputTag)
+        {
+            for (int i = 0; i < ActivatableAbilities.items.Count; i++)
+            {
+                FGameplayAbilitySpec AbilitySpec = ActivatableAbilities.items[i];
+                if (AbilitySpec.Ability != null && AbilitySpec.DynamicAbilityTags.HasTagExact(InputTag))
+                {
+                    InputReleasedSpecHandles.Add(AbilitySpec.Handle);
+                    InputHeldSpecHandles.Add(AbilitySpec.Handle);
+                }
+
+            }
+        }
         public void ProcessAbilityInput(float DeltaTime)
         {
             AbilitiesToActivate.Clear();
@@ -100,6 +115,24 @@ namespace GameplayAbilitySystem
             for (int i = 0; i < AbilitiesToActivate.Count; i++)
             {
                 TryActivateAbility(AbilitiesToActivate[i]);
+            }
+            for (int i = 0; i < InputReleasedSpecHandles.Count; i++)
+            {
+                FGameplayAbilitySpecHandle SpecHandle = InputReleasedSpecHandles[i];
+                FGameplayAbilitySpec AbilitySpec = FindAbilitySpecFromHandle(SpecHandle);
+                if (AbilitySpec != null)
+                {
+                    if (AbilitySpec.Ability != null)
+                    {
+                        AbilitySpec.InputPressed = false;
+
+                        if (AbilitySpec.IsActive())
+                        {
+                            // Ability is active so pass along the input event.
+                            AbilitySpecInputReleased(AbilitySpec);
+                        }
+                    }
+                }
             }
             InputPressedSpecHandles.Clear();
             InputHeldSpecHandles.Clear();
@@ -215,6 +248,21 @@ namespace GameplayAbilitySystem
         {
 
         }
+        public void AbilityLocalInputReleased(int InputID)
+        {
+            foreach (FGameplayAbilitySpec Spec in ActivatableAbilities.items)
+            {
+                if (Spec.InputID == InputID)
+                {
+                    Spec.InputPressed = false;
+                    if (Spec.Ability != null && Spec.IsActive())
+                    {
+                        AbilitySpecInputReleased(Spec);
+                        //InvokeReplicatedEvent(EAbilityGenericReplicatedEvent::InputReleased, Spec.Handle, Spec.ActivationInfo.GetActivationPredictionKey());
+                    }
+                }
+            }
+        }
         public void AbilitySpecInputPressed(FGameplayAbilitySpec Spec)
         {
             Spec.InputPressed = true;
@@ -223,9 +271,13 @@ namespace GameplayAbilitySystem
                 //Spec.Ability.
             }
         }
-        public override void TickComponent(float DeltaTime)
+        public void AbilitySpecInputReleased(FGameplayAbilitySpec Spec)
         {
-
+            Spec.InputPressed = false;
+            if (Spec.IsActive())
+            {
+                //Spec.Ability.InputReleased(Spec.Handle, AbilityActorInfo, Spec.ActivationInfo);
+            }
         }
         public bool CanApplyAttributeModifiers(UGameplayEffect GameplayEffect, float Level, FGameplayEffectContextHandle EffectContext)
         {

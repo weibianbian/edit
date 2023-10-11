@@ -36,7 +36,7 @@ namespace RailShootGame
         public UGameplayTasksComponent TasksComponent;
         IGameplayTaskOwnerInterface TaskOwner;
         public UGameplayTask ChildTask;
-        public IGameplayTaskOwnerInterface GetTaskOwner() { return TaskOwner.IsValid() ? TaskOwner : null; }
+        public IGameplayTaskOwnerInterface GetTaskOwner() { return TaskOwner; }
         public bool IsFinished() { return (TaskState == EGameplayTaskState.Finished); }
         public UGameplayTask GetChildTask() { return ChildTask; }
         public bool IsTickingTask() { return (bTickingTask); }

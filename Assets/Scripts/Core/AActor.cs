@@ -130,14 +130,18 @@ namespace RailShootGame
                 return actorObject ? actorObject.gameObject : null;
             }
         }
-        public void Update()
+        public void Update(float deltaTime)
         {
-            move?.TickComponent(Time.deltaTime);
-            hsm?.TickComponent(Time.deltaTime);
-            if (Input.GetKeyDown(KeyCode.J))
+            foreach (var item in OwnedComponents)
             {
-                (sensor.GetSensor(Sensor.ESensorType.Sound) as SoundSensor).gunSound = true;
+                item.TickComponent(deltaTime);
             }
+            //move?.TickComponent(Time.deltaTime);
+            //hsm?.TickComponent(Time.deltaTime);
+            //if (Input.GetKeyDown(KeyCode.J))
+            //{
+            //    (sensor.GetSensor(Sensor.ESensorType.Sound) as SoundSensor).gunSound = true;
+            //}
         }
         public void InitHFSM()
         {
