@@ -33,7 +33,7 @@ namespace RailShootGame
         }
     }
 
-    public class Character : Pawn
+    public class Character : APawn
     {
         public bool bPressedJump = false;
         public float JumpKeyHoldTime = 0;

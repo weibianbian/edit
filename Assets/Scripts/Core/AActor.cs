@@ -1,4 +1,5 @@
 using GameplayAbilitySystem;
+using System;
 using System.Collections.Generic;
 using Unity.Collections.LowLevel.Unsafe;
 using UnityEngine;
@@ -14,7 +15,7 @@ namespace RailShootGame
     {
         void UpdateLogic(float delta);
     }
-    public class Pawn : AActor
+    public class APawn : AActor
     {
 
     }
@@ -27,9 +28,11 @@ namespace RailShootGame
         public SensorCompt sensor;
         public HierarchicalStateMachineCompt hsm;
         public Vector3 position;
+        public AActor Owner;
+        public APawn Instigator;
         public ULevel Outer;
 
-        private HashSet<ActorComponent> OwnedComponents=new HashSet<ActorComponent>();
+        private HashSet<ActorComponent> OwnedComponents = new HashSet<ActorComponent>();
 
         public HashSet<ActorComponent> GetInstanceComponents()
         {
@@ -59,7 +62,7 @@ namespace RailShootGame
             move.StopMove(EMoveStatus.MOVE_STATUS_DONE);
         }
 
-        public void PostSpawnInitialize()
+        public void PostSpawnInitialize(Vector3 UserSpawnPosition, AActor InOwner, APawn InInstigator)
         {
             //这里的一般流程如下
             // - Actor设置基础。
@@ -71,10 +74,26 @@ namespace RailShootGame
             //
 
             //延迟生成和非延迟生成的序列应该是相同的
-            UWorld World =GetWorld();
+            UWorld World = GetWorld();
 
+            SetOwner(InOwner);
+            SetInstigator(InInstigator);
             RegisterAllComponents();
+
+            PostActorCreated();
             FinishSpawning();
+        }
+        public virtual void SetOwner(AActor NewOwner)
+        {
+            Owner = NewOwner;
+        }
+        public virtual void SetInstigator(APawn InInstigator)
+        {
+            Instigator = InInstigator;
+        }
+        public virtual void PostActorCreated()
+        {
+
         }
         public void FinishSpawning()
         {
@@ -87,9 +106,15 @@ namespace RailShootGame
         }
         public void PostActorConstruction()
         {
-            PostInitializeComponents();
+            PreInitializeComponents();
 
             InitializeComponents();
+
+            PostInitializeComponents();
+        }
+        public virtual void PreInitializeComponents()
+        {
+
         }
         public virtual void PostInitializeComponents()
         {
@@ -103,7 +128,12 @@ namespace RailShootGame
         }
         public void RegisterAllComponents()
         {
+            PreRegisterAllComponents();
             IncrementalRegisterComponents();
+        }
+        public virtual void PreRegisterAllComponents()
+        {
+
         }
         public bool IncrementalRegisterComponents()
         {
