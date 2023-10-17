@@ -1,0 +1,13 @@
+#pragma kernel CopyTexture
+
+RWTexture2D<float4> result;
+
+Texture2D<float4> sourceTexture;
+int2 offset;
+
+[numthreads(8, 8, 1)]
+void CopyTexture(uint3 id : SV_DispatchThreadID)
+{
+    int2 targetPos = id.xy + offset;
+    result[targetPos] = sourceTexture[id.xy];
+}

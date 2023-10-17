@@ -8,19 +8,24 @@ using UnityEngine.UI;
 using UnityEditor;
 using System.Linq;
 using System;
-using UIToolkit.Runtime.DaVikingCode;
+using Unity.Collections;
+using UIToolkit.Runtime;
 
 [ShowOdinSerializedPropertiesInInspector]
 public class AtlasPackerEditor : MonoBehaviour
 {
 
-    public struct AtlasLayout
+    public class AtlasLayout
     {
         public Texture2D texture;
         public Vector4 scaleOffset;
-        public Vector4 IntRect;
+        public RectInt IntRect;
 
-        public bool Pack;
+        public bool Packed { get; private set; }
+        public bool SetPacked(bool v)
+        {
+           return  Packed =v; 
+        }
     }
 
     public const int previewCol = 8;
@@ -59,8 +64,7 @@ public class AtlasPackerEditor : MonoBehaviour
     }
 
     [HideLabel]
-    [PreviewField(1024f/2, ObjectFieldAlignment.Left)]
-    [OnValueChanged("PackAtlas")]
+    [PreviewField(2048f/2, ObjectFieldAlignment.Left)]
     public RenderTexture atlas;
 
     public Material blitCopyMaterial;
@@ -70,7 +74,7 @@ public class AtlasPackerEditor : MonoBehaviour
     void ResetAtlasTexture()
     {
         atlas?.Release();
-        RenderTextureDescriptor desc = new RenderTextureDescriptor(1024, 1024);
+        RenderTextureDescriptor desc = new RenderTextureDescriptor(2048, 2048);
         desc.useMipMap = false;
         desc.autoGenerateMips = false;
         desc.depthBufferBits = 0;   
@@ -85,68 +89,49 @@ public class AtlasPackerEditor : MonoBehaviour
     [Button]
     void GenRect()
     {
-        var textureSize = 1024;
+        var textureSize = 2048;
         if (texture2DAtlasLayouts == null)
             return;
 
-        List<Rect> rectangles = new List<Rect>();
-        foreach (var texture2DAtlasLayout in texture2DAtlasLayouts)
+        ITexture2DPacker packer = new RectanglePacker(textureSize, textureSize);
+        texture2DAtlasLayouts.Sort((x, y)=>x.texture.texelSize.magnitude.CompareTo(y.texture.texelSize.magnitude));
+        for (int i = 0; i < texture2DAtlasLayouts.Count; i++)
         {
-            if (texture2DAtlasLayout.texture.width > textureSize || texture2DAtlasLayout.texture.height > textureSize)
-                throw new Exception("A texture size is bigger than the sprite sheet size!");
-            else
-                rectangles.Add(new Rect(0, 0, texture2DAtlasLayout.texture.width, texture2DAtlasLayout.texture.height));
-        }
-
-        const int padding = 1;
-        RectanglePacker packer = new RectanglePacker(textureSize, textureSize, padding);
-        for (int i = 0; i < rectangles.Count; i++)
-            packer.insertRectangle((int)rectangles[i].width, (int)rectangles[i].height, i);
-
-        packer.packRectangles();
-        if (packer.rectangleCount > 0)
-        {
-            IntegerRectangle rect = new IntegerRectangle();
-            for (int j = 0; j < packer.rectangleCount; j++)
+            var texture2DAtlasLayout = texture2DAtlasLayouts[i];
+            if (!packer.TryInsert(texture2DAtlasLayout.texture.width, texture2DAtlasLayout.texture.height, out var rect))
             {
-
-                rect = packer.getRectangle(j, rect);
-
-                int index = packer.getRectangleId(j);
-                var texture2DAtlasLayout = texture2DAtlasLayouts[index];
-                texture2DAtlasLayout.IntRect = new Vector4(rect.x, rect.y, rect.width, rect.height);
-                Vector2 _scale;
-                _scale.x = (float)textureSize/ texture2DAtlasLayout.texture.width;
-                _scale.y = (float)textureSize / texture2DAtlasLayout.texture.height;
-
-                var x = (textureSize/ rect.width);
-                var y = (textureSize / rect.height);
-                var z = (rect.x + rect.width) / texture2DAtlasLayout.texture.width;
-                var w = (rect.y + rect.height)/ texture2DAtlasLayout.texture.height;
-
-                texture2DAtlasLayout.scaleOffset = new Vector4(x, y, -z, -w);
-                texture2DAtlasLayouts[index] = texture2DAtlasLayout;
+                Debug.LogError("A texture size is bigger than the sprite sheet free size!");
+                texture2DAtlasLayout.IntRect = default(RectInt);
+            }
+            else
+            {
+                texture2DAtlasLayout.IntRect = rect;
             }
         }
     }
 
     protected List<Sprite> mSprites = new List<Sprite>();
-    Texture2D sprite2D = null;
+    [PreviewField(2048f / 2, ObjectFieldAlignment.Left)]
+    public Texture2D sprite2D = null;
     [Button]
     void CreateSprites()
     {
-        sprite2D = new Texture2D(1024, 1024);
+        if (blitCopyMaterial != null && atlas == null || texture2DAtlasLayouts == null)
+            return;
+        sprite2D = new Texture2D(2048, 2048);
         RenderTexture.active = atlas;
-        sprite2D.ReadPixels(new Rect(0, 0, 1024, 1024), 0, 0, false);
+        sprite2D.ReadPixels(new Rect(0, 0, 2048, 2048), 0, 0, false);
         sprite2D.Apply();
         RenderTexture.active = null;
 
         var canvasGo =  GameObject.Find("Content");
-        for (int j = 0; j < texture2DAtlasLayouts.Count; j++)
+        foreach (var textureLayout in texture2DAtlasLayouts)
         {
-            var texture2DAtlasLayout = texture2DAtlasLayouts[j];
-            var rect = texture2DAtlasLayout.IntRect;
-            var sprite = Sprite.Create(sprite2D, new Rect(rect.x, rect.y, rect.z, rect.w), Vector2.one*0.5f, 100, 0, SpriteMeshType.FullRect);
+            if (!textureLayout.Packed)
+                continue;
+            var rect = textureLayout.IntRect;
+            var spriteRect = rect;
+            var sprite = Sprite.Create(sprite2D, spriteRect.AsRect(), Vector2.one*0.5f, 100, 0, SpriteMeshType.FullRect);
             mSprites.Add(sprite);
             var go = new GameObject($"{rect}", typeof(RectTransform), typeof(Image));
             go.GetComponent<Image>().sprite = sprite;
@@ -161,15 +146,25 @@ public class AtlasPackerEditor : MonoBehaviour
     {
         if (blitCopyMaterial != null && atlas == null || texture2DAtlasLayouts == null)
             return;
-        foreach (var textureLayout in texture2DAtlasLayouts.Where(l => l.Pack))
+
+        Rect rect = new Rect();
+        foreach (var textureLayout in texture2DAtlasLayouts.Where(l => l.Packed))
         {
-            if (textureLayout.texture == null)
+            if (textureLayout.IntRect.AsRect() == rect)
+            {
+                textureLayout.SetPacked(false);
                 continue;
+            }
             //new Vector2(rect.xMin, rect.yMin), rect.size
             RenderTexture.active = atlas;
-            blitCopyMaterial.SetVector(ShaderScaleOffset, textureLayout.scaleOffset);
-            Graphics.Blit(textureLayout.texture, atlas, blitCopyMaterial);
+            //blitCopyMaterial.SetVector(ShaderScaleOffset, textureLayout.scaleOffset);
+            //Graphics.Blit(textureLayout.texture, atlas, blitCopyMaterial);
+
+            Debug.Log($"CopyTexture {textureLayout.IntRect}, {textureLayout.texture.width},{textureLayout.texture.height}", textureLayout.texture);
+            Graphics.CopyTexture(textureLayout.texture, 0, 0, 0, 0, (int)textureLayout.IntRect.width, (int)textureLayout.IntRect.height,
+                atlas, 0, 0, (int)textureLayout.IntRect.x, (int)textureLayout.IntRect.y);
             RenderTexture.active = null;
+            textureLayout.SetPacked(true);
         }
     }
 
@@ -178,20 +173,22 @@ public class AtlasPackerEditor : MonoBehaviour
     {
         if (blitCopyMaterial != null && atlas == null || texture2DAtlasLayouts == null)
             return;
-
-        for (int i = 0; i < texture2DAtlasLayouts.Count; i++)
+        Rect rect = new Rect();
+        foreach (var textureLayout in texture2DAtlasLayouts)
         {
-
-            var textureLayout = texture2DAtlasLayouts[i];
             if (textureLayout.texture == null)
                 continue;
-            //new Vector2(rect.xMin, rect.yMin), rect.size
-            RenderTexture.active = atlas;
-            blitCopyMaterial.SetVector(ShaderScaleOffset, textureLayout.scaleOffset);
-            Graphics.Blit(textureLayout.texture, atlas, blitCopyMaterial);
-            RenderTexture.active = null;
+
+            if (textureLayout.IntRect.AsRect() == rect)
+            {
+                textureLayout.SetPacked(false);
+                continue;
+            }
+            Debug.Log($"CopyTexture {textureLayout.IntRect}, {textureLayout.texture.width},{textureLayout.texture.height}", textureLayout.texture);
+            Graphics.CopyTexture(textureLayout.texture, 0, 0, 0, 0, (int)textureLayout.IntRect.width, (int)textureLayout.IntRect.height,
+                atlas, 0, 0, (int)textureLayout.IntRect.x, (int)textureLayout.IntRect.y);
+            textureLayout.SetPacked(true);
         }
     }
-
 }
 #endif
