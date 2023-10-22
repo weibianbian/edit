@@ -22,7 +22,7 @@ public class idPhysics_Player : MonoBehaviour
     public playerPState_s current = new playerPState_s();
     public Vector3 inputDir = Vector3.zero;
     float maxJumpHeight = 10;
-    Vector3 gravityVector;
+    Vector3 gravityVector = new Vector3(0, -10, 0);
     public int upmove = 0;
     const int PMF_DUCKED = 1;       // set when ducking
     const int PMF_JUMPED = 2;       // set when the player jumped this frame
@@ -36,17 +36,25 @@ public class idPhysics_Player : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame
     void Update()
     {
+        inputDir = new Vector3();
+        upmove = 0;
+
         float horizontal = Input.GetAxis("Horizontal");
         float vertical = Input.GetAxis("Vertical");
         inputDir = new Vector3(horizontal, 0, vertical);
         inputDir = Camera.main.transform.TransformVector(inputDir);
-
+        inputDir.y = 0;
+        inputDir.Normalize();
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            upmove = 1;
+        }
         current.origin = transform.position;
         MovePlayer((int)(Time.deltaTime * 1000));
 
@@ -56,18 +64,31 @@ public class idPhysics_Player : MonoBehaviour
     }
     public void MovePlayer(int msec)
     {
+        walking = true;
+        groundPlane = false;
+        ladder = false;
+
         framemsec = msec;
         frametime = framemsec * 0.001f;
 
         playerSpeed = walkSpeed;
 
-        CheckGround();
-        WalkMove();
+        //CheckGround();
+        if (walking)
+        {
+            WalkMove();
+        }
+        else
+        {
+            AirMove();
+        }
+        
     }
     public void WalkMove()
     {
         if (CheckJump())
         {
+            AirMove();
             return;
         }
 
@@ -94,6 +115,23 @@ public class idPhysics_Player : MonoBehaviour
         oldVelocity = current.velocity;
 
         SlideMove(false, true, true, true);
+    }
+    public void AirMove()
+    {
+        Vector3 wishvel = Vector3.zero;
+        Vector3 wishdir = Vector3.zero;
+        float wishspeed;
+        float scale;
+        Friction();
+
+        wishvel = inputDir;
+        wishvel = wishvel - Vector3.Dot(wishvel, gravityVector.normalized) * gravityVector.normalized;
+        wishdir=wishvel;
+        wishspeed = playerSpeed;
+
+        Accelerate(wishdir, wishspeed, 1);
+
+        SlideMove(true, false, false, false);
     }
     void SlideMove(bool gravity, bool stepUp, bool stepDown, bool push)
     {
@@ -137,6 +175,7 @@ public class idPhysics_Player : MonoBehaviour
         if (walking)
         {
             // ignore slope movement, remove all velocity in gravity direction
+            vel = vel + Vector3.Dot(vel, gravityVector.normalized) * gravityVector.normalized;
         }
         speed = vel.sqrMagnitude;
         if (speed <= 0.0f)
@@ -175,12 +214,12 @@ public class idPhysics_Player : MonoBehaviour
     {
         Vector3 addVelocity;
 
-        if (upmove < 10)
+        if (upmove < 1)
         {
             return false;
         }
 
-        if ((current.movementFlags & PMF_JUMP_HELD) == 0)
+        if ((current.movementFlags & PMF_JUMP_HELD) > 0)
         {
             return false;
         }
