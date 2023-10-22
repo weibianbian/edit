@@ -21,10 +21,22 @@ public class idPhysics_Player : MonoBehaviour
     float playerSpeed = 0;
     public playerPState_s current = new playerPState_s();
     public Vector3 inputDir = Vector3.zero;
+    float maxJumpHeight = 10;
+    Vector3 gravityVector;
+    public int upmove = 0;
+    const int PMF_DUCKED = 1;       // set when ducking
+    const int PMF_JUMPED = 2;       // set when the player jumped this frame
+    const int PMF_STEPPED_UP = 4;       // set when the player stepped up this frame
+    const int PMF_STEPPED_DOWN = 8;     // set when the player stepped down this frame
+    const int PMF_JUMP_HELD = 16;       // set when jump button is held down
+    const int PMF_TIME_LAND = 32;       // movementTime is time before rejump
+    const int PMF_TIME_KNOCKBACK = 64;      // movementTime is an air-accelerate only time
+    const int PMF_TIME_WATERJUMP = 128;     // movementTime is waterjump
+    const int PMF_ALL_TIMES = (PMF_TIME_WATERJUMP | PMF_TIME_LAND | PMF_TIME_KNOCKBACK);
     // Start is called before the first frame update
     void Start()
     {
-
+        
     }
 
     // Update is called once per frame
@@ -54,6 +66,11 @@ public class idPhysics_Player : MonoBehaviour
     }
     public void WalkMove()
     {
+        if (CheckJump())
+        {
+            return;
+        }
+
         Friction();
         Vector3 wishvel;
         Vector3 wishdir;
@@ -153,5 +170,27 @@ public class idPhysics_Player : MonoBehaviour
                 current.origin.y = hit.point.y + 2;
             }
         }
+    }
+    public bool CheckJump()
+    {
+        Vector3 addVelocity;
+
+        if (upmove < 10)
+        {
+            return false;
+        }
+
+        if ((current.movementFlags & PMF_JUMP_HELD) == 0)
+        {
+            return false;
+        }
+
+        groundPlane = false;
+        walking = false;
+        current.movementFlags |= PMF_JUMP_HELD | PMF_JUMPED;
+
+        addVelocity = 2.0f * maxJumpHeight * -gravityVector;
+        current.velocity = addVelocity;
+        return true;
     }
 }
