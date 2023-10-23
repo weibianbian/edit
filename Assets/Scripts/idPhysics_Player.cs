@@ -10,6 +10,14 @@ public class playerPState_s
     public int movementFlags;
     public int movementTime;
 }
+public enum pmtype_t
+{
+    PM_NORMAL,              // normal physics
+    PM_DEAD,                // no acceleration or turning, but free falling
+    PM_SPECTATOR,           // flying without gravity but with collision detection
+    PM_FREEZE,              // stuck in place without control
+    PM_NOCLIP				// flying without collision detection nor gravity
+}
 public class idPhysics_Player : MonoBehaviour
 {
     bool walking = false;
@@ -73,7 +81,19 @@ public class idPhysics_Player : MonoBehaviour
 
         playerSpeed = walkSpeed;
 
-        //CheckGround();
+        current.movementFlags &= ~(PMF_JUMPED | PMF_STEPPED_UP | PMF_STEPPED_DOWN);
+        current.stepUp = 0.0f;
+
+        if (upmove < 1)
+        {
+            // not holding jump
+            current.movementFlags &= ~PMF_JUMP_HELD;
+        }
+        if (current.movementType == (int)pmtype_t.PM_FREEZE)
+        {
+            return;
+        }
+        CheckGround();
         if (walking)
         {
             WalkMove();
@@ -82,7 +102,7 @@ public class idPhysics_Player : MonoBehaviour
         {
             AirMove();
         }
-        
+        CheckGround();
     }
     public void WalkMove()
     {
@@ -126,10 +146,15 @@ public class idPhysics_Player : MonoBehaviour
 
         wishvel = inputDir;
         wishvel = wishvel - Vector3.Dot(wishvel, gravityVector.normalized) * gravityVector.normalized;
-        wishdir=wishvel;
+        wishdir = wishvel;
         wishspeed = playerSpeed;
 
         Accelerate(wishdir, wishspeed, 1);
+
+        if (groundPlane)
+        {
+
+        }
 
         SlideMove(true, false, false, false);
     }
@@ -199,16 +224,26 @@ public class idPhysics_Player : MonoBehaviour
     }
     public void CheckGround()
     {
-        RaycastHit hit;
+        int i, contents;
+        Vector3 point = Vector3.zero;
+        bool hadGroundContacts;
+
         Ray ray = new Ray(current.origin, Vector3.down);
-        Physics.Raycast(ray, out hit, 100);
+        bool IsHit = Physics.Raycast(ray, 2);
+        if (!IsHit)
         {
-            float dist = Vector3.Distance(hit.point, current.origin);
-            if (dist != 2)
-            {
-                current.origin.y = hit.point.y + 2;
-            }
+            groundPlane = false;
+            walking = false;
+            return;
         }
+        if (Vector3.Dot(current.velocity, -gravityVector.normalized) > 0)
+        {
+            groundPlane = false;
+            walking = false;
+            return;
+        }
+        groundPlane = true;
+        walking = true;
     }
     public bool CheckJump()
     {
