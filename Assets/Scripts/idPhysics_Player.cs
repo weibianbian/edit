@@ -162,6 +162,12 @@ public class idPhysics_Player : MonoBehaviour
     {
         Vector3 end, stepEnd, primal_velocity, endVelocity, endClipVelocity, clipVelocity;
         float time_left;
+        if (gravity)
+        {
+            endVelocity = current.velocity + gravityVector * frametime;
+            current.velocity = (current.velocity + endVelocity) * 0.5f;
+        }
+        else
         {
             endVelocity = current.velocity;
         }
