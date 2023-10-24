@@ -1,3 +1,4 @@
+using System.Diagnostics.Contracts;
 using UnityEngine;
 public class playerPState_s
 {
@@ -20,18 +21,40 @@ public enum pmtype_t
 }
 public class idPhysics_Player : MonoBehaviour
 {
-    bool walking = false;
-    bool groundPlane = false;
-    bool ladder = false;
+    public bool walking = false;
+    public bool groundPlane = false;
+    public bool contacts = false;
+    public bool ladder = false;
     int framemsec = 0;
     float frametime = 0;
-    float walkSpeed = 4;
-    float playerSpeed = 0;
+    public float walkSpeed = 100;
+    public float playerSpeed = 0;
     public playerPState_s current = new playerPState_s();
     public Vector3 inputDir = Vector3.zero;
     float maxJumpHeight = 10;
     Vector3 gravityVector = new Vector3(0, -10, 0);
     public int upmove = 0;
+    //
+    const float PM_STOPSPEED = 100.0f;
+    const float PM_SWIMSCALE = 0.5f;
+    const float PM_LADDERSPEED = 100.0f;
+    const float PM_STEPSCALE = 1.0f;
+
+    const float PM_ACCELERATE = 10.0f;
+    const float PM_AIRACCELERATE = 1.0f;
+    const float PM_WATERACCELERATE = 4.0f;
+    const float PM_FLYACCELERATE = 8.0f;
+
+    const float PM_FRICTION = 6.0f;
+    const float PM_AIRFRICTION = 0.0f;
+    const float PM_WATERFRICTION = 1.0f;
+    const float PM_FLYFRICTION = 3.0f;
+    const float PM_NOCLIPFRICTION = 12.0f;
+
+    const float MIN_WALK_NORMAL = 0.7f;     // can't walk on very steep slopes
+    const float OVERCLIP = 1.001f;
+    //
+
     const int PMF_DUCKED = 1;       // set when ducking
     const int PMF_JUMPED = 2;       // set when the player jumped this frame
     const int PMF_STEPPED_UP = 4;       // set when the player stepped up this frame
@@ -63,16 +86,17 @@ public class idPhysics_Player : MonoBehaviour
         {
             upmove = 1;
         }
+       
+    }
+    private void FixedUpdate()
+    {
         current.origin = transform.position;
         MovePlayer((int)(Time.deltaTime * 1000));
-
-
         transform.position = current.origin;
-        //transform.position += (Time.deltaTime * inputDir * 10);
     }
     public void MovePlayer(int msec)
     {
-        walking = true;
+        walking = false;
         groundPlane = false;
         ladder = false;
 
@@ -93,6 +117,11 @@ public class idPhysics_Player : MonoBehaviour
         {
             return;
         }
+        if (current.movementType == (int)pmtype_t.PM_DEAD)
+        {
+            inputDir = Vector3.zero;
+            upmove = 0;
+        }
         CheckGround();
         if (walking)
         {
@@ -106,33 +135,36 @@ public class idPhysics_Player : MonoBehaviour
     }
     public void WalkMove()
     {
+        Vector3 wishvel;
+        Vector3 wishdir;
+        float wishspeed;
+        float scale;
+        float accelerate;
+        Vector3 oldVelocity, vel;
+        float oldVel, newVel;
         if (CheckJump())
         {
             AirMove();
             return;
         }
-
         Friction();
-        Vector3 wishvel;
-        Vector3 wishdir;
-        float wishspeed;
-        float scale;
-        float accelerate = 10;
-        Vector3 oldVelocity, vel;
-        float oldVel, newVel;
-
         wishvel = inputDir;
-
         wishdir = wishvel;
-
         wishspeed = playerSpeed;
-
-
         wishdir.y = 0;
         wishdir.Normalize();
-        Accelerate(wishdir, wishspeed, accelerate);
 
+        accelerate = PM_ACCELERATE;
+        Accelerate(wishdir, wishspeed, accelerate);
         oldVelocity = current.velocity;
+
+        current.velocity.y = 0;
+
+        vel = current.velocity - Vector3.Dot(current.velocity, gravityVector.normalized) * gravityVector.normalized;
+        if (!(vel.sqrMagnitude != 0))
+        {
+            return;
+        }
 
         SlideMove(false, true, true, true);
     }
@@ -171,11 +203,19 @@ public class idPhysics_Player : MonoBehaviour
         {
             endVelocity = current.velocity;
         }
+        if (gravity)
+        {
+            current.velocity = endVelocity;
+        }
+        clipVelocity = current.velocity - Vector3.Dot(gravityVector.normalized, current.velocity) * gravityVector.normalized;
+        endClipVelocity = endVelocity - Vector3.Dot(gravityVector.normalized, endVelocity) * gravityVector.normalized;
+        if (Vector3.Dot(clipVelocity, endClipVelocity) < 0.0f)
+        {
+            current.velocity = Vector3.Dot(gravityVector.normalized, current.velocity) * gravityVector.normalized;
+        }
         time_left = frametime;
         end = current.origin + time_left * current.velocity;
         current.origin = end;
-
-
     }
     void Accelerate(Vector3 wishdir, float wishspeed, float accel)
     {
@@ -205,21 +245,26 @@ public class idPhysics_Player : MonoBehaviour
 
         if (walking)
         {
-            // ignore slope movement, remove all velocity in gravity direction
             vel = vel + Vector3.Dot(vel, gravityVector.normalized) * gravityVector.normalized;
         }
-        speed = vel.sqrMagnitude;
-        if (speed <= 0.0f)
+        speed = vel.magnitude;
+        if (speed < 1.0f)
         {
             current.velocity = Vector3.zero;
             return;
         }
         drop = 0;
+        if (walking)
         {
+            if (!((current.movementFlags & PMF_TIME_KNOCKBACK) != 0))
             {
-                control = speed;
-                drop += control * 6 * frametime;
+                control = speed < PM_STOPSPEED ? PM_STOPSPEED : speed;
+                drop += control * PM_FRICTION * frametime;
             }
+        }
+        else
+        {
+            drop += speed * PM_AIRFRICTION * frametime;
         }
         newspeed = speed - drop;
         if (newspeed < 0)
@@ -235,13 +280,27 @@ public class idPhysics_Player : MonoBehaviour
         bool hadGroundContacts;
 
         Ray ray = new Ray(current.origin, Vector3.down);
+
         bool IsHit = Physics.Raycast(ray, 2);
-        if (!IsHit)
+        hadGroundContacts = !IsHit;
+        contacts = IsHit;
+        float fraction = 0;
+        if (contacts)
+        {
+
+        }
+        else
+        {
+            fraction = 1;
+        }
+
+        if (fraction == 1)
         {
             groundPlane = false;
             walking = false;
             return;
         }
+
         if (Vector3.Dot(current.velocity, -gravityVector.normalized) > 0)
         {
             groundPlane = false;
@@ -250,6 +309,19 @@ public class idPhysics_Player : MonoBehaviour
         }
         groundPlane = true;
         walking = true;
+        if ((current.movementFlags & PMF_TIME_WATERJUMP) > 0)
+        {
+            current.movementFlags &= ~(PMF_TIME_WATERJUMP | PMF_TIME_LAND);
+            current.movementTime = 0;
+        }
+        if (!hadGroundContacts)
+        {
+            if ((Vector3.Dot(current.velocity, -gravityVector.normalized)) < -200.0f)
+            {
+                current.movementFlags |= PMF_TIME_LAND;
+                current.movementTime = 250;
+            }
+        }
     }
     public bool CheckJump()
     {
@@ -269,8 +341,35 @@ public class idPhysics_Player : MonoBehaviour
         walking = false;
         current.movementFlags |= PMF_JUMP_HELD | PMF_JUMPED;
 
+        //addVelocity = 2.0f * maxJumpHeight * -gravityVector;
+
+        //addVelocity= - gravityVector.normalized * Mathf.Sqrt(2.0f * maxJumpHeight * gravityVector.magnitude);
+
         addVelocity = 2.0f * maxJumpHeight * -gravityVector;
+
+        float man2 = addVelocity.magnitude;
+        addVelocity.Normalize();
+        addVelocity *= Mathf.Sqrt(man2);
         current.velocity = addVelocity;
         return true;
+    }
+    public float CmdScale()
+    {
+        int max;
+        float total;
+        float scale;
+        int forwardmove;
+        int rightmove;
+        int upmove;
+
+        if (walking)
+        {
+            upmove = 0;
+        }
+        else
+        {
+            upmove = this.upmove;
+        }
+        return 0;
     }
 }

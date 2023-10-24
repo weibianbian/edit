@@ -435,7 +435,7 @@ Transform:
   m_GameObject: {fileID: 356804159}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 2, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -453,7 +453,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3be8249657a2f7446824cbce886dfe55, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  walking: 0
+  groundPlane: 0
+  contacts: 0
+  ladder: 0
+  walkSpeed: 10
+  playerSpeed: 0
   inputDir: {x: 0, y: 0, z: 0}
+  upmove: 0
 --- !u!1 &492997226
 GameObject:
   m_ObjectHideFlags: 0
@@ -541,7 +548,7 @@ Transform:
   m_GameObject: {fileID: 492997226}
   serializedVersion: 2
   m_LocalRotation: {x: 0.09115319, y: -0.84808254, z: 0.15511233, w: 0.49838465}
-  m_LocalPosition: {x: 9.07, y: 4.7, z: 4.06}
+  m_LocalPosition: {x: 9.07, y: 6.7, z: 4.06}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -646,7 +653,7 @@ Transform:
   m_GameObject: {fileID: 854854499}
   serializedVersion: 2
   m_LocalRotation: {x: 0.09115319, y: -0.84808254, z: 0.15511233, w: 0.49838465}
-  m_LocalPosition: {x: 9.07, y: 4.7, z: 4.06}
+  m_LocalPosition: {x: 9.07, y: 6.7, z: 4.06}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
