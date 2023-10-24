@@ -1,4 +1,5 @@
 using System.Diagnostics.Contracts;
+using Unity.VisualScripting;
 using UnityEngine;
 public class playerPState_s
 {
@@ -86,12 +87,13 @@ public class idPhysics_Player : MonoBehaviour
         {
             upmove = 1;
         }
-       
+
     }
     private void FixedUpdate()
     {
         current.origin = transform.position;
         MovePlayer((int)(Time.deltaTime * 1000));
+        current.origin = current.origin + Time.deltaTime * current.velocity; ;
         transform.position = current.origin;
     }
     public void MovePlayer(int msec)
@@ -180,8 +182,10 @@ public class idPhysics_Player : MonoBehaviour
         wishvel = wishvel - Vector3.Dot(wishvel, gravityVector.normalized) * gravityVector.normalized;
         wishdir = wishvel;
         wishspeed = playerSpeed;
+        wishdir.y = 0;
+        wishdir.Normalize();
 
-        Accelerate(wishdir, wishspeed, 1);
+        Accelerate(wishdir, wishspeed, PM_AIRACCELERATE);
 
         if (groundPlane)
         {
@@ -203,6 +207,7 @@ public class idPhysics_Player : MonoBehaviour
         {
             endVelocity = current.velocity;
         }
+        time_left = frametime;
         if (gravity)
         {
             current.velocity = endVelocity;
@@ -213,9 +218,7 @@ public class idPhysics_Player : MonoBehaviour
         {
             current.velocity = Vector3.Dot(gravityVector.normalized, current.velocity) * gravityVector.normalized;
         }
-        time_left = frametime;
-        end = current.origin + time_left * current.velocity;
-        current.origin = end;
+
     }
     void Accelerate(Vector3 wishdir, float wishspeed, float accel)
     {
@@ -250,7 +253,15 @@ public class idPhysics_Player : MonoBehaviour
         speed = vel.magnitude;
         if (speed < 1.0f)
         {
-            current.velocity = Vector3.zero;
+            if (Mathf.Abs(Vector3.Dot(current.velocity, gravityVector.normalized)) < 1e-5f)
+            {
+                current.velocity = Vector3.zero;
+            }
+            else
+            {
+                current.velocity = Vector3.Dot(current.velocity, gravityVector.normalized) * gravityVector.normalized;
+            }
+
             return;
         }
         drop = 0;
