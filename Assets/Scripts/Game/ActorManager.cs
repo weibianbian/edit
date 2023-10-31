@@ -49,7 +49,7 @@ namespace RailShootGame
         {
             this.resourceManager = resourceManager;
         }
-        public AActor SpawnActor(EActorType actorType,Vector3 spawnPos)
+        public AActor SpawnActor(EActorType actorType, Vector3 spawnPos)
         {
             ESceneObjType sceneObjType = actorMapping[actorType];
 
@@ -72,7 +72,7 @@ namespace RailShootGame
 
             gameActors.Add(actorLogic);
 
-            actorObject.transform.position= spawnPos;
+            actorObject.transform.position = spawnPos;
             return actorLogic;
         }
     }

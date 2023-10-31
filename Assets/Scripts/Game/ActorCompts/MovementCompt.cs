@@ -11,7 +11,7 @@ namespace RailShootGame
 
         public MoveState move;
 
-
+        public Vector3 Velocity;
         public void Init()
         {
             move = new MoveState();
