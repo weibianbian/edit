@@ -136,6 +136,10 @@ namespace RailShootGame
 
             return false;
         }
+        public Vector3 GetActorFeetLocation()
+        {
+            return Vector3.zero;
+        }
     }
 }
 
