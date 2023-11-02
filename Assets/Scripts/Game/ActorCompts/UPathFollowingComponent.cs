@@ -20,7 +20,10 @@ namespace RailShootGame
         public float PathfollowingRegularPathPointAcceptanceRadius;
         public float AcceptanceRadius;
         public float MyDefaultAcceptanceRadius;
+        public float MinAgentRadiusPct;
         public bool bStopMovementOnFinish = false;
+        public bool bReachTestIncludesGoalRadius = false;
+        public bool bReachTestIncludesAgentRadius = false;
         public static int NextRequestId = 0;
         public int RequestMove(PathData InPath)
         {
@@ -108,7 +111,13 @@ namespace RailShootGame
         }
         public bool HasReachedDestination(Vector3 CurrentLocation)
         {
-            return false;
+            Vector3 GoalLocation = Path.GetPathPointLocation(Path.GetPathPoints().Count - 1);
+            float GoalRadius = 0.0f;
+            float GoalHalfHeight = 0.0f;
+
+            float AcceptanceRangeToUse = GetFinalAcceptanceRadius(Path, Vector3.zero, Vector3.zero);
+            return HasReachedInternal(GoalLocation, bReachTestIncludesGoalRadius ? GoalRadius : 0.0f, GoalHalfHeight, CurrentLocation
+                , AcceptanceRangeToUse, bReachTestIncludesAgentRadius ? MinAgentRadiusPct : 0.0f);
         }
         public bool HasReachedCurrentTarget(Vector3 CurrentLocation)
         {
@@ -198,8 +207,8 @@ namespace RailShootGame
             {
                 //if (Status == EPathFollowingStatus.Moving)
                 //{
-                //    Vector3 MoveFocus = GetMoveFocus(AIOwner->bAllowStrafe);
-                //    AIOwner->SetFocalPoint(MoveFocus, EAIFocusPriority::Move);
+                //    Vector3 MoveFocus = GetMoveFocus(AIOwner.bAllowStrafe);
+                //    AIOwner.SetFocalPoint(MoveFocus, EAIFocusPriority::Move);
                 //}
                 //else if (Status == EPathFollowingStatus.Idle)
                 //{
@@ -255,6 +264,30 @@ namespace RailShootGame
         public float GetFinalAcceptanceRadius(PathData Path, Vector3 OriginalGoalLocation, Vector3 PathEndOverride)
         {
             return AcceptanceRadius;
+        }
+        public Vector3 GetMoveFocus(bool bAllowStrafe)
+        {
+
+            Vector3 MoveFocus = Vector3.zero;
+            {
+                Vector3 CurrentMoveDirection = GetCurrentDirection();
+                MoveFocus = CurrentDestination + (CurrentMoveDirection * 1);
+            }
+
+            return MoveFocus;
+        }
+        public Vector3 GetCurrentDirection()
+        {
+            {
+                // calculate direction to based destination
+                Vector3 SegmentStartLocation = Path.GetPathPointLocation(MoveSegmentStartIndex);
+                Vector3 SegmentEndLocation = CurrentDestination;
+
+                return Vector3.Normalize(SegmentEndLocation - SegmentStartLocation);
+            }
+
+            // use cached direction of current path segment
+            return MoveSegmentDirection;
         }
         public int GetNextPathIndex()
         {

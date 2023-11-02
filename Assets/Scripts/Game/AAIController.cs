@@ -7,6 +7,7 @@ namespace RailShootGame
     public class AAIController : AController
     {
         public UPathFollowingComponent PathFollowingComponent;
+        public bool bAllowStrafe = false;
         public AAIController()
         {
             PathFollowingComponent = ReferencePool.Acquire<UPathFollowingComponent>();
