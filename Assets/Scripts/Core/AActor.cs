@@ -56,7 +56,7 @@ namespace RailShootGame
         //创建的时候，需要填充配置信息
         public void Spawn()
         {
-            move.StopMove(EMoveStatus.MOVE_STATUS_DONE);
+            //move.StopMove(EMoveStatus.MOVE_STATUS_DONE);
         }
 
         public void PostSpawnInitialize()
