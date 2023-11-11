@@ -126,9 +126,12 @@ namespace RailShootGame
                 return actorObject ? actorObject.gameObject : null;
             }
         }
-        public void Tick()
+        public virtual void Tick(float DeltaTime)
         {
-
+            foreach (var item in OwnedComponents)
+            {
+                item.TickComponent(DeltaTime);
+            }
         }
         public void InitHFSM()
         {

@@ -19,6 +19,6 @@ public class UEMoveTest : MonoBehaviour
         {
             character.Jump();
         }
-        character.Tick();
+        character.Tick(Time.deltaTime);
     }
 }
