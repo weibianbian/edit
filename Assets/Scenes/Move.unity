@@ -450,17 +450,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 356804159}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3be8249657a2f7446824cbce886dfe55, type: 3}
+  m_Script: {fileID: 11500000, guid: 75d934c063dc7a442b5fdabaf30b4765, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  walking: 0
-  groundPlane: 0
-  contacts: 0
-  ladder: 0
-  walkSpeed: 10
-  playerSpeed: 0
-  inputDir: {x: 0, y: 0, z: 0}
-  upmove: 0
 --- !u!1 &492997226
 GameObject:
   m_ObjectHideFlags: 0

@@ -18,8 +18,7 @@ public class ActorObject : MonoBehaviour
         actor = new AActor();
         actor.actorObject = this;
         actor.Init(game);
-        actor.move.agent = gameObject.GetComponent<NavMeshAgent>();
-        actor.move.agent.enabled = true;
+       
 
         return actor;
     }
@@ -32,7 +31,6 @@ public class ActorObject : MonoBehaviour
     //}
     public void Update()
     {
-        actor?.Update();
     }
 
 }

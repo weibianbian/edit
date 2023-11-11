@@ -18,7 +18,7 @@ public class HFSMTest : MonoBehaviour
 
         State m = new State(EStatus.Combat.ToString(), null);
 
-        l.AddTransition(new Transition(new SoundSensorCondition(), m, 0));
+        //l.AddTransition(new Transition(new SoundSensorCondition(), m, 0));
         game = new UWorld();
         entity = new AActor();
         hfsm = new HierarchicalStateMachine(game, l, m);

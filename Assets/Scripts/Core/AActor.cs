@@ -5,27 +5,22 @@ using UnityEngine;
 
 namespace RailShootGame
 {
-    public interface IActorLogic
-    {
-
-        void UpdateLogic(float delta);
-    }
-    public interface IActorComponent
-    {
-        void UpdateLogic(float delta);
-    }
-    public class Pawn : AActor
-    {
-
-    }
-
+    //生成路径
+    //1、SpawnActor 被调用 
+    //2、PostSpawnInitialize
+    //3、PostActorCreated 创建后即被生成的Actor调用，构建函数类行为在此发生，PostActorCreated和PostLoad互斥
+    //4、ExecuteConstruction
+    ////////////OnConstruction
+    //5、PostActorConstruction
+    ////////////1、PreInitializeComponents--在Actor的组件上调用InitializeComponent之前进行调用
+    ////////////2、InitializeComponent--Actor上定义的每个组件的创建辅助函数
+    ////////////3、PostInitializeComponents--Actor的组件初始化后调用
+    //6、OnActorSpawned
+    //7、BeginPlay
     //Spawn -----  Init  ----Activate
     public class AActor : ReferencePoolObject
     {
         public ActorObject actorObject;
-        public MovementCompt move;
-        public SensorCompt sensor;
-        public HierarchicalStateMachineCompt hsm;
         public Vector3 position;
         public ULevel Outer;
 
@@ -42,16 +37,17 @@ namespace RailShootGame
 
             };
         }
+        public T CreateDefaultSubobject<T>() where T:ActorComponent
+        {
+            ActorComponent result = ReferencePool.Acquire(typeof(T)) as ActorComponent;
+            result.SetOwner(this);
+            result.PostInitProperties();
+
+            return result as T;
+        }
         public void Init(UWorld game)
         {
-            move = new MovementCompt();
-            move.Init();
-
-            sensor = new SensorCompt();
-            sensor.AddSensor(new SoundSensor());
-
-            hsm = new HierarchicalStateMachineCompt();
-            hsm.Init();
+          
         }
         //创建的时候，需要填充配置信息
         public void Spawn()
@@ -130,14 +126,9 @@ namespace RailShootGame
                 return actorObject ? actorObject.gameObject : null;
             }
         }
-        public void Update()
+        public void Tick()
         {
-            move?.TickComponent(Time.deltaTime);
-            hsm?.TickComponent(Time.deltaTime);
-            if (Input.GetKeyDown(KeyCode.J))
-            {
-                (sensor.GetSensor(Sensor.ESensorType.Sound) as SoundSensor).gunSound = true;
-            }
+
         }
         public void InitHFSM()
         {

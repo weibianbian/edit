@@ -31,18 +31,9 @@ namespace HFSMRuntime
             return false;
         }
     }
-    public class SoundSensorCondition : ICondition
-    {
-        public bool Test(UWorld g, AActor e)
-        {
-            SoundSensor soundSensor = e.sensor.GetSensor(Sensor.ESensorType.Sound) as SoundSensor;
-            if (soundSensor != null)
-            {
-              return  soundSensor.gunSound;
-
-            }
-            return false;
-        }
-    }
+    //public class SoundSensorCondition : ICondition
+    //{
+       
+    //}
 }
 

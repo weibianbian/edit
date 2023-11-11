@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Unity.VisualScripting;
+using UnityEngine;
 using UnityEngine.TextCore.Text;
 
 namespace RailShootGame
@@ -10,6 +11,17 @@ namespace RailShootGame
         protected ACharacter CharacterOwner;
         public float JumpZVelocity;
         public int CustomMovementMode;
+        public virtual void SetDefaultMovementMode()
+        {
+            //SetMovementMode(DefaultLandMovementMode);
+
+            //// Avoid 1-frame delay if trying to walk but walking fails at this location.
+            //if (MovementMode == EMovementMode.MOVE_Walking && GetMovementBase() == NULL)
+            //{
+            //    Velocity.z = SavedVelocityZ; // Prevent temporary walking state from zeroing Z velocity.
+            //    SetMovementMode(EMovementMode.MOVE_Falling);
+            //}
+        }
         public bool IsFalling()
         {
             return MovementMode == EMovementMode.MOVE_Falling;
@@ -65,7 +77,7 @@ namespace RailShootGame
         }
         public override void TickComponent(float DeltaTime)
         {
-            ControlledCharacterMove(Vector3.zero, 1);
+            ControlledCharacterMove(Vector3.zero, DeltaTime);
         }
         public void ControlledCharacterMove(Vector3 InputVector, float DeltaSeconds)
         {

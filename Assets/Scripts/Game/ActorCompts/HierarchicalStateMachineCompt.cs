@@ -12,7 +12,7 @@ namespace RailShootGame
 
             State m = new State(EStatus.Combat.ToString(), null);
 
-            l.AddTransition(new Transition(new SoundSensorCondition(), m, 0));
+            //l.AddTransition(new Transition(new SoundSensorCondition(), m, 0));
             hsm = new HierarchicalStateMachine(Outer.GetWorld(), l, m);
         }
 
