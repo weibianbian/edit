@@ -22,6 +22,11 @@ namespace RailShootGame
             //    SetMovementMode(EMovementMode.MOVE_Falling);
             //}
         }
+        public override void OnRegister()
+        {
+            base.OnRegister();
+            CharacterOwner = GetOwner() as ACharacter;
+        }
         public bool IsFalling()
         {
             return MovementMode == EMovementMode.MOVE_Falling;

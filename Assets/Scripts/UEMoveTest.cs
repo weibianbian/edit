@@ -1,15 +1,21 @@
 using RailShootGame;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Collections.LowLevel.Unsafe;
 using UnityEngine;
 
 public class UEMoveTest : MonoBehaviour
 {
+    public UWorld World;
     public ACharacter character;
     // Start is called before the first frame update
     void Start()
     {
-        character=new ACharacter();
+        World = new UWorld();
+        ULevel level = new ULevel();
+        World.AddToWorld(level);
+        World.CurrentLevel = level;
+        character = World.SpawnActor<ACharacter>();
     }
 
     // Update is called once per frame
