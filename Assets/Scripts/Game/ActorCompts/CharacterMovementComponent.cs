@@ -40,6 +40,10 @@ namespace RailShootGame
             }
             return false;
         }
+        public virtual bool CanAttemptJump()
+        {
+            return false;
+        }
         public virtual void SetMovementMode(EMovementMode NewMovementMode, int NewCustomMode = 0)
         {
             if (NewMovementMode != EMovementMode.MOVE_Custom)
@@ -91,7 +95,7 @@ namespace RailShootGame
         }
         public void PerformMovement(float DeltaSeconds)
         {
-
+            CharacterOwner.ClearJumpInput(DeltaSeconds);
         }
     }
 }

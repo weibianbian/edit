@@ -1,15 +1,20 @@
 ﻿using GameplayAbilitySystem;
+using System.Security.Cryptography;
+using TMPro;
 
 namespace RailShootGame
 {
     public class ACharacter : Pawn
     {
         public bool bPressedJump = false;
-        public float JumpKeyHoldTime = 0;
+        public bool bIsCrouched = false;
         public bool bWasJumping = false;
         private int JumpCurrentCount = 0;
         private int JumpCurrentCountPreJump = 0;
+        private int JumpMaxCount = 0;
         private float JumpForceTimeRemaining = 0;
+        public float JumpKeyHoldTime = 0;
+        public float JumpMaxHoldTime = 0.1f;
 
         public CharacterMovementComponent CharacterMovement;
         public UAbilitySystemComponent asc;
@@ -49,6 +54,40 @@ namespace RailShootGame
             }
             return bCanJump;
         }
+        protected virtual bool CanJumpInternal_Implementation()
+        {
+            return !bIsCrouched && JumpIsAllowedInternal();
+        }
+        protected bool JumpIsAllowedInternal()
+        {
+            bool bJumpIsAllowed = CharacterMovement.CanAttemptJump();
+
+            if (bJumpIsAllowed)
+            {
+                if (!bWasJumping || GetJumpMaxHoldTime() <= 0.0f)
+                {
+                    if (JumpCurrentCount == 0 && CharacterMovement.IsFalling())
+                    {
+                        bJumpIsAllowed = JumpCurrentCount + 1 < JumpMaxCount;
+                    }
+                    else
+                    {
+                        bJumpIsAllowed = JumpCurrentCount < JumpMaxCount;
+                    }
+                }
+                else
+                {
+                    // Only consider JumpKeyHoldTime as long as:
+                    // A) The jump limit hasn't been met OR
+                    // B) The jump limit has been met AND we were already jumping
+                    bool bJumpKeyHeld = (bPressedJump && JumpKeyHoldTime < GetJumpMaxHoldTime());
+                    bJumpIsAllowed = bJumpKeyHeld &&
+                        ((JumpCurrentCount < JumpMaxCount) || (bWasJumping && JumpCurrentCount == JumpMaxCount));
+                }
+            }
+
+            return bJumpIsAllowed;
+        }
         public void CheckJumpInput(float DeltaSeconds)
         {
             if (CharacterMovement != null)
@@ -71,9 +110,28 @@ namespace RailShootGame
                 }
             }
         }
+        public void ClearJumpInput(float DeltaTime)
+        {
+            if (bPressedJump)
+            {
+                JumpKeyHoldTime += DeltaTime;
+
+                // Don't disable bPressedJump right away if it's still held.
+                // Don't modify JumpForceTimeRemaining because a frame of update may be remaining.
+                if (JumpKeyHoldTime >= GetJumpMaxHoldTime())
+                {
+                    bPressedJump = false;
+                }
+            }
+            else
+            {
+                JumpForceTimeRemaining = 0.0f;
+                bWasJumping = false;
+            }
+        }
         private float GetJumpMaxHoldTime()
         {
-            return JumpKeyHoldTime;
+            return JumpMaxHoldTime;
         }
         public void ResetJumpState()
         {
