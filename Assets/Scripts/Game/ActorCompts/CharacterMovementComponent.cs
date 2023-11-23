@@ -135,7 +135,11 @@ namespace RailShootGame
                 Acceleration.z = 0.0f;
                 //应用加速度
                 CalcVelocity(timeTick, GroundFriction, false, GetMaxBrakingDeceleration());
+                //计算移动参数
+                Vector3 MoveVelocity = Velocity;
+                Vector3 Delta = timeTick * MoveVelocity;
             }
+            
             if (IsMovingOnGround())
             {
                 MaintainHorizontalGroundVelocity();
