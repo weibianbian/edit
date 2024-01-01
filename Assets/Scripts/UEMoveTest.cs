@@ -27,4 +27,7 @@ public class UEMoveTest : MonoBehaviour
         }
         character.Tick(Time.deltaTime);
     }
+    private void FixedUpdate()
+    {
+    }
 }

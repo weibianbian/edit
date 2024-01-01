@@ -6,7 +6,7 @@ namespace RailShootGame
 {
     public class UMovementComponent : ActorComponent
     {
-
+        public USceneComponent UpdatedComponent;
         public NavMeshAgent agent;
         public Vector3 targetPos;
         public Vector3 Velocity;
@@ -15,7 +15,10 @@ namespace RailShootGame
         {
 
         }
-
+        public override void OnRegister()
+        {
+            base.OnRegister();
+        }
 
         public override void TickComponent(float DeltaTime)
         {
@@ -40,6 +43,10 @@ namespace RailShootGame
             //允许1%的误差，以考虑数值的不精确性。
             float OverVelocityPercent = 1.01f;
             return (Velocity.sqrMagnitude > MaxSpeedSquared * OverVelocityPercent);
+        }
+        void SetUpdatedComponent(USceneComponent NewUpdatedComponent)
+        {
+
         }
     }
 }

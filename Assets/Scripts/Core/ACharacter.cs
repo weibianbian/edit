@@ -22,7 +22,7 @@ namespace RailShootGame
         public ACharacter()
         {
             CharacterMovement = CreateDefaultSubobject<CharacterMovementComponent>();
-
+            //CharacterMovement.UpdatedComponent=
         }
         public override void PostInitializeComponents()
         {
