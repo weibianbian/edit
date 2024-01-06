@@ -32,7 +32,7 @@ public class FFindFloorResult
     public float LineDist = 0;
     public float FloorDist = 0;
 
-    public void SetSetFromSweep(FHitResult InHit, float InSweepFloorDist, bool bIsWalkableFloor)
+    public void SetFromSweep(FHitResult InHit, float InSweepFloorDist, bool bIsWalkableFloor)
     {
         bBlockingHit = InHit.bBlockingHit;
         bWalkableFloor = bIsWalkableFloor;
@@ -115,7 +115,8 @@ public class UFindFloor : MonoBehaviour
         //FindFloorNew(CurrentFloor, null);
 
         //FStepDownResult StepDownResult = new FStepDownResult();
-        //MoveAlongFloor(StepDownResult);
+        PhysWalking(Time.deltaTime);
+
         //FindFloorNew(CurrentFloor, null);
     }
     private Vector3 ComputeGroundMovementDelta(Vector3 Delta, FHitResult RampHit)
@@ -157,9 +158,9 @@ public class UFindFloor : MonoBehaviour
             OutStepDownResult = StepDownResult;
         }
     }
-    private void MoveAlongFloor(FStepDownResult OutStepDownResult)
+    private void MoveAlongFloor(Vector3 InVelocity, float DeltaSeconds, FStepDownResult OutStepDownResult)
     {
-        Vector3 Delta = new Vector3(Velocity.x, 0, Velocity.z) * Time.deltaTime;
+        Vector3 Delta = new Vector3(InVelocity.x, 0, InVelocity.z) * DeltaSeconds;
         FHitResult Hit = new FHitResult();
         Vector3 RampVector = ComputeGroundMovementDelta(Delta, CurrentFloor.HitResult);
         SafeMoveUpdatedComponent(RampVector, Hit);
@@ -214,10 +215,23 @@ public class UFindFloor : MonoBehaviour
         if (OldFloorDist < MIN_FLOOR_DIST || OldFloorDist > MAX_FLOOR_DIST)
         {
             FHitResult AdjustHit = new FHitResult();
-            float InitialZ = player.transform.position.y;
+            float InitialY = player.transform.position.y;
             float AvgFloorDist = (MIN_FLOOR_DIST + MAX_FLOOR_DIST) * 0.5f;
             float MoveDist = AvgFloorDist - OldFloorDist;
             SafeMoveUpdatedComponent(new Vector3(0, MoveDist, 0), AdjustHit);
+            if (!AdjustHit.bBlockingHit)
+            {
+                CurrentFloor.FloorDist += MoveDist;
+            }
+            else if (MoveDist > 0)
+            {
+                CurrentFloor.FloorDist += player.transform.position.y - InitialY;
+            }
+            else
+            {
+                CurrentFloor.FloorDist = player.transform.position.y - AdjustHit.HitResult.point.y;
+                CurrentFloor.SetFromSweep(AdjustHit, CurrentFloor.FloorDist, true);
+            }
         }
     }
     private void SafeMoveUpdatedComponent(Vector3 Delta, FHitResult OutHit)
@@ -277,7 +291,7 @@ public class UFindFloor : MonoBehaviour
                 float MaxPenetrationAdjust = Mathf.Max(MAX_FLOOR_DIST, CapsuleShape.CapsuleRadius);
                 float SweepResult = Mathf.Max(-MaxPenetrationAdjust, Hit.Time * TraceDist - ShrinkHeight);
 
-                OutFloorResult.SetSetFromSweep(Hit, SweepResult, false);
+                OutFloorResult.SetFromSweep(Hit, SweepResult, false);
                 if (Hit.bBlockingHit)
                 {
                     if (SweepResult <= SweepDistance)
@@ -309,6 +323,25 @@ public class UFindFloor : MonoBehaviour
         {
             OutHit.bBlockingHit = false;
             return false;
+        }
+    }
+    private void PhysWalking(float timeTick)
+    {
+        Vector3 MoveVelocity = Velocity;
+        FStepDownResult StepDownResult = new FStepDownResult();
+        MoveAlongFloor(MoveVelocity, timeTick, StepDownResult);
+
+        if (StepDownResult.bComputedFloor)
+        {
+            CurrentFloor = StepDownResult.FloorResult;
+        }
+        else
+        {
+            FindFloor(player.transform.position, CurrentFloor, null);
+        }
+        if (CurrentFloor.IsWalkableFloor())
+        {
+            AdjustFloorHeight();
         }
     }
     private void PhysFalling(float deltaTime)
