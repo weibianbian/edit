@@ -7,6 +7,9 @@ using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Animations;
+using UnityEngine.UI;
+using UnityEngine.Windows;
+using static UnityEditor.AddressableAssets.Build.BuildPipelineTasks.GenerateLocationListsTask;
 
 public class FHitResult
 {
@@ -15,10 +18,50 @@ public class FHitResult
     public bool bBlockingHit = false;
     public float Time;
 }
+public class FStepDownResult
+{
+    public bool bComputedFloor = false;
+    public FFindFloorResult FloorResult = new FFindFloorResult();
+}
 public class FFindFloorResult
 {
     public FHitResult HitResult = new FHitResult();
+    public bool bBlockingHit = false;
+    public bool bWalkableFloor = false;
+    public bool bLineTrace = false;
+    public float LineDist = 0;
+    public float FloorDist = 0;
 
+    public void SetSetFromSweep(FHitResult InHit, float InSweepFloorDist, bool bIsWalkableFloor)
+    {
+        bBlockingHit = InHit.bBlockingHit;
+        bWalkableFloor = bIsWalkableFloor;
+        bLineTrace = false;
+        FloorDist = InSweepFloorDist;
+        LineDist = 0.0f;
+        HitResult = InHit;
+    }
+    public bool IsWalkableFloor()
+    {
+        return (bBlockingHit) && bWalkableFloor;
+    }
+}
+public class FCapsuleShape
+{
+    public Vector3 Point1;
+    public Vector3 Point2;
+    public float CapsuleHalfHeight;
+    public float CapsuleRadius;
+
+    public void UpdateShape(Vector3 center)
+    {
+        Point1 = new Vector3(center.x, center.y - (GetScaledCapsuleHalfHeight_WithoutHemisphere()), center.z);
+        Point2 = new Vector3(center.x, center.y - (GetScaledCapsuleHalfHeight_WithoutHemisphere()), center.z);
+    }
+    float GetScaledCapsuleHalfHeight_WithoutHemisphere()
+    {
+        return CapsuleHalfHeight - CapsuleRadius;
+    }
 }
 
 public class UFindFloor : MonoBehaviour
@@ -34,18 +77,23 @@ public class UFindFloor : MonoBehaviour
 
     public bool IsHit = false;
     public float MaxStepHeight = 2;
-    public float MAX_FLOOR_DIST = 2.4f;
-    public bool isStop = false;
+    public float MAX_FLOOR_DIST = 0.24f;
+    public float MIN_FLOOR_DIST = 0.19f;
+    float UE_KINDA_SMALL_NUMBER = (1.0e-4f);
+    public FCapsuleShape CapsuleShape = new FCapsuleShape();
     void Start()
     {
+        CapsuleShape.CapsuleHalfHeight = 1;
+        CapsuleShape.CapsuleRadius = 0.5f;
         CurrentFloor = new FFindFloorResult();
-        FindFloorNew(CurrentFloor);
-    }
+        //FindFloorNew(CurrentFloor, null);
 
+        FindFloor(player.transform.position, CurrentFloor, null);
+        AdjustFloorHeight();
+    }
     // Update is called once per frame
     void Update()
     {
-        if (isStop) { return; }
         //Ray ray = new Ray(player.transform.position, Vector3.down);
         //if (Physics.Raycast(ray, out hitInfo, 100))
         //{
@@ -64,9 +112,11 @@ public class UFindFloor : MonoBehaviour
         //    float FloorDotDelta = Vector3.Dot(FloorNormal, Velocity);
         //    Velocity = (Velocity - (FloorNormal * FloorDotDelta));
         //}
-        FindFloorNew(CurrentFloor);
-        MoveAlongFloor();
-        FindFloorNew(CurrentFloor);
+        //FindFloorNew(CurrentFloor, null);
+
+        //FStepDownResult StepDownResult = new FStepDownResult();
+        //MoveAlongFloor(StepDownResult);
+        //FindFloorNew(CurrentFloor, null);
     }
     private Vector3 ComputeGroundMovementDelta(Vector3 Delta, FHitResult RampHit)
     {
@@ -75,11 +125,11 @@ public class UFindFloor : MonoBehaviour
         Vector3 RampMovement = (Delta - (FloorNormal * FloorDotDelta));
         return RampMovement;
     }
-    private void StepUp(Vector3 Delta)
+    private void StepUp(Vector3 Delta, FHitResult InHit, FStepDownResult OutStepDownResult)
     {
         float StepTravelUpHeight = MaxStepHeight;
         float StepTravelDownHeight = StepTravelUpHeight;
-
+        Vector3 OldLocation = player.transform.position;
         FHitResult SweepUpHit = new FHitResult();
         //step up
         MoveUpdateComponent(new Vector3(0, StepTravelUpHeight, 0), SweepUpHit);
@@ -88,12 +138,26 @@ public class UFindFloor : MonoBehaviour
         MoveUpdateComponent(Delta, Hit);
         //step down
         MoveUpdateComponent(new Vector3(0, -StepTravelDownHeight, 0), Hit);
+        FStepDownResult StepDownResult = new FStepDownResult();
         if (Hit.bBlockingHit)
         {
+            if (OutStepDownResult != null)
+            {
+                FindFloor(player.transform.position, StepDownResult.FloorResult, Hit);
+                if (Hit.HitResult.point.y > OldLocation.y)
+                {
+
+                }
+                StepDownResult.bComputedFloor = true;
+            }
 
         }
+        if (OutStepDownResult != null)
+        {
+            OutStepDownResult = StepDownResult;
+        }
     }
-    private void MoveAlongFloor()
+    private void MoveAlongFloor(FStepDownResult OutStepDownResult)
     {
         Vector3 Delta = new Vector3(Velocity.x, 0, Velocity.z) * Time.deltaTime;
         FHitResult Hit = new FHitResult();
@@ -111,13 +175,12 @@ public class UFindFloor : MonoBehaviour
             }
             else
             {
-                
+
                 Debug.LogError("装上了法线==0的");
             }
             if (Hit.bBlockingHit)
             {
-                StepUp(Delta * (1.0f - PercentTimeApplied));
-                Debug.LogError("完成了一次上下");
+                StepUp(Delta * (1.0f - PercentTimeApplied), Hit, OutStepDownResult);
                 //isStop = true;
             }
         }
@@ -126,8 +189,8 @@ public class UFindFloor : MonoBehaviour
     private void MoveUpdateComponent(Vector3 Delta, FHitResult OutHit)
     {
         Vector3 playerPos = player.transform.position;
-        Vector3 pos1 = new Vector3(playerPos.x, playerPos.y - 0.5f, playerPos.z);
-        Vector3 pos2 = new Vector3(playerPos.x, playerPos.y + 0.5f, playerPos.z);
+        Vector3 pos1 = new Vector3(playerPos.x, playerPos.y - CapsuleShape.CapsuleRadius, playerPos.z);
+        Vector3 pos2 = new Vector3(playerPos.x, playerPos.y + CapsuleShape.CapsuleRadius, playerPos.z);
 
         if (Physics.CapsuleCast(pos1, pos2, 0.5f, Delta, out OutHit.HitResult, Delta.magnitude))
         {
@@ -141,39 +204,111 @@ public class UFindFloor : MonoBehaviour
             OutHit.bBlockingHit = false;
         }
     }
+    private void AdjustFloorHeight()
+    {
+        if (!CurrentFloor.IsWalkableFloor())
+        {
+            return;
+        }
+        float OldFloorDist = CurrentFloor.FloorDist;
+        if (OldFloorDist < MIN_FLOOR_DIST || OldFloorDist > MAX_FLOOR_DIST)
+        {
+            FHitResult AdjustHit = new FHitResult();
+            float InitialZ = player.transform.position.y;
+            float AvgFloorDist = (MIN_FLOOR_DIST + MAX_FLOOR_DIST) * 0.5f;
+            float MoveDist = AvgFloorDist - OldFloorDist;
+            SafeMoveUpdatedComponent(new Vector3(0, MoveDist, 0), AdjustHit);
+        }
+    }
     private void SafeMoveUpdatedComponent(Vector3 Delta, FHitResult OutHit)
     {
-        Vector3 playerPos = player.transform.position;
-        Vector3 pos1 = new Vector3(playerPos.x, playerPos.y - 0.5f, playerPos.z);
-        Vector3 pos2 = new Vector3(playerPos.x, playerPos.y + 0.5f, playerPos.z);
-        if (Physics.CapsuleCast(pos1, pos2, 0.5f, Delta, out OutHit.HitResult, Delta.magnitude))
+        CapsuleShape.UpdateShape(player.transform.position);
+        if (Physics.CapsuleCast(CapsuleShape.Point1, CapsuleShape.Point2, CapsuleShape.CapsuleRadius, Delta, out OutHit.HitResult, Delta.magnitude))
         {
-            player.transform.position = playerPos + Delta.normalized * OutHit.HitResult.distance;
+            player.transform.position = player.transform.position + Delta.normalized * OutHit.HitResult.distance;
             OutHit.bBlockingHit = true;
             OutHit.Time = OutHit.HitResult.distance / Delta.magnitude;
         }
         else
         {
-            player.transform.position = playerPos + Delta;
+            player.transform.position = player.transform.position + Delta;
             OutHit.bBlockingHit = false;
         }
     }
-    private void FindFloorNew(FFindFloorResult OutFloorResult)
+    private void FindFloor(Vector3 CapsuleLocation, FFindFloorResult OutFloorResult, FHitResult DownwardSweepResult)
     {
-        Vector3 playerPos = player.transform.position;
-        Vector3 pos1 = new Vector3(playerPos.x, playerPos.y - 0.5f, playerPos.z);
-        Vector3 pos2 = new Vector3(playerPos.x, playerPos.y + 0.5f, playerPos.z);
-        if (Physics.CapsuleCast(pos1, pos2, 0.5f, -Vector3.up, out OutFloorResult.HitResult.HitResult, MaxStepHeight))
+        float HeightCheckAdjust = MAX_FLOOR_DIST + UE_KINDA_SMALL_NUMBER;
+        float FloorSweepTraceDist = Mathf.Max(MAX_FLOOR_DIST, MaxStepHeight + HeightCheckAdjust);
+        float FloorLineTraceDist = FloorSweepTraceDist;
+        bool bNeedToValidateFloor = true;
+
+        if (FloorLineTraceDist > 0.0f || FloorSweepTraceDist > 0.0f)
         {
-            OutFloorResult.HitResult.bBlockingHit = true;
-            OutFloorResult.HitResult.Time = 1;
-            OutFloorResult.HitResult.ImpactNormal = OutFloorResult.HitResult.HitResult.normal;
-            player.transform.position = playerPos - Vector3.up * (OutFloorResult.HitResult.HitResult.distance - 0.1f);
+            ComputeFloorDist(CapsuleLocation, FloorLineTraceDist, FloorSweepTraceDist, OutFloorResult, CapsuleShape.CapsuleRadius, DownwardSweepResult);
+        }
+        //CapsuleShape.UpdateShape(CapsuleLocation);
+        //if (Physics.CapsuleCast(CapsuleShape.Point1, CapsuleShape.Point2, CapsuleShape.CapsuleRadius, -Vector3.up, out OutFloorResult.HitResult.HitResult, MaxStepHeight))
+        //{
+        //    OutFloorResult.HitResult.bBlockingHit = true;
+        //    OutFloorResult.HitResult.Time = 1;
+        //    OutFloorResult.HitResult.ImpactNormal = OutFloorResult.HitResult.HitResult.normal;
+        //    player.transform.position = player.transform.position - Vector3.up * (OutFloorResult.HitResult.HitResult.distance - 0.1f);
+        //}
+        //else
+        //{
+        //    OutFloorResult.HitResult.bBlockingHit = false;
+        //    OutFloorResult.HitResult.Time = 0;
+        //}
+    }
+    private void ComputeFloorDist(Vector3 CapsuleLocation, float LineDistance, float SweepDistance, FFindFloorResult OutFloorResult, float SweepRadius, FHitResult DownwardSweepResult)
+    {
+        if (SweepDistance > 0 & SweepRadius > 0)
+        {
+            float ShrinkScale = 0.9f;
+            float ShrinkScaleOverlap = 0.1f;
+            float ShrinkHeight = (CapsuleShape.CapsuleHalfHeight - CapsuleShape.CapsuleRadius) * (1.0f - ShrinkScale);
+            float TraceDist = SweepDistance + ShrinkHeight;
+            FHitResult Hit = new FHitResult();
+
+            bool bBlockingHit = FloorSweepTest(Hit, CapsuleLocation, CapsuleLocation + new Vector3(0, -TraceDist, 0), CapsuleShape);
+
+            if (bBlockingHit)
+            {
+                float MaxPenetrationAdjust = Mathf.Max(MAX_FLOOR_DIST, CapsuleShape.CapsuleRadius);
+                float SweepResult = Mathf.Max(-MaxPenetrationAdjust, Hit.Time * TraceDist - ShrinkHeight);
+
+                OutFloorResult.SetSetFromSweep(Hit, SweepResult, false);
+                if (Hit.bBlockingHit)
+                {
+                    if (SweepResult <= SweepDistance)
+                    {
+                        OutFloorResult.bWalkableFloor = true;
+                        return;
+                    }
+                }
+            }
+
+        }
+        if (!OutFloorResult.bBlockingHit)
+        {
+            OutFloorResult.FloorDist = SweepDistance;
+            return;
+        }
+    }
+    private bool FloorSweepTest(FHitResult OutHit, Vector3 Start, Vector3 End, FCapsuleShape CollisionShape)
+    {
+        CollisionShape.UpdateShape(Start);
+        if (Physics.CapsuleCast(CollisionShape.Point1, CollisionShape.Point2, CollisionShape.CapsuleRadius, End - Start, out OutHit.HitResult, (End - Start).magnitude))
+        {
+            OutHit.bBlockingHit = true;
+            OutHit.ImpactNormal = OutHit.HitResult.normal;
+            OutHit.Time = OutHit.HitResult.distance / (End - Start).magnitude;
+            return true;
         }
         else
         {
-            OutFloorResult.HitResult.bBlockingHit = false;
-            OutFloorResult.HitResult.Time = 0;
+            OutHit.bBlockingHit = false;
+            return false;
         }
     }
     private void PhysFalling(float deltaTime)
@@ -182,18 +317,6 @@ public class UFindFloor : MonoBehaviour
         //SafeMoveUpdatedComponent
         Vector3 Adjusted = Velocity * deltaTime;
         player.transform.position += Adjusted;
-    }
-
-    private void FindFloor()
-    {
-        float HeightCheckAdjust = -MAX_FLOOR_DIST;
-        float FloorSweepTraceDist = Mathf.Max(MAX_FLOOR_DIST, MaxStepHeight + HeightCheckAdjust);
-        float FloorLineTraceDist = FloorSweepTraceDist;
-        if (FloorLineTraceDist > 0.0f || FloorSweepTraceDist > 0.0f)
-        {
-            //ComputeFloorDist;
-
-        }
     }
 
     private void OnDrawGizmos()
