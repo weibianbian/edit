@@ -260,19 +260,6 @@ public class UFindFloor : MonoBehaviour
         {
             ComputeFloorDist(CapsuleLocation, FloorLineTraceDist, FloorSweepTraceDist, OutFloorResult, CapsuleShape.CapsuleRadius, DownwardSweepResult);
         }
-        //CapsuleShape.UpdateShape(CapsuleLocation);
-        //if (Physics.CapsuleCast(CapsuleShape.Point1, CapsuleShape.Point2, CapsuleShape.CapsuleRadius, -Vector3.up, out OutFloorResult.HitResult.HitResult, MaxStepHeight))
-        //{
-        //    OutFloorResult.HitResult.bBlockingHit = true;
-        //    OutFloorResult.HitResult.Time = 1;
-        //    OutFloorResult.HitResult.ImpactNormal = OutFloorResult.HitResult.HitResult.normal;
-        //    player.transform.position = player.transform.position - Vector3.up * (OutFloorResult.HitResult.HitResult.distance - 0.1f);
-        //}
-        //else
-        //{
-        //    OutFloorResult.HitResult.bBlockingHit = false;
-        //    OutFloorResult.HitResult.Time = 0;
-        //}
     }
     private void ComputeFloorDist(Vector3 CapsuleLocation, float LineDistance, float SweepDistance, FFindFloorResult OutFloorResult, float SweepRadius, FHitResult DownwardSweepResult)
     {
@@ -322,6 +309,7 @@ public class UFindFloor : MonoBehaviour
         else
         {
             OutHit.bBlockingHit = false;
+            OutHit.Time = 1;
             return false;
         }
     }
