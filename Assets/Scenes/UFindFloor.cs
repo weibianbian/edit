@@ -1,3 +1,4 @@
+using RailShootGame;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -17,6 +18,13 @@ public class FHitResult
     public Vector3 ImpactNormal;
     public bool bBlockingHit = false;
     public float Time;
+    public void Reset(float InTime)
+    {
+        HitResult = new RaycastHit();
+        ImpactNormal = Vector3.zero;
+        bBlockingHit = false;
+        Time = InTime;
+    }
 }
 public class FStepDownResult
 {
@@ -45,6 +53,15 @@ public class FFindFloorResult
     {
         return (bBlockingHit) && bWalkableFloor;
     }
+    public void Clear()
+    {
+        bBlockingHit = false;
+        bWalkableFloor = false;
+        bLineTrace = false;
+        FloorDist = 0.0f;
+        LineDist = 0.0f;
+        HitResult.Reset(1);
+    }
 }
 public class FCapsuleShape
 {
@@ -56,7 +73,7 @@ public class FCapsuleShape
     public void UpdateShape(Vector3 center)
     {
         Point1 = new Vector3(center.x, center.y - (GetScaledCapsuleHalfHeight_WithoutHemisphere()), center.z);
-        Point2 = new Vector3(center.x, center.y - (GetScaledCapsuleHalfHeight_WithoutHemisphere()), center.z);
+        Point2 = new Vector3(center.x, center.y + (GetScaledCapsuleHalfHeight_WithoutHemisphere()), center.z);
     }
     float GetScaledCapsuleHalfHeight_WithoutHemisphere()
     {
@@ -74,7 +91,7 @@ public class UFindFloor : MonoBehaviour
     public FHitResult HitResult;
     public FFindFloorResult CurrentFloor;
     public Vector3 Velocity;
-
+    public EMovementMode MovementMode = EMovementMode.MOVE_None;
     public bool IsHit = false;
     public float MaxStepHeight = 2;
     public float MAX_FLOOR_DIST = 0.24f;
@@ -88,8 +105,9 @@ public class UFindFloor : MonoBehaviour
         CurrentFloor = new FFindFloorResult();
         //FindFloorNew(CurrentFloor, null);
 
-        FindFloor(player.transform.position, CurrentFloor, null);
-        AdjustFloorHeight();
+        //FindFloor(player.transform.position, CurrentFloor, null);
+        //AdjustFloorHeight();
+        SetMovementMode(EMovementMode.MOVE_Walking);
     }
     // Update is called once per frame
     void Update()
@@ -115,9 +133,14 @@ public class UFindFloor : MonoBehaviour
         //FindFloorNew(CurrentFloor, null);
 
         //FStepDownResult StepDownResult = new FStepDownResult();
-        PhysWalking(Time.deltaTime);
-
+        //PhysWalking(Time.deltaTime);
+       
+        StartNewPhysics(Time.deltaTime);
         //FindFloorNew(CurrentFloor, null);
+    }
+    bool IsMovingOnGround()
+    {
+        return ((MovementMode == EMovementMode.MOVE_Walking));
     }
     private Vector3 ComputeGroundMovementDelta(Vector3 Delta, FHitResult RampHit)
     {
@@ -251,6 +274,7 @@ public class UFindFloor : MonoBehaviour
     }
     private void FindFloor(Vector3 CapsuleLocation, FFindFloorResult OutFloorResult, FHitResult DownwardSweepResult)
     {
+        OutFloorResult.Clear();
         float HeightCheckAdjust = MAX_FLOOR_DIST + UE_KINDA_SMALL_NUMBER;
         float FloorSweepTraceDist = Mathf.Max(MAX_FLOOR_DIST, MaxStepHeight + HeightCheckAdjust);
         float FloorLineTraceDist = FloorSweepTraceDist;
@@ -295,6 +319,7 @@ public class UFindFloor : MonoBehaviour
             OutFloorResult.FloorDist = SweepDistance;
             return;
         }
+        OutFloorResult.bWalkableFloor = false;
     }
     private bool FloorSweepTest(FHitResult OutHit, Vector3 Start, Vector3 End, FCapsuleShape CollisionShape)
     {
@@ -316,6 +341,17 @@ public class UFindFloor : MonoBehaviour
     private void PhysWalking(float timeTick)
     {
         Vector3 MoveVelocity = Velocity;
+        Vector3 Delta = timeTick * MoveVelocity;
+        bool bZeroDelta = false;
+        bool bCheckedFall = false;
+        float remainingTime = timeTick;
+        Vector3 OldLocation = player.transform.position;
+        FFindFloorResult OldFloor = CurrentFloor;
+        if (Delta.x <= float.Epsilon && Delta.y <= float.Epsilon && Delta.z <= float.Epsilon)
+        {
+            bZeroDelta = true;
+        }
+
         FStepDownResult StepDownResult = new FStepDownResult();
         MoveAlongFloor(MoveVelocity, timeTick, StepDownResult);
 
@@ -331,6 +367,38 @@ public class UFindFloor : MonoBehaviour
         {
             AdjustFloorHeight();
         }
+        if (!CurrentFloor.IsWalkableFloor())
+        {
+            bool bMustJump = bZeroDelta;
+            if ((bMustJump || !bCheckedFall) && CheckFall(OldFloor, CurrentFloor.HitResult, Delta, OldLocation, remainingTime, timeTick, 0, bMustJump))
+            {
+                return;
+            }
+            bCheckedFall = true;
+        }
+    }
+    private bool CheckFall(FFindFloorResult OldFloor, FHitResult Hit, Vector3 Delta, Vector3 OldLocation, float remainingTime, float timeTick, int Iterations, bool bMustJump)
+    {
+        if (bMustJump)
+        {
+            //HandleWalkingOffLedge(OldFloor.HitResult.ImpactNormal, OldFloor.HitResult.Normal, OldLocation, timeTick);
+            if (IsMovingOnGround())
+            {
+                // If still walking, then fall. If not, assume the user set a different mode they want to keep.
+                StartFalling(Iterations, remainingTime, timeTick, Delta, OldLocation);
+            }
+            return true;
+        }
+        return false;
+    }
+    void StartFalling(int Iterations, float remainingTime, float timeTick, Vector3 Delta, Vector3 subLoc)
+    {
+        // start falling 
+        if (IsMovingOnGround())
+        {
+            SetMovementMode(EMovementMode.MOVE_Falling); //default behavior if script didn't change physics
+        }
+        StartNewPhysics(remainingTime);
     }
     private void PhysFalling(float deltaTime)
     {
@@ -339,7 +407,87 @@ public class UFindFloor : MonoBehaviour
         Vector3 Adjusted = Velocity * deltaTime;
         player.transform.position += Adjusted;
     }
+    private void SetMovementMode(EMovementMode NewMovementMode)
+    {
+        if (MovementMode == NewMovementMode)
+        {
+            return;
+        }
+        Debug.Log($"运动模式从{MovementMode}迁移到{NewMovementMode}");
+        EMovementMode PrevMovementMode = MovementMode;
+        MovementMode = NewMovementMode;
+        OnMovementModeChanged(PrevMovementMode);
+    }
+    private void OnMovementModeChanged(EMovementMode PreviousMovementMode)
+    {
+        if (MovementMode == EMovementMode.MOVE_Walking)
+        {
+            // Walking uses only XY velocity, and must be on a walkable floor, with a Base.
+            Velocity.y = 0.0f;
 
+            // make sure we update our new floor/base on initial entry of the walking physics
+            FindFloor(player.transform.position, CurrentFloor, null);
+            AdjustFloorHeight();
+            //SetBaseFromFloor(CurrentFloor);
+        }
+        else
+        {
+            CurrentFloor.Clear();
+
+            if (MovementMode == EMovementMode.MOVE_Falling)
+            {
+                //DecayingFormerBaseVelocity = GetImpartedMovementBaseVelocity();
+                //Velocity += DecayingFormerBaseVelocity;
+                //if (bMovementInProgress && CurrentRootMotion.HasAdditiveVelocity())
+                //{
+                //    // If we leave a base during movement and we have additive root motion, we need to add the imparted velocity so that it retains it next tick
+                //    CurrentRootMotion.LastPreAdditiveVelocity += DecayingFormerBaseVelocity;
+                //}
+                //if (!CharacterMovementCVars::bAddFormerBaseVelocityToRootMotionOverrideWhenFalling || FormerBaseVelocityDecayHalfLife == 0.f)
+                //{
+                //    DecayingFormerBaseVelocity = FVector::ZeroVector;
+                //}
+                //CharacterOwner->Falling();
+            }
+            if (MovementMode == EMovementMode.MOVE_None)
+            {
+                // Kill velocity and clear queued up events
+                //StopMovementKeepPathing();
+                //CharacterOwner->ResetJumpState();
+                //ClearAccumulatedForces();
+            }
+        }
+        if (MovementMode == EMovementMode.MOVE_Falling && PreviousMovementMode != EMovementMode.MOVE_Falling)
+        {
+
+        }
+    }
+    private void StartNewPhysics(float deltaTime)
+    {
+        switch (MovementMode)
+        {
+            case EMovementMode.MOVE_None:
+                break;
+            case EMovementMode.MOVE_Walking:
+                PhysWalking(deltaTime);
+                break;
+            case EMovementMode.MOVE_NavWalking:
+                break;
+            case EMovementMode.MOVE_Falling:
+                PhysFalling(deltaTime);
+                break;
+            case EMovementMode.MOVE_Swimming:
+                break;
+            case EMovementMode.MOVE_Flying:
+                break;
+            case EMovementMode.MOVE_Custom:
+                break;
+            case EMovementMode.MOVE_MAX:
+                break;
+            default:
+                break;
+        }
+    }
     private void OnDrawGizmos()
     {
         if (IsHit)
