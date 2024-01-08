@@ -134,7 +134,7 @@ public class UFindFloor : MonoBehaviour
 
         //FStepDownResult StepDownResult = new FStepDownResult();
         //PhysWalking(Time.deltaTime);
-       
+
         StartNewPhysics(Time.deltaTime);
         //FindFloorNew(CurrentFloor, null);
     }
@@ -145,9 +145,33 @@ public class UFindFloor : MonoBehaviour
     private Vector3 ComputeGroundMovementDelta(Vector3 Delta, FHitResult RampHit)
     {
         Vector3 FloorNormal = RampHit.ImpactNormal;
-        float FloorDotDelta = Vector3.Dot(FloorNormal, Delta);
-        Vector3 RampMovement = (Delta - (FloorNormal * FloorDotDelta));
-        return RampMovement;
+        if (FloorNormal.y < (1.0f - UE_KINDA_SMALL_NUMBER) && FloorNormal.y > UE_KINDA_SMALL_NUMBER && IsWalkable(RampHit))
+        {
+            float FloorDotDelta = Vector3.Dot(FloorNormal, Delta);
+            Vector3 RampMovement = (Delta - (FloorNormal * FloorDotDelta));
+            return RampMovement;
+        }
+        return Delta;
+    }
+    private bool IsWalkable(FHitResult Hit)
+    {
+        if (!Hit.bBlockingHit)
+        {
+            return false;
+        }
+        if (Hit.ImpactNormal.y < UE_KINDA_SMALL_NUMBER)
+        {
+            return false;
+        }
+
+        //float TestWalkableZ = WalkableFloorZ;
+
+        //// Can't walk on this surface if it is too steep.
+        //if (Hit.ImpactNormal.y < TestWalkableZ)
+        //{
+        //    return false;
+        //}
+        return true;
     }
     private void StepUp(Vector3 Delta, FHitResult InHit, FStepDownResult OutStepDownResult)
     {
@@ -200,7 +224,7 @@ public class UFindFloor : MonoBehaviour
             else
             {
 
-                Debug.LogError("装上了法线==0的");
+                Debug.LogError("撞上了法线==0的");
             }
             if (Hit.bBlockingHit)
             {
@@ -379,7 +403,7 @@ public class UFindFloor : MonoBehaviour
     }
     private bool CheckFall(FFindFloorResult OldFloor, FHitResult Hit, Vector3 Delta, Vector3 OldLocation, float remainingTime, float timeTick, int Iterations, bool bMustJump)
     {
-        if (bMustJump)
+        //if (bMustJump)
         {
             //HandleWalkingOffLedge(OldFloor.HitResult.ImpactNormal, OldFloor.HitResult.Normal, OldLocation, timeTick);
             if (IsMovingOnGround())
@@ -490,13 +514,13 @@ public class UFindFloor : MonoBehaviour
     }
     private void OnDrawGizmos()
     {
-        if (IsHit)
+        if (CurrentFloor != null)
         {
-            //Vector3 FloorNormal = hitInfo.normal;
-            //Vector3 from = hitInfo.point;
-            //Vector3 to = FloorNormal * 10 + from;
-            //Gizmos.color = Color.blue;
-            //Gizmos.DrawLine(from, to);
+            Vector3 FloorNormal = CurrentFloor.HitResult.ImpactNormal;
+            Vector3 from = CurrentFloor.HitResult.HitResult.point;
+            Vector3 to = FloorNormal * 100 + from;
+            Gizmos.color = Color.blue;
+            Gizmos.DrawLine(from, to);
 
             //Vector3 oldVelocity = Vector3.forward * 10;
             //from = player.transform.position;
