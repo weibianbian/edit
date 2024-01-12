@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Drawing.Imaging;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Text.RegularExpressions;
 using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
@@ -15,9 +16,26 @@ using static UnityEditor.AddressableAssets.Build.BuildPipelineTasks.GenerateLoca
 public class FHitResult
 {
     public RaycastHit HitResult;
+    public Vector3 ImpactPoint;
     public Vector3 ImpactNormal;
+    public Vector3 Location;
     public bool bBlockingHit = false;
     public float Time;
+    public FHitResult(float InTime)
+    {
+        Init();
+        Time = InTime;
+    }
+    public FHitResult()
+    {
+        Init();
+    }
+    public void Init()
+    {
+        Time = 1.0f;
+        HitResult = new RaycastHit();
+        bBlockingHit = false;
+    }
     public void Reset(float InTime)
     {
         HitResult = new RaycastHit();
@@ -52,6 +70,10 @@ public class FFindFloorResult
     public bool IsWalkableFloor()
     {
         return (bBlockingHit) && bWalkableFloor;
+    }
+    public float GetDistanceToFloor()
+    {
+        return FloorDist;
     }
     public void Clear()
     {
@@ -97,6 +119,7 @@ public class UFindFloor : MonoBehaviour
     public float MAX_FLOOR_DIST = 0.24f;
     public float MIN_FLOOR_DIST = 0.19f;
     float UE_KINDA_SMALL_NUMBER = (1.0e-4f);
+    float SWEEP_EDGE_REJECT_DISTANCE = 0.15f;
     public FCapsuleShape CapsuleShape = new FCapsuleShape();
     void Start()
     {
@@ -173,37 +196,79 @@ public class UFindFloor : MonoBehaviour
         //}
         return true;
     }
-    private void StepUp(Vector3 Delta, FHitResult InHit, FStepDownResult OutStepDownResult)
+    private bool StepUp(Vector3 Delta, FHitResult InHit, FStepDownResult OutStepDownResult)
     {
+        if (MaxStepHeight <= 0)
+        {
+            return false;
+        }
+        float PawnHalfHeight = CapsuleShape.CapsuleHalfHeight;
+        float PawnRadius = CapsuleShape.CapsuleRadius;
+        Vector3 OldLocation = player.transform.position;
+
+
+        float InitialImpactZ = InHit.ImpactPoint.y;
+
+        if (InitialImpactZ > OldLocation.y + (PawnHalfHeight - PawnRadius))
+        {
+            return false;
+        }
         float StepTravelUpHeight = MaxStepHeight;
         float StepTravelDownHeight = StepTravelUpHeight;
-        Vector3 OldLocation = player.transform.position;
-        FHitResult SweepUpHit = new FHitResult();
+        float PawnInitialFloorBaseZ = OldLocation.y - CapsuleShape.CapsuleHalfHeight;
+        float PawnFloorPointZ = PawnInitialFloorBaseZ;
+        if (IsMovingOnGround() && CurrentFloor.IsWalkableFloor())
+        {
+            float FloorDist = MathF.Max(0.0f, CurrentFloor.GetDistanceToFloor());
+            PawnInitialFloorBaseZ -= FloorDist;
+            StepTravelUpHeight = MathF.Max(StepTravelUpHeight - FloorDist, 0.0f);
+            StepTravelDownHeight = (MaxStepHeight + MAX_FLOOR_DIST * 2.0f);
+            bool bHitVerticalFace = !IsWithinEdgeTolerance(InHit.Location, InHit.ImpactPoint, CapsuleShape.CapsuleRadius);
+            if (!CurrentFloor.bLineTrace && !bHitVerticalFace)
+            {
+                PawnFloorPointZ = CurrentFloor.HitResult.ImpactPoint.y;
+            }
+            else
+            {
+                PawnFloorPointZ -= CurrentFloor.FloorDist;
+            }
+        }
+
+        if (InitialImpactZ <= PawnInitialFloorBaseZ)
+        {
+            return false;
+        }
         //step up
+        FHitResult SweepUpHit = new FHitResult(1);
         MoveUpdateComponent(new Vector3(0, StepTravelUpHeight, 0), SweepUpHit);
-        FHitResult Hit = new FHitResult();
+
         //step forward
+        FHitResult Hit = new FHitResult(1);
         MoveUpdateComponent(Delta, Hit);
+
         //step down
         MoveUpdateComponent(new Vector3(0, -StepTravelDownHeight, 0), Hit);
-        FStepDownResult StepDownResult = new FStepDownResult();
         if (Hit.bBlockingHit)
         {
+            float DeltaZ = Hit.ImpactPoint.y - PawnFloorPointZ;
+
+            if (!IsWithinEdgeTolerance(Hit.Location, Hit.ImpactPoint, PawnRadius))
+            {
+                //UE_LOG(LogCharacterMovement, VeryVerbose, TEXT("- Reject StepUp (outside edge tolerance)"));
+                return false;
+            }
+
             if (OutStepDownResult != null)
             {
-                FindFloor(player.transform.position, StepDownResult.FloorResult, Hit);
-                if (Hit.HitResult.point.y > OldLocation.y)
+                FindFloor(player.transform.position, OutStepDownResult.FloorResult, Hit);
+                if (Hit.Location.y > OldLocation.y)
                 {
 
                 }
-                StepDownResult.bComputedFloor = true;
+                OutStepDownResult.bComputedFloor = true;
             }
-
         }
-        if (OutStepDownResult != null)
-        {
-            OutStepDownResult = StepDownResult;
-        }
+        return true;
     }
     private void MoveAlongFloor(Vector3 InVelocity, float DeltaSeconds, FStepDownResult OutStepDownResult)
     {
@@ -228,7 +293,14 @@ public class UFindFloor : MonoBehaviour
             }
             if (Hit.bBlockingHit)
             {
-                StepUp(Delta * (1.0f - PercentTimeApplied), Hit, OutStepDownResult);
+                if (!StepUp(Delta * (1.0f - PercentTimeApplied), Hit, OutStepDownResult))
+                {
+
+                }
+                else
+                {
+
+                }
                 //isStop = true;
             }
         }
@@ -244,6 +316,9 @@ public class UFindFloor : MonoBehaviour
         {
             player.transform.position = playerPos + Delta.normalized * OutHit.HitResult.distance;
             OutHit.bBlockingHit = true;
+            OutHit.ImpactNormal = OutHit.HitResult.normal;
+            OutHit.ImpactPoint = OutHit.HitResult.point;
+            OutHit.Location = player.transform.position;
             OutHit.Time = OutHit.HitResult.distance / Delta.magnitude;
         }
         else
@@ -288,6 +363,10 @@ public class UFindFloor : MonoBehaviour
         {
             player.transform.position = player.transform.position + Delta.normalized * OutHit.HitResult.distance;
             OutHit.bBlockingHit = true;
+            OutHit.ImpactNormal = OutHit.HitResult.normal;
+            OutHit.ImpactPoint = OutHit.HitResult.point;
+            OutHit.Location = player.transform.position;
+
             OutHit.Time = OutHit.HitResult.distance / Delta.magnitude;
         }
         else
@@ -308,6 +387,10 @@ public class UFindFloor : MonoBehaviour
         {
             ComputeFloorDist(CapsuleLocation, FloorLineTraceDist, FloorSweepTraceDist, OutFloorResult, CapsuleShape.CapsuleRadius, DownwardSweepResult);
         }
+        if (bNeedToValidateFloor && OutFloorResult.bBlockingHit)
+        {
+
+        }
     }
     private void ComputeFloorDist(Vector3 CapsuleLocation, float LineDistance, float SweepDistance, FFindFloorResult OutFloorResult, float SweepRadius, FHitResult DownwardSweepResult)
     {
@@ -317,12 +400,29 @@ public class UFindFloor : MonoBehaviour
             float ShrinkScaleOverlap = 0.1f;
             float ShrinkHeight = (CapsuleShape.CapsuleHalfHeight - CapsuleShape.CapsuleRadius) * (1.0f - ShrinkScale);
             float TraceDist = SweepDistance + ShrinkHeight;
+
+            FCapsuleShape ShrinkCapsuleShape = MakeCapsule(SweepRadius, CapsuleShape.CapsuleHalfHeight - ShrinkHeight);
+
             FHitResult Hit = new FHitResult();
 
-            bool bBlockingHit = FloorSweepTest(Hit, CapsuleLocation, CapsuleLocation + new Vector3(0, -TraceDist, 0), CapsuleShape);
+            bool bBlockingHit = FloorSweepTest(Hit, CapsuleLocation, CapsuleLocation + new Vector3(0, -TraceDist, 0), ShrinkCapsuleShape);
 
             if (bBlockingHit)
             {
+                if (!IsWithinEdgeTolerance(CapsuleLocation, Hit.ImpactPoint, ShrinkCapsuleShape.CapsuleRadius))
+                {
+                    ShrinkCapsuleShape.CapsuleRadius = MathF.Max(0.0f, ShrinkCapsuleShape.CapsuleRadius - SWEEP_EDGE_REJECT_DISTANCE - UE_KINDA_SMALL_NUMBER);
+
+                    if (!(ShrinkCapsuleShape.CapsuleRadius <= UE_KINDA_SMALL_NUMBER))
+                    {
+                        ShrinkHeight = (CapsuleShape.CapsuleHalfHeight - CapsuleShape.CapsuleRadius) * (1.0f - ShrinkScaleOverlap);
+                        TraceDist = SweepDistance + ShrinkHeight;
+                        ShrinkCapsuleShape.CapsuleHalfHeight = MathF.Max(ShrinkCapsuleShape.CapsuleHalfHeight - ShrinkHeight, ShrinkCapsuleShape.CapsuleRadius);
+                        Hit.Reset(1.0f);
+
+                        bBlockingHit = FloorSweepTest(Hit, CapsuleLocation, CapsuleLocation + new Vector3(0.0f, 0.0f, -TraceDist), ShrinkCapsuleShape);
+                    }
+                }
                 float MaxPenetrationAdjust = Mathf.Max(MAX_FLOOR_DIST, CapsuleShape.CapsuleRadius);
                 float SweepResult = Mathf.Max(-MaxPenetrationAdjust, Hit.Time * TraceDist - ShrinkHeight);
 
@@ -345,6 +445,13 @@ public class UFindFloor : MonoBehaviour
         }
         OutFloorResult.bWalkableFloor = false;
     }
+    private FCapsuleShape MakeCapsule(float CapsuleRadius, float CapsuleHalfHeight)
+    {
+        FCapsuleShape CapsuleShape = new FCapsuleShape();
+        CapsuleShape.CapsuleRadius = CapsuleRadius;
+        CapsuleShape.CapsuleHalfHeight = CapsuleHalfHeight;
+        return CapsuleShape;
+    }
     private bool FloorSweepTest(FHitResult OutHit, Vector3 Start, Vector3 End, FCapsuleShape CollisionShape)
     {
         CollisionShape.UpdateShape(Start);
@@ -352,7 +459,9 @@ public class UFindFloor : MonoBehaviour
         {
             OutHit.bBlockingHit = true;
             OutHit.ImpactNormal = OutHit.HitResult.normal;
+            OutHit.ImpactPoint = OutHit.HitResult.point;
             OutHit.Time = OutHit.HitResult.distance / (End - Start).magnitude;
+            OutHit.Location = Start + (End - Start).normalized * OutHit.HitResult.distance;
             return true;
         }
         else
@@ -361,6 +470,13 @@ public class UFindFloor : MonoBehaviour
             OutHit.Time = 1;
             return false;
         }
+    }
+    private bool IsWithinEdgeTolerance(Vector3 CapsuleLocation, Vector3 TestImpactPoint, float CapsuleRadius)
+    {
+        Vector3 delta = TestImpactPoint - CapsuleLocation;
+        float DistFromCenterSq = delta.x * delta.x + delta.z * delta.z;
+        float ReducedRadiusSq = MathF.Pow(MathF.Max(SWEEP_EDGE_REJECT_DISTANCE + UE_KINDA_SMALL_NUMBER, CapsuleRadius - SWEEP_EDGE_REJECT_DISTANCE), 2);
+        return DistFromCenterSq < ReducedRadiusSq;
     }
     private void PhysWalking(float timeTick)
     {
