@@ -133,7 +133,7 @@ public class UFindFloor : MonoBehaviour
         SetMovementMode(EMovementMode.MOVE_Walking);
     }
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         //Ray ray = new Ray(player.transform.position, Vector3.down);
         //if (Physics.Raycast(ray, out hitInfo, 100))
@@ -196,7 +196,7 @@ public class UFindFloor : MonoBehaviour
         //}
         return true;
     }
-    private bool StepUp(Vector3 Delta, FHitResult InHit, FStepDownResult OutStepDownResult)
+    private bool StepUp(Vector3 GravDir, Vector3 Delta, FHitResult InHit, FStepDownResult OutStepDownResult)
     {
         if (MaxStepHeight <= 0)
         {
@@ -204,10 +204,10 @@ public class UFindFloor : MonoBehaviour
         }
         float PawnHalfHeight = CapsuleShape.CapsuleHalfHeight;
         float PawnRadius = CapsuleShape.CapsuleRadius;
+        float InitialImpactZ = InHit.ImpactPoint.y;
         Vector3 OldLocation = player.transform.position;
 
-
-        float InitialImpactZ = InHit.ImpactPoint.y;
+        Vector3 RawPos = player.transform.position;
 
         if (InitialImpactZ > OldLocation.y + (PawnHalfHeight - PawnRadius))
         {
@@ -240,21 +240,25 @@ public class UFindFloor : MonoBehaviour
         }
         //step up
         FHitResult SweepUpHit = new FHitResult(1);
-        MoveUpdateComponent(new Vector3(0, StepTravelUpHeight, 0), SweepUpHit);
+        MoveUpdateComponent(-GravDir * StepTravelUpHeight, SweepUpHit);
 
         //step forward
         FHitResult Hit = new FHitResult(1);
         MoveUpdateComponent(Delta, Hit);
 
         //step down
-        MoveUpdateComponent(new Vector3(0, -StepTravelDownHeight, 0), Hit);
+        MoveUpdateComponent(GravDir * StepTravelDownHeight, Hit);
         if (Hit.bBlockingHit)
         {
             float DeltaZ = Hit.ImpactPoint.y - PawnFloorPointZ;
-
+            if (DeltaZ > MaxStepHeight)
+            {
+                player.transform.position = RawPos;
+                return false;
+            }
             if (!IsWithinEdgeTolerance(Hit.Location, Hit.ImpactPoint, PawnRadius))
             {
-                //UE_LOG(LogCharacterMovement, VeryVerbose, TEXT("- Reject StepUp (outside edge tolerance)"));
+                player.transform.position = RawPos;
                 return false;
             }
 
@@ -293,7 +297,8 @@ public class UFindFloor : MonoBehaviour
             }
             if (Hit.bBlockingHit)
             {
-                if (!StepUp(Delta * (1.0f - PercentTimeApplied), Hit, OutStepDownResult))
+                Vector3 GravDir = new Vector3(0.0f, -1f, 0f);
+                if (!StepUp(GravDir, Delta * (1.0f - PercentTimeApplied), Hit, OutStepDownResult))
                 {
 
                 }
@@ -308,13 +313,11 @@ public class UFindFloor : MonoBehaviour
     }
     private void MoveUpdateComponent(Vector3 Delta, FHitResult OutHit)
     {
-        Vector3 playerPos = player.transform.position;
-        Vector3 pos1 = new Vector3(playerPos.x, playerPos.y - CapsuleShape.CapsuleRadius, playerPos.z);
-        Vector3 pos2 = new Vector3(playerPos.x, playerPos.y + CapsuleShape.CapsuleRadius, playerPos.z);
+        CapsuleShape.UpdateShape(player.transform.position);
 
-        if (Physics.CapsuleCast(pos1, pos2, 0.5f, Delta, out OutHit.HitResult, Delta.magnitude))
+        if (Physics.CapsuleCast(CapsuleShape.Point1, CapsuleShape.Point2, CapsuleShape.CapsuleRadius, Delta.normalized, out OutHit.HitResult, Delta.magnitude))
         {
-            player.transform.position = playerPos + Delta.normalized * OutHit.HitResult.distance;
+            player.transform.position = player.transform.position + Delta.normalized * OutHit.HitResult.distance;
             OutHit.bBlockingHit = true;
             OutHit.ImpactNormal = OutHit.HitResult.normal;
             OutHit.ImpactPoint = OutHit.HitResult.point;
@@ -323,7 +326,7 @@ public class UFindFloor : MonoBehaviour
         }
         else
         {
-            player.transform.position = playerPos + Delta;
+            player.transform.position = player.transform.position + Delta;
             OutHit.bBlockingHit = false;
         }
     }
@@ -509,12 +512,12 @@ public class UFindFloor : MonoBehaviour
         }
         if (!CurrentFloor.IsWalkableFloor())
         {
-            bool bMustJump = bZeroDelta;
-            if ((bMustJump || !bCheckedFall) && CheckFall(OldFloor, CurrentFloor.HitResult, Delta, OldLocation, remainingTime, timeTick, 0, bMustJump))
-            {
-                return;
-            }
-            bCheckedFall = true;
+            //bool bMustJump = bZeroDelta;
+            //if ((bMustJump || !bCheckedFall) && CheckFall(OldFloor, CurrentFloor.HitResult, Delta, OldLocation, remainingTime, timeTick, 0, bMustJump))
+            //{
+            //    return;
+            //}
+            //bCheckedFall = true;
         }
     }
     private bool CheckFall(FFindFloorResult OldFloor, FHitResult Hit, Vector3 Delta, Vector3 OldLocation, float remainingTime, float timeTick, int Iterations, bool bMustJump)
