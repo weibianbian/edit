@@ -1,18 +1,30 @@
 using RailShootGame;
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Drawing.Imaging;
-using System.Runtime.InteropServices.WindowsRuntime;
-using System.Text.RegularExpressions;
 using Unity.VisualScripting;
-using UnityEditor;
 using UnityEngine;
-using UnityEngine.Animations;
-using UnityEngine.UI;
-using UnityEngine.Windows;
-using static UnityEditor.AddressableAssets.Build.BuildPipelineTasks.GenerateLocationListsTask;
 
+public  class FScopedMovementUpdate
+{
+    public TestMoveComponent Owner;
+
+    public Transform InitialTransform;
+
+}
+public class TestMoveComponent
+{
+    public FScopedMovementUpdate ScopedMovementStack;
+
+    public Transform player;
+
+    public void EndScopedMovementUpdate()
+    {
+        if (ScopedMovementStack==null)
+        {
+            return;
+        }
+
+    }
+}
 public class FHitResult
 {
     public RaycastHit HitResult;
@@ -43,11 +55,26 @@ public class FHitResult
         bBlockingHit = false;
         Time = InTime;
     }
+    public void Copy(FHitResult other)
+    {
+        HitResult=other.HitResult;
+        ImpactPoint = other.ImpactPoint;
+        ImpactNormal = other.ImpactNormal;
+        Location = other.Location;
+        bBlockingHit = other.bBlockingHit;
+        Time = other.Time;
+    }
 }
 public class FStepDownResult
 {
     public bool bComputedFloor = false;
     public FFindFloorResult FloorResult = new FFindFloorResult();
+
+    public void Copy(FStepDownResult other)
+    {
+        bComputedFloor= other.bComputedFloor;
+        FloorResult.Copy(other.FloorResult);
+    }
 }
 public class FFindFloorResult
 {
@@ -83,6 +110,15 @@ public class FFindFloorResult
         FloorDist = 0.0f;
         LineDist = 0.0f;
         HitResult.Reset(1);
+    }
+    public void Copy(FFindFloorResult other)
+    {
+        bBlockingHit=other.bBlockingHit;
+        bWalkableFloor = other.bWalkableFloor;
+        bLineTrace = other.bLineTrace;
+        FloorDist = other.FloorDist;
+        LineDist = other.LineDist;
+        HitResult.Copy(other.HitResult);
     }
 }
 public class FCapsuleShape
@@ -121,8 +157,13 @@ public class UFindFloor : MonoBehaviour
     float UE_KINDA_SMALL_NUMBER = (1.0e-4f);
     float SWEEP_EDGE_REJECT_DISTANCE = 0.15f;
     public FCapsuleShape CapsuleShape = new FCapsuleShape();
+    public TestMoveComponent testMoveComponent = new TestMoveComponent();
+
     void Start()
     {
+        testMoveComponent = new TestMoveComponent();
+        testMoveComponent.player = player.transform;
+
         CapsuleShape.CapsuleHalfHeight = 1;
         CapsuleShape.CapsuleRadius = 0.5f;
         CurrentFloor = new FFindFloorResult();
@@ -245,7 +286,7 @@ public class UFindFloor : MonoBehaviour
         //step forward
         FHitResult Hit = new FHitResult(1);
         MoveUpdateComponent(Delta, Hit);
-
+        FStepDownResult StepDownResult=new FStepDownResult();
         //step down
         MoveUpdateComponent(GravDir * StepTravelDownHeight, Hit);
         if (Hit.bBlockingHit)
@@ -256,21 +297,25 @@ public class UFindFloor : MonoBehaviour
                 player.transform.position = RawPos;
                 return false;
             }
-            if (!IsWithinEdgeTolerance(Hit.Location, Hit.ImpactPoint, PawnRadius))
-            {
-                player.transform.position = RawPos;
-                return false;
-            }
+            //if (!IsWithinEdgeTolerance(Hit.Location, Hit.ImpactPoint, PawnRadius))
+            //{
+            //    player.transform.position = RawPos;
+            //    return false;
+            //}
 
             if (OutStepDownResult != null)
             {
-                FindFloor(player.transform.position, OutStepDownResult.FloorResult, Hit);
+                FindFloor(RawPos, StepDownResult.FloorResult, Hit);
                 if (Hit.Location.y > OldLocation.y)
                 {
 
                 }
-                OutStepDownResult.bComputedFloor = true;
+                StepDownResult.bComputedFloor = true;
             }
+        }
+        if (OutStepDownResult != null)
+        {
+            OutStepDownResult.Copy(StepDownResult);
         }
         return true;
     }
@@ -512,12 +557,12 @@ public class UFindFloor : MonoBehaviour
         }
         if (!CurrentFloor.IsWalkableFloor())
         {
-            //bool bMustJump = bZeroDelta;
-            //if ((bMustJump || !bCheckedFall) && CheckFall(OldFloor, CurrentFloor.HitResult, Delta, OldLocation, remainingTime, timeTick, 0, bMustJump))
-            //{
-            //    return;
-            //}
-            //bCheckedFall = true;
+            bool bMustJump = bZeroDelta;
+            if ((bMustJump || !bCheckedFall) && CheckFall(OldFloor, CurrentFloor.HitResult, Delta, OldLocation, remainingTime, timeTick, 0, bMustJump))
+            {
+                return;
+            }
+            bCheckedFall = true;
         }
     }
     private bool CheckFall(FFindFloorResult OldFloor, FHitResult Hit, Vector3 Delta, Vector3 OldLocation, float remainingTime, float timeTick, int Iterations, bool bMustJump)
