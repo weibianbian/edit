@@ -152,10 +152,10 @@ public class UFindFloor : MonoBehaviour
     public EMovementMode MovementMode = EMovementMode.MOVE_None;
     public bool IsHit = false;
     public float MaxStepHeight = 2;
-    public float MAX_FLOOR_DIST = 0.24f;
-    public float MIN_FLOOR_DIST = 0.19f;
+    public float MAX_FLOOR_DIST = 0.024f;
+    public float MIN_FLOOR_DIST = 0.019f;
     float UE_KINDA_SMALL_NUMBER = (1.0e-4f);
-    float SWEEP_EDGE_REJECT_DISTANCE = 0.015f;
+    float SWEEP_EDGE_REJECT_DISTANCE = 0.0015f;
     public FCapsuleShape CapsuleShape = new FCapsuleShape();
     public TestMoveComponent testMoveComponent = new TestMoveComponent();
 
