@@ -215,7 +215,8 @@ public class UFindFloor : MonoBehaviour
         {
             float FloorDotDelta = Vector3.Dot(FloorNormal, Delta);
             Vector3 RampMovement = (Delta - (FloorNormal * FloorDotDelta));
-            return RampMovement;
+
+            return Delta.magnitude * RampMovement.normalized;
         }
         return Delta;
     }
@@ -443,7 +444,7 @@ public class UFindFloor : MonoBehaviour
                 {
                     MaxPerchFloorDist += Mathf.Max(0.0f, PerchAdditionalHeight);
                 }
-                FFindFloorResult PerchFloorResult=new FFindFloorResult();
+                FFindFloorResult PerchFloorResult = new FFindFloorResult();
                 if (ComputePerchResult(GetValidPerchRadius(), OutFloorResult.HitResult, MaxPerchFloorDist, PerchFloorResult))
                 {
                     //不要让地板距离的调整把我们推得太高，否则下次我们就会超出栖木距离而坠落。
