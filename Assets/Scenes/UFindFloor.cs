@@ -149,6 +149,8 @@ public class UFindFloor : MonoBehaviour
     public FHitResult HitResult;
     public FFindFloorResult CurrentFloor;
     public Vector3 Velocity;
+    public float PerchRadiusThreshold = 0;
+    public float PerchAdditionalHeight = 0;
     public EMovementMode MovementMode = EMovementMode.MOVE_None;
     public bool IsHit = false;
     public float MaxStepHeight = 2;
@@ -228,6 +230,10 @@ public class UFindFloor : MonoBehaviour
             return false;
         }
 
+        if (Vector3.Angle(Hit.ImpactNormal, Vector3.up) <= 60)
+        {
+            return false;
+        }
         //float TestWalkableZ = WalkableFloorZ;
 
         //// Can't walk on this surface if it is too steep.
@@ -429,10 +435,104 @@ public class UFindFloor : MonoBehaviour
         }
         if (bNeedToValidateFloor && OutFloorResult.bBlockingHit)
         {
+            bool bCheckRadius = true;
+            if (ShouldComputePerchResult(OutFloorResult.HitResult, bCheckRadius))
+            {
+                float MaxPerchFloorDist = Mathf.Max(MAX_FLOOR_DIST, MaxStepHeight + HeightCheckAdjust);
+                if (IsMovingOnGround())
+                {
+                    MaxPerchFloorDist += Mathf.Max(0.0f, PerchAdditionalHeight);
+                }
+                FFindFloorResult PerchFloorResult=new FFindFloorResult();
+                if (ComputePerchResult(GetValidPerchRadius(), OutFloorResult.HitResult, MaxPerchFloorDist, PerchFloorResult))
+                {
+                    //不要让地板距离的调整把我们推得太高，否则下次我们就会超出栖木距离而坠落。
+                    float AvgFloorDist = (MIN_FLOOR_DIST + MAX_FLOOR_DIST) * 0.5f;
+                    float MoveUpDist = (AvgFloorDist - OutFloorResult.FloorDist);
+                    if (MoveUpDist + PerchFloorResult.FloorDist >= MaxPerchFloorDist)
+                    {
+                        OutFloorResult.FloorDist = AvgFloorDist;
+                    }
 
+                    // 如果普通的太空舱在一个不能行走的表面上，而栖息的太空舱可以让我们站立，那么它就可以超越正常的太空舱，成为一个可以行走的太空舱。
+                    if (!OutFloorResult.bWalkableFloor)
+                    {
+                        // 地板距离用作普通胶囊到碰撞点的距离，以确保AdjustFloorHeight()行为正确。
+                        //OutFloorResult.SetFromLineTrace(PerchFloorResult.HitResult, OutFloorResult.FloorDist, FMath::Max(OutFloorResult.FloorDist, MIN_FLOOR_DIST), true);
+                    }
+                }
+                else
+                {
+                    // 我们没有地板(或者是无效的，因为它不能行走)，不能在这里栖息，所以无效的地板(这会导致我们开始坠落)。
+                    OutFloorResult.bWalkableFloor = false;
+                }
+            }
         }
     }
-    private void ComputeFloorDist(Vector3 CapsuleLocation, float LineDistance, float SweepDistance, FFindFloorResult OutFloorResult, float SweepRadius, FHitResult DownwardSweepResult)
+    private bool ComputePerchResult(float TestRadius, FHitResult InHit, float InMaxFloorDist, FFindFloorResult OutPerchFloorResult)
+    {
+        if (InMaxFloorDist <= 0.0f)
+        {
+            return false;
+        }
+        float PawnRadius, PawnHalfHeight;
+        PawnRadius = CapsuleShape.CapsuleRadius;
+        PawnHalfHeight = CapsuleShape.CapsuleHalfHeight;
+
+        Vector3 CapsuleLocation = InHit.Location;
+
+        float InHitAboveBase = Mathf.Max(0.0f, InHit.ImpactPoint.y - (CapsuleLocation.y - PawnHalfHeight));
+        float PerchLineDist = Mathf.Max(0.0f, InMaxFloorDist - InHitAboveBase);
+        float PerchSweepDist = Mathf.Max(0.0f, InMaxFloorDist);
+
+        float ActualSweepDist = PerchSweepDist + PawnRadius;
+        ComputeFloorDist(CapsuleLocation, PerchLineDist, ActualSweepDist, OutPerchFloorResult, TestRadius);
+        if (!OutPerchFloorResult.IsWalkableFloor())
+        {
+            return false;
+        }
+        else if (InHitAboveBase + OutPerchFloorResult.FloorDist > InMaxFloorDist)
+        {
+            OutPerchFloorResult.bWalkableFloor = false;
+            return false;
+        }
+
+        return true;
+    }
+    private float GetPerchRadiusThreshold()
+    {
+        return MathF.Max(0.0f, PerchRadiusThreshold);
+    }
+    private bool ShouldComputePerchResult(FHitResult InHit, bool bCheckRadius)
+    {
+        if (!InHit.bBlockingHit)
+        {
+            return false;
+        }
+        if (GetPerchRadiusThreshold() <= SWEEP_EDGE_REJECT_DISTANCE)
+        {
+            return false;
+        }
+
+        if (bCheckRadius)
+        {
+            Vector3 delta = (InHit.ImpactPoint - InHit.Location);
+            float DistFromCenterSq = delta.x * delta.x + delta.z * delta.z;
+            float StandOnEdgeRadius = GetValidPerchRadius();
+            if (DistFromCenterSq <= Mathf.Pow(StandOnEdgeRadius, 2))
+            {
+                // Already within perch radius.
+                return false;
+            }
+        }
+
+        return true;
+    }
+    private float GetValidPerchRadius()
+    {
+        return Mathf.Clamp(CapsuleShape.CapsuleRadius - GetPerchRadiusThreshold(), 0.11f, CapsuleShape.CapsuleRadius);
+    }
+    private void ComputeFloorDist(Vector3 CapsuleLocation, float LineDistance, float SweepDistance, FFindFloorResult OutFloorResult, float SweepRadius, FHitResult DownwardSweepResult = null)
     {
         if (SweepDistance > 0 & SweepRadius > 0)
         {
