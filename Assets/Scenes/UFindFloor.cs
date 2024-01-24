@@ -32,6 +32,7 @@ public class FHitResult
     public Vector3 ImpactNormal;
     public Vector3 Location;
     public bool bBlockingHit = false;
+    public bool bStartPenetrating = false;
     public float Time;
     public FHitResult(float InTime)
     {
@@ -62,6 +63,7 @@ public class FHitResult
         ImpactNormal = other.ImpactNormal;
         Location = other.Location;
         bBlockingHit = other.bBlockingHit;
+        bStartPenetrating=other.bStartPenetrating;
         Time = other.Time;
     }
 }
@@ -648,6 +650,10 @@ public class UFindFloor : MonoBehaviour
         if (CurrentFloor.IsWalkableFloor())
         {
             AdjustFloorHeight();
+        }
+        else if (CurrentFloor.HitResult.bStartPenetrating) 
+        {
+
         }
         if (!CurrentFloor.IsWalkableFloor())
         {

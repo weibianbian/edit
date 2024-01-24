@@ -642,7 +642,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player: {fileID: 1466159254}
   Gravity: {x: 0, y: -9.8, z: 0}
-  Velocity: {x: 0, y: 0, z: 2}
+  Velocity: {x: 0, y: 0, z: 0.5}
+  PerchRadiusThreshold: 0
+  PerchAdditionalHeight: 0
   MovementMode: 0
   IsHit: 0
   MaxStepHeight: 2
