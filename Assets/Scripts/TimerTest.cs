@@ -1,10 +1,7 @@
-using Core.Timer;
-using RailShootGame;
 using System;
 using System.Reflection;
-using UnityEditor;
+using UEngine.Timer;
 using UnityEngine;
-using static UnityEngine.UI.GridLayoutGroup;
 
 public class TimerTest : MonoBehaviour
 {

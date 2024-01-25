@@ -1,5 +1,4 @@
-﻿using Core.Timer;
-using System.Collections.Generic;
+﻿using UEngine.Timer;
 using UnityEngine;
 
 public class RailShoot : MonoBehaviour

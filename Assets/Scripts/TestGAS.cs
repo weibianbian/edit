@@ -1,11 +1,9 @@
-using Core;
-using GameplayAbilitySystem;
-using JetBrains.Annotations;
 using RailShootGame;
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using Unity.Collections.LowLevel.Unsafe;
+using UEngine;
+using UEngine.Core;
+using UEngine.GameplayAbilities;
+using UEngine.GameplayTags;
 using UnityEngine;
 
 public class TestGAS : MonoBehaviour

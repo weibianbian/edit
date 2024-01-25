@@ -1,4 +1,5 @@
 ﻿using HFSMRuntime;
+using UEngine.Components;
 
 namespace RailShootGame
 {

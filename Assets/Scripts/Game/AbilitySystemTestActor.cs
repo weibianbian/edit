@@ -1,4 +1,7 @@
-﻿using GameplayAbilitySystem;
+﻿using UEngine.Core;
+using UEngine.GameFramework;
+using UEngine.GameplayAbilities;
+using UEngine.GameplayTags;
 
 namespace RailShootGame
 {
@@ -22,7 +25,6 @@ namespace RailShootGame
 
         public void HandleGameplayCue(AActor TargetActor, FGameplayTag GameplayCueTag, EGameplayCueEvent EventType, GameplayCueParameters Parameters)
         {
-
         }
     }
 }
