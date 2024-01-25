@@ -3,7 +3,7 @@ using UEngine.Components;
 
 namespace RailShootGame
 {
-    public class HierarchicalStateMachineCompt : ActorComponent
+    public class HierarchicalStateMachineCompt : UActorComponent
     {
         public HierarchicalStateMachine hsm;
        

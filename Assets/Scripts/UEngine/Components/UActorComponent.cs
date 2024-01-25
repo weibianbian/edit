@@ -3,11 +3,20 @@ using UEngine.GameFramework;
 
 namespace UEngine.Components
 {
-    public abstract class ActorComponent : ReferencePoolObject
+    //UActorComponent::OnComponentCreated
+    //UActorComponent::OnRegister
+    //UActorComponent::InitializeComponent
+    //UActorComponent::BeginPlay
+    //UActorComponent::TickComponent
+    //UActorComponent::EndPlay
+    //UActorComponent::UninitializeComponent
+    //UActorComponent::OnUnregister
+    //UActorComponent::OnComponentDestroyed
+    public abstract class UActorComponent : ReferencePoolObject
     {
         protected AActor Outer;
         private UWorld WorldPrivate;
-        public ActorComponent()
+        public UActorComponent()
         {
         }
         public virtual void TickComponent(float DeltaTime)

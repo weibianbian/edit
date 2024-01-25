@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace UEngine.Core
+﻿namespace UEngine.Core
 {
     public abstract class ReferencePoolObject
     {

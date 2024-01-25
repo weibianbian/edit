@@ -5,7 +5,7 @@ using UnityEngine.AI;
 
 namespace UEngine.GameFramework
 {
-    public class UMovementComponent : ActorComponent
+    public class UMovementComponent : UActorComponent
     {
         public USceneComponent UpdatedComponent;
         public NavMeshAgent agent;

@@ -24,7 +24,7 @@ namespace UEngine.GameplayTasks
     {
 
     }
-    public class UGameplayTasksComponent : ActorComponent
+    public class UGameplayTasksComponent : UActorComponent
     {
         public List<FGameplayTaskEventData> TaskEvents = new List<FGameplayTaskEventData>();
         public List<UGameplayTask> TickingTasks = new List<UGameplayTask>();

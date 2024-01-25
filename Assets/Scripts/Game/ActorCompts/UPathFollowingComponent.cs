@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace RailShootGame
 {
-    public class UPathFollowingComponent : ActorComponent
+    public class UPathFollowingComponent : UActorComponent
     {
         public PathData Path;
         public NavMovementComponent MovementComp;

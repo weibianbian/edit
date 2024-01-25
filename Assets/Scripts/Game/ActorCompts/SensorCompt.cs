@@ -3,7 +3,7 @@ using UEngine.Components;
 
 namespace RailShootGame
 {
-    public class SensorCompt: ActorComponent
+    public class SensorCompt: UActorComponent
     {
         public Dictionary<Sensor.ESensorType, Sensor> sensors = new Dictionary<Sensor.ESensorType, Sensor>();
         public Sensor GetSensor(Sensor.ESensorType sensorType)

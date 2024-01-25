@@ -24,22 +24,22 @@ namespace UEngine.GameFramework
         public Vector3 position;
         public ULevel Outer;
 
-        private HashSet<ActorComponent> OwnedComponents=new HashSet<ActorComponent>();
+        private HashSet<UActorComponent> OwnedComponents=new HashSet<UActorComponent>();
 
-        public HashSet<ActorComponent> GetInstanceComponents()
+        public HashSet<UActorComponent> GetInstanceComponents()
         {
             return OwnedComponents;
         }
-        public void AddOwnedComponent(ActorComponent Component)
+        public void AddOwnedComponent(UActorComponent Component)
         {
             if (OwnedComponents.Add(Component))
             {
 
             };
         }
-        public T CreateDefaultSubobject<T>() where T:ActorComponent
+        public T CreateDefaultSubobject<T>() where T:UActorComponent
         {
-            ActorComponent result = ReferencePool.Acquire(typeof(T)) as ActorComponent;
+            UActorComponent result = ReferencePool.Acquire(typeof(T)) as UActorComponent;
             result.SetOwner(this);
             result.PostInitProperties();
 
@@ -99,7 +99,9 @@ namespace UEngine.GameFramework
         }
         public void RegisterAllComponents()
         {
+            PreRegisterAllComponents();
             IncrementalRegisterComponents();
+            PostRegisterAllComponents();
         }
         public bool IncrementalRegisterComponents()
         {
@@ -109,6 +111,14 @@ namespace UEngine.GameFramework
                 Component.RegisterComponentWithWorld(World);
             }
             return true;
+        }
+        public void PreRegisterAllComponents()
+        {
+
+        }
+        public void PostRegisterAllComponents()
+        {
+
         }
         //通知脚本怪物已被触发器或手电筒激活
         public void Activate()
